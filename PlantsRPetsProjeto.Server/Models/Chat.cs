@@ -2,9 +2,9 @@
 {
     public class Chat
     {
-        public int Id { get; set; }
-        public Community Community { get; set; }
-        public List<Message> Messages { get; set; }
+        public int ChatId { get; set; }
+        public int CommunityId { get; set; }
+        public ICollection<Message> Messages { get; set; }
     }
 
 }

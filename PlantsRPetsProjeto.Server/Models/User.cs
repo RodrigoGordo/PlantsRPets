@@ -2,15 +2,16 @@
 {
     public class User
     {
-        public int Id { get; set; }
+        public int UserId { get; set; }
         public string Username { get; set; }
         public string Email { get; set; }
-        public string PassswordHash { get; set; }
+        public string PasswordHash { get; set; }
         public DateTime RegistrationDate { get; set; }
         public Profile Profile { get; set; }
-        public List<Plantation> Plantations { get; set; }
-        public List<Pet> Pets { get; set; }
+        public ICollection<Plantation> Plantations { get; set; }
+        public ICollection<Pet> Pets { get; set; }
         public Dashboard Dashboard { get; set; }
+        public ICollection<Community> Communities { get; set; }
 
     }
 }
