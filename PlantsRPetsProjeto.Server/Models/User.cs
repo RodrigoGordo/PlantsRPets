@@ -1,11 +1,10 @@
-﻿namespace PlantsRPetsProjeto.Server.Models
+﻿using Microsoft.AspNetCore.Identity;
+
+namespace PlantsRPetsProjeto.Server.Models
 {
-    public class User
+    public class User : IdentityUser
     {
-        public int UserId { get; set; }
-        public string Username { get; set; }
-        public string Email { get; set; }
-        public string PasswordHash { get; set; }
+
         public DateTime RegistrationDate { get; set; }
         public Profile Profile { get; set; }
         public ICollection<Plantation> Plantations { get; set; }

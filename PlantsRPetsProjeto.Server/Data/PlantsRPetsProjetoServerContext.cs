@@ -1,0 +1,32 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using PlantsRPetsProjeto.Server.Models;
+
+namespace PlantsRPetsProjeto.Server.Data
+{
+    public class PlantsRPetsProjetoServerContext : DbContext
+    {
+        public PlantsRPetsProjetoServerContext (DbContextOptions<PlantsRPetsProjetoServerContext> options)
+            : base(options)
+        {
+        }
+
+        public DbSet<PlantsRPetsProjeto.Server.Models.Plant> Plant { get; set; } = default!;
+        public DbSet<PlantsRPetsProjeto.Server.Models.Pet> Pet { get; set; } = default!;
+        public DbSet<PlantsRPetsProjeto.Server.Models.Plantation> Plantation { get; set; } = default!;
+        public DbSet<PlantsRPetsProjeto.Server.Models.Metric> Metric { get; set; } = default!;
+        public DbSet<PlantsRPetsProjeto.Server.Models.Community> Community { get; set; } = default!;
+        public DbSet<PlantsRPetsProjeto.Server.Models.Chat> Chat { get; set; } = default!;
+        public DbSet<PlantsRPetsProjeto.Server.Models.Collection> Collection { get; set; } = default!;
+        public DbSet<PlantsRPetsProjeto.Server.Models.Dashboard> Dashboard { get; set; } = default!;
+        public DbSet<PlantsRPetsProjeto.Server.Models.Message> Message { get; set; } = default!;
+        public DbSet<PlantsRPetsProjeto.Server.Models.Notification> Notification { get; set; } = default!;
+        public DbSet<PlantsRPetsProjeto.Server.Models.Profile> Profile { get; set; } = default!;
+        public DbSet<PlantsRPetsProjeto.Server.Models.SustainabilityTip> SustainabilityTip { get; set; } = default!;
+        public DbSet<PlantsRPetsProjeto.Server.Models.Settings> Settings { get; set; } = default!;
+        public DbSet<PlantsRPetsProjeto.Server.Models.Tutorial> Tutorial { get; set; } = default!;
+    }
+}

@@ -1,7 +1,9 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\PlantsRPetsProjeto.Server",
+    "\\PlantsRPetsProjeto.Server\\Data"
   ],
-  "SelectedNode": "\\PlantsRPetsProjeto.sln",
+  "SelectedNode": "\\PlantsRPetsProjeto.Server\\Data\\PlantsRPetsProjetoServerContext.cs",
   "PreviewInSolutionExplorer": false
 }
