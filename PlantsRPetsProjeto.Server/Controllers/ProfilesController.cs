@@ -54,7 +54,7 @@ namespace PlantsRPetsProjeto.Server.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ProfileId,UserId,Name,Bio,ProfilePicture")] Profile profile)
+        public async Task<IActionResult> Create([Bind("ProfileId,UserId,Bio,ProfilePicture")] Profile profile)
         {
             if (ModelState.IsValid)
             {
@@ -86,7 +86,7 @@ namespace PlantsRPetsProjeto.Server.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ProfileId,UserId,Name,Bio,ProfilePicture")] Profile profile)
+        public async Task<IActionResult> Edit(int id, [Bind("ProfileId,UserId,Bio,ProfilePicture")] Profile profile)
         {
             if (id != profile.ProfileId)
             {

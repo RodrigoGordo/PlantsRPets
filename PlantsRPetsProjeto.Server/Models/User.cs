@@ -4,7 +4,7 @@ namespace PlantsRPetsProjeto.Server.Models
 {
     public class User : IdentityUser
     {
-
+        public string Nickname { get; set; }
         public DateTime RegistrationDate { get; set; }
         public Profile Profile { get; set; }
         public ICollection<Plantation> Plantations { get; set; }

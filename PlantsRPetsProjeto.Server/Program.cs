@@ -10,6 +10,8 @@ using PlantsRPetsProjeto.Server.Data;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<PlantsRPetsProjetoServerContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("PlantsRPetsProjetoServerContext") ?? throw new InvalidOperationException("Connection string 'PlantsRPetsProjetoServerContext' not found.")));
+//builder.Services.AddDbContext<PlantsRPetsProjetoServerContext>(options =>
+//    options.UseSqlServer(builder.Configuration.GetConnectionString("PlantsRPetsProjetoServerContext") ?? throw new InvalidOperationException("Connection string 'PlantsRPetsProjetoServerContext' not found.")));
 
 // Add services to the container.
 
