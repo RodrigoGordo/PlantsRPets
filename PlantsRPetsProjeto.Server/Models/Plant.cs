@@ -3,7 +3,6 @@
     public class Plant
     {
         public int PlantId { get; set; }
-        public int SustainabilityInfoId { get; set; }
         public string Name { get; set; }
         public string Type { get; set; }
         public int GrowthTime { get; set; }
