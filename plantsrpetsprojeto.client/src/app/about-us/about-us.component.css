@@ -1,0 +1,62 @@
+/* about-us.component.css */
+.about-us-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 40px;
+  background-color: #ffffff; /* White background for clean look */
+  border-radius: 12px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+h1 {
+  font-size: 3rem;
+  color: #2e8b57; /* Green color */
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.about-content {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.about-description, .about-values, .about-team {
+  text-align: center;
+}
+
+  .about-description h2, .about-values h2, .about-team h2 {
+    font-size: 2rem;
+    color: #27ae60;
+    font-weight: 600;
+  }
+
+  .about-description p, .about-values ul, .about-team p {
+    font-size: 1.1rem;
+    color: #34495e;
+    margin-top: 10px;
+    line-height: 1.7;
+    letter-spacing: 0.5px;
+  }
+
+  .about-values ul {
+    list-style-type: none;
+    padding: 0;
+  }
+
+    .about-values ul li {
+      margin-bottom: 15px;
+    }
+
+      .about-values ul li:before {
+        content: '🌿';
+        margin-right: 10px;
+        color: #27ae60;
+        font-size: 1.5rem;
+      }
