@@ -7,6 +7,7 @@ using Microsoft.OpenApi.Models;
 using PlantsRPetsProjeto.Server.Models;
 using PlantsRPetsProjeto.Server.Data;
 using Microsoft.IdentityModel.Tokens;
+using PlantsRPetsProjeto.Server.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -48,6 +49,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 
 builder.Services.AddAuthorization();
+
+builder.Services.AddScoped<IEmailService, GraphEmailService>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
