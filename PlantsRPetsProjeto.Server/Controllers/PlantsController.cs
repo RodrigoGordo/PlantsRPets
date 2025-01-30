@@ -54,7 +54,7 @@ namespace PlantsRPetsProjeto.Server.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("PlantId,SustainabilityInfoId,Name,Type,GrowthTime,WaterFrequency,isGrown")] Plant plant)
+        public async Task<IActionResult> Create([Bind("PlantId,Name,Type,GrowthTime,WaterFrequency,isGrown")] Plant plant)
         {
             if (ModelState.IsValid)
             {
@@ -86,7 +86,7 @@ namespace PlantsRPetsProjeto.Server.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("PlantId,SustainabilityInfoId,Name,Type,GrowthTime,WaterFrequency,isGrown")] Plant plant)
+        public async Task<IActionResult> Edit(int id, [Bind("PlantId,Name,Type,GrowthTime,WaterFrequency,isGrown")] Plant plant)
         {
             if (id != plant.PlantId)
             {
