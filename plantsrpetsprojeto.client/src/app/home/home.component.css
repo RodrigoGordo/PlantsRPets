@@ -1,0 +1,138 @@
+/* General styles */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f1f8f4; /* Soft greenish background */
+}
+
+.home-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Header styles */
+header {
+  text-align: center;
+  margin-bottom: 40px;
+  color: #2e7d32; /* Dark Green */
+}
+
+  header h1 {
+    font-size: 3em;
+    font-weight: bold;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin: 0;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+  }
+
+/* Navigation menu styles */
+.menu {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #388e3c; /* Deep green */
+  padding: 20px 40px;
+  margin-bottom: 30px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+.logo img {
+  width: 50px; /* Adjust the size of the logo */
+  height: auto;
+  margin-right: 20px;
+}
+
+.menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: inline-flex;
+  gap: 30px;
+}
+
+  .menu ul li {
+    display: inline;
+  }
+
+.mock-button {
+  font-size: 1.4em;
+  color: #fff;
+  padding: 12px 25px;
+  background-color: #66bb6a; /* Light green */
+  border-radius: 30px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+  .mock-button:hover {
+    background-color: #81c784; /* Slightly lighter green */
+    transform: translateY(-3px); /* Lift effect */
+  }
+
+/* Content section styles */
+.content {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  margin-top: 50px;
+}
+
+  .content .card {
+    width: 48%;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+    .content .card:hover {
+      transform: translateY(-5px); /* Lift effect on hover */
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+    }
+
+  .content h2 {
+    font-size: 2em;
+    color: #388e3c; /* Dark green */
+    margin-bottom: 10px;
+    font-weight: bold;
+  }
+
+  .content p {
+    font-size: 1.1em;
+    color: #4caf50; /* Fresh green */
+    line-height: 1.6;
+  }
+
+/* Section Styling */
+section {
+  margin-top: 40px;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .content {
+    flex-direction: column;
+    align-items: center;
+  }
+
+    .content .card {
+      width: 90%;
+      margin-bottom: 20px;
+    }
+
+  .menu {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .logo {
+    margin-bottom: 20px;
+  }
+}
