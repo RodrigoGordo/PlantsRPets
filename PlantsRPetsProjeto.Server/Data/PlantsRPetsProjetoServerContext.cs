@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using PlantsRPetsProjeto.Server.Models;
 
 namespace PlantsRPetsProjeto.Server.Data
 {
-    public class PlantsRPetsProjetoServerContext : DbContext
+    public class PlantsRPetsProjetoServerContext : IdentityDbContext<User>
     {
         public PlantsRPetsProjetoServerContext (DbContextOptions<PlantsRPetsProjetoServerContext> options)
             : base(options)
