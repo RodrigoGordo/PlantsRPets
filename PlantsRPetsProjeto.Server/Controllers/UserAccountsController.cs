@@ -18,11 +18,13 @@ namespace PlantsRPetsProjeto.Server.Controllers
     {
         private readonly UserManager<User> _userManager;
         private readonly IConfiguration _configuration;
+        private readonly IEmailService _emailService;
 
-        public UserAccountsController(UserManager<User> userManager, IConfiguration configuration)
+        public UserAccountsController(UserManager<User> userManager, IConfiguration configuration, IEmailService emailService)
         {
             _userManager = userManager;
             _configuration = configuration;
+            _emailService = emailService;
         }
 
         [HttpPost("api/signup")]
@@ -87,26 +89,25 @@ namespace PlantsRPetsProjeto.Server.Controllers
             });
         }
 
-        [HttpPost("api/forgot-password")]
-        public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordModel model, [FromServices] IEmailService emailService)
+        [HttpPost("forgot-password")]
+        public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordModel model)
         {
             try
             {
                 var user = await _userManager.FindByEmailAsync(model.Email);
-
                 if (user == null)
                     return BadRequest(new { message = "The email doesn't exist." });
 
-                // Gera o token de recuperação da pass
+                // Gerar token de recuperação de senha
                 var token = await _userManager.GeneratePasswordResetTokenAsync(user);
-
-                // Encode seguro do token
                 var encodedToken = WebUtility.UrlEncode(token);
 
+                // Construir link de redefinição de senha
                 var resetLink = $"{_configuration["Frontend:BaseUrl"]}/reset-password?email={user.Email}&token={encodedToken}";
+                Console.WriteLine($"[DEBUG] Password Reset Token: {token}");// Remover depois (É penas para teste)
 
-                // Enviar email com o link de redefinição de senha
-                await emailService.SendEmailAsync(
+                // Enviar email
+                await _emailService.SendEmailAsync(
                     user.Email!,
                     "Password Reset Request",
                     $"<p>Hello {user.Nickname},</p>" +
@@ -119,12 +120,15 @@ namespace PlantsRPetsProjeto.Server.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"[ERROR] {ex.ToString()}");
+                Console.WriteLine($"[ERROR] {ex.Message}");
                 return StatusCode(500, new { message = "An error occurred while processing your request." });
             }
         }
 
-        [HttpPost("api/reset-password")]
+        /// <summary>
+        /// Permite redefinir a senha do usuário usando o token enviado por email.
+        /// </summary>
+        [HttpPost("reset-password")]
         public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordModel model)
         {
             try
@@ -134,14 +138,13 @@ namespace PlantsRPetsProjeto.Server.Controllers
                     return BadRequest(new { message = "Invalid request." });
 
                 var result = await _userManager.ResetPasswordAsync(user, model.Token, model.NewPassword);
-
                 if (result.Succeeded)
                     return Ok(new { message = "Password reset successfully." });
 
                 return BadRequest(new
                 {
                     message = "Failed to reset password.",
-                    errors = result.Errors.Select(e => e.Description) //pode-se apagar depois
+                    errors = result.Errors.Select(e => e.Description) // Pode ser removido depois
                 });
             }
             catch (Exception ex)
