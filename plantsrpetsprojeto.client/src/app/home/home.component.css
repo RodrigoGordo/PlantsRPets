@@ -15,16 +15,12 @@ body {
 .home-container {
   max-width: 1100px;
   margin: 0 auto;
-  padding: 40px;
+  padding: 0px;
   box-sizing: border-box;
 }
 
-header {
-  text-align: center;
-  margin-bottom: 30px;
-}
-
 h1 {
+  
   font-size: 3rem;
   color: #2e8b57; /* Fresh plant-like green color */
   font-weight: 700;
@@ -59,18 +55,18 @@ nav ul {
   gap: 25px;
 }
 
-  nav ul li {
-    cursor: pointer;
-    font-size: 1.1rem;
-    color: #fff;
-    font-weight: 600;
-    text-transform: capitalize;
-    transition: color 0.3s ease-in-out;
-  }
+nav ul li {
+  cursor: pointer;
+  font-size: 1.1rem;
+  color: #fff;
+  font-weight: 600;
+  text-transform: capitalize;
+  transition: color 0.3s ease-in-out;
+}
 
-    nav ul li:hover {
-      color: #81c784; /* Soft green color for hover effect */
-    }
+nav ul li:hover {
+  color: #81c784; /* Soft green color for hover effect */
+}
 
 .mock-button {
   text-decoration: none;
@@ -78,7 +74,7 @@ nav ul {
 }
 
 /* Main Content Section Styles */
-.intro, .what-you-can-do {
+.intro {
   background-color: #ffffff;
   padding: 40px;
   margin-top: 50px;
@@ -88,42 +84,38 @@ nav ul {
   transition: all 0.3s ease-in-out;
 }
 
-  .intro:hover, .what-you-can-do:hover {
-    transform: translateY(-5px);
-  }
+.intro:hover {
+  transform: translateY(-5px);
+}
 
-  .intro h2, .what-you-can-do h2 {
-    font-size: 2.4rem;
-    color: #27ae60; /* Greenish color */
-    font-weight: 600;
-    margin-bottom: 20px;
-  }
+.intro h2 {
+  font-size: 2.4rem;
+  color: #27ae60; /* Greenish color */
+  font-weight: 600;
+  margin-bottom: 20px;
+}
 
-  .intro p, .what-you-can-do ul {
-    font-size: 1.1rem;
-    color: #34495e;
-    margin-top: 10px;
-    line-height: 1.7;
-    letter-spacing: 0.5px;
-  }
+.intro p {
+  font-size: 1.1rem;
+  color: #34495e;
+  margin-top: 10px;
+  line-height: 1.7;
+  letter-spacing: 0.5px;
+}
 
-  .what-you-can-do ul {
-    list-style-type: none;
-    padding: 0;
-  }
+.sign-in {
+  background: white;
+  color: #4caf50;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: bold;
+}
 
-    .what-you-can-do ul li {
-      margin-bottom: 12px;
-      line-height: 1.8;
-      font-weight: 400;
-    }
-
-      .what-you-can-do ul li:before {
-        content: '🌱';
-        margin-right: 10px;
-        color: #27ae60; /* Green checkmark */
-        font-size: 1.5rem;
-      }
+.sign-in:hover {
+  background: #f1f1f1;
+}
 
 /* Footer */
 footer {
