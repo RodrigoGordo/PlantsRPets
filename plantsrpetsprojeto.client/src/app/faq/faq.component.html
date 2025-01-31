@@ -1,28 +1,43 @@
 <!-- faq.component.html -->
-<div class="faq-container">
-  <header>
-    <h1>Frequently Asked Questions</h1>
-  </header>
+<body>
+  <div class="faq-container">
+    <nav class="menu">
+      <div class="logo">
+        <img src="assets/logo.png" alt="Plants R Pets Logo" />
+      </div>
+      <ul>
+        <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" class="mock-button">Home</a></li>
+        <li><a routerLink="/features" routerLinkActive="active" class="mock-button">Features</a></li>
+        <li><a routerLink="/about-us" routerLinkActive="active" class="mock-button">About Us</a></li>
+        <li><a routerLink="/faq" routerLinkActive="active" class="mock-button">FAQ</a></li>
+        <li><a routerLink="/contact-us" routerLinkActive="active" class="mock-button">Contact Us</a></li>
+      </ul>
+      <button class="sign-in">Sign in</button>
+    </nav>
+    <header>
+      <h1>Frequently Asked Questions</h1>
+    </header>
 
-  <section class="faq-list">
-    <div class="faq-item">
-      <h2>How do I manage my plants?</h2>
-      <p>Simply add your plants to your plantation list, and we'll send you reminders when it's time to water and take care of them.</p>
-    </div>
+    <section class="faq-list">
+      <div class="faq-item">
+        <h2>How do I manage my plants?</h2>
+        <p>Simply add your plants to your plantation list, and we'll send you reminders when it's time to water and take care of them.</p>
+      </div>
 
-    <div class="faq-item">
-      <h2>How can I add pets to my collection?</h2>
-      <p>You can add pets by navigating to the Pet Collections section and filling out a simple form for each pet.</p>
-    </div>
+      <div class="faq-item">
+        <h2>How can I add pets to my collection?</h2>
+        <p>You can add pets by navigating to the Pet Collections section and filling out a simple form for each pet.</p>
+      </div>
 
-    <div class="faq-item">
-      <h2>Do I need an internet connection to use the app?</h2>
-      <p>Yes, an internet connection is required to sync your data and receive notifications.</p>
-    </div>
+      <div class="faq-item">
+        <h2>Do I need an internet connection to use the app?</h2>
+        <p>Yes, an internet connection is required to sync your data and receive notifications.</p>
+      </div>
 
-    <div class="faq-item">
-      <h2>Is the app free?</h2>
-      <p>The app is free to use with basic features. Premium features are available via a subscription.</p>
-    </div>
-  </section>
-</div>
+      <div class="faq-item">
+        <h2>Is the app free?</h2>
+        <p>The app is free to use with basic features. Premium features are available via a subscription.</p>
+      </div>
+    </section>
+  </div>
+</body>

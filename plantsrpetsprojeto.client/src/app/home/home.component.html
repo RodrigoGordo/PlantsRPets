@@ -1,22 +1,24 @@
 <div class="home-container">
   <nav class="menu">
     <div class="logo">
-      <img src="logo.png" alt="Plants R Pets Logo" />
+      <img src="assets/logo.png" alt="Plants R Pets Logo" />
     </div>
     <ul>
-      <li><a routerLink="/about-us" class="mock-button">About Us</a></li>
-      <li><a routerLink="/features" class="mock-button">Features</a></li>
-      <li><a routerLink="/faq" class="mock-button">FAQ</a></li>
-      <li><a routerLink="/contact-us" class="mock-button">Contact Us</a></li>
+      <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" class="mock-button">Home</a></li>
+      <li><a routerLink="/features" routerLinkActive="active" class="mock-button">Features</a></li>
+      <li><a routerLink="/about-us" routerLinkActive="active" class="mock-button">About Us</a></li>
+      <li><a routerLink="/faq" routerLinkActive="active" class="mock-button">FAQ</a></li>
+      <li><a routerLink="/contact-us" routerLinkActive="active" class="mock-button">Contact Us</a></li>
     </ul>
     <button class="sign-in">Sign in</button>
   </nav>
-
   <!-- Main Content Section -->
   <section class="intro">
     <h2>Grow Plants, Earn Pets and Practice Sustainability</h2>
-    <p>Plants R' Pets is an app that combines crop management with gamification,
-    allowing you to grow plants, adopt sustainable practices,
-    and earn unique virtual pets as rewards.</p>
+    <p>
+      Plants R' Pets is an app that combines crop management with gamification,
+      allowing you to grow plants, adopt sustainable practices,
+      and earn unique virtual pets as rewards.
+    </p>
   </section>
 </div>

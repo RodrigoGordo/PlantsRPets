@@ -1,8 +1,20 @@
 <div class="features-container">
+  <nav class="menu">
+    <div class="logo">
+      <img src="assets/logo.png" alt="Plants R Pets Logo" />
+    </div>
+    <ul>
+      <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" class="mock-button">Home</a></li>
+      <li><a routerLink="/features" routerLinkActive="active" class="mock-button">Features</a></li>
+      <li><a routerLink="/about-us" routerLinkActive="active" class="mock-button">About Us</a></li>
+      <li><a routerLink="/faq" routerLinkActive="active" class="mock-button">FAQ</a></li>
+      <li><a routerLink="/contact-us" routerLinkActive="active" class="mock-button">Contact Us</a></li>
+    </ul>
+    <button class="sign-in">Sign in</button>
+  </nav>
   <header>
     <h1>Features</h1>
   </header>
-
   <section class="features-list">
     <div class="feature-item">
       <h2>Plant Management</h2>

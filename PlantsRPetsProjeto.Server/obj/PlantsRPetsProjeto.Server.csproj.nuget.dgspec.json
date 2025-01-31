@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Rodrigo\\source\\repos\\PlantsRPets\\PlantsRPetsProjeto.Server\\PlantsRPetsProjeto.Server.csproj": {}
+    "D:\\Git\\PlantsRPets\\PlantsRPetsProjeto.Server\\PlantsRPetsProjeto.Server.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Rodrigo\\source\\repos\\PlantsRPets\\PlantsRPetsProjeto.Server\\PlantsRPetsProjeto.Server.csproj": {
+    "D:\\Git\\PlantsRPets\\PlantsRPetsProjeto.Server\\PlantsRPetsProjeto.Server.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Rodrigo\\source\\repos\\PlantsRPets\\PlantsRPetsProjeto.Server\\PlantsRPetsProjeto.Server.csproj",
+        "projectUniqueName": "D:\\Git\\PlantsRPets\\PlantsRPetsProjeto.Server\\PlantsRPetsProjeto.Server.csproj",
         "projectName": "PlantsRPetsProjeto.Server",
-        "projectPath": "C:\\Users\\Rodrigo\\source\\repos\\PlantsRPets\\PlantsRPetsProjeto.Server\\PlantsRPetsProjeto.Server.csproj",
-        "packagesPath": "C:\\Users\\Rodrigo\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Rodrigo\\source\\repos\\PlantsRPets\\PlantsRPetsProjeto.Server\\obj\\",
+        "projectPath": "D:\\Git\\PlantsRPets\\PlantsRPetsProjeto.Server\\PlantsRPetsProjeto.Server.csproj",
+        "packagesPath": "C:\\Users\\putot\\.nuget\\packages\\",
+        "outputPath": "D:\\Git\\PlantsRPets\\PlantsRPetsProjeto.Server\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\Rodrigo\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\putot\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
