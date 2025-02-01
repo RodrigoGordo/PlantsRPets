@@ -14,8 +14,10 @@ interface WeatherForecast {
   standalone: false,
   styleUrl: './app.component.css'
 })
-export class AppComponent implements OnInit {
-  public forecasts: WeatherForecast[] = [];
+export class AppComponent{
+  title = 'plantsrpetsprojeto.client';
+
+  /*public forecasts: WeatherForecast[] = [];
 
   constructor(private http: HttpClient) {}
 
@@ -34,5 +36,5 @@ export class AppComponent implements OnInit {
     );
   }
 
-  title = 'plantsrpetsprojeto.client';
+  title = 'plantsrpetsprojeto.client';*/
 }

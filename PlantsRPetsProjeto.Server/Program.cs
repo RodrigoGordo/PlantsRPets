@@ -11,6 +11,18 @@ using PlantsRPetsProjeto.Server.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Enable CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll",
+        policy =>
+        {
+            policy.AllowAnyOrigin() // Permite chamadas de qualquer domínio (usar com cuidado em produção)
+                  .AllowAnyMethod() // Permite qualquer método (GET, POST, etc.)
+                  .AllowAnyHeader(); // Permite qualquer cabeçalho na requisição
+        });
+});
+
 //Add services to the container
 builder.Services.AddControllers();
 
@@ -102,6 +114,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors("AllowAll");
 
 app.UseAuthentication();
 app.UseAuthorization();

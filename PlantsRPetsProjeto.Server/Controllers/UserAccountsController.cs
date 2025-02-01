@@ -89,7 +89,7 @@ namespace PlantsRPetsProjeto.Server.Controllers
             });
         }
 
-        [HttpPost("forgot-password")]
+        [HttpPost("api/forgot-password")]
         public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordModel model)
         {
             try
@@ -125,10 +125,8 @@ namespace PlantsRPetsProjeto.Server.Controllers
             }
         }
 
-        /// <summary>
-        /// Permite redefinir a senha do usuário usando o token enviado por email.
-        /// </summary>
-        [HttpPost("reset-password")]
+       
+        [HttpPost("api/reset-password")]
         public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordModel model)
         {
             try
