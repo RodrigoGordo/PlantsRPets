@@ -25,6 +25,10 @@ header h1 {
   text-transform: uppercase;
 }
 
+.features-list ul{
+    list-style: none;
+}
+
 .features-list {
   display: flex;
   flex-direction: column;
