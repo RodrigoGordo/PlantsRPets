@@ -1,35 +1,58 @@
 <!-- contact-us.component.html -->
 <body>
+  <!-- Navigation Bar (mesmo código das demais páginas) -->
   <nav class="menu">
     <div class="logo">
       <img src="assets/logo.png" alt="Plants R Pets Logo" />
     </div>
     <ul>
-      <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" class="mock-button">Home</a></li>
-      <li><a routerLink="/features" routerLinkActive="active" class="mock-button">Features</a></li>
-      <li><a routerLink="/about-us" routerLinkActive="active" class="mock-button">About Us</a></li>
-      <li><a routerLink="/faq" routerLinkActive="active" class="mock-button">FAQ</a></li>
-      <li><a routerLink="/contact-us" routerLinkActive="active" class="mock-button">Contact Us</a></li>
+      <li>
+        <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" class="mock-button">
+          Home
+        </a>
+      </li>
+      <li>
+        <a routerLink="/features" routerLinkActive="active" class="mock-button">
+          Features
+        </a>
+      </li>
+      <li>
+        <a routerLink="/about-us" routerLinkActive="active" class="mock-button">
+          About Us
+        </a>
+      </li>
+      <li>
+        <a routerLink="/faq" routerLinkActive="active" class="mock-button">
+          FAQ
+        </a>
+      </li>
+      <li>
+        <a routerLink="/contact-us" routerLinkActive="active" class="mock-button">
+          Contact Us
+        </a>
+      </li>
     </ul>
     <button class="sign-in">Sign in</button>
   </nav>
   <div class="contact-us-container">
     <header>
-      <h1>Contact us</h1>
+      <h1>Contact Us</h1>
     </header>
 
-    <section class="about-content">
-      <div class="about-description">
+    <section class="contact-content">
+      <div class="contact-info">
         <h2>Google Mail</h2>
       </div>
 
-      <div class="about-values">
+      <div class="contact-info">
         <h2>Outlook</h2>
       </div>
 
-      <div class="about-team">
+      <div class="contact-info">
         <h2>Our Team</h2>
-        <p>We are a passionate team of plant lovers, pet enthusiasts, and tech developers working together to bring the best plant and pet management solution to the world!</p>
+        <p>
+          We are a passionate team of plant lovers, pet enthusiasts, and tech developers working together to bring the best plant and pet management solution to the world!
+        </p>
       </div>
     </section>
   </div>

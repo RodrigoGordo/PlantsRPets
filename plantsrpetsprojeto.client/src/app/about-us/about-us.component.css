@@ -1,9 +1,9 @@
-/* General Styles */
+
 body {
   font-family: 'Arial', sans-serif;
   margin: 0;
   padding: 0;
-  background-color: #e9f7db; /* Light greenish background */
+  background-color: #e9f7db;
   color: #2c3e50;
   line-height: 1.6;
   height: 100vh;
@@ -12,12 +12,11 @@ body {
   justify-content: flex-start;
 }
 
-/* Navigation Bar */
 nav.menu {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #4CAF50; /* Rich green */
+  background-color: #4CAF50;
   padding: 18px 40px;
   border-radius: 50px;
   box-shadow: 0 8px 10px rgba(0, 0, 0, 0.1);
@@ -48,19 +47,15 @@ nav ul {
     transition: color 0.3s ease-in-out;
     position: relative;
   }
-
-    /* Hover Effect */
     nav ul li:hover {
       color: #81c784;
     }
 
-    /* Active Page Styling */
     nav ul li a.active {
       color: #ffeb3b;
       font-weight: bold;
     }
 
-      /* Elegant Active Page Highlight */
       nav ul li a.active::after {
         content: "";
         display: block;
@@ -74,13 +69,11 @@ nav ul {
         transition: width 0.3s ease-in-out;
       }
 
-/* Mock Button */
 .mock-button {
   text-decoration: none;
   color: inherit;
 }
 
-/* Sign-in Button */
 .sign-in {
   background: white;
   color: #4caf50;
@@ -95,7 +88,6 @@ nav ul {
     background: #f1f1f1;
   }
 
-/* About Us Container */
 .about-us-container {
   max-width: 1100px;
   margin: 50px auto;
@@ -106,7 +98,6 @@ nav ul {
   text-align: center;
 }
 
-/* Header */
 header h1 {
   font-size: 3rem;
   color: #2e8b57;
@@ -116,7 +107,6 @@ header h1 {
   text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-/* About Content */
 .about-content {
   display: flex;
   flex-direction: column;
@@ -124,7 +114,6 @@ header h1 {
   margin-top: 20px;
 }
 
-/* Sections */
 .about-description,
 .about-values,
 .about-team {
@@ -158,7 +147,6 @@ header h1 {
     letter-spacing: 0.5px;
   }
 
-  /* Values List */
   .about-values ul {
     list-style-type: none;
     padding: 0;
@@ -171,7 +159,6 @@ header h1 {
     position: relative;
   }
 
-    /* Add a Leaf Icon to List Items */
     .about-values li::before {
       content: "🌿";
       color: #27ae60;
@@ -179,7 +166,6 @@ header h1 {
       margin-right: 10px;
     }
 
-/* Footer */
 footer {
   text-align: center;
   font-size: 0.9rem;

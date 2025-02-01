@@ -1,33 +1,19 @@
-/* Main Container */
-.faq-container {
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 40px;
-  background-color: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+/* Geral */
+body {
+  font-family: 'Arial', sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #e9f7db; /* Fundo verde claro */
+  color: #2c3e50;
+  line-height: 1.6;
 }
 
-/* Header */
-header {
-  text-align: center;
-  margin-bottom: 40px;
-}
-
-h1 {
-  font-size: 3rem;
-  color: #2e8b57;
-  font-weight: 700;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-}
-
-/* Navigation Menu */
+/* Nav Bar (igual ao do About Us) */
 nav.menu {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #4CAF50; /* Rich green */
+  background-color: #4CAF50; /* Verde intenso */
   padding: 18px 40px;
   border-radius: 50px;
   box-shadow: 0 8px 10px rgba(0, 0, 0, 0.1);
@@ -59,24 +45,23 @@ nav ul {
     position: relative;
   }
 
-    /* Hover Effect */
+    /* Efeito Hover */
     nav ul li:hover {
-      color: #81c784; /* Soft green */
+      color: #81c784; /* Verde suave */
     }
 
-    /* Active Page Styling */
+    /* Estilização de Página Ativa */
     nav ul li a.active {
-      color: #ffeb3b; /* Bright yellow */
+      color: #ffeb3b; /* Amarelo brilhante */
       font-weight: bold;
     }
 
-      /* Elegant Active Page Highlight */
       nav ul li a.active::after {
         content: "";
         display: block;
         height: 4px;
         width: 100%;
-        background: linear-gradient(to right, #ffeb3b, #ff9800); /* Yellow to orange gradient */
+        background: linear-gradient(to right, #ffeb3b, #ff9800); /* Gradiente amarelo a laranja */
         position: absolute;
         bottom: -6px;
         left: 0;
@@ -84,13 +69,13 @@ nav ul {
         transition: width 0.3s ease-in-out;
       }
 
-/* Mock Button */
+/* Link "Mock Button" */
 .mock-button {
   text-decoration: none;
   color: inherit;
 }
 
-/* Sign-in Button */
+/* Botão Sign-in */
 .sign-in {
   background: white;
   color: #4caf50;
@@ -105,14 +90,34 @@ nav ul {
     background: #f1f1f1;
   }
 
-/* FAQ List */
+/* Container Principal do FAQ */
+.faq-container {
+  max-width: 1100px;
+  margin: 50px auto; /* Para ficar consistente com o About Us */
+  padding: 40px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+/* Header do FAQ */
+header h1 {
+  font-size: 3rem;
+  color: #2e8b57;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+/* Lista de FAQ */
 .faq-list {
   display: flex;
   flex-direction: column;
   gap: 25px;
 }
 
-/* FAQ Item */
+/* Item de FAQ */
 .faq-item {
   background-color: #f4f4f9;
   padding: 20px;
@@ -120,14 +125,12 @@ nav ul {
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
 }
 
-  /* FAQ Titles */
   .faq-item h2 {
     font-size: 1.8rem;
     color: #27ae60;
     font-weight: 600;
   }
 
-  /* FAQ Text */
   .faq-item p {
     font-size: 1.1rem;
     color: #34495e;

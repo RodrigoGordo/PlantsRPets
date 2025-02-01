@@ -1,12 +1,3 @@
-/* Main Container */
-.home-container {
-  margin: 0 auto;
-  padding: 40px;
-  background-color: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-}
-
 /* General Styles */
 body {
   font-family: 'Arial', sans-serif;
@@ -15,13 +6,9 @@ body {
   background-color: #e9f7db; /* Light greenish background */
   color: #2c3e50;
   line-height: 1.6;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
 }
 
-/* Header and Navigation */
+/* Navigation Bar (igual às demais páginas) */
 nav.menu {
   display: flex;
   justify-content: space-between;
@@ -58,18 +45,15 @@ nav ul {
     position: relative;
   }
 
-    /* Hover Effect */
     nav ul li:hover {
       color: #81c784;
     }
 
-    /* Active Page Styling */
     nav ul li a.active {
       color: #ffeb3b;
       font-weight: bold;
     }
 
-      /* Active Page Underline */
       nav ul li a.active::after {
         content: "";
         display: block;
@@ -104,15 +88,24 @@ nav ul {
     background: #f1f1f1;
   }
 
-/* Main Content Section */
-.intro {
-  background-color: #ffffff;
+/* Main Container para a Home */
+.home-container {
+  max-width: 1100px;
+  margin: 50px auto; /* Consistente com as outras páginas */
   padding: 40px;
-  margin-top: 50px;
+  background-color: #ffffff;
   border-radius: 12px;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
   text-align: center;
-  transition: all 0.3s ease-in-out;
+}
+
+/* Main Content Section (Intro) */
+.intro {
+  background-color: #ffffff;
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease-in-out;
 }
 
   .intro:hover {
@@ -134,7 +127,7 @@ nav ul {
     letter-spacing: 0.5px;
   }
 
-/* Footer */
+/* Footer (se aplicável) */
 footer {
   text-align: center;
   font-size: 0.9rem;
@@ -142,6 +135,7 @@ footer {
   margin-top: 50px;
 }
 
+/* Header (se utilizado) */
 header {
   text-align: center;
   margin-bottom: 40px;
