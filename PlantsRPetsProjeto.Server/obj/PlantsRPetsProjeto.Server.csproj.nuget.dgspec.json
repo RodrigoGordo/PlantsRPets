@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Git\\PlantsRPets\\PlantsRPetsProjeto.Server\\PlantsRPetsProjeto.Server.csproj": {}
+    "C:\\Users\\Rodrigo\\source\\repos\\PlantsRPets\\PlantsRPetsProjeto.Server\\PlantsRPetsProjeto.Server.csproj": {}
   },
   "projects": {
-    "D:\\Git\\PlantsRPets\\PlantsRPetsProjeto.Server\\PlantsRPetsProjeto.Server.csproj": {
+    "C:\\Users\\Rodrigo\\source\\repos\\PlantsRPets\\PlantsRPetsProjeto.Server\\PlantsRPetsProjeto.Server.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Git\\PlantsRPets\\PlantsRPetsProjeto.Server\\PlantsRPetsProjeto.Server.csproj",
+        "projectUniqueName": "C:\\Users\\Rodrigo\\source\\repos\\PlantsRPets\\PlantsRPetsProjeto.Server\\PlantsRPetsProjeto.Server.csproj",
         "projectName": "PlantsRPetsProjeto.Server",
-        "projectPath": "D:\\Git\\PlantsRPets\\PlantsRPetsProjeto.Server\\PlantsRPetsProjeto.Server.csproj",
-        "packagesPath": "C:\\Users\\putot\\.nuget\\packages\\",
-        "outputPath": "D:\\Git\\PlantsRPets\\PlantsRPetsProjeto.Server\\obj\\",
+        "projectPath": "C:\\Users\\Rodrigo\\source\\repos\\PlantsRPets\\PlantsRPetsProjeto.Server\\PlantsRPetsProjeto.Server.csproj",
+        "packagesPath": "C:\\Users\\Rodrigo\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Rodrigo\\source\\repos\\PlantsRPets\\PlantsRPetsProjeto.Server\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\putot\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Rodrigo\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -79,6 +79,10 @@
             "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
               "target": "Package",
               "version": "[8.0.7, )"
+            },
+            "SendGrid": {
+              "target": "Package",
+              "version": "[9.29.3, )"
             },
             "Swashbuckle.AspNetCore": {
               "target": "Package",

@@ -12,8 +12,8 @@ using PlantsRPetsProjeto.Server.Data;
 namespace PlantsRPetsProjeto.Server.Migrations
 {
     [DbContext(typeof(PlantsRPetsProjetoServerContext))]
-    [Migration("20250130002728_Initial")]
-    partial class Initial
+    [Migration("20250130183708_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -379,9 +379,6 @@ namespace PlantsRPetsProjeto.Server.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("SustainabilityInfoId")
-                        .HasColumnType("int");
 
                     b.Property<string>("Type")
                         .IsRequired()

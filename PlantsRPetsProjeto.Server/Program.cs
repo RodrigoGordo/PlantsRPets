@@ -7,8 +7,21 @@ using Microsoft.OpenApi.Models;
 using PlantsRPetsProjeto.Server.Models;
 using PlantsRPetsProjeto.Server.Data;
 using Microsoft.IdentityModel.Tokens;
+using PlantsRPetsProjeto.Server.Services;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Enable CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll",
+        policy =>
+        {
+            policy.AllowAnyOrigin() // Permite chamadas de qualquer domínio (usar com cuidado em produção)
+                  .AllowAnyMethod() // Permite qualquer método (GET, POST, etc.)
+                  .AllowAnyHeader(); // Permite qualquer cabeçalho na requisição
+        });
+});
 
 //Add services to the container
 builder.Services.AddControllers();
@@ -48,6 +61,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 
 builder.Services.AddAuthorization();
+
+builder.Services.AddTransient<IEmailService, SendGridEmailService>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -99,6 +114,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors("AllowAll");
 
 app.UseAuthentication();
 app.UseAuthorization();
