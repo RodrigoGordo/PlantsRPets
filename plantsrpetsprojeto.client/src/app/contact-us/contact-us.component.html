@@ -1,1 +1,36 @@
-<p>contact-us works!</p>
+<!-- contact-us.component.html -->
+<body>
+  <nav class="menu">
+    <div class="logo">
+      <img src="assets/logo.png" alt="Plants R Pets Logo" />
+    </div>
+    <ul>
+      <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" class="mock-button">Home</a></li>
+      <li><a routerLink="/features" routerLinkActive="active" class="mock-button">Features</a></li>
+      <li><a routerLink="/about-us" routerLinkActive="active" class="mock-button">About Us</a></li>
+      <li><a routerLink="/faq" routerLinkActive="active" class="mock-button">FAQ</a></li>
+      <li><a routerLink="/contact-us" routerLinkActive="active" class="mock-button">Contact Us</a></li>
+    </ul>
+    <button class="sign-in">Sign in</button>
+  </nav>
+  <div class="contact-us-container">
+    <header>
+      <h1>Contact us</h1>
+    </header>
+
+    <section class="about-content">
+      <div class="about-description">
+        <h2>Google Mail</h2>
+      </div>
+
+      <div class="about-values">
+        <h2>Outlook</h2>
+      </div>
+
+      <div class="about-team">
+        <h2>Our Team</h2>
+        <p>We are a passionate team of plant lovers, pet enthusiasts, and tech developers working together to bring the best plant and pet management solution to the world!</p>
+      </div>
+    </section>
+  </div>
+</body>
