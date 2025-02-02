@@ -5,13 +5,17 @@ import { AboutUsComponent } from './about-us/about-us.component';
 import { FeaturesComponent } from './features/features.component';
 import { FaqComponent } from './faq/faq.component';
 import { ContactUsComponent } from './contact-us/contact-us.component';
+import { SigninComponent } from './signin/signin.component'
+import { RegisterComponent } from './register/register.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'about-us', component: AboutUsComponent },
   { path: 'features', component: FeaturesComponent },
   { path: 'faq', component: FaqComponent },
-  { path: 'contact-us', component: ContactUsComponent}
+  { path: 'contact-us', component: ContactUsComponent },
+  { path: 'signin', component: SigninComponent },
+  { path: 'register', component: RegisterComponent },
 ];
 
 @NgModule({

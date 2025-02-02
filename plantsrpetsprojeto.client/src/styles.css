@@ -1,1 +1,22 @@
 /* You can add global styles to this file, and also import other style files */
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+/* styles.css */
+.mat-mdc-dialog-surface {
+  background-color: #ffffff !important;
+  box-shadow: none !important;
+  border-radius: 16px !important;
+}
+
+.mdc-dialog__surface {
+  padding: 0 !important;
+  margin: 0 !important;
+  overflow: visible !important;
+}
+
+/* Global stylesheet */
+app-root {
+  padding: 0 !important;
+}

@@ -86,7 +86,20 @@ builder.Services.AddSwaggerGen(options =>
         });
 });
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("Angular", policy =>
+    {
+        policy.WithOrigins("https://localhost:4200")
+              .AllowAnyHeader()
+              .AllowAnyMethod()
+              .AllowCredentials();
+    });
+});
+
 var app = builder.Build();
+
+app.UseCors("Angular");
 
 // Configure the HTTP request pipeline.
 app.UseHttpsRedirection();
