@@ -7,6 +7,8 @@ import { FaqComponent } from './faq/faq.component';
 import { ContactUsComponent } from './contact-us/contact-us.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
+import { SigninComponent } from './signin/signin.component'
+import { RegisterComponent } from './register/register.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -16,7 +18,9 @@ const routes: Routes = [
   { path: 'contact-us', component: ContactUsComponent},
   { path: 'forgot-password', component: ForgotPasswordComponent },
   { path: 'reset-password', component: ResetPasswordComponent },
-  { path: '**', redirectTo: '' }
+  { path: '**', redirectTo: '' },
+  { path: 'signin', component: SigninComponent },
+  { path: 'register', component: RegisterComponent },
 ];
 
 @NgModule({

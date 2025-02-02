@@ -1,16 +1,22 @@
-const { env } = require('process');
-
-const target = env.ASPNETCORE_HTTPS_PORT ? `https://localhost:${env.ASPNETCORE_HTTPS_PORT}` :
-    env.ASPNETCORE_URLS ? env.ASPNETCORE_URLS.split(';')[0] : 'https://localhost:7024';
-
 const PROXY_CONFIG = [
   {
     context: [
-      "/weatherforecast",
+      "/api", // Match all API routes
+      "/login",
+      "/logout",
+      "/register",
+      "/refresh",
+      "/confirmEmail",
+      "/resendConfirmationEmail",
+      "/forgotPassword",
+      "/resetPassword",
+      "/manage/**"
     ],
-    target,
-    secure: false
+    target: "https://localhost:7024", // Match your backend port
+    secure: false,
+    changeOrigin: true,
+    logLevel: "debug",
   }
-]
+];
 
 module.exports = PROXY_CONFIG;

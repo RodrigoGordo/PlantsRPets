@@ -1,0 +1,40 @@
+/* Login Menu Layout */
+.login-menu {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+  list-style: none;
+  padding: 0;
+}
+
+/* Common Button Styles */
+.login-button, .logout-button {
+  border: none;
+  padding: 0.5rem 1.5rem;
+  border-radius: 50px; /* Oval Shape */
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+  text-decoration: none;
+  border: 3px solid rgba(0, 0, 0, 0.3); /* Subtle Black Outline */
+}
+
+/* Login Button - Darker Green */
+.login-button {
+  background-color: #2e7d32; /* Darker Green */
+  color: #e8f5e9; /* Light Greenish-White for contrast */
+}
+
+  .login-button:hover {
+    background-color: #1b5e20; /* Even Darker Green */
+  }
+
+/* Logout Button - Light Red */
+.logout-button {
+  background-color: #ffb2b2; /* Light Red */
+  color: #821414; /* Dark Red Text */
+}
+
+  .logout-button:hover {
+    background-color: #ff9999;
+  }

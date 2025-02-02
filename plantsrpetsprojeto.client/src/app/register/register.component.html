@@ -1,0 +1,77 @@
+<div class="auth-wrapper">
+  <!-- Logo Container -->
+  <div class="logo-container">
+    <a routerLink="/" class="logo-link">
+      <img src="assets/logo.png" alt="App Logo" class="logo">
+    </a>
+  </div>
+
+  <div class="auth-content">
+    <div class="auth-card">
+      <h2 class="auth-title">Create Account</h2>
+
+      <form [formGroup]="registerForm" (ngSubmit)="register()" class="auth-form">
+        <!-- Nickname -->
+        <div class="form-group">
+          <input type="text"
+                 formControlName="name"
+                 placeholder="Nickname"
+                 class="form-input"
+                 [ngClass]="{ 'input-error': registerForm.get('name')?.touched && registerForm.get('name')?.invalid }">
+          <div class="error-message" *ngIf="registerForm.get('name')?.touched && registerForm.get('name')?.invalid">
+            <span *ngIf="registerForm.get('name')?.errors?.['required']">Nickname is required</span>
+          </div>
+        </div>
+
+        <!-- Email -->
+        <div class="form-group">
+          <input type="email"
+                 formControlName="email"
+                 placeholder="Email"
+                 class="form-input"
+                 [ngClass]="{ 'input-error': registerForm.get('email')?.touched && registerForm.get('email')?.invalid }">
+          <div class="error-message" *ngIf="registerForm.get('email')?.touched && registerForm.get('email')?.invalid">
+            <span *ngIf="registerForm.get('email')?.errors?.['required']">Email is required</span>
+            <span *ngIf="registerForm.get('email')?.errors?.['email']">Please enter a valid email</span>
+          </div>
+        </div>
+
+        <!-- Password -->
+        <div class="form-group">
+          <input type="password"
+                 formControlName="password"
+                 placeholder="Password"
+                 class="form-input"
+                 [ngClass]="{ 'input-error': registerForm.get('password')?.touched && registerForm.get('password')?.invalid }">
+          <div class="error-message" *ngIf="registerForm.get('password')?.touched && registerForm.get('password')?.invalid">
+            <span *ngIf="registerForm.get('password')?.errors?.['required']">Password is required</span>
+            <span *ngIf="registerForm.get('password')?.errors?.['minlength']">Minimum 6 characters</span>
+            <span *ngIf="registerForm.get('password')?.errors?.['pattern']">Requires one special character</span>
+          </div>
+        </div>
+
+        <!-- Confirm Password -->
+        <div class="form-group">
+          <input type="password"
+                 formControlName="confirmPassword"
+                 placeholder="Confirm Password"
+                 class="form-input"
+                 [ngClass]="{ 'input-error': registerForm.hasError('passwordMismatch') }">
+          <div class="error-message"
+               *ngIf="registerForm.hasError('passwordMismatch') && registerForm.get('confirmPassword')?.touched">
+            Passwords do not match
+          </div>
+        </div>
+
+        <button type="submit" class="auth-button" [disabled]="!registerForm.valid">
+          Register Now
+        </button>
+
+        <div class="auth-footer">
+          Already have an account?
+          <a class="auth-link" (click)="openLogin()">Log In</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,47 @@
+<div class="signin-modal">
+  <div class="modal-header">
+    <h2>Welcome Back</h2>
+    <p>Sign in to continue to your account</p>
+    <button class="close-btn" (click)="closeDialog()">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M13 1L1 13M1 1L13 13" stroke="#666" stroke-width="2" stroke-linecap="round" />
+      </svg>
+    </button>
+  </div>
+
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="signin-form">
+    <div class="form-group">
+      <input type="email"
+             formControlName="email"
+             placeholder="Email address"
+             class="form-input"
+             [ngClass]="{ 'input-error': loginForm.get('email')?.touched && loginForm.get('email')?.invalid }">
+      <div class="error-message" *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.invalid">
+        <span *ngIf="loginForm.get('email')?.errors?.['required']">Email is required</span>
+        <span *ngIf="loginForm.get('email')?.errors?.['email']">Please enter a valid email</span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <input type="password"
+             formControlName="password"
+             placeholder="Password"
+             class="form-input"
+             [ngClass]="{ 'input-error': loginForm.get('password')?.touched && loginForm.get('password')?.invalid }">
+      <div class="error-message" *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.invalid">
+        Password is required
+      </div>
+    </div>
+
+    <div class="auth-error" *ngIf="authFailed">
+      Invalid email or password. Please try again.
+    </div>
+
+    <button type="submit" class="signin-btn" [disabled]="!loginForm.valid">Continue</button>
+
+    <div class="form-links">
+      <a class="text-link" (click)="openResetPassword()">Forgot your password?</a>
+      <a class="text-link" [routerLink]="['/register']" (click)="closeDialog()">Don't have an account? Sign up</a>
+    </div>
+  </form>
+</div>

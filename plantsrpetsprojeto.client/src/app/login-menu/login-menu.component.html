@@ -1,0 +1,9 @@
+<!-- login-menu.component.html -->
+<ul class="login-menu">
+  <li *ngIf="!isSignedIn">
+    <button class="login-button" (click)="openSignInDialog()">Sign in</button>
+  </li>
+  <li *ngIf="isSignedIn">
+    <button class="logout-button" (click)="signOut()">Logout</button>
+  </li>
+</ul>
