@@ -35,7 +35,11 @@ import { MatButtonModule } from '@angular/material/button';
     ContactUsComponent,
     ResetPasswordComponent,
     ForgotPasswordComponent,
-    NavbarComponent
+    NavbarComponent,
+    LoginMenuComponent,
+    RegisterComponent,
+    SigninComponent,
+    ConfirmDialogueComponent,
   ],
   imports: [
     BrowserModule,
@@ -43,10 +47,6 @@ import { MatButtonModule } from '@angular/material/button';
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
-    LoginMenuComponent,
-    RegisterComponent,
-    SigninComponent,
-    ConfirmDialogueComponent,
     RouterModule,
     MatDialogModule, MatFormFieldModule,
     MatInputModule, MatButtonModule

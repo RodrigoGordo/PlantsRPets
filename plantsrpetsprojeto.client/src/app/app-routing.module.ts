@@ -18,9 +18,9 @@ const routes: Routes = [
   { path: 'contact-us', component: ContactUsComponent},
   { path: 'forgot-password', component: ForgotPasswordComponent },
   { path: 'reset-password', component: ResetPasswordComponent },
-  { path: '**', redirectTo: '' },
   { path: 'signin', component: SigninComponent },
   { path: 'register', component: RegisterComponent },
+  { path: '**', redirectTo: '' },
 ];
 
 @NgModule({
