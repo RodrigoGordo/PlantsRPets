@@ -6,10 +6,6 @@ body {
   background-color: #e9f7db;
   color: #2c3e50;
   line-height: 1.6;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
 }
 
 .about-us-container {

@@ -40,7 +40,13 @@
             ],
             "styles": [
               "@angular/material/prebuilt-themes/azure-blue.css",
-              "src/styles.css"
+              "src/styles.css",
+              "src/app/about-us/about-us.component.css",
+              "src/app/contact-us/contact-us.component.css",
+              "src/app/faq/faq.component.css",
+              "src/app/features/features.component.css",
+              "src/app/landing-page/landing-page.component.css",
+              "src/app/navbar/navbar.component.css"
             ],
             "scripts": []
           },
