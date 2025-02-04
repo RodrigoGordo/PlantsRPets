@@ -98,7 +98,7 @@ export class RegisterComponent implements OnInit {
 
   openLogin(): void {
     this.dialog.open(SigninComponent, {
-      width: '400px',
+      width: '520px',
       panelClass: 'auth-dialog'
     });
   }

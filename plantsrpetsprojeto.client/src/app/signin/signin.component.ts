@@ -40,9 +40,9 @@ export class SigninComponent{
     }
   }
 
-  openResetPassword(): void {
+  openForgotPassword(): void {
     this.dialogRef.close();
-    this.router.navigate(['/reset-password']);
+    this.router.navigate(['/forgot-password']);
   }
 
   closeDialog(): void {
