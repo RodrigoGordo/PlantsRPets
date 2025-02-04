@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -90,6 +91,7 @@ namespace PlantsRPetsProjeto.Server.Controllers
         }
 
         [HttpPost("api/forgot-password")]
+        [EnableCors("AllowAll")]
         public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordModel model)
         {
             try
@@ -127,6 +129,7 @@ namespace PlantsRPetsProjeto.Server.Controllers
 
        
         [HttpPost("api/reset-password")]
+        [EnableCors("AllowAll")]
         public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordModel model)
         {
             try

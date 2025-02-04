@@ -11,18 +11,6 @@ using PlantsRPetsProjeto.Server.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Enable CORS
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("AllowAll",
-        policy =>
-        {
-            policy.AllowAnyOrigin() // Permite chamadas de qualquer domínio (usar com cuidado em produção)
-                  .AllowAnyMethod() // Permite qualquer método (GET, POST, etc.)
-                  .AllowAnyHeader(); // Permite qualquer cabeçalho na requisição
-        });
-});
-
 //Add services to the container
 builder.Services.AddControllers();
 
@@ -101,6 +89,8 @@ builder.Services.AddSwaggerGen(options =>
         });
 });
 
+// Enable CORS
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("Angular", policy =>
@@ -110,11 +100,19 @@ builder.Services.AddCors(options =>
               .AllowAnyMethod()
               .AllowCredentials();
     });
+
+    options.AddPolicy("AllowAll",
+        policy =>
+        {
+            policy.AllowAnyOrigin() // Permite chamadas de qualquer domínio (usar com cuidado em produção)
+                  .AllowAnyMethod() // Permite qualquer método (GET, POST, etc.)
+                  .AllowAnyHeader(); // Permite qualquer cabeçalho na requisição
+        });
 });
+
 
 var app = builder.Build();
 
-app.UseCors("Angular");
 
 // Configure the HTTP request pipeline.
 app.UseHttpsRedirection();
@@ -128,7 +126,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseCors("AllowAll");
+app.UseCors("Angular");
+
+app.UseWhen(context => context.Request.Path.StartsWithSegments("/forgot-password"), appBuilder =>
+{
+    appBuilder.UseCors("AllowAll");
+});
+
 
 app.UseAuthentication();
 app.UseAuthorization();
