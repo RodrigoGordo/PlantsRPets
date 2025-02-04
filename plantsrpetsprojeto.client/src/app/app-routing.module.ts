@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { HomeComponent } from './home/home.component';
+import { LandingPageComponent } from './landing-page/landing-page.component';
 import { AboutUsComponent } from './about-us/about-us.component';
 import { FeaturesComponent } from './features/features.component';
 import { FaqComponent } from './faq/faq.component';
@@ -11,7 +11,7 @@ import { SigninComponent } from './signin/signin.component'
 import { RegisterComponent } from './register/register.component';
 
 const routes: Routes = [
-  { path: '', component: HomeComponent },
+  { path: '', component: LandingPageComponent },
   { path: 'about-us', component: AboutUsComponent },
   { path: 'features', component: FeaturesComponent },
   { path: 'faq', component: FaqComponent },

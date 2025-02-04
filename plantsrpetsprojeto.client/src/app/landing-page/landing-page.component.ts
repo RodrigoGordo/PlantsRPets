@@ -4,11 +4,11 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-home',
   standalone: false,
-  templateUrl: './home.component.html',
-  styleUrl: './home.component.css'
+  templateUrl: './landing-page.component.html',
+  styleUrl: './landing-page.component.css'
 })
 
-export class HomeComponent {
+export class LandingPageComponent {
 
   constructor(private router: Router) { }
 

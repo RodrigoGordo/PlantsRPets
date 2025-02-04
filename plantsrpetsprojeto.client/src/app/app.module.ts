@@ -3,7 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { HomeComponent } from './home/home.component';
+import { LandingPageComponent } from './landing-page/landing-page.component';
 import { AboutUsComponent } from './about-us/about-us.component';
 import { FeaturesComponent } from './features/features.component';
 import { FaqComponent } from './faq/faq.component';
@@ -28,7 +28,7 @@ import { MatButtonModule } from '@angular/material/button';
 @NgModule({
   declarations: [
     AppComponent,
-    HomeComponent,
+    LandingPageComponent,
     AboutUsComponent,
     FeaturesComponent,
     FaqComponent,
