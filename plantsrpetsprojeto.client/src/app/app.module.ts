@@ -23,7 +23,11 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import { NavbarHomeComponent } from './navbar-home/navbar-home.component';
+import { PlantationsComponent } from './plantations/plantations.component';
+import { CollectionComponent } from './collection/collection.component';
+import { CommunitiesComponent } from './communities/communities.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { SettingsComponent } from './settings/settings.component';
 
 
 @NgModule({
@@ -41,7 +45,11 @@ import { NavbarHomeComponent } from './navbar-home/navbar-home.component';
     RegisterComponent,
     SigninComponent,
     ConfirmDialogueComponent,
-    NavbarHomeComponent,
+    PlantationsComponent,
+    CollectionComponent,
+    CommunitiesComponent,
+    DashboardComponent,
+    SettingsComponent,
   ],
   imports: [
     BrowserModule,
