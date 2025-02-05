@@ -14,6 +14,7 @@ import { CollectionComponent } from './collection/collection.component';
 import { CommunitiesComponent } from './communities/communities.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { SettingsComponent } from './settings/settings.component';
+import { HomeComponent } from './home/home.component';
 
 const routes: Routes = [
   { path: '', component: LandingPageComponent },
@@ -30,6 +31,7 @@ const routes: Routes = [
   { path: 'communities', component: CommunitiesComponent },
   { path: 'dashboard', component: DashboardComponent },
   { path: 'settings', component: SettingsComponent },
+  { path: 'home', component: HomeComponent },
   { path: '**', redirectTo: '' },
 ];
 

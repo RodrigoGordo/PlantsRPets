@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { SigninComponent } from '../signin/signin.component';
 import { AuthorizeService } from '../authorize.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login-menu',
@@ -15,7 +16,8 @@ export class LoginMenuComponent {
 
   constructor(
     public dialog: MatDialog,
-    private authService: AuthorizeService
+    private authService: AuthorizeService,
+    private router: Router
   ) {
     this.authService.onStateChanged().subscribe((state: boolean) => {
       this.isSignedIn = state;
@@ -33,7 +35,8 @@ export class LoginMenuComponent {
   signOut(): void {
     if (this.isSignedIn) {
       this.authService.signOut();
-      this.isSignedIn = false;
+      this.isSignedIn = false
+      this.router.navigateByUrl("");
     }
   }
 }

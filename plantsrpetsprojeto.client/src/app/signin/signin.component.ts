@@ -30,7 +30,7 @@ export class SigninComponent{
         next: (success) => {
           if (success) {
             this.dialogRef.close(true);
-            this.router.navigateByUrl("/");
+            this.router.navigateByUrl("/home");
           }
         },
         error: () => {
