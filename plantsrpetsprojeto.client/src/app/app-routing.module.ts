@@ -9,6 +9,11 @@ import { ForgotPasswordComponent } from './forgot-password/forgot-password.compo
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import { SigninComponent } from './signin/signin.component'
 import { RegisterComponent } from './register/register.component';
+import { PlantationsComponent } from './plantations/plantations.component';
+import { CollectionComponent } from './collection/collection.component';
+import { CommunitiesComponent } from './communities/communities.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { SettingsComponent } from './settings/settings.component';
 
 const routes: Routes = [
   { path: '', component: LandingPageComponent },
@@ -20,6 +25,11 @@ const routes: Routes = [
   { path: 'reset-password', component: ResetPasswordComponent },
   { path: 'signin', component: SigninComponent },
   { path: 'register', component: RegisterComponent },
+  { path: 'plantations', component: PlantationsComponent },
+  { path: 'collections', component: CollectionComponent },
+  { path: 'communities', component: CommunitiesComponent },
+  { path: 'dashboard', component: DashboardComponent },
+  { path: 'settings', component: SettingsComponent },
   { path: '**', redirectTo: '' },
 ];
 

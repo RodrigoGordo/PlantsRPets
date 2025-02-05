@@ -28,6 +28,7 @@ import { CollectionComponent } from './collection/collection.component';
 import { CommunitiesComponent } from './communities/communities.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { SettingsComponent } from './settings/settings.component';
+import { HomeComponent } from './home/home.component';
 
 
 @NgModule({
@@ -50,6 +51,7 @@ import { SettingsComponent } from './settings/settings.component';
     CommunitiesComponent,
     DashboardComponent,
     SettingsComponent,
+    HomeComponent,
   ],
   imports: [
     BrowserModule,
