@@ -38,6 +38,7 @@ export class LoginMenuComponent {
       this.authService.signOut();
       this.isSignedIn = false;
       this.dropdownOpen = false;
+      this.router.navigateByUrl("");
     }
   }
 
