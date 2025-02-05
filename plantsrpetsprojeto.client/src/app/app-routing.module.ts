@@ -14,6 +14,7 @@ import { CollectionComponent } from './collection/collection.component';
 import { CommunitiesComponent } from './communities/communities.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { SettingsComponent } from './settings/settings.component';
+import { ProfileComponent } from './profile/profile.component';
 import { HomeComponent } from './home/home.component';
 
 const routes: Routes = [
@@ -31,6 +32,7 @@ const routes: Routes = [
   { path: 'communities', component: CommunitiesComponent },
   { path: 'dashboard', component: DashboardComponent },
   { path: 'settings', component: SettingsComponent },
+  { path: 'profile', component: ProfileComponent },
   { path: 'home', component: HomeComponent },
   { path: '**', redirectTo: '' },
 ];

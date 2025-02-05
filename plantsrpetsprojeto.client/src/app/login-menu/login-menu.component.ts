@@ -13,6 +13,7 @@ import { Router } from '@angular/router';
 })
 export class LoginMenuComponent {
   isSignedIn: boolean = false;
+  dropdownOpen: boolean = false;
 
   constructor(
     public dialog: MatDialog,
@@ -35,8 +36,12 @@ export class LoginMenuComponent {
   signOut(): void {
     if (this.isSignedIn) {
       this.authService.signOut();
-      this.isSignedIn = false
-      this.router.navigateByUrl("");
+      this.isSignedIn = false;
+      this.dropdownOpen = false;
     }
+  }
+
+  toggleDropdown(): void {
+    this.dropdownOpen = !this.dropdownOpen;
   }
 }
