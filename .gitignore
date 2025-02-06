@@ -361,3 +361,7 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+PlantsRPetsProjeto.Server/obj/PlantsRPetsProjeto.Server.csproj.nuget.dgspec.json
+PlantsRPetsProjeto.Server/obj/PlantsRPetsProjeto.Server.csproj.nuget.g.props
+PlantsRPetsProjeto.Server/obj/project.nuget.cache
+PlantsRPetsProjeto.Server/obj/project.assets.json
