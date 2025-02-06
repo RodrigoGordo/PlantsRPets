@@ -19,6 +19,7 @@ import { SigninComponent } from './signin/signin.component';
 import { ConfirmDialogueComponent } from './confirm-dialogue/confirm-dialogue.component';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { ReactiveFormsModule } from '@angular/forms';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -66,8 +67,11 @@ import { LogoutConfirmationComponent } from './logout-confirmation/logout-confir
     ReactiveFormsModule,
     HttpClientModule,
     RouterModule,
-    MatDialogModule, MatFormFieldModule,
-    MatInputModule, MatButtonModule
+    MatTooltipModule,
+    MatDialogModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule
   ],
   providers: [
     provideAnimationsAsync()
