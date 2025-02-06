@@ -15,6 +15,7 @@
                  formControlName="name"
                  placeholder="Nickname"
                  class="form-input"
+                 matTooltip="Enter a valid nickname"
                  [ngClass]="{ 'input-error': registerForm.get('name')?.touched && registerForm.get('name')?.invalid }">
           <div class="error-message" *ngIf="registerForm.get('name')?.touched && registerForm.get('name')?.invalid">
             <span *ngIf="registerForm.get('name')?.errors?.['required']">Nickname is required</span>
@@ -26,6 +27,7 @@
                  formControlName="email"
                  placeholder="Email"
                  class="form-input"
+                 matTooltip="Enter a valid email address"
                  [ngClass]="{ 'input-error': registerForm.get('email')?.touched && registerForm.get('email')?.invalid }">
           <div class="error-message" *ngIf="registerForm.get('email')?.touched && registerForm.get('email')?.invalid">
             <span *ngIf="registerForm.get('email')?.errors?.['required']">Email is required</span>
@@ -38,6 +40,7 @@
                  formControlName="password"
                  placeholder="Password"
                  class="form-input"
+                 matTooltip="Password must be at least 6 characters and include a special character"
                  [ngClass]="{ 'input-error': registerForm.get('password')?.touched && registerForm.get('password')?.invalid }">
           <div class="error-message" *ngIf="registerForm.get('password')?.touched && registerForm.get('password')?.invalid">
             <span *ngIf="registerForm.get('password')?.errors?.['required']">Password is required</span>
@@ -51,6 +54,7 @@
                  formControlName="confirmPassword"
                  placeholder="Confirm Password"
                  class="form-input"
+                 matTooltip="Re-enter your password to confirm"
                  [ngClass]="{ 'input-error': registerForm.hasError('passwordMismatch') }">
           <div class="error-message"
                *ngIf="registerForm.hasError('passwordMismatch') && registerForm.get('confirmPassword')?.touched">

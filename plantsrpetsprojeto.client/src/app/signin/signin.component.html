@@ -15,6 +15,7 @@
              formControlName="email"
              placeholder="Email address"
              class="form-input"
+             matTooltip="If you have an account enter a valid email address"
              [ngClass]="{ 'input-error': loginForm.get('email')?.touched && loginForm.get('email')?.invalid }">
       <div class="error-message" *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.invalid">
         <span *ngIf="loginForm.get('email')?.errors?.['required']">Email is required</span>
@@ -27,6 +28,7 @@
              formControlName="password"
              placeholder="Password"
              class="form-input"
+             matTooltip="Enter your password"
              [ngClass]="{ 'input-error': loginForm.get('password')?.touched && loginForm.get('password')?.invalid }">
       <div class="error-message" *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.invalid">
         Password is required
@@ -40,8 +42,8 @@
     <button type="submit" class="signin-btn" [disabled]="!loginForm.valid">Continue</button>
 
     <div class="form-links">
-      <a class="text-link" (click)="openForgotPassword()">Forgot your password?</a>
-      <a class="text-link" [routerLink]="['/register']" (click)="closeDialog()">Don't have an account? Sign up</a>
+      <a class="text-link" (click)="openForgotPassword()" matTooltip="Request a reset link.">Forgot your password?</a>
+      <a class="text-link" [routerLink]="['/register']" (click)="closeDialog()" matTooltip="Create your new account">Don't have an account? Sign up</a>
     </div>
   </form>
 </div>

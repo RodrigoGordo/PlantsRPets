@@ -1,52 +1,52 @@
 <nav class="menu">
   <div class="logo">
-    <img src="assets/logo.png" alt="Plants R Pets Logo" />
+    <img src="assets/logo.png" alt="Plants R Pets Logo" matTooltip="Click to return to the homepage"/>
   </div>
   <ul *ngIf="!isSignedIn">
     <li>
-      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" class="mock-button">
+      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" class="mock-button" matTooltip="Go to the homepage">
         Home
       </a>
     </li>
     <li>
-      <a routerLink="/features" routerLinkActive="active" class="mock-button">
+      <a routerLink="/features" routerLinkActive="active" class="mock-button" matTooltip="Explore the features of our app">
         Features
       </a>
     </li>
     <li>
-      <a routerLink="/about-us" routerLinkActive="active" class="mock-button">
+      <a routerLink="/about-us" routerLinkActive="active" class="mock-button" matTooltip="Learn more about us">
         About Us
       </a>
     </li>
     <li>
-      <a routerLink="/faq" routerLinkActive="active" class="mock-button">
+      <a routerLink="/faq" routerLinkActive="active" class="mock-button" matTooltip="Find answers to common questions">
         FAQ
       </a>
     </li>
     <li>
-      <a routerLink="/contact-us" routerLinkActive="active" class="mock-button">
+      <a routerLink="/contact-us" routerLinkActive="active" class="mock-button" matTooltip="Get in touch with us">
         Contact Us
       </a>
     </li>
   </ul>
   <ul *ngIf="isSignedIn">
     <li>
-      <a routerLink="/plantations" routerLinkActive="active" class="mock-button">
+      <a routerLink="/plantations" routerLinkActive="active" class="mock-button" matTooltip="Manage your plant collections here.">
         Plantations
       </a>
     </li>
     <li>
-      <a routerLink="/collections" routerLinkActive="active" class="mock-button">
+      <a routerLink="/collections" routerLinkActive="active" class="mock-button" matTooltip="View and organize your collections">
         Collections
       </a>
     </li>
     <li>
-      <a routerLink="/communities" routerLinkActive="active" class="mock-button">
+      <a routerLink="/communities" routerLinkActive="active" class="mock-button" matTooltip="Join and interact with plant communities">
         Communites
       </a>
     </li>
     <li>
-      <a routerLink="/dashboard" routerLinkActive="active" class="mock-button">
+      <a routerLink="/dashboard" routerLinkActive="active" class="mock-button" matTooltip="Check your dashboard for quick insights">
         Dashboard
       </a>
     </li>

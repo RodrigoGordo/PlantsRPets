@@ -1,18 +1,19 @@
 <ul class="login-menu">
   <li *ngIf="!isSignedIn">
-    <button class="login-button" (click)="openSignInDialog()">Sign in</button>
+    <button class="login-button" (click)="openSignInDialog()" matTooltip="Login in to your account">Sign in</button>
   </li>
 
   <li *ngIf="isSignedIn" class="profile-menu">
     <img src="assets/default-profile.png"
          alt="Profile"
          class="profile-icon"
-         (click)="toggleDropdown()" />
+         (click)="toggleDropdown()"
+         matTooltip="View your user options"/>
     <div class="dropdown-menu" *ngIf="dropdownOpen">
-      <a routerLink="/profile" class="dropdown-item">👤 Profile</a>
-      <a routerLink="/settings" class="dropdown-item">⚙️ Settings</a>
+      <a routerLink="/profile" class="dropdown-item" matTooltip="View and edit your profile">👤 Profile</a>
+      <a routerLink="/settings" class="dropdown-item" matTooltip="Adjust your account settings">⚙️ Settings</a>
       <hr />
-      <button class="logout-button" (click)="confirmLogout()">Logout</button>
+      <button class="logout-button" (click)="confirmLogout()" matTooltip="Log out from your account">Logout</button>
     </div>
   </li>
 </ul>
