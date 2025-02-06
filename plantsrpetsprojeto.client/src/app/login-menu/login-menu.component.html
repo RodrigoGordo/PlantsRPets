@@ -1,4 +1,3 @@
-<!-- login-menu.component.html -->
 <ul class="login-menu">
   <li *ngIf="!isSignedIn">
     <button class="login-button" (click)="openSignInDialog()">Sign in</button>
@@ -13,7 +12,7 @@
       <a routerLink="/profile" class="dropdown-item">👤 Profile</a>
       <a routerLink="/settings" class="dropdown-item">⚙️ Settings</a>
       <hr />
-      <button class="logout-button" (click)="signOut()">Logout</button>
+      <button class="logout-button" (click)="confirmLogout()">Logout</button>
     </div>
   </li>
 </ul>

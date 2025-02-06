@@ -94,7 +94,7 @@ export class RegisterComponent implements OnInit {
           }
         }
       } catch (e) {
-        this.errors.push('An unexpected error occurred');
+        this.errors.push('An unexpected error occurred!');
       }
     }
   }

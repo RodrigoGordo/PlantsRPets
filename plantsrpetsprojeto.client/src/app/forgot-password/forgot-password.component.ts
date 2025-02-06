@@ -30,12 +30,12 @@ export class ForgotPasswordComponent {
     this.http.post('api/forgot-password', { email }).subscribe({
       next: () => {
         this.isLoading = false;
-        this.message = "Um link de redefinição de senha foi enviado para o seu email.";
+        this.message = "A password reset link has been sent to your email.";
         this.errorMessage = '';
       },
       error: err => {
         this.isLoading = false;
-        this.errorMessage = err.error?.message || "Ocorreu um erro. Tente novamente.";
+        this.errorMessage = err.error?.message || "An error occurred. Please try again.";
         this.message = '';
       }
     });

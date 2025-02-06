@@ -25,7 +25,10 @@ export class ResetPasswordComponent implements OnInit {
     private router: Router
   ) {
     this.resetForm = this.fb.group({
-      newPassword: ['', [Validators.required, Validators.minLength(6)]],
+      newPassword: ['', [
+        Validators.required,
+        Validators.minLength(6),
+        Validators.pattern(/(?=.*[^a-zA-Z0-9 ])/)]],
       confirmPassword: ['', [Validators.required]]
     });
   }
@@ -44,7 +47,7 @@ export class ResetPasswordComponent implements OnInit {
     const confirmPassword = this.resetForm.value.confirmPassword;
 
     if (newPassword !== confirmPassword) {
-      this.errorMessage = "As senhas não coincidem!";
+      this.errorMessage = "The passwords don't match!";
       return;
     }
 
@@ -57,14 +60,14 @@ export class ResetPasswordComponent implements OnInit {
     }).subscribe({
       next: () => {
         this.isLoading = false;
-        this.successMessage = "Senha redefinida com sucesso! Redirecionando...";
+        this.successMessage = "Password reset successfully!";
         this.errorMessage = '';
 
         setTimeout(() => this.router.navigate(['/']), 2000);
       },
       error: err => {
         this.isLoading = false;
-        this.errorMessage = err.error?.message || "Ocorreu um erro. Tente novamente.";
+        this.errorMessage = err.error?.message || "An error occurred. Please try again.";
         this.successMessage = '';
       }
     });

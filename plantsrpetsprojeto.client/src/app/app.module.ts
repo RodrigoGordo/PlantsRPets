@@ -31,6 +31,7 @@ import { SettingsComponent } from './settings/settings.component';
 import { HomeComponent } from './home/home.component';
 import { ProfileComponent } from './profile/profile.component';
 import { LoadingIndicatorComponent } from './loading-indicator/loading-indicator.component';
+import { LogoutConfirmationComponent } from './logout-confirmation/logout-confirmation.component';
 
 
 @NgModule({
@@ -56,6 +57,7 @@ import { LoadingIndicatorComponent } from './loading-indicator/loading-indicator
     HomeComponent,
     ProfileComponent,
     LoadingIndicatorComponent,
+    LogoutConfirmationComponent,
   ],
   imports: [
     BrowserModule,

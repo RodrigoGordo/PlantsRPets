@@ -4,6 +4,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { SigninComponent } from '../signin/signin.component';
 import { AuthorizeService } from '../authorize.service';
 import { Router } from '@angular/router';
+import { LogoutConfirmationComponent } from '../logout-confirmation/logout-confirmation.component';
+
 
 @Component({
   selector: 'app-login-menu',
@@ -30,6 +32,19 @@ export class LoginMenuComponent {
       width: '520px',
       panelClass: 'custom-dialog-container',
       disableClose: true
+    });
+  }
+
+  confirmLogout(): void {
+    const dialogRef = this.dialog.open(LogoutConfirmationComponent, {
+      width: '350px',
+      disableClose: true
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === 'confirm') {
+        this.signOut();
+      }
     });
   }
 
