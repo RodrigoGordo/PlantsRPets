@@ -30,6 +30,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { SettingsComponent } from './settings/settings.component';
 import { HomeComponent } from './home/home.component';
 import { ProfileComponent } from './profile/profile.component';
+import { LoadingIndicatorComponent } from './loading-indicator/loading-indicator.component';
 
 
 @NgModule({
@@ -54,6 +55,7 @@ import { ProfileComponent } from './profile/profile.component';
     SettingsComponent,
     HomeComponent,
     ProfileComponent,
+    LoadingIndicatorComponent,
   ],
   imports: [
     BrowserModule,

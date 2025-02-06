@@ -17,6 +17,7 @@ export class RegisterComponent implements OnInit {
   registerFailed: boolean = false;
   registerSucceeded: boolean = false;
   signedIn: boolean = false;
+  isLoading: boolean = false;
 
   constructor(
     private authService: AuthorizeService,
@@ -53,6 +54,7 @@ export class RegisterComponent implements OnInit {
   public register(): void {
     if (!this.registerForm.valid) return;
 
+    this.isLoading = true;
     this.registerFailed = false;
     this.errors = [];
 
@@ -60,15 +62,16 @@ export class RegisterComponent implements OnInit {
 
     this.authService.register(name, email, password).subscribe({
       next: (response) => {
+        this.isLoading = false;
         if (response) {
           this.registerSucceeded = true;
           this.registerForm.reset();
           setTimeout(() => this.registerSucceeded = false, 5000);
-          // Redirect immediately
           this.router.navigateByUrl("/");
         }
       },
       error: (error) => {
+        this.isLoading = false;
         console.error('Full error:', error);
         if (error.status === 500) {
           console.error('Backend error details:', error.error);

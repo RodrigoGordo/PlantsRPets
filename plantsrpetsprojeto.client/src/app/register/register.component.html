@@ -1,5 +1,4 @@
 <div class="auth-wrapper">
-  <!-- Logo Container -->
   <div class="logo-container">
     <a routerLink="/" class="logo-link">
       <img src="assets/logo.png" alt="App Logo" class="logo">
@@ -11,7 +10,6 @@
       <h2 class="auth-title">Create Account</h2>
 
       <form [formGroup]="registerForm" (ngSubmit)="register()" class="auth-form">
-        <!-- Nickname -->
         <div class="form-group">
           <input type="text"
                  formControlName="name"
@@ -23,7 +21,6 @@
           </div>
         </div>
 
-        <!-- Email -->
         <div class="form-group">
           <input type="email"
                  formControlName="email"
@@ -36,7 +33,6 @@
           </div>
         </div>
 
-        <!-- Password -->
         <div class="form-group">
           <input type="password"
                  formControlName="password"
@@ -50,7 +46,6 @@
           </div>
         </div>
 
-        <!-- Confirm Password -->
         <div class="form-group">
           <input type="password"
                  formControlName="confirmPassword"
@@ -75,3 +70,5 @@
     </div>
   </div>
 </div>
+
+<app-loading-indicator [isLoading]="isLoading"></app-loading-indicator>

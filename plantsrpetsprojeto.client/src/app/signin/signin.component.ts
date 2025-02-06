@@ -14,6 +14,7 @@ export class SigninComponent{
   loginForm!: FormGroup;
   authFailed: boolean = false;
   signedIn: boolean = false;
+  isLoading: boolean = false;
 
   constructor(private fb: FormBuilder, private dialogRef: MatDialogRef<SigninComponent>, private authService: AuthorizeService, private router: Router) {
     this.signedIn = this.authService.isSignedIn();
@@ -25,15 +26,19 @@ export class SigninComponent{
 
   onSubmit(): void {
     if (this.loginForm.valid) {
+      this.isLoading = true;
       const { email, password } = this.loginForm.value;
+
       this.authService.signIn(email, password).subscribe({
         next: (success) => {
+          this.isLoading = false; 
           if (success) {
             this.dialogRef.close(true);
             this.router.navigateByUrl("/home");
           }
         },
         error: () => {
+          this.isLoading = false;
           this.authFailed = true;
         }
       });

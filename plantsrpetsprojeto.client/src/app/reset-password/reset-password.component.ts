@@ -16,6 +16,7 @@ export class ResetPasswordComponent implements OnInit {
   email: string = '';
   successMessage: string = '';
   errorMessage: string = '';
+  isLoading: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -30,7 +31,6 @@ export class ResetPasswordComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // Captura os parâmetros da URL
     this.route.queryParams.subscribe(params => {
       this.email = params['email'] || '';
       this.token = params['token'] || '';
@@ -48,18 +48,22 @@ export class ResetPasswordComponent implements OnInit {
       return;
     }
 
+    this.isLoading = true;
+
     this.http.post('api/reset-password', {
       email: this.email,
       token: this.token,
       newPassword
     }).subscribe({
       next: () => {
+        this.isLoading = false;
         this.successMessage = "Senha redefinida com sucesso! Redirecionando...";
         this.errorMessage = '';
 
         setTimeout(() => this.router.navigate(['/']), 2000);
       },
       error: err => {
+        this.isLoading = false;
         this.errorMessage = err.error?.message || "Ocorreu um erro. Tente novamente.";
         this.successMessage = '';
       }
