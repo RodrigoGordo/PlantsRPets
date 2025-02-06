@@ -1,5 +1,9 @@
 import { Component } from '@angular/core';
 
+/**
+ * Componente responsável pelas definições da aplicação.
+ * Atualmente serve como base para futuras funcionalidades relacionadas com as configurações do utilizador.
+ */
 @Component({
   selector: 'app-settings',
   standalone: false,

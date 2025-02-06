@@ -5,6 +5,11 @@ import { MatDialog } from '@angular/material/dialog';
 import { SigninComponent } from '../signin/signin.component';
 import { Router } from '@angular/router';
 
+
+/**
+ * Componente responsável pelo registo de novos utilizadores.
+ * Permite que os utilizadores criem uma nova conta, validando o formulário e enviando os dados para o backend.
+ */
 @Component({
   selector: 'app-register-component',
   templateUrl: './register.component.html',
@@ -19,6 +24,15 @@ export class RegisterComponent implements OnInit {
   signedIn: boolean = false;
   isLoading: boolean = false;
 
+  /**
+   * Construtor do componente que inicializa serviços essenciais para o registo,
+   * como autenticação, criação de formulários, controlo de diálogos e navegação.
+   *
+   * @param authService - Serviço responsável pela autenticação e registo de utilizadores.
+   * @param formBuilder - Serviço para construir e gerir formulários reativos.
+   * @param dialog - Serviço para abrir diálogos modais, como o formulário de login.
+   * @param router - Serviço de navegação para redirecionar após o registo.
+   */
   constructor(
     private authService: AuthorizeService,
     private formBuilder: FormBuilder,
@@ -28,10 +42,18 @@ export class RegisterComponent implements OnInit {
     this.signedIn = this.authService.isSignedIn();
   }
 
+  /**
+   * Método do ciclo de vida do Angular chamado na inicialização do componente.
+   * Inicializa o formulário de registo com as validações necessárias.
+   */
   ngOnInit(): void {
     this.initializeForm();
   }
 
+  /**
+   * Inicializa o formulário de registo com validações para nome, e-mail, palavra-passe e confirmação da palavra-passe.
+   * Inclui um validador personalizado para garantir que as palavras-passe coincidem.
+   */
   initializeForm(): void {
     this.registerForm = this.formBuilder.group({
       name: ['', Validators.required],
@@ -44,6 +66,12 @@ export class RegisterComponent implements OnInit {
     }, { validators: this.passwordMatchValidator });
   }
 
+  /**
+   * Validador personalizado para verificar se a palavra-passe e a confirmação da palavra-passe coincidem.
+   *
+   * @param control - Grupo de controlos do formulário que contém os campos de palavra-passe.
+   * @returns - Um objeto de erro se as palavras-passe não coincidirem, ou null se forem válidas.
+   */
   passwordMatchValidator: ValidatorFn = (control: AbstractControl): null | object => {
     const password = control.get('password');
     const confirmPassword = control.get('confirmPassword');
@@ -51,6 +79,10 @@ export class RegisterComponent implements OnInit {
     return password.value !== confirmPassword.value ? { passwordMismatch: true } : null;
   }
 
+  /**
+   * Envia o pedido de registo para o backend após validar o formulário.
+   * Em caso de sucesso, limpa o formulário e redireciona o utilizador. Caso contrário, apresenta mensagens de erro.
+   */
   public register(): void {
     if (!this.registerForm.valid) return;
 
@@ -82,6 +114,11 @@ export class RegisterComponent implements OnInit {
     });
   }
 
+  /**
+   * Trata os erros de registo, extraindo mensagens de erro do backend para exibir ao utilizador.
+   *
+   * @param error - Objeto de erro retornado pela API, contendo detalhes sobre a falha.
+   */
   private handleRegistrationError(error: any): void {
     if (error.error) {
       try {
@@ -99,6 +136,9 @@ export class RegisterComponent implements OnInit {
     }
   }
 
+  /**
+   * Abre o diálogo modal para o formulário de login, permitindo que o utilizador faça login rapidamente após o registo.
+   */
   openLogin(): void {
     this.dialog.open(SigninComponent, {
       width: '520px',

@@ -1,6 +1,10 @@
 import { Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 
+/**
+ * Componente responsável por exibir uma caixa de diálogo de confirmação de logout.
+ * Permite que o utilizador confirme ou cancele a ação de terminar sessão.
+ */
 @Component({
   selector: 'app-logout-confirmation',
   standalone: false,
@@ -9,12 +13,25 @@ import { MatDialogRef } from '@angular/material/dialog';
   styleUrl: './logout-confirmation.component.css'
 })
 export class LogoutConfirmationComponent {
+
+  /**
+   * Construtor do componente que gere a referência da caixa de diálogo.
+   * 
+   * @param dialogRef - Referência da instância do diálogo atual, utilizada para fechar o modal e retornar o resultado.
+   */
   constructor(private dialogRef: MatDialogRef<LogoutConfirmationComponent>) { }
 
+
+  /**
+   * Confirma a ação de logout e fecha o diálogo, retornando o estado 'confirm'.
+   */
   confirm(): void {
     this.dialogRef.close('confirm');
   }
 
+  /**
+   * Cancela a ação de logout e fecha o diálogo, retornando o estado 'cancel'.
+   */
   cancel(): void {
     this.dialogRef.close('cancel');
   }

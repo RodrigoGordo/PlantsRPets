@@ -2,6 +2,11 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 
+/**
+ * Componente responsável pelo processo de recuperação de palavra-passe.
+ * Permite que o utilizador solicite o envio de um link para redefinir a sua palavra-passe,
+ * através do e-mail associado à conta.
+ */
 @Component({
   selector: 'app-forgot-password',
   standalone: false,
@@ -15,12 +20,23 @@ export class ForgotPasswordComponent {
   errorMessage: string = '';
   isLoading: boolean = false;
 
+  /**
+   * Construtor do componente que inicializa o formulário de recuperação de palavra-passe e gere dependências.
+   * 
+   * @param fb - Serviço do Angular para a criação e gestão de formulários reativos.
+   * @param http - Serviço HTTP utilizado para enviar o pedido de recuperação ao backend.
+   */
   constructor(private fb: FormBuilder, private http: HttpClient) {
     this.forgotPasswordForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]]
     });
   }
 
+  /**
+   * Envia o pedido de recuperação de palavra-passe para o backend.
+   * Após validação do formulário, é efetuada uma chamada HTTP para enviar o link de recuperação para o e-mail do utilizador.
+   * Em caso de sucesso, uma mensagem é exibida; em caso de erro, é apresentada uma mensagem de erro.
+   */
   sendResetLink(): void {
     if (this.forgotPasswordForm.invalid) return;
 

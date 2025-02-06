@@ -14,6 +14,10 @@ using System.Text;
 
 namespace PlantsRPetsProjeto.Server.Controllers
 {
+    /// <summary>
+    /// Controlador responsável pela gestão de contas de utilizador.
+    /// Inclui funcionalidades de registo, autenticação, recuperação e redefinição de palavra-passe.
+    /// </summary>
     [ApiController]
     public class UserAccountsController : ControllerBase
     {
@@ -21,6 +25,12 @@ namespace PlantsRPetsProjeto.Server.Controllers
         private readonly IConfiguration _configuration;
         private readonly IEmailService _emailService;
 
+        /// <summary>
+        /// Inicializa uma nova instância do <see cref="UserAccountsController"/>.
+        /// </summary>
+        /// <param name="userManager">Serviço de gestão de utilizadores.</param>
+        /// <param name="configuration">Configurações da aplicação, incluindo chaves JWT.</param>
+        /// <param name="emailService">Serviço para envio de e-mails.</param>
         public UserAccountsController(UserManager<User> userManager, IConfiguration configuration, IEmailService emailService)
         {
             _userManager = userManager;
@@ -28,6 +38,11 @@ namespace PlantsRPetsProjeto.Server.Controllers
             _emailService = emailService;
         }
 
+        /// <summary>
+        /// Regista um novo utilizador na aplicação.
+        /// </summary>
+        /// <param name="model">Modelo contendo o e-mail, nickname e palavra-passe do novo utilizador.</param>
+        /// <returns>Retorna um código HTTP 200 se o registo for bem-sucedido ou 400 em caso de erro.</returns>
         [HttpPost("api/signup")]
         public async Task<IActionResult> Register([FromBody] UserRegistrationModel model)
         {
@@ -47,6 +62,11 @@ namespace PlantsRPetsProjeto.Server.Controllers
             return BadRequest(result.Errors);
         }
 
+        /// <summary>
+        /// Autentica um utilizador e gera um token JWT para sessões autenticadas.
+        /// </summary>
+        /// <param name="model">Modelo contendo o e-mail e a palavra-passe do utilizador.</param>
+        /// <returns>Token JWT para autenticação ou um código de erro em caso de falha.</returns>
         [HttpPost("api/signin")]
         public async Task<IActionResult> Login([FromBody] UserLoginModel model)
         {
@@ -61,7 +81,6 @@ namespace PlantsRPetsProjeto.Server.Controllers
                 return BadRequest(new { message = "Invalid email or password." });
             }
 
-            // Gerar os claims do utilizador
             var claims = new List<Claim>
             {
                 new Claim("Nickname", user.Nickname),
@@ -69,7 +88,6 @@ namespace PlantsRPetsProjeto.Server.Controllers
                 new Claim("UserId", user.Id)
             };
 
-            // Gerar o token JWT
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
@@ -77,12 +95,11 @@ namespace PlantsRPetsProjeto.Server.Controllers
                 issuer: _configuration["Jwt:Issuer"],
                 audience: _configuration["Jwt:Audience"],
                 claims: claims,
-                expires: DateTime.UtcNow.AddDays(1), // Definir o tempo de expiração
+                expires: DateTime.UtcNow.AddDays(1),
                 signingCredentials: creds);
 
             var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
 
-            // Retornar o token ao cliente
             return Ok(new
             {
                 token = tokenString,
@@ -90,6 +107,11 @@ namespace PlantsRPetsProjeto.Server.Controllers
             });
         }
 
+        /// <summary>
+        /// Inicia o processo de recuperação de palavra-passe, enviando um link para o e-mail do utilizador.
+        /// </summary>
+        /// <param name="model">Modelo contendo o e-mail do utilizador.</param>
+        /// <returns>Mensagem de sucesso ou erro consoante o resultado do envio do e-mail.</returns>
         [HttpPost("api/forgot-password")]
         [EnableCors("AllowAll")]
         public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordModel model)
@@ -100,15 +122,12 @@ namespace PlantsRPetsProjeto.Server.Controllers
                 if (user == null)
                     return BadRequest(new { message = "The email doesn't exist." });
 
-                // Gerar token de recuperação de senha
                 var token = await _userManager.GeneratePasswordResetTokenAsync(user);
                 var encodedToken = WebUtility.UrlEncode(token);
 
-                // Construir link de redefinição de senha
                 var resetLink = $"{_configuration["Frontend:BaseUrl"]}/reset-password?email={user.Email}&token={encodedToken}";
-                Console.WriteLine($"[DEBUG] Password Reset Token: {token}");// Remover depois (É penas para teste)
+                Console.WriteLine($"[DEBUG] Password Reset Token: {token}");// Pode ser removido depois (DEBUG)
 
-                // Enviar email
                 await _emailService.SendEmailAsync(
                     user.Email!,
                     "Password Reset Request",
@@ -127,7 +146,12 @@ namespace PlantsRPetsProjeto.Server.Controllers
             }
         }
 
-       
+
+        /// <summary>
+        /// Redefine a palavra-passe do utilizador com base num token de recuperação enviado por e-mail.
+        /// </summary>
+        /// <param name="model">Modelo contendo o e-mail do utilizador, token de redefinição e nova palavra-passe.</param>
+        /// <returns>Mensagem de confirmação em caso de sucesso ou erro detalhado em caso de falha.</returns>
         [HttpPost("api/reset-password")]
         [EnableCors("AllowAll")]
         public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordModel model)
@@ -145,7 +169,7 @@ namespace PlantsRPetsProjeto.Server.Controllers
                 return BadRequest(new
                 {
                     message = "Failed to reset password.",
-                    errors = result.Errors.Select(e => e.Description) // Pode ser removido depois
+                    errors = result.Errors.Select(e => e.Description) // Pode ser removido depois (DEBUG)
                 });
             }
             catch (Exception ex)
@@ -157,6 +181,9 @@ namespace PlantsRPetsProjeto.Server.Controllers
 
     }
 
+    /// <summary>
+    /// Modelo de dados para o login de utilizadores.
+    /// </summary>
     public class UserLoginModel
     {
         public string Email { get; set; }
@@ -164,6 +191,9 @@ namespace PlantsRPetsProjeto.Server.Controllers
     }
 
 
+    /// <summary>
+    /// Modelo de dados para o registo de novos utilizadores.
+    /// </summary>
     public class UserRegistrationModel
     {
         public string Nickname { get; set; }
@@ -172,11 +202,17 @@ namespace PlantsRPetsProjeto.Server.Controllers
 
     }
 
+    /// <summary>
+    /// Modelo de dados utilizado para o pedido de recuperação de palavra-passe.
+    /// </summary>
     public class ForgotPasswordModel
     {
         public string Email { get; set; }
     }
 
+    /// <summary>
+    /// Modelo de dados para redefinir a palavra-passe de um utilizador.
+    /// </summary>
     public class ResetPasswordModel
     {
         public string Email { get; set; }
