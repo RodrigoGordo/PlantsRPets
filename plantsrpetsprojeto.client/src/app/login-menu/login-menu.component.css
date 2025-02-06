@@ -13,7 +13,6 @@
   cursor: pointer;
   transition: transform 0.3s ease-in-out, box-shadow 0.2s ease-in-out;
   border: 3px solid rgba(0, 0, 0, 0.3); 
-  object-fit: cover;
 }
 
   .profile-icon:hover {
@@ -24,6 +23,8 @@
 .profile-menu {
   position: relative;
   display: inline-block;
+  width: 50%;
+  height: 50%;
 }
 
 .dropdown-menu {

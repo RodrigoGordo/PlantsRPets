@@ -128,12 +128,6 @@ if (app.Environment.IsDevelopment())
 
 app.UseCors("Angular");
 
-app.UseWhen(context => context.Request.Path.StartsWithSegments("/forgot-password"), appBuilder =>
-{
-    appBuilder.UseCors("AllowAll");
-});
-
-
 app.UseAuthentication();
 app.UseAuthorization();
 

@@ -25,7 +25,7 @@ export class ForgotPasswordComponent {
 
     const email = this.forgotPasswordForm.value.email;
 
-    this.http.post('https://localhost:7024/api/forgot-password', { email }).subscribe({
+    this.http.post('api/forgot-password', { email }).subscribe({
       next: () => {
         this.message = "Um link de redefinição de senha foi enviado para o seu email.";
         this.errorMessage = '';

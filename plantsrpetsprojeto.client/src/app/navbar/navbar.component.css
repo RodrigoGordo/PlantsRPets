@@ -3,8 +3,7 @@ nav.menu {
   justify-content: space-between;
   align-items: center;
   background-color: #4CAF50; /* Rich green */
-  padding: 18px 40px;
-  border-radius: 50px;
+  padding: 10px 40px;
   box-shadow: 0 8px 10px rgba(0, 0, 0, 0.1);
   position: sticky;
   top: 0;
@@ -12,7 +11,7 @@ nav.menu {
 }
 
 nav .logo img {
-  height: 50px;
+  height: 70px;
   object-fit: contain;
 }
 
