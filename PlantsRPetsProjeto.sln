@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlantsRPetsProjeto.Server",
 EndProject
 Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "plantsrpetsprojeto.client", "plantsrpetsprojeto.client\plantsrpetsprojeto.client.esproj", "{572B2668-8D6A-41E1-B6B3-3643A2AA1A92}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlantsRPetsProjeto.Tests", "Tests\PlantsRPetsProjeto.Tests.csproj", "{A736566B-2C3F-4F51-8445-3B90BD4244AF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,6 +25,10 @@ Global
 		{572B2668-8D6A-41E1-B6B3-3643A2AA1A92}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{572B2668-8D6A-41E1-B6B3-3643A2AA1A92}.Release|Any CPU.Build.0 = Release|Any CPU
 		{572B2668-8D6A-41E1-B6B3-3643A2AA1A92}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{A736566B-2C3F-4F51-8445-3B90BD4244AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A736566B-2C3F-4F51-8445-3B90BD4244AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A736566B-2C3F-4F51-8445-3B90BD4244AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A736566B-2C3F-4F51-8445-3B90BD4244AF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
