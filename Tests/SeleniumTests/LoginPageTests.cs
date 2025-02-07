@@ -8,7 +8,7 @@ namespace Tests.SeleniumTests
     public class LoginPageTests : IDisposable
     {
         private readonly IWebDriver _driver;
-        private readonly string baseUrl = "http://localhost:4200";
+        private readonly string baseUrl = "https://localhost:4200";
 
 
         public LoginPageTests()
@@ -23,20 +23,27 @@ namespace Tests.SeleniumTests
         {
             _driver.Navigate().GoToUrl($"{baseUrl}");
 
-            var loginMenu = _driver.FindElement(By.Id("login-menu"));
+            var wait = new OpenQA.Selenium.Support.UI.WebDriverWait(_driver, TimeSpan.FromSeconds(10));
+            var loginMenu = wait.Until(driver => driver.FindElement(By.ClassName("login-menu")));
             loginMenu.Click();
 
             var emailField = _driver.FindElement(By.CssSelector("input[placeholder='Email address']"));
             var passwordField = _driver.FindElement(By.CssSelector("input[placeholder='Password']"));
-            var continueButton = _driver.FindElement(By.XPath("//button[contains(text(), 'Continue')]"));
 
             emailField.SendKeys("gega@gmail.com");
             passwordField.SendKeys("gegassaurorex#");
+
+
+            var continueButton = wait.Until(driver =>
+            {
+                var button = driver.FindElement(By.CssSelector("button.signin-btn[type='submit']"));
+                return button.Enabled ? button : null;
+            });
+
             continueButton.Click();
 
 
             // Se encontrar o elemento collections, então fez login com sucesso e está na home page 
-            var wait = new OpenQA.Selenium.Support.UI.WebDriverWait(_driver, TimeSpan.FromSeconds(5));
             var collectionsElement = wait.Until(driver =>
                 driver.FindElement(By.XPath("//a[@routerlink='/collections' and contains(text(), 'Collections')]")));
 
