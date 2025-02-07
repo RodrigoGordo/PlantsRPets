@@ -126,3 +126,23 @@ body {
   cursor: not-allowed;
   background-color: #cbd5e0;
 }
+
+.register-error-message {
+  color: #ff4444;
+  font-size: 14px;
+  text-align: center;
+  padding: 12px;
+  background: #fff5f5;
+  border-radius: 8px;
+  margin-top: 12px;
+}
+
+.success-message {
+  color: green;
+  font-size: 14px;
+  text-align: center;
+  padding: 12px;
+  background-color: lightgreen;
+  border-radius: 8px;
+  margin-top: 12px;
+}

@@ -12,13 +12,13 @@
       <form [formGroup]="registerForm" (ngSubmit)="register()" class="auth-form">
         <div class="form-group">
           <input type="text"
-                 formControlName="name"
+                 formControlName="nickName"
                  placeholder="Nickname"
                  class="form-input"
                  matTooltip="Enter a valid nickname"
-                 [ngClass]="{ 'input-error': registerForm.get('name')?.touched && registerForm.get('name')?.invalid }">
-          <div class="error-message" *ngIf="registerForm.get('name')?.touched && registerForm.get('name')?.invalid">
-            <span *ngIf="registerForm.get('name')?.errors?.['required']">Nickname is required</span>
+                 [ngClass]="{ 'input-error': registerForm.get('nickName')?.touched && registerForm.get('nickName')?.invalid }">
+          <div class="error-message" *ngIf="registerForm.get('nickName')?.touched && registerForm.get('nickName')?.invalid">
+            <span *ngIf="registerForm.get('nickName')?.errors?.['required']">Nickname is required</span>
           </div>
         </div>
 
@@ -45,7 +45,7 @@
           <div class="error-message" *ngIf="registerForm.get('password')?.touched && registerForm.get('password')?.invalid">
             <span *ngIf="registerForm.get('password')?.errors?.['required']">Password is required</span>
             <span *ngIf="registerForm.get('password')?.errors?.['minlength']">Minimum 6 characters</span>
-            <span *ngIf="registerForm.get('password')?.errors?.['pattern']">Requires one special character</span>
+            <span *ngIf="registerForm.get('password')?.errors?.['pattern']"> Requires one special character</span>
           </div>
         </div>
 
@@ -65,6 +65,13 @@
         <button type="submit" class="auth-button" [disabled]="!registerForm.valid">
           Register Now
         </button>
+        <div class="success-message" *ngIf="registerSucceeded">
+          Registration Sucessful!
+        </div>
+        <div class="register-error-message" *ngIf="errorMessage">
+          {{ errorMessage }}
+        </div>
+
 
         <div class="auth-footer">
           Already have an account?

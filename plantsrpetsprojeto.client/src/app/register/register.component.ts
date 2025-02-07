@@ -4,6 +4,7 @@ import { AuthorizeService } from "../authorize.service";
 import { MatDialog } from '@angular/material/dialog';
 import { SigninComponent } from '../signin/signin.component';
 import { Router } from '@angular/router';
+import { HttpClient } from "@angular/common/http";
 
 
 /**
@@ -12,16 +13,15 @@ import { Router } from '@angular/router';
  */
 @Component({
   selector: 'app-register-component',
-  templateUrl: './register.component.html',
   styleUrls: ['./register.component.css'],
+  templateUrl: './register.component.html',
   standalone: false,
 })
 export class RegisterComponent implements OnInit {
-  errors: string[] = [];
   registerForm!: FormGroup;
-  registerFailed: boolean = false;
   registerSucceeded: boolean = false;
   signedIn: boolean = false;
+  errorMessage: string = '';
   isLoading: boolean = false;
 
   /**
@@ -32,12 +32,14 @@ export class RegisterComponent implements OnInit {
    * @param formBuilder - Serviço para construir e gerir formulários reativos.
    * @param dialog - Serviço para abrir diálogos modais, como o formulário de login.
    * @param router - Serviço de navegação para redirecionar após o registo.
+   * @param http - Serviço HTTP para enviar o pedido de registo ao backend.
    */
   constructor(
     private authService: AuthorizeService,
     private formBuilder: FormBuilder,
     private dialog: MatDialog,
-    private router: Router
+    private router: Router,
+    private http: HttpClient
   ) {
     this.signedIn = this.authService.isSignedIn();
   }
@@ -56,7 +58,7 @@ export class RegisterComponent implements OnInit {
    */
   initializeForm(): void {
     this.registerForm = this.formBuilder.group({
-      name: ['', Validators.required],
+      nickName: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       password: ['', [
         Validators.required,
@@ -85,55 +87,32 @@ export class RegisterComponent implements OnInit {
    */
   public register(): void {
     if (!this.registerForm.valid) return;
-
     this.isLoading = true;
-    this.registerFailed = false;
-    this.errors = [];
 
-    const { name, email, password } = this.registerForm.value;
+    const { nickName, email, password } = this.registerForm.value;
 
-    this.authService.register(name, email, password).subscribe({
+    this.http.post('api/signup', {
+      nickName,
+      email,
+      password
+    }).subscribe({
       next: (response) => {
         this.isLoading = false;
         if (response) {
           this.registerSucceeded = true;
           this.registerForm.reset();
-          setTimeout(() => this.registerSucceeded = false, 5000);
-          this.router.navigateByUrl("/");
+          this.errorMessage = "";
+          setTimeout(() => {
+            this.router.navigateByUrl("/");
+          }, 1300);
         }
       },
-      error: (error) => {
+      error: err => {
         this.isLoading = false;
-        console.error('Full error:', error);
-        if (error.status === 500) {
-          console.error('Backend error details:', error.error);
-        }
-        this.registerFailed = true;
-        this.handleRegistrationError(error);
+        this.registerSucceeded = false;
+        this.errorMessage = err.error?.message;
       }
     });
-  }
-
-  /**
-   * Trata os erros de registo, extraindo mensagens de erro do backend para exibir ao utilizador.
-   *
-   * @param error - Objeto de erro retornado pela API, contendo detalhes sobre a falha.
-   */
-  private handleRegistrationError(error: any): void {
-    if (error.error) {
-      try {
-        const errorObj = JSON.parse(error.error);
-        if (errorObj?.errors) {
-          for (const field in errorObj.errors) {
-            if (errorObj.errors.hasOwnProperty(field)) {
-              this.errors.push(...errorObj.errors[field]);
-            }
-          }
-        }
-      } catch (e) {
-        this.errors.push('An unexpected error occurred!');
-      }
-    }
   }
 
   /**

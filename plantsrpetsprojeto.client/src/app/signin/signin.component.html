@@ -35,11 +35,14 @@
       </div>
     </div>
 
-    <div class="auth-error" *ngIf="authFailed">
-      Invalid email or password. Please try again.
-    </div>
-
     <button type="submit" class="signin-btn" [disabled]="!loginForm.valid">Continue</button>
+
+    <div class="success-message" *ngIf="loginSuccess">
+      Login sucessful. Welcome back!
+    </div>
+    <div class="auth-error" *ngIf="errorMessage">
+      {{ errorMessage }}
+    </div>
 
     <div class="form-links">
       <a class="text-link" (click)="openForgotPassword()" matTooltip="Request a reset link.">Forgot your password?</a>

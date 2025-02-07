@@ -3,6 +3,8 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
 import { AuthorizeService } from "../authorize.service";
 import { MatDialogRef } from '@angular/material/dialog';
+import { HttpClient } from "@angular/common/http";
+
 
 /**
  * Componente responsável pela autenticação de utilizadores na aplicação.
@@ -11,15 +13,17 @@ import { MatDialogRef } from '@angular/material/dialog';
  */
 @Component({
   selector: 'app-signin-component',
-  templateUrl: './signin.component.html',
   styleUrl: './signin.component.css',
+  templateUrl: './signin.component.html',
   standalone: false,
 })
-export class SigninComponent{
+export class SigninComponent {
   loginForm!: FormGroup;
   authFailed: boolean = false;
   signedIn: boolean = false;
+  errorMessage: string = '';
   isLoading: boolean = false;
+  loginSuccess: boolean = false;
 
   /**
    * Construtor do componente que inicializa o formulário de login e verifica o estado de autenticação do utilizador.
@@ -28,8 +32,9 @@ export class SigninComponent{
    * @param dialogRef - Referência à janela modal atual, permitindo o seu controlo (abrir/fechar).
    * @param authService - Serviço de autenticação responsável pela gestão de tokens e validação de credenciais.
    * @param router - Serviço de navegação do Angular para redirecionamento após login bem-sucedido.
+   * @param http - Serviço HTTP para enviar o pedido de signin ao backend.
    */
-  constructor(private fb: FormBuilder, private dialogRef: MatDialogRef<SigninComponent>, private authService: AuthorizeService, private router: Router) {
+  constructor(private fb: FormBuilder, private dialogRef: MatDialogRef<SigninComponent>, private authService: AuthorizeService, private router: Router, private http: HttpClient) {
     this.signedIn = this.authService.isSignedIn();
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -43,24 +48,34 @@ export class SigninComponent{
    * Em caso de falha, apresenta uma mensagem de erro.
    */
   onSubmit(): void {
-    if (this.loginForm.valid) {
-      this.isLoading = true;
-      const { email, password } = this.loginForm.value;
+    if (!this.loginForm.valid) return;
+    this.isLoading = true;
 
-      this.authService.signIn(email, password).subscribe({
-        next: (success) => {
-          this.isLoading = false; 
-          if (success) {
+    const { email, password } = this.loginForm.value;
+
+    this.http.post('api/signin', {
+      email,
+      password
+    }).subscribe({
+      next: (response) => {
+        this.isLoading = false;
+        if (response) {
+          this.authService.signIn(email, password).subscribe();
+          this.loginSuccess = true;
+          this.errorMessage = "";
+          setTimeout(() => {
             this.dialogRef.close(true);
             this.router.navigateByUrl("/home");
-          }
-        },
-        error: () => {
-          this.isLoading = false;
-          this.authFailed = true;
+          }, 1300);
         }
-      });
-    }
+      },
+      error: err => {
+        this.isLoading = false;
+        this.authFailed = true;
+        this.loginSuccess = false;
+        this.errorMessage = err.error?.message;
+      }
+    });
   }
 
   /**
