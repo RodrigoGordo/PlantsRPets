@@ -113,6 +113,21 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
+// User e Role seeders
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    var userManager = services.GetRequiredService<UserManager<User>>();
+    var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+    var context = services.GetRequiredService<PlantsRPetsProjetoServerContext>();
+    
+    await context.Database.MigrateAsync();
+
+    // Chamar os seeders
+    await UserSeeder.SeedUsersAsync(userManager);
+    await RoleSeeder.SeedRoles(roleManager);
+}
+
 
 // Configure the HTTP request pipeline.
 app.UseHttpsRedirection();
