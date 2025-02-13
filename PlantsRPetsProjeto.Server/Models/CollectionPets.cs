@@ -6,9 +6,9 @@ namespace PlantsRPetsProjeto.Server.Models
     {
         public int CollectionPetsId { get; set; }
         public int CollectionId { get; set; }
-        public virtual Collection Collection { get; set; }
+        public virtual Collection ReferenceCollection { get; set; }
         public int PetId { get; set; }
-        public virtual Pet Pet { get; set; }
+        public virtual Pet ReferencePet { get; set; }
         public bool IsFavorite { get; set; }
     }
 }
