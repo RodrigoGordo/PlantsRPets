@@ -742,7 +742,7 @@
           "lib/netstandard2.0/Microsoft.AspNetCore.Razor.Language.dll": {}
         }
       },
-      "Microsoft.AspNetCore.SpaProxy/8.0.12": {
+      "Microsoft.AspNetCore.SpaProxy/8.0.13": {
         "type": "package",
         "compile": {
           "lib/net8.0/Microsoft.AspNetCore.SpaProxy.dll": {}
@@ -4035,10 +4035,10 @@
         "microsoft.aspnetcore.razor.language.nuspec"
       ]
     },
-    "Microsoft.AspNetCore.SpaProxy/8.0.12": {
-      "sha512": "3FCqH7rdZVENLCSbBwiX9K034j5fUbqh8qk14Etj4pROGZGqH/nzlFZ+LdT/S2MtpWJSOUJLTT72Xk/Jf6+UVw==",
+    "Microsoft.AspNetCore.SpaProxy/8.0.13": {
+      "sha512": "MwrXZfC53RySu6fnXeL6+l8JaiuHs1c3oruvs1ZzKCKH6vJ4MR0zLuGETb37kiS9wzIVXQCtqgR5Bsf5Dzm1+Q==",
       "type": "package",
-      "path": "microsoft.aspnetcore.spaproxy/8.0.12",
+      "path": "microsoft.aspnetcore.spaproxy/8.0.13",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -4046,7 +4046,7 @@
         "THIRD-PARTY-NOTICES.TXT",
         "build/Microsoft.AspNetCore.SpaProxy.targets",
         "lib/net8.0/Microsoft.AspNetCore.SpaProxy.dll",
-        "microsoft.aspnetcore.spaproxy.8.0.12.nupkg.sha512",
+        "microsoft.aspnetcore.spaproxy.8.0.13.nupkg.sha512",
         "microsoft.aspnetcore.spaproxy.nuspec"
       ]
     },
@@ -8408,23 +8408,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Rodrigo\\.nuget\\packages\\": {},
+    "C:\\Users\\Gonçalo\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Rodrigo\\source\\repos\\PlantsRPets\\PlantsRPetsProjeto.Server\\PlantsRPetsProjeto.Server.csproj",
+      "projectUniqueName": "C:\\PV\\Projeto\\PlantsRPets\\PlantsRPetsProjeto.Server\\PlantsRPetsProjeto.Server.csproj",
       "projectName": "PlantsRPetsProjeto.Server",
-      "projectPath": "C:\\Users\\Rodrigo\\source\\repos\\PlantsRPets\\PlantsRPetsProjeto.Server\\PlantsRPetsProjeto.Server.csproj",
-      "packagesPath": "C:\\Users\\Rodrigo\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Rodrigo\\source\\repos\\PlantsRPets\\PlantsRPetsProjeto.Server\\obj\\",
+      "projectPath": "C:\\PV\\Projeto\\PlantsRPets\\PlantsRPetsProjeto.Server\\PlantsRPetsProjeto.Server.csproj",
+      "packagesPath": "C:\\Users\\Gonçalo\\.nuget\\packages\\",
+      "outputPath": "C:\\PV\\Projeto\\PlantsRPets\\PlantsRPetsProjeto.Server\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\Rodrigo\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Gonçalo\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
