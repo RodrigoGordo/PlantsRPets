@@ -3,7 +3,7 @@
     public class Collection
     {
         public int CollectionId { get; set; }
-        public ICollection<Pet> CollectedPets { get; set; }
+        public virtual ICollection<CollectionPets> CollectionPets { get; set; }
     }
 
 }
