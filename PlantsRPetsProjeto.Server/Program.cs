@@ -20,6 +20,7 @@ builder.Services.AddDbContext<PlantsRPetsProjetoServerContext>(options =>
 //Add Identity
 builder.Services
     .AddIdentityApiEndpoints<User>()
+    .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<PlantsRPetsProjetoServerContext>();
 
 // Configure Identity
@@ -117,15 +118,15 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
-    var userManager = services.GetRequiredService<UserManager<User>>();
     var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+    var userManager = services.GetRequiredService<UserManager<User>>();
     var context = services.GetRequiredService<PlantsRPetsProjetoServerContext>();
     
     await context.Database.MigrateAsync();
 
     // Chamar os seeders
-    await UserSeeder.SeedUsersAsync(userManager);
     await RoleSeeder.SeedRoles(roleManager);
+    await UserSeeder.SeedUsersAsync(userManager);
 }
 
 
