@@ -29,5 +29,6 @@ namespace PlantsRPetsProjeto.Server.Data
         public DbSet<PlantsRPetsProjeto.Server.Models.Settings> Settings { get; set; } = default!;
         public DbSet<PlantsRPetsProjeto.Server.Models.SustainabilityTip> SustainabilityTip { get; set; } = default!;
         public DbSet<PlantsRPetsProjeto.Server.Models.Tutorial> Tutorial { get; set; } = default!;
+        public DbSet<PlantsRPetsProjeto.Server.Models.PlantationPlants> PlantationPlants { get; set; } = default!;
     }
 }

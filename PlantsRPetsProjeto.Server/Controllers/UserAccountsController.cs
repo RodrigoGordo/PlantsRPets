@@ -111,6 +111,7 @@ namespace PlantsRPetsProjeto.Server.Controllers
                     signingCredentials: creds);
 
                 var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
+                Console.WriteLine($"[DEBUG] Password Reset Token: {token}");// Pode ser removido depois (DEBUG)
 
                 // Retornar o token ao cliente
                 return Ok(new
