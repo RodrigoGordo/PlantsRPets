@@ -23,6 +23,9 @@ namespace PlantsRPetsProjeto.Server.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Plantation>>> GetUserPlantations()
         {
+            var token = Request.Headers["Authorization"];
+            Console.WriteLine($"Token recebido: {token}");
+
             var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (string.IsNullOrEmpty(userIdString))
                 return Unauthorized(new { message = "User not authenticated." });
