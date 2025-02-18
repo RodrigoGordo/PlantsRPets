@@ -1,9 +1,11 @@
-﻿namespace PlantsRPetsProjeto.Server.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace PlantsRPetsProjeto.Server.Models
 {
     public class Plantation
     {
         public int PlantationId { get; set; }
-        public int OwnerId { get; set; }
+        public int OwnerId { get; set; } //alterar para string
         public string PlantationName { get; set; }
         public PlantType PlantType { get; set; }
         public DateTime PlantingDate { get; set; }

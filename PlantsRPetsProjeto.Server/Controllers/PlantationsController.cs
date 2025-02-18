@@ -9,6 +9,7 @@ using PlantsRPetsProjeto.Server.Models;
 
 namespace PlantsRPetsProjeto.Server.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/plantations")]
     public class PlantationsController : ControllerBase
@@ -28,13 +29,10 @@ namespace PlantsRPetsProjeto.Server.Controllers
 
             var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (string.IsNullOrEmpty(userIdString))
-                return Unauthorized(new { message = "User not authenticated." });
-
-            if (!int.TryParse(userIdString, out int userId))
-                return BadRequest(new { message = "Invalid user ID format." });
+                return Unauthorized(new { message = "User not found." });
 
             var plantations = await _context.Plantation
-                .Where(p => p.OwnerId == userId)
+                .Where(p => p.OwnerId == userIdString)
                 .ToListAsync();
 
             return Ok(plantations);
