@@ -12,7 +12,7 @@ using PlantsRPetsProjeto.Server.Data;
 namespace PlantsRPetsProjeto.Server.Migrations
 {
     [DbContext(typeof(PlantsRPetsProjetoServerContext))]
-    [Migration("20250214135348_Initial")]
+    [Migration("20250219175202_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -244,8 +244,9 @@ namespace PlantsRPetsProjeto.Server.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("OwnerId")
-                        .HasColumnType("int");
+                    b.Property<string>("OwnerId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("CommunityId");
 
@@ -260,10 +261,14 @@ namespace PlantsRPetsProjeto.Server.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DashboardId"));
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("DashboardId");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
 
                     b.ToTable("Dashboard");
                 });
@@ -283,8 +288,9 @@ namespace PlantsRPetsProjeto.Server.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("SenderId")
-                        .HasColumnType("int");
+                    b.Property<string>("SenderId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("Timestamp")
                         .HasColumnType("datetime2");
@@ -313,8 +319,9 @@ namespace PlantsRPetsProjeto.Server.Migrations
                     b.Property<int>("TotalPlants")
                         .HasColumnType("int");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<double>("WaterSaved")
                         .HasColumnType("float");
@@ -439,8 +446,9 @@ namespace PlantsRPetsProjeto.Server.Migrations
                     b.Property<int>("Level")
                         .HasColumnType("int");
 
-                    b.Property<int>("OwnerId")
-                        .HasColumnType("int");
+                    b.Property<string>("OwnerId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("PlantType")
                         .HasColumnType("int");
@@ -509,10 +517,14 @@ namespace PlantsRPetsProjeto.Server.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("ProfileId");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
 
                     b.ToTable("Profile");
                 });
@@ -541,8 +553,9 @@ namespace PlantsRPetsProjeto.Server.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -557,8 +570,9 @@ namespace PlantsRPetsProjeto.Server.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("AuthorId")
-                        .HasColumnType("int");
+                    b.Property<string>("AuthorId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Category")
                         .IsRequired()
@@ -585,8 +599,9 @@ namespace PlantsRPetsProjeto.Server.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("AuthorId")
-                        .HasColumnType("int");
+                    b.Property<string>("AuthorId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Content")
                         .IsRequired()
@@ -612,9 +627,6 @@ namespace PlantsRPetsProjeto.Server.Migrations
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("DashboardId")
-                        .HasColumnType("int");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
@@ -650,9 +662,6 @@ namespace PlantsRPetsProjeto.Server.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("ProfileId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("RegistrationDate")
                         .HasColumnType("datetime2");
 
@@ -668,8 +677,6 @@ namespace PlantsRPetsProjeto.Server.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DashboardId");
-
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
 
@@ -677,8 +684,6 @@ namespace PlantsRPetsProjeto.Server.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
-
-                    b.HasIndex("ProfileId");
 
                     b.ToTable("AspNetUsers", (string)null);
                 });
@@ -768,6 +773,15 @@ namespace PlantsRPetsProjeto.Server.Migrations
                     b.Navigation("ReferencePet");
                 });
 
+            modelBuilder.Entity("PlantsRPetsProjeto.Server.Models.Dashboard", b =>
+                {
+                    b.HasOne("PlantsRPetsProjeto.Server.Models.User", null)
+                        .WithOne("Dashboard")
+                        .HasForeignKey("PlantsRPetsProjeto.Server.Models.Dashboard", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("PlantsRPetsProjeto.Server.Models.Message", b =>
                 {
                     b.HasOne("PlantsRPetsProjeto.Server.Models.Chat", null)
@@ -825,19 +839,13 @@ namespace PlantsRPetsProjeto.Server.Migrations
                     b.Navigation("ReferencePlantation");
                 });
 
-            modelBuilder.Entity("PlantsRPetsProjeto.Server.Models.User", b =>
+            modelBuilder.Entity("PlantsRPetsProjeto.Server.Models.Profile", b =>
                 {
-                    b.HasOne("PlantsRPetsProjeto.Server.Models.Dashboard", "Dashboard")
-                        .WithMany()
-                        .HasForeignKey("DashboardId");
-
-                    b.HasOne("PlantsRPetsProjeto.Server.Models.Profile", "Profile")
-                        .WithMany()
-                        .HasForeignKey("ProfileId");
-
-                    b.Navigation("Dashboard");
-
-                    b.Navigation("Profile");
+                    b.HasOne("PlantsRPetsProjeto.Server.Models.User", null)
+                        .WithOne("Profile")
+                        .HasForeignKey("PlantsRPetsProjeto.Server.Models.Profile", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("PlantsRPetsProjeto.Server.Models.Chat", b =>
@@ -869,9 +877,13 @@ namespace PlantsRPetsProjeto.Server.Migrations
 
             modelBuilder.Entity("PlantsRPetsProjeto.Server.Models.User", b =>
                 {
+                    b.Navigation("Dashboard");
+
                     b.Navigation("Pets");
 
                     b.Navigation("Plantations");
+
+                    b.Navigation("Profile");
                 });
 #pragma warning restore 612, 618
         }

@@ -55,27 +55,27 @@ namespace PlantsRPetsProjeto.Server.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Plantation>> CreatePlantation([FromBody] Plantation plantation)
-        {
-            var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (string.IsNullOrEmpty(userIdString))
-                return Unauthorized(new { message = "User not authenticated." });
+        //public async Task<ActionResult<Plantation>> CreatePlantation([FromBody] Plantation plantation)
+        //{
+        //    var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        //    if (string.IsNullOrEmpty(userIdString))
+        //        return Unauthorized(new { message = "User not authenticated." });
 
-            if (!int.TryParse(userIdString, out int userId))
-                return BadRequest(new { message = "Invalid user ID format." });
+        //    if (!int.TryParse(userIdString, out int userId))
+        //        return BadRequest(new { message = "Invalid user ID format." });
 
-            plantation.OwnerId = userId;
-            plantation.PlantingDate = DateTime.UtcNow;
-            plantation.LastWatered = DateTime.UtcNow;
-            plantation.ExperiencePoints = 0;
-            plantation.Level = 1;
-            plantation.GrowthStatus = "Growing";
+        //    plantation.OwnerId = userId;
+        //    plantation.PlantingDate = DateTime.UtcNow;
+        //    plantation.LastWatered = DateTime.UtcNow;
+        //    plantation.ExperiencePoints = 0;
+        //    plantation.Level = 1;
+        //    plantation.GrowthStatus = "Growing";
 
-            _context.Plantation.Add(plantation);
-            await _context.SaveChangesAsync();
+        //    _context.Plantation.Add(plantation);
+        //    await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetPlantation), new { id = plantation.PlantationId }, plantation);
-        }
+        //    return CreatedAtAction(nameof(GetPlantation), new { id = plantation.PlantationId }, plantation);
+        //}
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdatePlantation(int id, [FromBody] Plantation plantation)
@@ -106,28 +106,28 @@ namespace PlantsRPetsProjeto.Server.Controllers
             return NoContent();
         }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeletePlantation(int id)
-        {
-            var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (string.IsNullOrEmpty(userIdString))
-                return Unauthorized(new { message = "User not authenticated." });
+        ////[HttpDelete("{id}")]
+        ////public async Task<IActionResult> DeletePlantation(int id)
+        ////{
+        ////    var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        ////    if (string.IsNullOrEmpty(userIdString))
+        ////        return Unauthorized(new { message = "User not authenticated." });
 
-            if (!int.TryParse(userIdString, out int userId))
-                return BadRequest(new { message = "Invalid user ID format." });
+        ////    if (!int.TryParse(userIdString, out int userId))
+        ////        return BadRequest(new { message = "Invalid user ID format." });
 
-            var plantation = await _context.Plantation.FindAsync(id);
-            if (plantation == null)
-                return NotFound(new { message = "Plantation not found." });
+        ////    var plantation = await _context.Plantation.FindAsync(id);
+        ////    if (plantation == null)
+        ////        return NotFound(new { message = "Plantation not found." });
 
-            if (plantation.OwnerId != userId)
-                return Forbid();
+        ////    if (plantation.OwnerId != userId)
+        ////        return Forbid();
 
-            _context.Plantation.Remove(plantation);
-            await _context.SaveChangesAsync();
+        ////    _context.Plantation.Remove(plantation);
+        ////    await _context.SaveChangesAsync();
 
-            return Ok(new { message = "Plantation deleted successfully." });
-        }
+        ////    return Ok(new { message = "Plantation deleted successfully." });
+        ////}
 
         [HttpPost("{plantationId}/add-plant")]
         public async Task<IActionResult> AddPlantToPlantation(int plantationId, [FromBody] PlantationPlants plantationPlant)

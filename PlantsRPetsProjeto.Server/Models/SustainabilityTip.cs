@@ -6,7 +6,7 @@
         public string Title { get; set; }
         public string Content { get; set; }
         public string Category { get; set; }
-        public int AuthorId { get; set; }
+        public string AuthorId { get; set; }
     }
 
 }

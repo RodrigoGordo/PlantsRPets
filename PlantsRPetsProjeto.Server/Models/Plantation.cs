@@ -5,7 +5,7 @@ namespace PlantsRPetsProjeto.Server.Models
     public class Plantation
     {
         public int PlantationId { get; set; }
-        public int OwnerId { get; set; } //alterar para string
+        public string OwnerId { get; set; }
         public string PlantationName { get; set; }
         public PlantType PlantType { get; set; }
         public DateTime PlantingDate { get; set; }

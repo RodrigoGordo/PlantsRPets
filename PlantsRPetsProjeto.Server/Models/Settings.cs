@@ -3,7 +3,7 @@
     public class Settings
     {
         public int Id { get; set; }
-        public int UserId { get; set; }
+        public string UserId { get; set; }
         public ICollection<string> NotificationPreferences { get; set; }
         public string Theme { get; set; }
         public string Language { get; set; }
