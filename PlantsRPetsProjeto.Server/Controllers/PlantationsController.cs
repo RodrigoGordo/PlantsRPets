@@ -24,15 +24,12 @@ namespace PlantsRPetsProjeto.Server.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Plantation>>> GetUserPlantations()
         {
-            var token = Request.Headers["Authorization"];
-            Console.WriteLine($"Token recebido: {token}");
-
-            var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (string.IsNullOrEmpty(userIdString))
-                return Unauthorized(new { message = "User not found." });
+            var userId = User.FindFirst("UserId")?.Value;
+            if (string.IsNullOrEmpty(userId))
+                return NotFound(new { message = "User not found." });
 
             var plantations = await _context.Plantation
-                .Where(p => p.OwnerId == userIdString)
+                .Where(p => p.OwnerId == userId)
                 .ToListAsync();
 
             return Ok(plantations);
@@ -47,43 +44,56 @@ namespace PlantsRPetsProjeto.Server.Controllers
                 .FirstOrDefaultAsync(p => p.PlantationId == id);
 
             if (plantation == null)
-            {
                 return NotFound(new { message = "Plantation not found." });
-            }
 
             return Ok(plantation);
         }
 
         [HttpPost]
-        //public async Task<ActionResult<Plantation>> CreatePlantation([FromBody] Plantation plantation)
-        //{
-        //    var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        //    if (string.IsNullOrEmpty(userIdString))
-        //        return Unauthorized(new { message = "User not authenticated." });
+        public async Task<ActionResult<Plantation>> CreatePlantation([FromBody] Plantation plantation)
+        {
+            var userId = User.FindFirst("UserId")?.Value;
+            if (string.IsNullOrEmpty(userId))
+                return NotFound(new { message = "User not found." });
 
-        //    if (!int.TryParse(userIdString, out int userId))
-        //        return BadRequest(new { message = "Invalid user ID format." });
+            plantation.OwnerId = userId;
+            plantation.PlantingDate = DateTime.UtcNow;
+            plantation.LastWatered = DateTime.UtcNow;
+            plantation.ExperiencePoints = 0;
+            plantation.Level = 1;
+            plantation.GrowthStatus = "Growing";
+            plantation.PlantationPlants ??= new List<PlantationPlants>();
 
-        //    plantation.OwnerId = userId;
-        //    plantation.PlantingDate = DateTime.UtcNow;
-        //    plantation.LastWatered = DateTime.UtcNow;
-        //    plantation.ExperiencePoints = 0;
-        //    plantation.Level = 1;
-        //    plantation.GrowthStatus = "Growing";
+            _context.Plantation.Add(plantation);
+            await _context.SaveChangesAsync();
 
-        //    _context.Plantation.Add(plantation);
-        //    await _context.SaveChangesAsync();
-
-        //    return CreatedAtAction(nameof(GetPlantation), new { id = plantation.PlantationId }, plantation);
-        //}
+            return CreatedAtAction(nameof(GetPlantation), new { id = plantation.PlantationId }, plantation);
+        }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdatePlantation(int id, [FromBody] Plantation plantation)
         {
+            var userId = User.FindFirst("UserId")?.Value;
+            if (string.IsNullOrEmpty(userId))
+                return NotFound(new { message = "User not found." });
+
             if (id != plantation.PlantationId)
-            {
                 return BadRequest(new { message = "ID mismatch." });
-            }
+
+            var existingPlantation = await _context.Plantation.FindAsync(id);
+            if (existingPlantation == null)
+                return NotFound(new { message = "Plantation not found." });
+
+            if (existingPlantation.OwnerId != userId)
+                return Forbid("You do not have permission to update this plantation.");
+
+            existingPlantation.PlantationName = plantation.PlantationName;
+            existingPlantation.PlantType = plantation.PlantType;
+            existingPlantation.LastWatered = plantation.LastWatered;
+            existingPlantation.HarvestDate = plantation.HarvestDate;
+            existingPlantation.GrowthStatus = plantation.GrowthStatus;
+            existingPlantation.ExperiencePoints = plantation.ExperiencePoints;
+            existingPlantation.Level = plantation.Level;
 
             _context.Entry(plantation).State = EntityState.Modified;
 
@@ -93,69 +103,51 @@ namespace PlantsRPetsProjeto.Server.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!_context.Plantation.Any(e => e.PlantationId == id))
-                {
-                    return NotFound(new { message = "Plantation not found." });
-                }
-                else
-                {
-                    throw;
-                }
+                return Conflict(new { message = "Conflict updating plantation, please try again." });
             }
 
             return NoContent();
         }
 
-        ////[HttpDelete("{id}")]
-        ////public async Task<IActionResult> DeletePlantation(int id)
-        ////{
-        ////    var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        ////    if (string.IsNullOrEmpty(userIdString))
-        ////        return Unauthorized(new { message = "User not authenticated." });
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeletePlantation(int id)
+        {
+            var userId = User.FindFirst("UserId")?.Value;
+            if (string.IsNullOrEmpty(userId))
+                return NotFound(new { message = "User not found." });
 
-        ////    if (!int.TryParse(userIdString, out int userId))
-        ////        return BadRequest(new { message = "Invalid user ID format." });
+            var plantation = await _context.Plantation.FindAsync(id);
+            if (plantation == null)
+                return NotFound(new { message = "Plantation not found." });
 
-        ////    var plantation = await _context.Plantation.FindAsync(id);
-        ////    if (plantation == null)
-        ////        return NotFound(new { message = "Plantation not found." });
+            if (plantation.OwnerId != userId)
+                return Forbid("You do not have permission to delete this plantation.");
 
-        ////    if (plantation.OwnerId != userId)
-        ////        return Forbid();
+            _context.Plantation.Remove(plantation);
+            await _context.SaveChangesAsync();
 
-        ////    _context.Plantation.Remove(plantation);
-        ////    await _context.SaveChangesAsync();
-
-        ////    return Ok(new { message = "Plantation deleted successfully." });
-        ////}
+            return Ok(new { message = "Plantation deleted successfully." });
+        }
 
         [HttpPost("{plantationId}/add-plant")]
         public async Task<IActionResult> AddPlantToPlantation(int plantationId, [FromBody] PlantationPlants plantationPlant)
         {
             var plantation = await _context.Plantation.FindAsync(plantationId);
             if (plantation == null)
-            {
                 return NotFound(new { message = "Plantation not found." });
-            }
 
             var plant = await _context.Plant.FindAsync(plantationPlant.PlantId);
             if (plant == null)
-            {
                 return NotFound(new { message = "Plant not found." });
-            }
 
             if (plant.Type != plantation.PlantType)
-            {
                 return BadRequest(new { message = "This plant type is not allowed in this plantation." });
-            }
 
             var existingPlant = await _context.PlantationPlants
                 .FirstOrDefaultAsync(pp => pp.PlantationId == plantationId && pp.PlantId == plantationPlant.PlantId);
 
             if (existingPlant != null)
-            {
                 existingPlant.Quantity += plantationPlant.Quantity;
-            }
             else
             {
                 plantationPlant.PlantationId = plantationId;
@@ -173,9 +165,7 @@ namespace PlantsRPetsProjeto.Server.Controllers
                 .FirstOrDefaultAsync(pp => pp.PlantationId == plantationId && pp.PlantId == plantId);
 
             if (plantationPlant == null)
-            {
                 return NotFound(new { message = "Plant not found in this plantation." });
-            }
 
             _context.PlantationPlants.Remove(plantationPlant);
             await _context.SaveChangesAsync();
