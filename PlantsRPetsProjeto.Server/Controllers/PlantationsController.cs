@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -50,19 +51,25 @@ namespace PlantsRPetsProjeto.Server.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Plantation>> CreatePlantation([FromBody] Plantation plantation)
+        public async Task<ActionResult<Plantation>> CreatePlantation([FromBody] CreatePlantationModel model)
         {
             var userId = User.FindFirst("UserId")?.Value;
             if (string.IsNullOrEmpty(userId))
                 return NotFound(new { message = "User not found." });
 
-            plantation.OwnerId = userId;
-            plantation.PlantingDate = DateTime.UtcNow;
-            plantation.LastWatered = DateTime.UtcNow;
-            plantation.ExperiencePoints = 0;
-            plantation.Level = 1;
-            plantation.GrowthStatus = "Growing";
-            plantation.PlantationPlants ??= new List<PlantationPlants>();
+            var plantation = new Plantation
+            {
+                OwnerId = userId,
+                PlantationName = model.PlantationName,
+                PlantType = model.PlantType,
+                PlantingDate = DateTime.UtcNow,
+                LastWatered = DateTime.UtcNow,
+                GrowthStatus = "Growing",
+                ExperiencePoints = 0,
+                Level = 1,
+                PlantationPlants = new List<PlantationPlants>(),
+                HarvestDate = DateTime.UtcNow
+            };
 
             _context.Plantation.Add(plantation);
             await _context.SaveChangesAsync();
@@ -71,14 +78,11 @@ namespace PlantsRPetsProjeto.Server.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdatePlantation(int id, [FromBody] Plantation plantation)
+        public async Task<IActionResult> UpdatePlantation(int id, [FromBody] UpdatePlantationModel model)
         {
             var userId = User.FindFirst("UserId")?.Value;
             if (string.IsNullOrEmpty(userId))
                 return NotFound(new { message = "User not found." });
-
-            if (id != plantation.PlantationId)
-                return BadRequest(new { message = "ID mismatch." });
 
             var existingPlantation = await _context.Plantation.FindAsync(id);
             if (existingPlantation == null)
@@ -87,15 +91,15 @@ namespace PlantsRPetsProjeto.Server.Controllers
             if (existingPlantation.OwnerId != userId)
                 return Forbid("You do not have permission to update this plantation.");
 
-            existingPlantation.PlantationName = plantation.PlantationName;
-            existingPlantation.PlantType = plantation.PlantType;
-            existingPlantation.LastWatered = plantation.LastWatered;
-            existingPlantation.HarvestDate = plantation.HarvestDate;
-            existingPlantation.GrowthStatus = plantation.GrowthStatus;
-            existingPlantation.ExperiencePoints = plantation.ExperiencePoints;
-            existingPlantation.Level = plantation.Level;
+            existingPlantation.PlantationName = model.PlantationName;
+            existingPlantation.PlantType = model.PlantType;
+            existingPlantation.LastWatered = model.LastWatered ?? existingPlantation.LastWatered;
+            existingPlantation.HarvestDate = model.HarvestDate ?? existingPlantation.HarvestDate;
+            existingPlantation.GrowthStatus = model.GrowthStatus;
+            existingPlantation.ExperiencePoints = model.ExperiencePoints;
+            existingPlantation.Level = model.Level;
 
-            _context.Entry(plantation).State = EntityState.Modified;
+            _context.Entry(existingPlantation).State = EntityState.Modified;
 
             try
             {
@@ -108,6 +112,7 @@ namespace PlantsRPetsProjeto.Server.Controllers
 
             return NoContent();
         }
+
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePlantation(int id)
@@ -130,27 +135,38 @@ namespace PlantsRPetsProjeto.Server.Controllers
         }
 
         [HttpPost("{plantationId}/add-plant")]
-        public async Task<IActionResult> AddPlantToPlantation(int plantationId, [FromBody] PlantationPlants plantationPlant)
+        public async Task<IActionResult> AddPlantToPlantation(int plantationId, [FromBody] AddPlantToPlantationModel model)
         {
             var plantation = await _context.Plantation.FindAsync(plantationId);
             if (plantation == null)
                 return NotFound(new { message = "Plantation not found." });
 
-            var plant = await _context.Plant.FindAsync(plantationPlant.PlantId);
+            var plant = await _context.Plant.FindAsync(model.PlantId);
             if (plant == null)
                 return NotFound(new { message = "Plant not found." });
 
             if (plant.Type != plantation.PlantType)
                 return BadRequest(new { message = "This plant type is not allowed in this plantation." });
 
+            if (model.Quantity <= 0)
+                return BadRequest(new { message = "Quantity must be greater than zero." });
+
             var existingPlant = await _context.PlantationPlants
-                .FirstOrDefaultAsync(pp => pp.PlantationId == plantationId && pp.PlantId == plantationPlant.PlantId);
+                .FirstOrDefaultAsync(pp => pp.PlantationId == plantationId && pp.PlantId == model.PlantId);
 
             if (existingPlant != null)
-                existingPlant.Quantity += plantationPlant.Quantity;
+            {
+                existingPlant.Quantity += model.Quantity;
+            }
             else
             {
-                plantationPlant.PlantationId = plantationId;
+                var plantationPlant = new PlantationPlants
+                {
+                    PlantationId = plantationId,
+                    PlantId = model.PlantId,
+                    Quantity = model.Quantity
+                };
+
                 _context.PlantationPlants.Add(plantationPlant);
             }
 
@@ -159,17 +175,40 @@ namespace PlantsRPetsProjeto.Server.Controllers
         }
 
         [HttpDelete("{plantationId}/remove-plant/{plantId}")]
-        public async Task<IActionResult> RemovePlantFromPlantation(int plantationId, int plantId)
+        public async Task<IActionResult> RemovePlantFromPlantation(int plantationId, int plantId, [FromBody] RemovePlantFromPlantationModel model)
         {
+            var plantation = await _context.Plantation.FindAsync(plantationId);
+            if (plantation == null)
+                return NotFound(new { message = "Plantation not found." });
+
+            var plant = await _context.Plant.FindAsync(plantId);
+            if (plant == null)
+                return NotFound(new { message = "Plant not found." });
+
             var plantationPlant = await _context.PlantationPlants
                 .FirstOrDefaultAsync(pp => pp.PlantationId == plantationId && pp.PlantId == plantId);
 
             if (plantationPlant == null)
                 return NotFound(new { message = "Plant not found in this plantation." });
 
-            _context.PlantationPlants.Remove(plantationPlant);
-            await _context.SaveChangesAsync();
+            if (model.Quantity.HasValue)
+            {
+                if (model.Quantity.Value <= 0)
+                    return BadRequest(new { message = "Quantity must be greater than zero." });
 
+                plantationPlant.Quantity -= model.Quantity.Value;
+
+                if (plantationPlant.Quantity <= 0)
+                {
+                    _context.PlantationPlants.Remove(plantationPlant);
+                }
+            }
+            else
+            {
+                _context.PlantationPlants.Remove(plantationPlant);
+            }
+
+            await _context.SaveChangesAsync();
             return Ok(new { message = "Plant removed from plantation successfully." });
         }
 
@@ -188,5 +227,37 @@ namespace PlantsRPetsProjeto.Server.Controllers
         {
             return _context.Plantation.Any(e => e.PlantationId == id);
         }
+    }
+
+
+
+    public class CreatePlantationModel
+    {
+        public string PlantationName { get; set; }
+        public PlantType PlantType { get; set; }
+    }
+
+    public class UpdatePlantationModel
+    {
+        public string PlantationName { get; set; }
+        public PlantType PlantType { get; set; }
+        public DateTime? LastWatered { get; set; }
+        public DateTime? HarvestDate { get; set; }
+        public string GrowthStatus { get; set; }
+        public int ExperiencePoints { get; set; }
+        public int Level { get; set; }
+    }
+
+    public class AddPlantToPlantationModel
+    {
+        public int PlantId { get; set; }
+        [Range(1, int.MaxValue, ErrorMessage = "Quantity must be at least 1.")]
+        public int Quantity { get; set; }
+    }
+
+    public class RemovePlantFromPlantationModel
+    {
+        [Range(1, int.MaxValue, ErrorMessage = "Quantity must be at least 1.")]
+        public int? Quantity { get; set; }
     }
 }
