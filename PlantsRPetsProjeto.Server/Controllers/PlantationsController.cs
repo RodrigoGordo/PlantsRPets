@@ -67,7 +67,7 @@ namespace PlantsRPetsProjeto.Server.Controllers
                 GrowthStatus = "Growing",
                 ExperiencePoints = 0,
                 Level = 1,
-                PlantationPlants = new List<PlantationPlants>(),
+                PlantationPlants = [],
                 HarvestDate = DateTime.UtcNow
             };
 
@@ -233,17 +233,17 @@ namespace PlantsRPetsProjeto.Server.Controllers
 
     public class CreatePlantationModel
     {
-        public string PlantationName { get; set; }
+        public required string PlantationName { get; set; }
         public PlantType PlantType { get; set; }
     }
 
     public class UpdatePlantationModel
     {
-        public string PlantationName { get; set; }
+        public required string PlantationName { get; set; }
         public PlantType PlantType { get; set; }
         public DateTime? LastWatered { get; set; }
         public DateTime? HarvestDate { get; set; }
-        public string GrowthStatus { get; set; }
+        public required string GrowthStatus { get; set; }
         public int ExperiencePoints { get; set; }
         public int Level { get; set; }
     }
