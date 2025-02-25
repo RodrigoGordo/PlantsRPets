@@ -71,10 +71,17 @@ namespace PlantsRPetsProjeto.Server.Controllers
             if (existingPlant == null)
                 return NotFound(new { message = "Plant not found." });
 
-            existingPlant.PlantName = model.PlantName;
-            existingPlant.Type = model.Type;
-            existingPlant.GrowthTime = model.GrowthTime;
-            existingPlant.WaterFrequency = model.WaterFrequency;
+            if (model.PlantName != null)
+                existingPlant.PlantName = model.PlantName;
+
+            if (model.Type.HasValue)
+                existingPlant.Type = model.Type.Value;
+
+            if (model.GrowthTime.HasValue)
+                existingPlant.GrowthTime = model.GrowthTime.Value;
+
+            if (model.WaterFrequency.HasValue)
+                existingPlant.WaterFrequency = model.WaterFrequency.Value;
 
             _context.Entry(existingPlant).State = EntityState.Modified;
 
@@ -107,23 +114,23 @@ namespace PlantsRPetsProjeto.Server.Controllers
 
     public class CreatePlantModel
     {
-        public string PlantName { get; set; }
-        public PlantType Type { get; set; }
+        public required string PlantName { get; set; }
+        public required PlantType Type { get; set; }
         [Range(1, int.MaxValue, ErrorMessage = "Growth time must be at least 1 day.")]
-        public int GrowthTime { get; set; }
+        public required int GrowthTime { get; set; }
         [Range(1, int.MaxValue, ErrorMessage = "Water frequency must be at least 1 day.")]
-        public int WaterFrequency { get; set; }
+        public required int WaterFrequency { get; set; }
     }
 
     public class UpdatePlantModel
     {
         [Required]
-        public string PlantName { get; set; }
-        public PlantType Type { get; set; }
+        public string? PlantName { get; set; }
+        public PlantType? Type { get; set; }
         [Range(1, int.MaxValue, ErrorMessage = "Growth time must be at least 1 day.")]
-        public int GrowthTime { get; set; }
+        public int? GrowthTime { get; set; }
         [Range(1, int.MaxValue, ErrorMessage = "Water frequency must be at least 1 day.")]
-        public int WaterFrequency { get; set; }
+        public int? WaterFrequency { get; set; }
     }
 
 }

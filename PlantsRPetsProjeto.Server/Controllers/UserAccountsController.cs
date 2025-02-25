@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using PlantsRPetsProjeto.Server.Models;
 using PlantsRPetsProjeto.Server.Services;
+using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 using System.Security.Claims;
@@ -91,13 +92,20 @@ namespace PlantsRPetsProjeto.Server.Controllers
                     return BadRequest(new { message = "Invalid email or password." });
                 }
 
+                var roles = await _userManager.GetRolesAsync(user);
+
                 // Gerar os claims do utilizador
                 var claims = new List<Claim>
-            {
+                {
                 new Claim("Nickname", user.Nickname),
                 new Claim("Email", user.Email),
                 new Claim("UserId", user.Id)
-            };
+                };
+
+                foreach (var role in roles)
+                {
+                    claims.Add(new Claim(ClaimTypes.Role, role));
+                }
 
                 // Gerar o token JWT
                 var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));

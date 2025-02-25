@@ -91,13 +91,26 @@ namespace PlantsRPetsProjeto.Server.Controllers
             if (existingPlantation.OwnerId != userId)
                 return Forbid("You do not have permission to update this plantation.");
 
-            existingPlantation.PlantationName = model.PlantationName;
-            existingPlantation.PlantType = model.PlantType;
-            existingPlantation.LastWatered = model.LastWatered ?? existingPlantation.LastWatered;
-            existingPlantation.HarvestDate = model.HarvestDate ?? existingPlantation.HarvestDate;
-            existingPlantation.GrowthStatus = model.GrowthStatus;
-            existingPlantation.ExperiencePoints = model.ExperiencePoints;
-            existingPlantation.Level = model.Level;
+            if (model.PlantationName != null)
+                existingPlantation.PlantationName = model.PlantationName;
+
+            if (model.PlantType.HasValue)
+                existingPlantation.PlantType = model.PlantType.Value;
+
+            if (model.LastWatered.HasValue)
+                existingPlantation.LastWatered = model.LastWatered.Value;
+
+            if (model.HarvestDate.HasValue)
+                existingPlantation.HarvestDate = model.HarvestDate.Value;
+
+            if (model.GrowthStatus != null)
+                existingPlantation.GrowthStatus = model.GrowthStatus;
+
+            if (model.ExperiencePoints.HasValue)
+                existingPlantation.ExperiencePoints = model.ExperiencePoints.Value;
+
+            if (model.Level.HasValue)
+                existingPlantation.Level = model.Level.Value;
 
             _context.Entry(existingPlantation).State = EntityState.Modified;
 
@@ -234,18 +247,18 @@ namespace PlantsRPetsProjeto.Server.Controllers
     public class CreatePlantationModel
     {
         public required string PlantationName { get; set; }
-        public PlantType PlantType { get; set; }
+        public required PlantType PlantType { get; set; }
     }
 
     public class UpdatePlantationModel
     {
-        public required string PlantationName { get; set; }
-        public PlantType PlantType { get; set; }
+        public string? PlantationName { get; set; }
+        public PlantType? PlantType { get; set; }
         public DateTime? LastWatered { get; set; }
         public DateTime? HarvestDate { get; set; }
-        public required string GrowthStatus { get; set; }
-        public int ExperiencePoints { get; set; }
-        public int Level { get; set; }
+        public string? GrowthStatus { get; set; }
+        public int? ExperiencePoints { get; set; }
+        public int? Level { get; set; }
     }
 
     public class AddPlantToPlantationModel
