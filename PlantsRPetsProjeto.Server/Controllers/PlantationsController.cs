@@ -141,10 +141,16 @@ namespace PlantsRPetsProjeto.Server.Controllers
             if (plantation.OwnerId != userId)
                 return Forbid("You do not have permission to delete this plantation.");
 
-            _context.Plantation.Remove(plantation);
-            await _context.SaveChangesAsync();
-
-            return Ok(new { message = "Plantation deleted successfully." });
+            try
+            {
+                _context.Plantation.Remove(plantation);
+                await _context.SaveChangesAsync();
+                return Ok(new { message = "Plantation deleted successfully." });
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                return Conflict(new { message = "Plantation was already removed or updated by another process." });
+            }
         }
 
         [HttpPost("{plantationId}/add-plant")]
@@ -236,13 +242,7 @@ namespace PlantsRPetsProjeto.Server.Controllers
             return Ok(plants);
         }
 
-        private bool PlantationExists(int id)
-        {
-            return _context.Plantation.Any(e => e.PlantationId == id);
-        }
     }
-
-
 
     public class CreatePlantationModel
     {
