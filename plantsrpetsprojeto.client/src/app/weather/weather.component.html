@@ -1,0 +1,9 @@
+<div class="weather-container">
+  <h2>Weather in {{ city }}</h2>
+  <div *ngIf="weather && weather.current">
+    <p> Temperature: {{ weather.current.temp_c }}°C</p> <!-- temp_c is the correct property -->
+    <p> Humidity: {{ weather.current.humidity }}%</p> <!-- humidity is correct -->
+    <p> Wind Speed: {{ weather.current.wind_kph }} km/h</p> <!-- wind_kph is correct -->
+    <p> Condition: {{ weather.current.condition.text }}</p> <!-- condition.text for weather description -->
+  </div>
+</div>
