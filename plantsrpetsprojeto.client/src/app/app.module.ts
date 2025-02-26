@@ -33,6 +33,7 @@ import { HomeComponent } from './home/home.component';
 import { ProfileComponent } from './profile/profile.component';
 import { LoadingIndicatorComponent } from './loading-indicator/loading-indicator.component';
 import { LogoutConfirmationComponent } from './logout-confirmation/logout-confirmation.component';
+import { PlantationCardComponent } from './plantation-card/plantation-card.component';
 
 
 @NgModule({
@@ -59,6 +60,7 @@ import { LogoutConfirmationComponent } from './logout-confirmation/logout-confir
     ProfileComponent,
     LoadingIndicatorComponent,
     LogoutConfirmationComponent,
+    PlantationCardComponent,
   ],
   imports: [
     BrowserModule,

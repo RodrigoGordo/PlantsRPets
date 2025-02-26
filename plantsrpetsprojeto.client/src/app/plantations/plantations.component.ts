@@ -1,4 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { PlantationsService } from '../plantations.service';
+import { MatDialog } from '@angular/material/dialog';
+//import { CreatePlantationComponent } from '../create-plantation/create-plantation.component';
+
 
 /**
  * Componente responsável pela gestão das plantações do utilizador.
@@ -11,6 +15,33 @@ import { Component } from '@angular/core';
   templateUrl: './plantations.component.html',
   styleUrl: './plantations.component.css'
 })
-export class PlantationsComponent {
+export class PlantationsComponent implements OnInit {
+  plantations: any[] = [];
 
+  constructor(private plantationsService: PlantationsService, private dialog: MatDialog) { }
+
+  ngOnInit(): void {
+    this.loadPlantations();
+  }
+
+  loadPlantations(): void {
+    this.plantationsService.getUserPlantations().subscribe(
+      (data: Plantation[]) => this.plantations = data,
+      (error: any) => console.error('Error fetching plantations:', error)
+    );
+  }
+
+  //openCreateDialog(): void {
+  //  const dialogRef = this.dialog.open(CreatePlantationComponent, {
+  //    width: '400px'
+  //  });
+
+  //  dialogRef.afterClosed().subscribe(result => {
+  //    if (result) this.loadPlantations();
+  //  });
+  //}
+
+  deletePlantation(id: number): void {
+    this.plantationsService.deletePlantation(id).subscribe(() => this.loadPlantations());
+  }
 }
