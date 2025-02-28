@@ -96,7 +96,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("Angular", policy =>
     {
-        policy.WithOrigins("https://localhost:4200")
+        policy.WithOrigins("https://localhost:4200", "https://127.0.0.1:4200", "https://plants-r-pets.azurewebsites.net/")
               .AllowAnyHeader()
               .AllowAnyMethod()
               .AllowCredentials();

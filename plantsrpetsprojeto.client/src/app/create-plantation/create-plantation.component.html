@@ -1,0 +1,25 @@
+<div class="dialog-container">
+  <h2>Create New Plantation</h2>
+
+  <form [formGroup]="plantationForm" (ngSubmit)="createPlantation()">
+    <div class="form-group">
+      <label for="name">Plantation Name</label>
+      <input id="name" type="text" formControlName="plantationName" placeholder="Enter a name">
+      <div class="error" *ngIf="plantationForm.get('plantationName')?.invalid && plantationForm.get('plantationName')?.touched">
+        Name must be at least 3 characters.
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="type">Plant Type</label>
+      <select id="type" formControlName="plantType">
+        <option *ngFor="let type of plantTypes" [value]="type">{{ type }}</option>
+      </select>
+    </div>
+
+    <div class="buttons">
+      <button type="submit" class="confirm-btn" [disabled]="plantationForm.invalid">Create</button>
+      <button type="button" class="cancel-btn" (click)="closeDialog()">Cancel</button>
+    </div>
+  </form>
+</div>

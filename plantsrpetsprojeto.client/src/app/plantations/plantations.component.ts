@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { PlantationsService } from '../plantations.service';
 import { MatDialog } from '@angular/material/dialog';
-//import { CreatePlantationComponent } from '../create-plantation/create-plantation.component';
+import { Plantation } from '../models/plantation.model';
+import { CreatePlantationComponent } from '../create-plantation/create-plantation.component';
 
 
 /**
@@ -31,15 +32,15 @@ export class PlantationsComponent implements OnInit {
     );
   }
 
-  //openCreateDialog(): void {
-  //  const dialogRef = this.dialog.open(CreatePlantationComponent, {
-  //    width: '400px'
-  //  });
+  openCreateDialog(): void {
+    const dialogRef = this.dialog.open(CreatePlantationComponent, {
+      width: '400px'
+    });
 
-  //  dialogRef.afterClosed().subscribe(result => {
-  //    if (result) this.loadPlantations();
-  //  });
-  //}
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) this.loadPlantations();
+    });
+  }
 
   deletePlantation(id: number): void {
     this.plantationsService.deletePlantation(id).subscribe(() => this.loadPlantations());

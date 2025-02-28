@@ -25,6 +25,11 @@ export class PlantationsService {
     return this.http.post<any>(this.apiUrl, plantationData);
   }
 
+  // Atualiza uma plantação
+  updatePlantationName(id: number, newName: string): Observable<any> {
+    return this.http.put(`${this.apiUrl}/${id}`, { plantationName: newName });
+  }
+
   // Remove uma plantação pelo ID
   deletePlantation(id: number): Observable<any> {
     return this.http.delete(`${this.apiUrl}/${id}`);

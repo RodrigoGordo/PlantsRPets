@@ -1,1 +1,22 @@
-<p>plantations works!</p>
+<body>
+  <app-navbar></app-navbar>
+
+  <div class="header">Here you can manage your plantations!</div>
+  <div class="plantations-container">
+    <h1 class="plantations-title">Plantations</h1>
+
+    <button class="create-btn" (click)="openCreateDialog()">Create New Plantation</button>
+
+    <p class="no-plantations" *ngIf="plantations.length === 0">
+      You don't have any plantations yet. Create one now!
+    </p>
+
+    <div class="plantations-list" *ngIf="plantations.length > 0">
+      <app-plantation-card *ngFor="let plantation of plantations"
+                           [plantation]="plantation"
+                           (updated)="loadPlantations()"
+                           (deleted)="loadPlantations()">
+      </app-plantation-card>
+    </div>
+  </div>
+</body>

@@ -34,6 +34,7 @@ import { ProfileComponent } from './profile/profile.component';
 import { LoadingIndicatorComponent } from './loading-indicator/loading-indicator.component';
 import { LogoutConfirmationComponent } from './logout-confirmation/logout-confirmation.component';
 import { PlantationCardComponent } from './plantation-card/plantation-card.component';
+import { CreatePlantationComponent } from './create-plantation/create-plantation.component';
 
 
 @NgModule({
@@ -61,6 +62,7 @@ import { PlantationCardComponent } from './plantation-card/plantation-card.compo
     LoadingIndicatorComponent,
     LogoutConfirmationComponent,
     PlantationCardComponent,
+    CreatePlantationComponent,
   ],
   imports: [
     BrowserModule,

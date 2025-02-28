@@ -1,1 +1,15 @@
-<p>plantation-card works!</p>
+<div class="plantation-card">
+  <div class="plantation-info">
+    <input *ngIf="isEditing" [(ngModel)]="newPlantationName" type="text" class="edit-input" />
+    <h3 *ngIf="!isEditing" class="plantation-name">{{ plantation.plantationName }}</h3>
+    <p class="plantation-type">{{ plantation.plantType }}</p>
+    <p class="last-watered">Last Watered: {{ plantation.lastWatered | date }}</p>
+  </div>
+
+  <div class="plantation-actions">
+    <button *ngIf="!isEditing" class="edit-btn" (click)="enableEdit()">✏️</button>
+    <button *ngIf="isEditing" class="save-btn" (click)="saveEdit()">✔️</button>
+    <button *ngIf="isEditing" class="cancel-btn" (click)="cancelEdit()">❌</button>
+    <button class="delete-btn" (click)="remove()">🗑️</button>
+  </div>
+</div>
