@@ -1,16 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using PlantsRPetsProjeto.Server.Data;
 using PlantsRPetsProjeto.Server.Models;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace PlantsRPetsProjeto.Server.Controllers
 {
-    public class SustainabilityTipsController : Controller
+    [Authorize]
+    [ApiController]
+    [Route("api/sustainability-tips")]
+    public class SustainabilityTipsController : ControllerBase
     {
         private readonly PlantsRPetsProjetoServerContext _context;
 
@@ -19,134 +21,84 @@ namespace PlantsRPetsProjeto.Server.Controllers
             _context = context;
         }
 
-        // GET: SustainabilityTips
-        public async Task<IActionResult> Index()
+        // GET: api/sustainability-tips
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<SustainabilityTip>>> GetSustainabilityTips()
         {
-            return View(await _context.SustainabilityTip.ToListAsync());
+            return await _context.SustainabilityTip.ToListAsync();
         }
 
-        // GET: SustainabilityTips/Details/5
-        public async Task<IActionResult> Details(int? id)
+        // GET: api/sustainability-tips/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<SustainabilityTip>> GetSustainabilityTip(int id)
         {
-            if (id == null)
+            var tip = await _context.SustainabilityTip.FindAsync(id);
+
+            if (tip == null)
             {
                 return NotFound();
             }
 
-            var sustainabilityTip = await _context.SustainabilityTip
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (sustainabilityTip == null)
-            {
-                return NotFound();
-            }
-
-            return View(sustainabilityTip);
+            return tip;
         }
 
-        // GET: SustainabilityTips/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: SustainabilityTips/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // POST: api/sustainability-tips
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,Content,Category,AuthorId")] SustainabilityTip sustainabilityTip)
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult<SustainabilityTip>> CreateSustainabilityTip(SustainabilityTip tip)
         {
-            if (ModelState.IsValid)
-            {
-                _context.Add(sustainabilityTip);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(sustainabilityTip);
-        }
-
-        // GET: SustainabilityTips/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var sustainabilityTip = await _context.SustainabilityTip.FindAsync(id);
-            if (sustainabilityTip == null)
-            {
-                return NotFound();
-            }
-            return View(sustainabilityTip);
-        }
-
-        // POST: SustainabilityTips/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Content,Category,AuthorId")] SustainabilityTip sustainabilityTip)
-        {
-            if (id != sustainabilityTip.Id)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(sustainabilityTip);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!SustainabilityTipExists(sustainabilityTip.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(sustainabilityTip);
-        }
-
-        // GET: SustainabilityTips/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var sustainabilityTip = await _context.SustainabilityTip
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (sustainabilityTip == null)
-            {
-                return NotFound();
-            }
-
-            return View(sustainabilityTip);
-        }
-
-        // POST: SustainabilityTips/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var sustainabilityTip = await _context.SustainabilityTip.FindAsync(id);
-            if (sustainabilityTip != null)
-            {
-                _context.SustainabilityTip.Remove(sustainabilityTip);
-            }
-
+            _context.SustainabilityTip.Add(tip);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+
+            return CreatedAtAction(nameof(GetSustainabilityTip), new { id = tip.Id }, tip);
+        }
+
+        // PUT: api/sustainability-tips/5
+        [HttpPut("{id}")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> UpdateSustainabilityTip(int id, SustainabilityTip tip)
+        {
+            if (id != tip.Id)
+            {
+                return BadRequest();
+            }
+
+            _context.Entry(tip).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!SustainabilityTipExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
+        }
+
+        // DELETE: api/sustainability-tips/5
+        [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> DeleteSustainabilityTip(int id)
+        {
+            var tip = await _context.SustainabilityTip.FindAsync(id);
+            if (tip == null)
+            {
+                return NotFound();
+            }
+
+            _context.SustainabilityTip.Remove(tip);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
         }
 
         private bool SustainabilityTipExists(int id)

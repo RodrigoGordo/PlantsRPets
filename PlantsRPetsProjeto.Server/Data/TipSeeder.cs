@@ -16,21 +16,28 @@ namespace PlantsRPetsProjeto.Server.Data
                         Title = "Compost Your Waste",
                         Content = "Turn organic waste into compost to reduce landfill waste and enrich your soil.",
                         Category = "Waste Management",
-                        AuthorId = "system"
+                        AuthorId = "0"
                     },
                     new SustainabilityTip
                     {
                         Title = "Use Rainwater",
                         Content = "Collect rainwater for watering plants to conserve tap water.",
                         Category = "Water Conservation",
-                        AuthorId = "system"
+                        AuthorId = "0"
                     },
                     new SustainabilityTip
                     {
                         Title = "Grow Your Own Food",
                         Content = "Plant vegetables and herbs to reduce carbon footprint and promote sustainability.",
                         Category = "Self-Sustainability",
-                        AuthorId = "system"
+                        AuthorId = "0"
+                    },
+                    new SustainabilityTip
+                    {
+                        Title = "Use Organic Pest Control",
+                        Content = "Encourage beneficial insects like ladybugs and plant marigolds to naturally repel harmful pests.",
+                        Category = "Pest Management",
+                        AuthorId = "0"
                     }
                 };
 
