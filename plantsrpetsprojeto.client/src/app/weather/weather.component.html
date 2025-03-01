@@ -5,8 +5,8 @@
   <div *ngIf="weather && weather.current">
     <h3>{{ weather.location.name }}</h3>
     <p class="temperature">
-      {{ weather.current.temp_c }}°C
-      <span class="unit-toggle" (click)="toggleUnit()">| °F</span>
+      {{ isCelsius ? weather.current.temp_c : weather.current.temp_f }}°{{ isCelsius ? 'C' : 'F' }}
+      <span class="unit-toggle" (click)="toggleUnit()">| °{{ isCelsius ? 'F' : 'C' }}</span>
     </p>
     <p>🌥 {{ weather.current.condition.text }}</p>
     <img [src]="'https:' + weather.current.condition.icon" alt="Weather icon">
@@ -19,7 +19,7 @@
       <div *ngFor="let day of forecast" class="forecast-day">
         <p>{{ day.date | date:'EEE' }}</p>
         <img [src]="'https:' + day.day.condition.icon" alt="Weather icon">
-        <p>{{ day.day.avgtemp_c }}°C</p>
+        <p>{{ isCelsius ? day.day.avgtemp_c : day.day.avgtemp_f }}°{{ isCelsius ? 'C' : 'F' }}</p>
       </div>
     </div>
   </div>
