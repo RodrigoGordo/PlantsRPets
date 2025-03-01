@@ -9,6 +9,7 @@ import { WeatherService } from "../weather.service";
 })
 export class WeatherComponent implements OnInit {
   weather: any;
+  forecast: any[] = []; // Store 7-day forecast
   locationError: string = '';
   isCelsius: boolean = true;
 
@@ -40,6 +41,7 @@ export class WeatherComponent implements OnInit {
     this.weatherService.getWeatherByCoords(lat, lon).subscribe(
       (data) => {
         this.weather = data;
+        this.forecast = data.forecast.forecastday; // Store forecast
       },
       (error) => {
         this.locationError = "Could not retrieve weather data.";
@@ -51,6 +53,7 @@ export class WeatherComponent implements OnInit {
     this.weatherService.getWeatherByCity(city).subscribe(
       (data) => {
         this.weather = data;
+        this.forecast = data.forecast.forecastday; // Store forecast
       },
       (error) => {
         this.locationError = "Could not retrieve weather data.";

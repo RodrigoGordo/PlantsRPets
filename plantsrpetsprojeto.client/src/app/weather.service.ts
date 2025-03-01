@@ -8,12 +8,12 @@ import { Observable } from 'rxjs';
 export class WeatherService {
   constructor(private http: HttpClient) { }
 
-  // Get weather by city name (Fallback)
+  // Fetch weather and forecast by city
   getWeatherByCity(city: string): Observable<any> {
     return this.http.get(`/api/weather/city/${city}`);
   }
 
-  // Get weather by user's coordinates
+  // Fetch weather and forecast by coordinates
   getWeatherByCoords(lat: number, lon: number): Observable<any> {
     return this.http.get(`/api/weather/coords/${lat}/${lon}`);
   }

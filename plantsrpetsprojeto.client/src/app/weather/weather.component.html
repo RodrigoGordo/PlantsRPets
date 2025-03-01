@@ -10,10 +10,17 @@
     </p>
     <p>🌥 {{ weather.current.condition.text }}</p>
     <img [src]="'https:' + weather.current.condition.icon" alt="Weather icon">
+  </div>
 
-    <div class="weather-details">
-      <span>💧 Humidity: {{ weather.current.humidity }}%</span>
-      <span>💨 Wind: {{ weather.current.wind_kph }} km/h</span>
+  <!-- Forecast Section -->
+  <div class="forecast-container">
+    <h3>7-Day Forecast</h3>
+    <div class="forecast">
+      <div *ngFor="let day of forecast" class="forecast-day">
+        <p>{{ day.date | date:'EEE' }}</p>
+        <img [src]="'https:' + day.day.condition.icon" alt="Weather icon">
+        <p>{{ day.day.avgtemp_c }}°C</p>
+      </div>
     </div>
   </div>
 </div>

@@ -15,7 +15,6 @@ namespace PlantsRPetsProjeto.Server.Controllers
             _weatherService = weatherService;
         }
 
-        // Fetch weather by city name
         [HttpGet("city/{city}")]
         public async Task<IActionResult> GetWeatherByCity(string city)
         {
@@ -24,7 +23,6 @@ namespace PlantsRPetsProjeto.Server.Controllers
             return Ok(weatherData);
         }
 
-        // Fetch weather by latitude and longitude
         [HttpGet("coords/{lat}/{lon}")]
         public async Task<IActionResult> GetWeatherByCoords(double lat, double lon)
         {

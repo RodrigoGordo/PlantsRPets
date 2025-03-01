@@ -64,3 +64,33 @@
   .unit-toggle:hover {
     text-decoration: underline;
   }
+
+.forecast-container {
+  margin-top: 20px;
+}
+
+.forecast {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  overflow-x: auto;
+  padding: 10px 0;
+}
+
+.forecast-day {
+  background: #292929;
+  padding: 10px;
+  border-radius: 8px;
+  text-align: center;
+  min-width: 50px;
+}
+
+  .forecast-day img {
+    width: 40px;
+    height: 40px;
+  }
+
+  .forecast-day p {
+    font-size: 14px;
+    margin: 5px 0;
+  }

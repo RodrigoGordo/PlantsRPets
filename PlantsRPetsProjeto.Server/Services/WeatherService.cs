@@ -17,7 +17,8 @@ namespace PlantsRPetsProjeto.Server.Services
 
         public async Task<object> GetWeatherAsync(string location)
         {
-            var response = await _httpClient.GetAsync($"http://api.weatherapi.com/v1/current.json?key={_apiKey}&q={location}&aqi=no");
+            // Fetch 7-day forecast instead of just current weather
+            var response = await _httpClient.GetAsync($"http://api.weatherapi.com/v1/forecast.json?key={_apiKey}&q={location}&days=7&aqi=no&alerts=no");
 
             if (!response.IsSuccessStatusCode)
             {
