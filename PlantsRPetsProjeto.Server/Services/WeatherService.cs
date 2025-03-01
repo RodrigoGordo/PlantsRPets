@@ -3,7 +3,6 @@ using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-
 namespace PlantsRPetsProjeto.Server.Services
 {
     public class WeatherService
@@ -16,9 +15,9 @@ namespace PlantsRPetsProjeto.Server.Services
             _httpClient = httpClient;
         }
 
-        public async Task<object> GetWeatherAsync(string city)
+        public async Task<object> GetWeatherAsync(string location)
         {
-            var response = await _httpClient.GetAsync($"http://api.weatherapi.com/v1/current.json?key={_apiKey}&q={city}&aqi=no");
+            var response = await _httpClient.GetAsync($"http://api.weatherapi.com/v1/current.json?key={_apiKey}&q={location}&aqi=no");
 
             if (!response.IsSuccessStatusCode)
             {
@@ -26,10 +25,7 @@ namespace PlantsRPetsProjeto.Server.Services
             }
 
             var weatherData = await response.Content.ReadFromJsonAsync<object>();
-            return weatherData; // Adjust the return type based on your needs
+            return weatherData;
         }
-
-
-
     }
 }

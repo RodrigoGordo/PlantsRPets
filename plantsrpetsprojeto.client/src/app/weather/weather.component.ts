@@ -9,18 +9,56 @@ import { WeatherService } from "../weather.service";
 })
 export class WeatherComponent implements OnInit {
   weather: any;
-  city = 'Setúbal';
+  locationError: string = '';
+  isCelsius: boolean = true;
 
   constructor(private weatherService: WeatherService) { }
 
   ngOnInit() {
-    this.getWeather();
+    this.getUserLocation();
   }
 
-  getWeather() {
-    this.weatherService.getWeather(this.city).subscribe(data => {
-      console.log(data); // Log the response to the console
-      this.weather = data;
-    });
+  getUserLocation() {
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          this.getWeatherByCoords(latitude, longitude);
+        },
+        (error) => {
+          this.locationError = "Unable to retrieve location. Using default city.";
+          this.getWeatherByCity("Setúbal");
+        }
+      );
+    } else {
+      this.locationError = "Geolocation is not supported by this browser.";
+      this.getWeatherByCity("Setúbal");
+    }
+  }
+
+  getWeatherByCoords(lat: number, lon: number) {
+    this.weatherService.getWeatherByCoords(lat, lon).subscribe(
+      (data) => {
+        this.weather = data;
+      },
+      (error) => {
+        this.locationError = "Could not retrieve weather data.";
+      }
+    );
+  }
+
+  getWeatherByCity(city: string) {
+    this.weatherService.getWeatherByCity(city).subscribe(
+      (data) => {
+        this.weather = data;
+      },
+      (error) => {
+        this.locationError = "Could not retrieve weather data.";
+      }
+    );
+  }
+
+  toggleUnit() {
+    this.isCelsius = !this.isCelsius;
   }
 }

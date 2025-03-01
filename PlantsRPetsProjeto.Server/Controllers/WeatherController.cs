@@ -2,12 +2,10 @@
 using PlantsRPetsProjeto.Server.Services;
 using System.Threading.Tasks;
 
-
 namespace PlantsRPetsProjeto.Server.Controllers
 {
     [Route("api/weather")]
     [ApiController]
-
     public class WeatherController : ControllerBase
     {
         private readonly WeatherService _weatherService;
@@ -17,13 +15,23 @@ namespace PlantsRPetsProjeto.Server.Controllers
             _weatherService = weatherService;
         }
 
-        [HttpGet("{city}")]
-        public async Task<IActionResult> GetWeather(string city)
+        // Fetch weather by city name
+        [HttpGet("city/{city}")]
+        public async Task<IActionResult> GetWeatherByCity(string city)
         {
             var weatherData = await _weatherService.GetWeatherAsync(city);
             if (weatherData == null) return NotFound();
             return Ok(weatherData);
         }
 
+        // Fetch weather by latitude and longitude
+        [HttpGet("coords/{lat}/{lon}")]
+        public async Task<IActionResult> GetWeatherByCoords(double lat, double lon)
+        {
+            var location = $"{lat},{lon}";
+            var weatherData = await _weatherService.GetWeatherAsync(location);
+            if (weatherData == null) return NotFound();
+            return Ok(weatherData);
+        }
     }
 }
