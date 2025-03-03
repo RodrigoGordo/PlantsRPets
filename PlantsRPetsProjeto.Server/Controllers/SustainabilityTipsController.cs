@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PlantsRPetsProjeto.Server.Data;
 using PlantsRPetsProjeto.Server.Models;
@@ -9,7 +8,6 @@ using System.Threading.Tasks;
 
 namespace PlantsRPetsProjeto.Server.Controllers
 {
-    [Authorize]
     [ApiController]
     [Route("api/sustainability-tips")]
     public class SustainabilityTipsController : ControllerBase
@@ -25,10 +23,11 @@ namespace PlantsRPetsProjeto.Server.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<SustainabilityTip>>> GetSustainabilityTips()
         {
-            return await _context.SustainabilityTip.ToListAsync();
+            var tips = await _context.SustainabilityTip.ToListAsync();
+            return Ok(tips); // Return the list wrapped in an OkObjectResult
         }
 
-        // GET: api/sustainability-tips/5
+
         [HttpGet("{id}")]
         public async Task<ActionResult<SustainabilityTip>> GetSustainabilityTip(int id)
         {
@@ -39,39 +38,39 @@ namespace PlantsRPetsProjeto.Server.Controllers
                 return NotFound();
             }
 
-            return tip;
+            return Ok(tip); // Return the tip wrapped in an OkObjectResult
         }
 
-        // POST: api/sustainability-tips
+
         [HttpPost]
-        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<SustainabilityTip>> CreateSustainabilityTip(SustainabilityTip tip)
         {
+            if (tip == null || string.IsNullOrWhiteSpace(tip.Title) || string.IsNullOrWhiteSpace(tip.Content))
+            {
+                return BadRequest("Invalid tip data.");
+            }
             _context.SustainabilityTip.Add(tip);
             await _context.SaveChangesAsync();
-
             return CreatedAtAction(nameof(GetSustainabilityTip), new { id = tip.Id }, tip);
         }
 
-        // PUT: api/sustainability-tips/5
+
         [HttpPut("{id}")]
-        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UpdateSustainabilityTip(int id, SustainabilityTip tip)
         {
             if (id != tip.Id)
             {
-                return BadRequest();
+                return BadRequest("ID mismatch.");
             }
 
             _context.Entry(tip).State = EntityState.Modified;
-
             try
             {
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!SustainabilityTipExists(id))
+                if (!_context.SustainabilityTip.Any(e => e.Id == id))
                 {
                     return NotFound();
                 }
@@ -84,11 +83,14 @@ namespace PlantsRPetsProjeto.Server.Controllers
             return NoContent();
         }
 
-        // DELETE: api/sustainability-tips/5
         [HttpDelete("{id}")]
-        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteSustainabilityTip(int id)
         {
+            if (id <= 0)
+            {
+                return BadRequest("Invalid ID.");
+            }
+
             var tip = await _context.SustainabilityTip.FindAsync(id);
             if (tip == null)
             {
@@ -98,7 +100,7 @@ namespace PlantsRPetsProjeto.Server.Controllers
             _context.SustainabilityTip.Remove(tip);
             await _context.SaveChangesAsync();
 
-            return NoContent();
+            return NoContent(); // Returning NoContent after deletion
         }
 
         private bool SustainabilityTipExists(int id)

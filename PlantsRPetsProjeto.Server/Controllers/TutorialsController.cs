@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PlantsRPetsProjeto.Server.Data;
 using PlantsRPetsProjeto.Server.Models;
 
 namespace PlantsRPetsProjeto.Server.Controllers
 {
-    public class TutorialsController : Controller
+    [ApiController]
+    [Route("api/tutorials")]
+    public class TutorialsController : ControllerBase
     {
         private readonly PlantsRPetsProjetoServerContext _context;
 
@@ -19,134 +16,91 @@ namespace PlantsRPetsProjeto.Server.Controllers
             _context = context;
         }
 
-        // GET: Tutorials
-        public async Task<IActionResult> Index()
+        // GET: api/tutorials
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Tutorial>>> GetTutorials()
         {
-            return View(await _context.Tutorial.ToListAsync());
+            var tutorials = await _context.Tutorial.ToListAsync();
+            return Ok(tutorials);
         }
 
-        // GET: Tutorials/Details/5
-        public async Task<IActionResult> Details(int? id)
+        // GET: api/tutorials/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Tutorial>> GetTutorial(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var tutorial = await _context.Tutorial
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (tutorial == null)
-            {
-                return NotFound();
-            }
-
-            return View(tutorial);
-        }
-
-        // GET: Tutorials/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: Tutorials/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,Content,AuthorId")] Tutorial tutorial)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(tutorial);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(tutorial);
-        }
-
-        // GET: Tutorials/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
             var tutorial = await _context.Tutorial.FindAsync(id);
+
             if (tutorial == null)
             {
                 return NotFound();
             }
-            return View(tutorial);
+
+            return Ok(tutorial);
         }
 
-        // POST: Tutorials/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // POST: api/tutorials
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Content,AuthorId")] Tutorial tutorial)
+        public async Task<ActionResult<Tutorial>> CreateTutorial(Tutorial tutorial)
+        {
+            if (tutorial == null || string.IsNullOrWhiteSpace(tutorial.Title) || string.IsNullOrWhiteSpace(tutorial.Content))
+            {
+                return BadRequest("Invalid tutorial data."); // Return BadRequest if invalid data
+            }
+
+            _context.Tutorial.Add(tutorial);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction(nameof(GetTutorial), new { id = tutorial.Id }, tutorial); // Return CreatedAtAction with tutorial details
+        }
+
+        // PUT: api/tutorials/5
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateTutorial(int id, Tutorial tutorial)
         {
             if (id != tutorial.Id)
             {
-                return NotFound();
+                return BadRequest("ID mismatch."); // Return BadRequest if IDs don't match
             }
 
-            if (ModelState.IsValid)
+            _context.Entry(tutorial).State = EntityState.Modified;
+            try
             {
-                try
-                {
-                    _context.Update(tutorial);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!TutorialExists(tutorial.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                await _context.SaveChangesAsync();
             }
-            return View(tutorial);
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!_context.Tutorial.Any(e => e.Id == id))
+                {
+                    return NotFound(); // Return NotFound if tutorial does not exist
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent(); // Return NoContent after successful update
         }
 
-        // GET: Tutorials/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        // DELETE: api/tutorials/5
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteTutorial(int id)
         {
-            if (id == null)
+            if (id <= 0)
             {
-                return NotFound();
+                return BadRequest("Invalid ID."); // Return BadRequest for invalid ID
             }
 
-            var tutorial = await _context.Tutorial
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var tutorial = await _context.Tutorial.FindAsync(id);
             if (tutorial == null)
             {
-                return NotFound();
+                return NotFound(); // Return NotFound if tutorial does not exist
             }
 
-            return View(tutorial);
-        }
-
-        // POST: Tutorials/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var tutorial = await _context.Tutorial.FindAsync(id);
-            if (tutorial != null)
-            {
-                _context.Tutorial.Remove(tutorial);
-            }
-
+            _context.Tutorial.Remove(tutorial);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+
+            return NoContent(); // Return NoContent after successful deletion
         }
 
         private bool TutorialExists(int id)
