@@ -29,8 +29,4 @@
     <ProjectReference Include="..\PlantsRPetsProjeto.Server\PlantsRPetsProjeto.Server.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="xUnitTests\ServiceTests\" />
-  </ItemGroup>
-
 </Project>

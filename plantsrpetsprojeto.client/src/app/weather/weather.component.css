@@ -3,7 +3,7 @@
   color: #dcdcdc;
   padding: 20px;
   border-radius: 10px;
-  width: 450px;
+  width: 480px;
   text-align: center;
   font-family: Arial, sans-serif;
   box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.1);
@@ -46,12 +46,6 @@
   color: red;
   font-size: 14px;
   margin-top: 10px;
-}
-
-.temperature {
-  font-size: 28px;
-  font-weight: bold;
-  color: #ffcc00;
 }
 
 .unit-toggle {
@@ -110,7 +104,7 @@
 }
 
 .temperature {
-  font-size: 28px;
+  font-size: 20px;
   font-weight: bold;
   color: #ffcc00;
 }
