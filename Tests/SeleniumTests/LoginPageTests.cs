@@ -2,6 +2,7 @@
 using OpenQA.Selenium.Chrome;
 using Xunit;
 using System;
+using System.Diagnostics;
 
 namespace Tests.SeleniumTests
 {
@@ -9,7 +10,6 @@ namespace Tests.SeleniumTests
     {
         private readonly IWebDriver _driver;
         private readonly string baseUrl = "https://localhost:4200";
-
 
         public LoginPageTests()
         {
