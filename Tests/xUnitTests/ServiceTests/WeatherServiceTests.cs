@@ -140,7 +140,6 @@ namespace PlantsRPetsProjeto.Tests
                 )
                 .ReturnsAsync(fakeResponse);
 
-            // Act: Chama o serviço
             var result = await _weatherService.GetWeatherAsync("Setúbal");
 
             // Assert: Garante que a resposta não é nula e contém os campos esperados
