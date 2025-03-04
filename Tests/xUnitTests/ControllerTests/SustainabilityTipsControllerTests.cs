@@ -80,7 +80,7 @@ namespace PlantsRPetsProjeto.Tests.xUnitTests.ControllerTests
             // Act
             var result = await _controller.GetSustainabilityTip(999);
             // Assert
-            Assert.IsType<NotFoundResult>(result.Result); // Correctly expect NotFoundResult
+            Assert.IsType<NotFoundResult>(result.Result);
         }
 
 
@@ -88,12 +88,12 @@ namespace PlantsRPetsProjeto.Tests.xUnitTests.ControllerTests
         public async Task GetSustainabilityTip_ReturnsSustainabilityTip_WhenValidId()
         {
             // Act
-            var result = await _controller.GetSustainabilityTip(1); // Valid ID
+            var result = await _controller.GetSustainabilityTip(1);
 
             // Assert
-            var okResult = Assert.IsType<OkObjectResult>(result.Result); // Expect OkObjectResult
+            var okResult = Assert.IsType<OkObjectResult>(result.Result);
             var returnedTip = Assert.IsType<SustainabilityTip>(okResult.Value);
-            Assert.Equal(1, returnedTip.Id); // Check the returned tip
+            Assert.Equal(1, returnedTip.Id);
         }
 
 

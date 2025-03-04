@@ -55,7 +55,7 @@ namespace PlantsRPetsProjeto.Server.Controllers
 
         // PUT: api/tutorials/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateTutorial(int id, Tutorial tutorial)
+        public async Task<ActionResult> UpdateTutorial(int id, Tutorial tutorial)
         {
             if (tutorial == null)
             {
