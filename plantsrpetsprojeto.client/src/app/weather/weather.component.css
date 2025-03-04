@@ -1,0 +1,133 @@
+.weather-container {
+  background-color: #1e1e1e;
+  color: #dcdcdc;
+  padding: 20px;
+  border-radius: 10px;
+  width: 480px;
+  text-align: center;
+  font-family: Arial, sans-serif;
+  box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.1);
+}
+
+  .weather-container h2 {
+    font-size: 20px;
+    margin-bottom: 0px;
+    color: #ffffff;
+  }
+
+  .weather-container h3 {
+    font-size: 18px;
+    margin-bottom: 0px;
+    color: #ffffff;
+  }
+
+  .weather-container p {
+    font-size: 14px;
+    margin: 0px 0;
+  }
+
+  .weather-container img {
+    width: 50px;
+    height: 50px;
+  }
+
+.weather-details {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+  .weather-details span {
+    font-size: 12px;
+    color: #aaaaaa;
+  }
+
+.error {
+  color: red;
+  font-size: 14px;
+  margin-top: 10px;
+}
+
+.unit-toggle {
+  font-size: 12px;
+  cursor: pointer;
+  color: #ffffff;
+  margin-left: 5px;
+}
+
+  .unit-toggle:hover {
+    text-decoration: underline;
+  }
+
+.forecast-container {
+  margin-top: 20px;
+}
+
+.forecast {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  overflow-x: auto;
+  padding: 10px 0;
+}
+
+.forecast-day {
+  background: #292929;
+  padding-left: 30px;
+  padding-right: 30px;
+  border-radius: 8px;
+  text-align: center;
+  min-width: 50px;
+}
+
+  .forecast-day img {
+    width: 30px;
+    height: 30px;
+  }
+
+  .forecast-day p {
+    font-size: 14px;
+    margin: 5px 0;
+  }
+
+.weather-details-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  padding: 10px;
+}
+
+.weather-icon img {
+  width: 60px;
+  height: 60px;
+}
+
+.temperature {
+  font-size: 20px;
+  font-weight: bold;
+  color: #ffcc00;
+}
+
+.weather-extra {
+  display: flex;
+  flex-direction: column;
+  font-size: 14px;
+  gap: 3px;
+}
+
+.weather-info {
+  display: flex;
+  flex-direction: column;
+  text-align: right;
+}
+
+  .weather-info h3 {
+    margin: 0;
+    font-size: 18px;
+  }
+
+  .weather-info p {
+    font-size: 14px;
+    margin: 3px 0;
+  }
