@@ -57,29 +57,33 @@ namespace PlantsRPetsProjeto.Server.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateTutorial(int id, Tutorial tutorial)
         {
-            if (id != tutorial.Id)
+            if (tutorial == null)
             {
-                return BadRequest("ID mismatch."); // Return BadRequest if IDs don't match
+                return BadRequest("Invalid tutorial data.");
             }
 
-            _context.Entry(tutorial).State = EntityState.Modified;
+            var existingTutorial = await _context.Tutorial.FindAsync(id);
+            if (existingTutorial == null)
+            {
+                return NotFound();
+            }
+
+            existingTutorial.Title = tutorial.Title;
+            existingTutorial.Content = tutorial.Content;
+            existingTutorial.AuthorId = tutorial.AuthorId;
+
+            _context.Entry(existingTutorial).State = EntityState.Modified;
+
             try
             {
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!_context.Tutorial.Any(e => e.Id == id))
-                {
-                    return NotFound(); // Return NotFound if tutorial does not exist
-                }
-                else
-                {
-                    throw;
-                }
+                return StatusCode(500, "A concurrency error occurred while updating the tutorial.");
             }
 
-            return NoContent(); // Return NoContent after successful update
+            return NoContent();
         }
 
         // DELETE: api/tutorials/5

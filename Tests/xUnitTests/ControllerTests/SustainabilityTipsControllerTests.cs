@@ -18,15 +18,13 @@ namespace PlantsRPetsProjeto.Tests.xUnitTests.ControllerTests
 
         public SustainabilityTipsControllerTests()
         {
-            // Create an In-Memory DbContext for testing purposes
             var options = new DbContextOptionsBuilder<PlantsRPetsProjetoServerContext>()
-                            .UseInMemoryDatabase(databaseName: "InMemoryDb")
+                            .UseInMemoryDatabase(databaseName: "PlantsRPetsProjetoServerContext-d44e0ca3-04c1-4112-ada5-60f52da9f50a")
                             .Options;
 
             _context = new PlantsRPetsProjetoServerContext(options);
             _controller = new SustainabilityTipsController(_context);
 
-            // Seed data into the in-memory database
             _context.SustainabilityTip.Add(new SustainabilityTip
             {
                 Title = "Save Water",
@@ -38,11 +36,9 @@ namespace PlantsRPetsProjeto.Tests.xUnitTests.ControllerTests
             _context.SaveChanges();
         }
 
-        // 1. Test Create
         [Fact]
         public async Task CreateSustainabilityTip_ReturnsCreatedAtActionResult_WhenValidTip()
         {
-            // Arrange
             var newTip = new SustainabilityTip
             {
                 Title = "Save Energy",
@@ -51,13 +47,11 @@ namespace PlantsRPetsProjeto.Tests.xUnitTests.ControllerTests
                 AuthorId = "author2"
             };
 
-            // Act
             var result = await _controller.CreateSustainabilityTip(newTip);
 
-            var createdAtActionResult = Assert.IsType<ActionResult<SustainabilityTip>>(result);
+            var createdAtActionResult = Assert.IsType<CreatedAtActionResult>(result.Result);
             var value = Assert.IsType<SustainabilityTip>(createdAtActionResult.Value);
 
-            // Assert the tip's properties
             Assert.Equal(newTip.Title, value.Title);
             Assert.Equal(newTip.Content, value.Content);
             Assert.Equal(newTip.Category, value.Category);
@@ -66,7 +60,6 @@ namespace PlantsRPetsProjeto.Tests.xUnitTests.ControllerTests
 
 
 
-        // 2. Test Get (All)
         [Fact]
         public async Task GetSustainabilityTips_ReturnsListOfTips()
         {
@@ -74,10 +67,10 @@ namespace PlantsRPetsProjeto.Tests.xUnitTests.ControllerTests
             var result = await _controller.GetSustainabilityTips();
 
             // Assert
-            var okResult = Assert.IsType<OkObjectResult>(result); // Expect OkObjectResult
+            var okResult = Assert.IsAssignableFrom<OkObjectResult>(result.Result);
             var returnedTips = Assert.IsType<List<SustainabilityTip>>(okResult.Value);
-            Assert.NotEmpty(returnedTips); // Ensure list is not empty
-            Assert.Equal(1, returnedTips.Count); // Since we have one seed in memory
+            Assert.NotEmpty(returnedTips);
+            Assert.Single(returnedTips);
         }
 
 
@@ -85,10 +78,9 @@ namespace PlantsRPetsProjeto.Tests.xUnitTests.ControllerTests
         public async Task GetSustainabilityTip_ReturnsNotFound_WhenInvalidId()
         {
             // Act
-            var result = await _controller.GetSustainabilityTip(999); // A non-existent ID
-
+            var result = await _controller.GetSustainabilityTip(999);
             // Assert
-            Assert.IsType<NotFoundResult>(result); // Correctly expect NotFoundResult
+            Assert.IsType<NotFoundResult>(result.Result); // Correctly expect NotFoundResult
         }
 
 
@@ -99,7 +91,7 @@ namespace PlantsRPetsProjeto.Tests.xUnitTests.ControllerTests
             var result = await _controller.GetSustainabilityTip(1); // Valid ID
 
             // Assert
-            var okResult = Assert.IsType<OkObjectResult>(result); // Expect OkObjectResult
+            var okResult = Assert.IsType<OkObjectResult>(result.Result); // Expect OkObjectResult
             var returnedTip = Assert.IsType<SustainabilityTip>(okResult.Value);
             Assert.Equal(1, returnedTip.Id); // Check the returned tip
         }
@@ -112,7 +104,6 @@ namespace PlantsRPetsProjeto.Tests.xUnitTests.ControllerTests
             // Arrange
             var updatedTip = new SustainabilityTip
             {
-                Id = 1,  // Ensure the ID matches the ID in the database (in this case, 1)
                 Title = "Save Water Updated",
                 Content = "Updated description for water conservation.",
                 Category = "Water Conservation",
@@ -123,7 +114,7 @@ namespace PlantsRPetsProjeto.Tests.xUnitTests.ControllerTests
             var result = await _controller.UpdateSustainabilityTip(1, updatedTip);
 
             // Assert
-            Assert.IsType<NoContentResult>(result);  // Expect NoContentResult
+            Assert.IsType<NoContentResult>(result);
 
             // Verify the tip was updated in the in-memory database
             var tipInDb = await _context.SustainabilityTip.FindAsync(1);

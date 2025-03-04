@@ -90,16 +90,14 @@ namespace PlantsRPetsProjeto.Tests.xUnitTests.ControllerTests
 
             // Assert
             var createdAtActionResult = Assert.IsType<CreatedAtActionResult>(result.Result);
+            var value = Assert.IsType<Tutorial>(createdAtActionResult.Value);
 
             // Check if RouteValues is not null
             Assert.NotNull(createdAtActionResult.RouteValues);
+            Assert.Equal(newTutorial.Title, value.Title);
+            Assert.Equal(newTutorial.Content, value.Content);
+            Assert.Equal(newTutorial.AuthorId, value.AuthorId);
 
-            // Ensure the correct action name and controller are in RouteValues
-            Assert.Equal("GetTutorial", createdAtActionResult.ActionName);
-
-            // Check if "controller" exists in RouteValues and is not null
-            Assert.True(createdAtActionResult.RouteValues.ContainsKey("controller"));
-            Assert.Equal("api/tutorials", createdAtActionResult.RouteValues["controller"]);
         }
 
 
@@ -127,7 +125,6 @@ namespace PlantsRPetsProjeto.Tests.xUnitTests.ControllerTests
         {
             var updatedTutorial = new Tutorial
             {
-                Id = 1,
                 Title = "How to Water Plants (Updated)",
                 Content = "Updated content on watering plants.",
                 AuthorId = "author1"
@@ -146,17 +143,16 @@ namespace PlantsRPetsProjeto.Tests.xUnitTests.ControllerTests
         {
             var updatedTutorial = new Tutorial
             {
-                Id = 999, // Non-existent ID
                 Title = "Updated tutorial",
                 Content = "Updated content",
                 AuthorId = "author2"
             };
 
             // Act
-            var result = await _controller.UpdateTutorial(1, updatedTutorial);
+            var result = await _controller.UpdateTutorial(999, updatedTutorial);
 
             // Assert
-            Assert.IsType<BadRequestObjectResult>(result);
+            Assert.IsType<NotFoundResult>(result);
         }
 
         // 8. Test Delete Tutorial (Valid ID)

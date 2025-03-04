@@ -49,39 +49,52 @@ namespace PlantsRPetsProjeto.Server.Controllers
             {
                 return BadRequest("Invalid tip data.");
             }
-            _context.SustainabilityTip.Add(tip);
+
+            _context.SustainabilityTip.Add(new SustainabilityTip
+            {
+                Title = tip.Title,
+                Content = tip.Content,
+                Category = tip.Category,
+                AuthorId = tip.AuthorId
+
+            });
+
             await _context.SaveChangesAsync();
+
             return CreatedAtAction(nameof(GetSustainabilityTip), new { id = tip.Id }, tip);
         }
+
 
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateSustainabilityTip(int id, SustainabilityTip tip)
         {
-            if (id != tip.Id)
+            if (tip == null || string.IsNullOrWhiteSpace(tip.Title) || string.IsNullOrWhiteSpace(tip.Content))
             {
-                return BadRequest("ID mismatch.");
+                return BadRequest("Invalid tip data.");
             }
 
-            _context.Entry(tip).State = EntityState.Modified;
+            var existingTip = await _context.SustainabilityTip.FindAsync(id);
+            if (existingTip == null)
+            {
+                return NotFound();
+            }
+
+            existingTip.Title = tip.Title;
+            existingTip.Content = tip.Content;
+
             try
             {
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!_context.SustainabilityTip.Any(e => e.Id == id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return StatusCode(500, "A concurrency issue occurred while updating the tip.");
             }
 
             return NoContent();
         }
+
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteSustainabilityTip(int id)
