@@ -1,0 +1,37 @@
+<div class="weather-container">
+  <p *ngIf="locationError" class="error">{{ locationError }}</p>
+
+  <div *ngIf="weather && weather.current" class="weather-details-container">
+    <div class="weather-icon">
+      <img [src]="'https:' + weather.current.condition.icon" alt="Weather icon">
+    </div>
+
+    <div class="temperature">
+      {{ isCelsius ? weather.current.temp_c : weather.current.temp_f }}°{{ isCelsius ? 'C' : 'F' }}
+      <span class="unit-toggle" (click)="toggleUnit()">| °{{ isCelsius ? 'F' : 'C' }}</span>
+    </div>
+
+    <div class="weather-extra">
+      <p>Precipitation: {{ weather.current.precip_mm }} mm</p>
+      <p>Humidity: {{ weather.current.humidity }}%</p>
+      <p>Wind: {{ weather.current.wind_kph }} km/h</p>
+    </div>
+
+    <div class="weather-info">
+      <h3>{{ weather.location.region }}</h3>
+      <p>{{ weather.location.localtime | date:'HH:mm' }}</p>
+      <p>{{ weather.current.condition.text }}</p>
+    </div>
+  </div>
+
+  <div class="forecast-container">
+    <h3>3-Day Forecast</h3>
+    <div class="forecast">
+      <div *ngFor="let day of forecast" class="forecast-day">
+        <p>{{ day.date | date:'EEE' }}</p>
+        <img [src]="'https:' + day.day.condition.icon" alt="Weather icon">
+        <p>{{ isCelsius ? day.day.avgtemp_c : day.day.avgtemp_f }}°{{ isCelsius ? 'C' : 'F' }}</p>
+      </div>
+    </div>
+  </div>
+</div>
