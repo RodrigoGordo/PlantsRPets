@@ -15,6 +15,8 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="9.0.2" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
     <PackageReference Include="Moq" Version="4.20.72" />
+    <PackageReference Include="NBomber" Version="5.8.2" />
+    <PackageReference Include="NBomber.Http" Version="5.2.1" />
     <PackageReference Include="Selenium.Support" Version="4.28.0" />
     <PackageReference Include="Selenium.WebDriver" Version="4.28.0" />
     <PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="133.0.6943.5300" />
@@ -28,6 +30,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\PlantsRPetsProjeto.Server\PlantsRPetsProjeto.Server.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="SystemTests\" />
   </ItemGroup>
 
 </Project>
