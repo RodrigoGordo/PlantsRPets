@@ -76,10 +76,6 @@
               "target": "Package",
               "version": "[9.0.1, )"
             },
-            "Microsoft.Extensions.Http": {
-              "target": "Package",
-              "version": "[9.0.2, )"
-            },
             "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
               "target": "Package",
               "version": "[8.0.7, )"
@@ -91,12 +87,6 @@
             "Swashbuckle.AspNetCore": {
               "target": "Package",
               "version": "[6.4.0, )"
-            },
-            "xunit.runner.visualstudio": {
-              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
-              "suppressParent": "All",
-              "target": "Package",
-              "version": "[2.5.3, )"
             }
           },
           "imports": [

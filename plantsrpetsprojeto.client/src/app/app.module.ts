@@ -33,7 +33,6 @@ import { HomeComponent } from './home/home.component';
 import { ProfileComponent } from './profile/profile.component';
 import { LoadingIndicatorComponent } from './loading-indicator/loading-indicator.component';
 import { LogoutConfirmationComponent } from './logout-confirmation/logout-confirmation.component';
-import { WeatherComponent } from './weather/weather.component';
 
 
 @NgModule({
@@ -60,7 +59,6 @@ import { WeatherComponent } from './weather/weather.component';
     ProfileComponent,
     LoadingIndicatorComponent,
     LogoutConfirmationComponent,
-    WeatherComponent,
   ],
   imports: [
     BrowserModule,
@@ -73,7 +71,7 @@ import { WeatherComponent } from './weather/weather.component';
     MatDialogModule,
     MatFormFieldModule,
     MatInputModule,
-    MatButtonModule,
+    MatButtonModule
   ],
   providers: [
     provideAnimationsAsync()
