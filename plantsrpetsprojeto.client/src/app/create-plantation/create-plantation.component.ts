@@ -28,8 +28,14 @@ export class CreatePlantationComponent {
 
   createPlantation(): void {
     if (this.plantationForm.valid) {
-      this.plantationsService.createPlantation(this.plantationForm.value).subscribe(() => {
-        this.dialogRef.close(true);
+      const requestData = {
+        plantationName: this.plantationForm.value.plantationName,
+        plantType: this.plantTypes.indexOf(this.plantationForm.value.plantType)
+      };
+
+      this.plantationsService.createPlantation(requestData).subscribe({
+        next: () => { this.dialogRef.close(true); },
+        error: (error) => { console.error("Erro ao criar plantação:", error); }
       });
     }
   }

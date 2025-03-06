@@ -10,7 +10,7 @@ export class AuthInterceptor implements HttpInterceptor {
   constructor(private router: Router) { }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    const token = localStorage.getItem('authToken'); // Obter token do localStorage
+    const token = localStorage.getItem('authToken');
     let authReq = req;
 
     if (token) {
@@ -21,11 +21,13 @@ export class AuthInterceptor implements HttpInterceptor {
       });
     }
 
+    console.log("Requisição após clonagem:", authReq);
+
     return next.handle(authReq).pipe(
       tap({
         error: (event) => {
           if (event instanceof HttpErrorResponse && event.status === 401) {
-            this.router.navigate(['signin']); // Redirecionar para o login
+            this.router.navigate(['signin']);
           }
         },
       })
