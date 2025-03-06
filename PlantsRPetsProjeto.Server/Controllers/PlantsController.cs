@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PlantsRPetsProjeto.Server.Data;
 using PlantsRPetsProjeto.Server.Models;
+using PlantsRPetsProjeto.Server.Services;
 
 namespace PlantsRPetsProjeto.Server.Controllers
 {
@@ -16,10 +17,12 @@ namespace PlantsRPetsProjeto.Server.Controllers
     public class PlantsController : ControllerBase
     {
         private readonly PlantsRPetsProjetoServerContext _context;
+        private readonly PlantInfoService _plantInfoService;
 
-        public PlantsController(PlantsRPetsProjetoServerContext context)
+        public PlantsController(PlantsRPetsProjetoServerContext context, PlantInfoService plantInfoService)
         {
             _context = context;
+            _plantInfoService = plantInfoService;
         }
 
         [HttpGet]
@@ -109,6 +112,34 @@ namespace PlantsRPetsProjeto.Server.Controllers
             await _context.SaveChangesAsync();
 
             return Ok(new { message = "Plant deleted successfully." });
+        }
+
+        [HttpGet("/plants/plants")]
+        public async Task<IActionResult> FetchAndStorePlant()
+        {
+            try
+            {
+                var plant = await _plantInfoService.GetPlantsAsync();
+                await SavePlantInfo(plant);
+                return Ok(plant);
+            }
+            catch (HttpRequestException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
+        [HttpGet("/bombo")]
+        public async Task SavePlantInfo(PlantInfo plant)
+        {
+            var existingPlant = await _context.PlantInfo.FindAsync(plant.PlantInfoId);
+            if (existingPlant != null)
+            {
+                _context.PlantInfo.Remove(existingPlant);
+            }
+
+            _context.PlantInfo.Add(plant);
+            await _context.SaveChangesAsync();
         }
     }
 

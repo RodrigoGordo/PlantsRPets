@@ -4,7 +4,7 @@ namespace PlantsRPetsProjeto.Server.Models
 {
     public class PlantInfo
     {
-        public int PlantId { get; set; }
+        public int PlantInfoId { get; set; }
         public string PlantName { get; set; }
         public string PlantType { get; set; }
         public string Cycle { get; set; }
