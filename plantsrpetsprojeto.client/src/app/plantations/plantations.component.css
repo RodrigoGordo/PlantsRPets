@@ -1,0 +1,114 @@
+.plantations-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+  text-align: center;
+}
+
+.plantations-title {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #1a1a1a;
+}
+
+.create-btn {
+  display: inline-block;
+  padding: 12px 18px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: white;
+  background-color: #4CAF50;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s;
+  margin-bottom: 20px;
+}
+
+.create-btn:hover {
+  background-color: #388E3C;
+}
+
+.no-plantations {
+  text-align: center;
+  font-size: 1.2rem;
+  color: #666;
+  margin-top: 20px;
+}
+
+.plantations-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.plantation-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  border-radius: 10px;
+  background: white;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s ease-in-out;
+}
+
+.plantation-card:hover {
+  transform: scale(1.02);
+}
+
+.plantation-info {
+  text-align: left;
+}
+
+.plantation-name {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.plantation-type {
+  font-size: 0.9rem;
+  color: #666;
+  margin-top: 5px;
+}
+
+.last-watered {
+  font-size: 0.85rem;
+  color: #888;
+}
+
+.edit-btn {
+  background: #ffc107;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  font-size: 1rem;
+  font-weight: bold;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s;
+  margin-right: 8px;
+}
+
+.edit-btn:hover {
+  background: #e0a800;
+}
+
+.delete-btn {
+  background: #ff5c5c;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  font-size: 1rem;
+  font-weight: bold;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.delete-btn:hover {
+  background: #e04848;
+}
+

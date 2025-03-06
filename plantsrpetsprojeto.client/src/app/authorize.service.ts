@@ -17,22 +17,18 @@ export class AuthorizeService {
     return this._authStateChanged.asObservable();
   }
 
-  // Verifica se o token está presente no localStorage
   private hasToken(): boolean {
     return !!localStorage.getItem('authToken');
   }
 
-  // Armazena o token no localStorage
   private saveToken(token: string): void {
     localStorage.setItem('authToken', token);
   }
 
-  // Remove o token do localStorage
   private clearToken(): void {
     localStorage.removeItem('authToken');
   }
 
-  // Login baseado em JWT
   public signIn(email: string, password: string): Observable<boolean> {
     return this.http.post<{ token: string }>('/api/signin', { email, password }).pipe(
       map((response) => {
@@ -49,7 +45,6 @@ export class AuthorizeService {
     );
   }
 
-  // Registro de novo utilizador
   public register(nickname: string, email: string, password: string): Observable<boolean> {
     return this.http.post('api/signup', {
       Nickname: nickname,
@@ -61,19 +56,15 @@ export class AuthorizeService {
     );
   }
 
-  // Logout - Remove o token e notifica o estado
   public signOut(): void {
     this.clearToken();
     this._authStateChanged.next(false);
   }
 
-  // Verifica se o utilizador está autenticado
   public isSignedIn(): boolean {
     return this.hasToken();
   }
 
-  
-  // check if the user is authenticated. the endpoint is protected so 401 if not.
   public user() {
     return this.http.get<UserInfo>('/manage/info', {
       withCredentials: true
@@ -83,7 +74,6 @@ export class AuthorizeService {
       }));
   }
 
-  // Obter informações do utilizador autenticado
   public getUserInfo(): Observable<UserInfo> {
     const token = localStorage.getItem('authToken');
     if (!token) {
