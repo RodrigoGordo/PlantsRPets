@@ -9,22 +9,20 @@ namespace PlantsRPetsProjeto.Server.Services
     public class PlantInfoService
     {
         private readonly HttpClient _httpClient;
-        //private readonly string _apiKey = "sk-uyOs67c9be8fd5f0c8989";
-        private readonly string _apiKey = "sk-gHT767ca361c2d4128998";
-
-
+        private readonly string _apiKey = "sk-uyOs67c9be8fd5f0c8989";
         public PlantInfoService(HttpClient httpClient)
         {
             _httpClient = httpClient;
         }
 
-        public async Task<List<PlantInfo>> GetPlantsAsync()
+        public async Task<PlantInfo> GetPlantsAsync()
         {
-            var plants = new List<PlantInfo>();
+            //var plants = new List<PlantInfo>();
             int id = 1;
+            //bool hasMoreResults = true;
 
-            while (id <= 29)
-            {
+            //while (hasMoreResults)
+            //{
                 var url = $"https://perenual.com/api/species/details/{id}?key={_apiKey}";
                 var response = await _httpClient.GetAsync(url);
 
@@ -40,19 +38,16 @@ namespace PlantsRPetsProjeto.Server.Services
 
                 var plant = MapToPlantInfo(jsonData);
 
-                plants.Add(plant);
+                //plants.Add(plant);
 
-                id++;
-            }
+                //hasMoreResults = false;
+            //}
 
-            Console.WriteLine(id);
-
-            return plants;
+            return plant;
         }
 
         private PlantInfo MapToPlantInfo(JsonElement jsonData)
         {
-
             return new PlantInfo
             {
                 PlantName = jsonData.TryGetProperty("common_name", out var commonName) && commonName.ValueKind != JsonValueKind.Null

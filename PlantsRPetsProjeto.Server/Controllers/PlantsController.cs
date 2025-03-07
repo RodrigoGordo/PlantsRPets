@@ -119,9 +119,9 @@ namespace PlantsRPetsProjeto.Server.Controllers
         {
             try
             {
-                var plants = await _plantInfoService.GetPlantsAsync();
-                await SavePlantInfo(plants);
-                return Ok(plants);
+                var plant = await _plantInfoService.GetPlantsAsync();
+                await SavePlantInfo(plant);
+                return Ok(plant);
             }
             catch (HttpRequestException ex)
             {
@@ -130,18 +130,15 @@ namespace PlantsRPetsProjeto.Server.Controllers
         }
 
         [HttpGet("/bombo")]
-        public async Task SavePlantInfo(List<PlantInfo> plants)
+        public async Task SavePlantInfo(PlantInfo plant)
         {
-            foreach (var plant in plants)
+            var existingPlant = await _context.PlantInfo.FindAsync(plant.PlantInfoId);
+            if (existingPlant != null)
             {
-                var existingPlant = await _context.PlantInfo.FindAsync(plant.PlantInfoId);
-                if (existingPlant != null)
-                {
-                    _context.PlantInfo.Remove(existingPlant);
-                }
-                _context.PlantInfo.Add(plant);
+                _context.PlantInfo.Remove(existingPlant);
             }
 
+            _context.PlantInfo.Add(plant);
             await _context.SaveChangesAsync();
         }
     }
