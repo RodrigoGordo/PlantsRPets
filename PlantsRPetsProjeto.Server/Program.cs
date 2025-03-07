@@ -131,7 +131,7 @@ using (var scope = app.Services.CreateScope())
     await RoleSeeder.SeedRoles(roleManager);
     await UserSeeder.SeedUsersAsync(userManager);
     await TipSeeder.SeedSustainabilityTips(context);
-    await PlantSeeder.SeedPlants(context);
+    //await PlantSeeder.SeedPlants(context);
 }
 
 
