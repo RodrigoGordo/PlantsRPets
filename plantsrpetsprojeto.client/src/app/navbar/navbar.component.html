@@ -31,6 +31,11 @@
   </ul>
   <ul *ngIf="isSignedIn">
     <li>
+      <a routerLink="/dashboard" routerLinkActive="active" class="mock-button" matTooltip="Check your dashboard for quick insights">
+        Dashboard
+      </a>
+    </li>
+    <li>
       <a routerLink="/plantations" routerLinkActive="active" class="mock-button" matTooltip="Manage your plant collections here.">
         Plantations
       </a>
@@ -46,8 +51,8 @@
       </a>
     </li>
     <li>
-      <a routerLink="/dashboard" routerLinkActive="active" class="mock-button" matTooltip="Check your dashboard for quick insights">
-        Dashboard
+      <a routerLink="/wiki" routerLinkActive="active" class="mock-button" matTooltip="Check meaningful information about all plants available">
+        Plant Wiki
       </a>
     </li>
   </ul>

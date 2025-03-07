@@ -18,7 +18,7 @@ namespace PlantsRPetsProjeto.Server.Services
         public async Task<PlantInfo> GetPlantsAsync()
         {
             //var plants = new List<PlantInfo>();
-            int id = 1;
+            int id = 5;
             //bool hasMoreResults = true;
 
             //while (hasMoreResults)

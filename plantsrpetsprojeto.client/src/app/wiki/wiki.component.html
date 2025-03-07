@@ -1,0 +1,22 @@
+<body>
+  <app-navbar></app-navbar>
+  <main>
+    <div class="search-container">
+    <form>
+      <input 
+        type="text" 
+        placeholder="Search For A Plant Guide" 
+        [(ngModel)]="searchQuery"
+        name="plantSearch"
+        class="search-input"
+      >
+    </form>
+  </div>
+  <article class="plant-grid">
+    <app-plant-card 
+      *ngFor="let plant of filteredPlants"
+      [plant]="plant">
+    </app-plant-card>
+  </article>
+  </main>
+</body>
