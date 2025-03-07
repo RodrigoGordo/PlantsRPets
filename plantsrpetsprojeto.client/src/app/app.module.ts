@@ -37,6 +37,8 @@ import { LogoutConfirmationComponent } from './logout-confirmation/logout-confir
 import { WeatherComponent } from './weather/weather.component';
 import { PlantationCardComponent } from './plantation-card/plantation-card.component';
 import { CreatePlantationComponent } from './create-plantation/create-plantation.component';
+import { WikiComponent } from './wiki/wiki.component';
+import { PlantCardComponent } from './plant-card/plant-card.component';
 
 
 @NgModule({
@@ -66,6 +68,8 @@ import { CreatePlantationComponent } from './create-plantation/create-plantation
     WeatherComponent,
     PlantationCardComponent,
     CreatePlantationComponent,
+    WikiComponent,
+    PlantCardComponent,
   ],
   imports: [
     BrowserModule,

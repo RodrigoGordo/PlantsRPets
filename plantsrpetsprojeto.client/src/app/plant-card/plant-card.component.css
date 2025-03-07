@@ -1,0 +1,44 @@
+.plant-card {
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  overflow: hidden;
+  margin: 10px;
+  width: 280px;
+  transition: transform 0.2s;
+  background: white;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+  .plant-card:hover {
+    transform: translateY(-3px);
+  }
+
+.image-container {
+  height: 200px;
+  overflow: hidden;
+}
+
+.plant-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.plant-info {
+  padding: 15px;
+  text-align: center;
+}
+
+.common-name {
+  margin: 0;
+  color: #2c541d;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.scientific-name {
+  margin: 5px 0 0;
+  color: #666;
+  font-size: 0.9rem;
+  font-style: italic;
+}
