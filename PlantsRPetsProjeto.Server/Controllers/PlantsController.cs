@@ -114,31 +114,105 @@ namespace PlantsRPetsProjeto.Server.Controllers
             return Ok(new { message = "Plant deleted successfully." });
         }
 
-        [HttpGet("/plants/plants")]
-        public async Task<IActionResult> FetchAndStorePlant()
+        [HttpGet("fetch-range/{startId}/{maxId}")]
+        public async Task<IActionResult> FetchAndStorePlants(int startId, int maxId)
         {
+            if (startId <= 0 || maxId <= 0)
+            {
+                return BadRequest(new { message = "startId and maxId must be greater than zero." });
+            }
+
+            if (startId > maxId)
+            {
+                return BadRequest(new { message = "startId must be less than or equal to maxId." });
+            }
+
             try
             {
-                var plant = await _plantInfoService.GetPlantsAsync();
-                await SavePlantInfo(plant);
-                return Ok(plant);
+                var plants = await _plantInfoService.GetPlantsAsync(startId, maxId);
+
+                if (plants == null || !plants.Any())
+                {
+                    return NotFound(new { message = "No plants found for the given range." });
+                }
+
+                await SavePlantInfo(plants);
+                return Ok(plants);
             }
             catch (HttpRequestException ex)
             {
-                return BadRequest(new { message = ex.Message });
+                return StatusCode(502, new { message = "Error fetching data from API", details = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "An unexpected error occurred", details = ex.Message });
             }
         }
 
-        [HttpGet("/bombo")]
-        public async Task SavePlantInfo(PlantInfo plant)
+        [HttpPost("/saveInfo")]
+        public async Task SavePlantInfo(List<PlantInfo> plants)
         {
-            var existingPlant = await _context.PlantInfo.FindAsync(plant.PlantInfoId);
-            if (existingPlant != null)
+            foreach (var plant in plants)
             {
-                _context.PlantInfo.Remove(existingPlant);
+                var existingPlant = await _context.PlantInfo
+                    .Include(p => p.PruningCount)
+                    .FirstOrDefaultAsync(p => p.PlantInfoId == plant.PlantInfoId);
+
+                if (existingPlant != null)
+                {
+                    existingPlant.PlantName = plant.PlantName;
+                    existingPlant.PlantType = plant.PlantType;
+                    existingPlant.Cycle = plant.Cycle;
+                    existingPlant.Watering = plant.Watering;
+                    existingPlant.PruningMonth = plant.PruningMonth;
+                    existingPlant.GrowthRate = plant.GrowthRate;
+                    existingPlant.Sunlight = plant.Sunlight;
+                    existingPlant.Edible = plant.Edible;
+                    existingPlant.CareLevel = plant.CareLevel;
+                    existingPlant.Flowers = plant.Flowers;
+                    existingPlant.Fruits = plant.Fruits;
+                    existingPlant.Leaf = plant.Leaf;
+                    existingPlant.Maintenance = plant.Maintenance;
+                    existingPlant.SaltTolerant = plant.SaltTolerant;
+                    existingPlant.Indoor = plant.Indoor;
+                    existingPlant.FloweringSeason = plant.FloweringSeason;
+                    existingPlant.Description = plant.Description;
+                    existingPlant.Image = plant.Image;
+                    existingPlant.HarvestSeason = plant.HarvestSeason;
+                    existingPlant.ScientificName = plant.ScientificName;
+                    existingPlant.DroughtTolerant = plant.DroughtTolerant;
+                    existingPlant.Cuisine = plant.Cuisine;
+                    existingPlant.Medicinal = plant.Medicinal;
+
+                    if (plant.PruningCount != null)
+                    {
+                        if (existingPlant.PruningCount == null)
+                        {
+                            existingPlant.PruningCount = new PruningCountInfo
+                            {
+                                Amount = plant.PruningCount.Amount,
+                                Interval = plant.PruningCount.Interval
+                            };
+                        }
+                        else
+                        {
+                            existingPlant.PruningCount.Amount = plant.PruningCount.Amount;
+                            existingPlant.PruningCount.Interval = plant.PruningCount.Interval;
+                        }
+                    }
+                    else
+                    {
+                        existingPlant.PruningCount = null;
+                    }
+
+                    _context.PlantInfo.Update(existingPlant);
+                }
+                else
+                {
+                    _context.PlantInfo.Add(plant);
+                }
             }
 
-            _context.PlantInfo.Add(plant);
             await _context.SaveChangesAsync();
         }
     }

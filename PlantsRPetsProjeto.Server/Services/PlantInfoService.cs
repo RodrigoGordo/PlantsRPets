@@ -15,35 +15,33 @@ namespace PlantsRPetsProjeto.Server.Services
             _httpClient = httpClient;
         }
 
-        public async Task<PlantInfo> GetPlantsAsync()
+        public async Task<List<PlantInfo>> GetPlantsAsync(int startId, int maxId)
         {
-            //var plants = new List<PlantInfo>();
-            int id = 1;
-            //bool hasMoreResults = true;
+            var plants = new List<PlantInfo>();
+            int id = startId;
 
-            //while (hasMoreResults)
-            //{
+            while (id <= maxId)
+            {
                 var url = $"https://perenual.com/api/species/details/{id}?key={_apiKey}";
                 var response = await _httpClient.GetAsync(url);
 
                 if (!response.IsSuccessStatusCode)
                 {
-                    throw new Exception($"Failed to fetch data: {response.StatusCode}");
+                    Console.WriteLine($"Failed to fetch plant {id}: {response.StatusCode}");
+                }
+                else
+                {
+                    var jsonResponse = await response.Content.ReadAsStringAsync();
+                    var jsonData = JsonSerializer.Deserialize<JsonElement>(jsonResponse);
+                    var plant = MapToPlantInfo(jsonData);
+                    plants.Add(plant);
                 }
 
-                var jsonResponse = await response.Content.ReadAsStringAsync();
+                id++;
+                await Task.Delay(2000);
+            }
 
-                Console.WriteLine(jsonResponse);
-                var jsonData = JsonSerializer.Deserialize<JsonElement>(jsonResponse);
-
-                var plant = MapToPlantInfo(jsonData);
-
-                //plants.Add(plant);
-
-                //hasMoreResults = false;
-            //}
-
-            return plant;
+            return plants;
         }
 
         private PlantInfo MapToPlantInfo(JsonElement jsonData)
@@ -60,12 +58,19 @@ namespace PlantsRPetsProjeto.Server.Services
                     ? watering.GetString() ?? "" : "",
                 PruningMonth = jsonData.TryGetProperty("pruning_month", out var pruningMonth) && pruningMonth.ValueKind == JsonValueKind.Array
                     ? pruningMonth.EnumerateArray().Select(p => p.GetString() ?? "").ToList() : new List<string>(),
-                PruningCount = jsonData.TryGetProperty("pruning_count", out var pruning) && pruning.ValueKind == JsonValueKind.Array
-                    ? pruning.GetArrayLength().ToString() : "N/A",
+                PruningCount = jsonData.TryGetProperty("pruning_count", out var pruningCount) && pruningCount.ValueKind == JsonValueKind.Object
+                    ? new PruningCountInfo
+                    {
+                        Amount = pruningCount.TryGetProperty("amount", out var amount) && amount.ValueKind == JsonValueKind.Number
+                            ? amount.GetInt32() : 0,
+                        Interval = pruningCount.TryGetProperty("interval", out var interval) && interval.ValueKind != JsonValueKind.Null
+                            ? interval.GetString() ?? "" : ""
+                    }
+                    : null,
                 GrowthRate = jsonData.TryGetProperty("growth_rate", out var growthRate) && growthRate.ValueKind != JsonValueKind.Null
                     ? growthRate.GetString() ?? "" : "",
-                Sun = jsonData.TryGetProperty("sunlight", out var sunlight) && sunlight.ValueKind == JsonValueKind.Array
-                    ? sunlight.EnumerateArray().FirstOrDefault().GetString() ?? "" : "",
+                Sunlight = jsonData.TryGetProperty("sunlight", out var sunlight) && sunlight.ValueKind == JsonValueKind.Array
+                    ? sunlight.EnumerateArray().Select(s => s.GetString() ?? "").ToList() : new List<string>(),
                 Edible = jsonData.TryGetProperty("edible_fruit", out var edible) && edible.ValueKind == JsonValueKind.True
                     ? "Yes" : "No",
                 CareLevel = jsonData.TryGetProperty("care_level", out var careLevel) && careLevel.ValueKind != JsonValueKind.Null
@@ -80,14 +85,19 @@ namespace PlantsRPetsProjeto.Server.Services
                 SaltTolerant = jsonData.TryGetProperty("salt_tolerant", out var saltTolerant) && saltTolerant.ValueKind == JsonValueKind.True
                     ? "Yes" : "No",
                 Indoor = jsonData.TryGetProperty("indoor", out var indoor) && indoor.ValueKind == JsonValueKind.True,
-                SunDuration = jsonData.TryGetProperty("sunlight", out var sunDuration) && sunDuration.ValueKind == JsonValueKind.Array
-                    ? string.Join(", ", sunDuration.EnumerateArray().Select(s => s.GetString() ?? "")) : "",
                 FloweringSeason = jsonData.TryGetProperty("flowering_season", out var floweringSeason) && floweringSeason.ValueKind != JsonValueKind.Null
                     ? floweringSeason.GetString() ?? "" : "",
                 Description = jsonData.TryGetProperty("description", out var description) && description.ValueKind != JsonValueKind.Null
                     ? description.GetString() ?? "" : "",
                 Image = jsonData.TryGetProperty("default_image", out var defaultImage) && defaultImage.TryGetProperty("regular_url", out var imageUrl) && imageUrl.ValueKind != JsonValueKind.Null
-                    ? imageUrl.GetString() ?? "" : ""
+                    ? imageUrl.GetString() ?? "" : "",
+                HarvestSeason = jsonData.TryGetProperty("harvest_season", out var harvestSeason) && harvestSeason.ValueKind != JsonValueKind.Null
+                    ? harvestSeason.GetString() ?? "" : "",
+                ScientificName = jsonData.TryGetProperty("scientific_name", out var scientificName) && scientificName.ValueKind == JsonValueKind.Array
+                    ? scientificName.EnumerateArray().Select(s => s.GetString() ?? "").ToList() : new List<string>(),
+                DroughtTolerant = jsonData.TryGetProperty("drought_tolerant", out var droughtTolerant) && droughtTolerant.ValueKind == JsonValueKind.True,
+                Cuisine = jsonData.TryGetProperty("cuisine", out var cuisine) && cuisine.ValueKind == JsonValueKind.True,
+                Medicinal = jsonData.TryGetProperty("medicinal", out var medicinal) && medicinal.ValueKind == JsonValueKind.True
             };
         }
 

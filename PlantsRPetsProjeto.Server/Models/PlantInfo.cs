@@ -10,9 +10,9 @@ namespace PlantsRPetsProjeto.Server.Models
         public string Cycle { get; set; }
         public string Watering { get; set; }
         public List<string> PruningMonth { get; set; }
-        public string PruningCount { get; set; }
+        public PruningCountInfo? PruningCount { get; set; }
         public string GrowthRate { get; set; }
-        public string Sun { get; set; }
+        public List<string> Sunlight { get; set; }
         public string Edible { get; set; }
         public string CareLevel { get; set; }
         public string Flowers { get; set; }
@@ -21,10 +21,15 @@ namespace PlantsRPetsProjeto.Server.Models
         public string Maintenance { get; set; }
         public string SaltTolerant { get; set; }
         public bool Indoor { get; set; }
-        public string SunDuration { get; set; }
         public string FloweringSeason { get; set; }
         public string Description { get; set; }
         public string Image { get; set; }
+        public string HarvestSeason { get; set; }
+        public List<string> ScientificName { get; set; }
+        public bool DroughtTolerant { get; set; }
+        public bool Cuisine { get; set; }
+        public bool Medicinal { get; set; }
+
     }
 
 }
