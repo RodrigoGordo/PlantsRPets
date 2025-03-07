@@ -23,7 +23,7 @@ namespace PlantsRPetsProjeto.Server.Models
         public bool Indoor { get; set; }
         public string FloweringSeason { get; set; }
         public string Description { get; set; }
-        public string Image { get; set; }
+        public string? Image { get; set; }
         public string HarvestSeason { get; set; }
         public List<string> ScientificName { get; set; }
         public bool DroughtTolerant { get; set; }

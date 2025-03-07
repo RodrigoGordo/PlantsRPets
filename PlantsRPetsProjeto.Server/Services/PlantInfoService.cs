@@ -89,8 +89,8 @@ namespace PlantsRPetsProjeto.Server.Services
                     ? floweringSeason.GetString() ?? "" : "",
                 Description = jsonData.TryGetProperty("description", out var description) && description.ValueKind != JsonValueKind.Null
                     ? description.GetString() ?? "" : "",
-                Image = jsonData.TryGetProperty("default_image", out var defaultImage) && defaultImage.TryGetProperty("regular_url", out var imageUrl) && imageUrl.ValueKind != JsonValueKind.Null
-                    ? imageUrl.GetString() ?? "" : "",
+                Image = jsonData.TryGetProperty("default_image", out var defaultImage) && defaultImage.ValueKind == JsonValueKind.Object && defaultImage.TryGetProperty("regular_url", out var imageUrl) &&
+                    imageUrl.ValueKind == JsonValueKind.String ? imageUrl.GetString() ?? "" : "",
                 HarvestSeason = jsonData.TryGetProperty("harvest_season", out var harvestSeason) && harvestSeason.ValueKind != JsonValueKind.Null
                     ? harvestSeason.GetString() ?? "" : "",
                 ScientificName = jsonData.TryGetProperty("scientific_name", out var scientificName) && scientificName.ValueKind == JsonValueKind.Array

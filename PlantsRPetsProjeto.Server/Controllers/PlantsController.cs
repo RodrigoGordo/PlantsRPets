@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -156,7 +157,7 @@ namespace PlantsRPetsProjeto.Server.Controllers
             {
                 var existingPlant = await _context.PlantInfo
                     .Include(p => p.PruningCount)
-                    .FirstOrDefaultAsync(p => p.PlantInfoId == plant.PlantInfoId);
+                    .FirstOrDefaultAsync(p => p.PlantName.Equals(plant.PlantName));
 
                 if (existingPlant != null)
                 {
