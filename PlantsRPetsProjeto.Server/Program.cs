@@ -54,6 +54,7 @@ builder.Services.AddAuthorization();
 builder.Services.AddTransient<IEmailService, SendGridEmailService>();
 builder.Services.AddHttpClient<WeatherService>();
 builder.Services.AddHttpClient<PlantInfoService>();
+builder.Services.AddHttpClient<SustainabilityTipService>();
 
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -66,7 +67,7 @@ builder.Services.AddSwaggerGen(options =>
         Version = "v1"
     });
 
-    // Configuração de autenticação no Swagger
+    // Configuraï¿½ï¿½o de autenticaï¿½ï¿½o no Swagger
     options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Name = "Authorization",
@@ -108,9 +109,9 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowAll",
         policy =>
         {
-            policy.AllowAnyOrigin() // Permite chamadas de qualquer domínio (usar com cuidado em produção)
-                  .AllowAnyMethod() // Permite qualquer método (GET, POST, etc.)
-                  .AllowAnyHeader(); // Permite qualquer cabeçalho na requisição
+            policy.AllowAnyOrigin() // Permite chamadas de qualquer domï¿½nio (usar com cuidado em produï¿½ï¿½o)
+                  .AllowAnyMethod() // Permite qualquer mï¿½todo (GET, POST, etc.)
+                  .AllowAnyHeader(); // Permite qualquer cabeï¿½alho na requisiï¿½ï¿½o
         });
 });
 
@@ -130,8 +131,8 @@ using (var scope = app.Services.CreateScope())
     // Chamar os seeders
     await RoleSeeder.SeedRoles(roleManager);
     await UserSeeder.SeedUsersAsync(userManager);
-    await TipSeeder.SeedSustainabilityTips(context);
     //await PlantSeeder.SeedPlants(context);
+    //await TipSeeder.SeedSustainabilityTips(context);
 }
 
 

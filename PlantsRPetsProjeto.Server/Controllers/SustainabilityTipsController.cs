@@ -2,123 +2,85 @@
 using Microsoft.EntityFrameworkCore;
 using PlantsRPetsProjeto.Server.Data;
 using PlantsRPetsProjeto.Server.Models;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using PlantsRPetsProjeto.Server.Services;
 
 namespace PlantsRPetsProjeto.Server.Controllers
 {
+    [Route("api/SustainabilityTips")]
     [ApiController]
-    [Route("api/sustainability-tips")]
     public class SustainabilityTipsController : ControllerBase
     {
+        private readonly SustainabilityTipService _tipsService;
         private readonly PlantsRPetsProjetoServerContext _context;
 
-        public SustainabilityTipsController(PlantsRPetsProjetoServerContext context)
+        public SustainabilityTipsController(
+            SustainabilityTipService tipsService,
+            PlantsRPetsProjetoServerContext context)
         {
+            _tipsService = tipsService;
             _context = context;
         }
 
-        // GET: api/sustainability-tips
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<SustainabilityTip>>> GetSustainabilityTips()
+        [HttpGet("fetch-range/{startId}/{maxId}")]
+        public async Task<IActionResult> FetchAndStoreSustainabilityTips(int startId, int maxId)
         {
-            var tips = await _context.SustainabilityTip.ToListAsync();
-            return Ok(tips); // Return the list wrapped in an OkObjectResult
-        }
-
-
-        [HttpGet("{id}")]
-        public async Task<ActionResult<SustainabilityTip>> GetSustainabilityTip(int id)
-        {
-            var tip = await _context.SustainabilityTip.FindAsync(id);
-
-            if (tip == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(tip); // Return the tip wrapped in an OkObjectResult
-        }
-
-
-        [HttpPost]
-        public async Task<ActionResult<SustainabilityTip>> CreateSustainabilityTip(SustainabilityTip tip)
-        {
-            if (tip == null || string.IsNullOrWhiteSpace(tip.Title) || string.IsNullOrWhiteSpace(tip.Content))
-            {
-                return BadRequest("Invalid tip data.");
-            }
-
-            _context.SustainabilityTip.Add(new SustainabilityTip
-            {
-                Title = tip.Title,
-                Content = tip.Content,
-                Category = tip.Category,
-                AuthorId = tip.AuthorId
-
-            });
-
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction(nameof(GetSustainabilityTip), new { id = tip.Id }, tip);
-        }
-
-
-
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateSustainabilityTip(int id, SustainabilityTip tip)
-        {
-            if (tip == null || string.IsNullOrWhiteSpace(tip.Title) || string.IsNullOrWhiteSpace(tip.Content))
-            {
-                return BadRequest("Invalid tip data.");
-            }
-
-            var existingTip = await _context.SustainabilityTip.FindAsync(id);
-            if (existingTip == null)
-            {
-                return NotFound();
-            }
-
-            existingTip.Title = tip.Title;
-            existingTip.Content = tip.Content;
+            if (startId <= 0 || maxId <= 0 || startId > maxId)
+                return BadRequest("Invalid ID range");
 
             try
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                return StatusCode(500, "A concurrency issue occurred while updating the tip.");
-            }
+                var tipsLists = await _tipsService.GetSustainabilityTipsAsync(startId, maxId);
 
-            return NoContent();
+                if (tipsLists?.Count == 0)
+                    return NotFound("No tips found in this range");
+
+                await SaveSustainabilityTips(tipsLists);
+                return Ok(tipsLists);
+            }
+            catch (HttpRequestException ex)
+            {
+                return StatusCode(502, $"API Error: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal Error: {ex.Message}");
+            }
         }
 
-
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteSustainabilityTip(int id)
+        [HttpPost("save-sustainability-tips")]
+        public async Task<IActionResult> SaveSustainabilityTips(List<SustainabilityTipsList> tipsLists)
         {
-            if (id <= 0)
+            foreach (var tipsList in tipsLists)
             {
-                return BadRequest("Invalid ID.");
+                var existingList = await _context.SustainabilityTipsList
+                    .Include(l => l.SustainabilityTip)
+                    .FirstOrDefaultAsync(l => l.PlantInfoId == tipsList.PlantInfoId);
+
+                if (existingList != null)
+                {
+                    existingList.PlantName = tipsList.PlantName;
+                    existingList.PlantScientificName = tipsList.PlantScientificName;
+                    _context.SustainabilityTip.RemoveRange(existingList.SustainabilityTip);
+                    existingList.SustainabilityTip = tipsList.SustainabilityTip;
+
+                    _context.Update(existingList);
+                }
+                else
+                {
+                    _context.Add(tipsList);
+                }
             }
 
-            var tip = await _context.SustainabilityTip.FindAsync(id);
-            if (tip == null)
-            {
-                return NotFound();
-            }
-
-            _context.SustainabilityTip.Remove(tip);
             await _context.SaveChangesAsync();
-
-            return NoContent(); // Returning NoContent after deletion
+            return Ok();
         }
 
-        private bool SustainabilityTipExists(int id)
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<SustainabilityTipsList>>> GetAllSustainabilityTips()
         {
-            return _context.SustainabilityTip.Any(e => e.Id == id);
+            return await _context.SustainabilityTipsList
+                .Include(l => l.SustainabilityTip)
+                .ToListAsync();
         }
     }
 }
