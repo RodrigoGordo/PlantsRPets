@@ -155,19 +155,18 @@ namespace PlantsRPetsProjeto.Server.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "SustainabilityTip",
+                name: "SustainabilityTipsList",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    SustainabilityTipsListId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Category = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    AuthorId = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    PlantInfoId = table.Column<int>(type: "int", nullable: false),
+                    PlantName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PlantScientificName = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_SustainabilityTip", x => x.Id);
+                    table.PrimaryKey("PK_SustainabilityTipsList", x => x.SustainabilityTipsListId);
                 });
 
             migrationBuilder.CreateTable(
@@ -419,6 +418,26 @@ namespace PlantsRPetsProjeto.Server.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "SustainabilityTip",
+                columns: table => new
+                {
+                    SustainabilityTipId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Type = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    SustainabilityTipsListId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SustainabilityTip", x => x.SustainabilityTipId);
+                    table.ForeignKey(
+                        name: "FK_SustainabilityTip_SustainabilityTipsList_SustainabilityTipsListId",
+                        column: x => x.SustainabilityTipsListId,
+                        principalTable: "SustainabilityTipsList",
+                        principalColumn: "SustainabilityTipsListId");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Metric",
                 columns: table => new
                 {
@@ -665,6 +684,11 @@ namespace PlantsRPetsProjeto.Server.Migrations
                 table: "Profile",
                 column: "UserId",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SustainabilityTip_SustainabilityTipsListId",
+                table: "SustainabilityTip",
+                column: "SustainabilityTipsListId");
         }
 
         /// <inheritdoc />
@@ -741,6 +765,9 @@ namespace PlantsRPetsProjeto.Server.Migrations
 
             migrationBuilder.DropTable(
                 name: "PruningCountInfo");
+
+            migrationBuilder.DropTable(
+                name: "SustainabilityTipsList");
 
             migrationBuilder.DropTable(
                 name: "Profile");

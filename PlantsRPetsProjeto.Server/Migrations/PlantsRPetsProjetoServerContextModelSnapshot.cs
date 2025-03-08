@@ -685,31 +685,52 @@ namespace PlantsRPetsProjeto.Server.Migrations
 
             modelBuilder.Entity("PlantsRPetsProjeto.Server.Models.SustainabilityTip", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("SustainabilityTipId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SustainabilityTipId"));
 
-                    b.Property<string>("AuthorId")
+                    b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Category")
+                    b.Property<int?>("SustainabilityTipsListId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Type")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Content")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.HasKey("SustainabilityTipId");
 
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
+                    b.HasIndex("SustainabilityTipsListId");
 
                     b.ToTable("SustainabilityTip");
+                });
+
+            modelBuilder.Entity("PlantsRPetsProjeto.Server.Models.SustainabilityTipsList", b =>
+                {
+                    b.Property<int>("SustainabilityTipsListId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SustainabilityTipsListId"));
+
+                    b.Property<int>("PlantInfoId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PlantName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.PrimitiveCollection<string>("PlantScientificName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("SustainabilityTipsListId");
+
+                    b.ToTable("SustainabilityTipsList");
                 });
 
             modelBuilder.Entity("PlantsRPetsProjeto.Server.Models.Tutorial", b =>
@@ -978,6 +999,13 @@ namespace PlantsRPetsProjeto.Server.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("PlantsRPetsProjeto.Server.Models.SustainabilityTip", b =>
+                {
+                    b.HasOne("PlantsRPetsProjeto.Server.Models.SustainabilityTipsList", null)
+                        .WithMany("SustainabilityTip")
+                        .HasForeignKey("SustainabilityTipsListId");
+                });
+
             modelBuilder.Entity("PlantsRPetsProjeto.Server.Models.Chat", b =>
                 {
                     b.Navigation("Messages");
@@ -1003,6 +1031,11 @@ namespace PlantsRPetsProjeto.Server.Migrations
                     b.Navigation("FavoritePets");
 
                     b.Navigation("HighlightedPlantations");
+                });
+
+            modelBuilder.Entity("PlantsRPetsProjeto.Server.Models.SustainabilityTipsList", b =>
+                {
+                    b.Navigation("SustainabilityTip");
                 });
 
             modelBuilder.Entity("PlantsRPetsProjeto.Server.Models.User", b =>
