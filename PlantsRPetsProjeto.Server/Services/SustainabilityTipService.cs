@@ -6,12 +6,12 @@ using PlantsRPetsProjeto.Server.Models;
 
 namespace PlantsRPetsProjeto.Server.Services
 {
-    public class SustainabilityTipsService
+    public class SustainabilityTipService
     {
         private readonly HttpClient _httpClient;
         private readonly string _apiKey;
 
-        public SustainabilityTipsService(HttpClient httpClient, IConfiguration configuration)
+        public SustainabilityTipService(HttpClient httpClient, IConfiguration configuration)
         {
             _httpClient = httpClient;
             _apiKey = configuration["ApiSettings:PerenualApiKey"] ?? throw new ArgumentNullException("API Key is missing!");
@@ -67,7 +67,6 @@ namespace PlantsRPetsProjeto.Server.Services
 
             return new SustainabilityTipsList
             {
-                SustainabilityTipsListId = plantData.TryGetProperty("id", out var tipListId) && tipListId.ValueKind == JsonValueKind.Number ? tipListId.GetInt32() : 0,
                 PlantInfoId = plantId,
                 PlantName = plantData.TryGetProperty("common_name", out var commonName) && commonName.ValueKind != JsonValueKind.Null
                     ? commonName.GetString() ?? "" : "",
@@ -76,7 +75,6 @@ namespace PlantsRPetsProjeto.Server.Services
                 SustainabilityTip = plantData.TryGetProperty("section", out var section) && section.ValueKind == JsonValueKind.Array
                     ? section.EnumerateArray().Select(tip => new SustainabilityTip
                     {
-                        SustainabilityTipId = tip.TryGetProperty("id", out var tipId) && tipId.ValueKind == JsonValueKind.Number ? tipId.GetInt32() : 0,
                         Type = tip.TryGetProperty("type", out var type) && type.ValueKind != JsonValueKind.Null ? type.GetString() ?? "" : "",
                         Description = tip.TryGetProperty("description", out var description) && description.ValueKind != JsonValueKind.Null ? description.GetString() ?? "" : ""
                     }).ToList()

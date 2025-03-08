@@ -10,11 +10,11 @@ namespace PlantsRPetsProjeto.Server.Controllers
     [ApiController]
     public class SustainabilityTipsController : ControllerBase
     {
-        private readonly SustainabilityTipsService _tipsService;
+        private readonly SustainabilityTipService _tipsService;
         private readonly PlantsRPetsProjetoServerContext _context;
 
         public SustainabilityTipsController(
-            SustainabilityTipsService tipsService,
+            SustainabilityTipService tipsService,
             PlantsRPetsProjetoServerContext context)
         {
             _tipsService = tipsService;
