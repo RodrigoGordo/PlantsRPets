@@ -1,0 +1,61 @@
+<body>
+  <app-navbar></app-navbar>
+
+  <main>
+
+      <div *ngIf="errorMessage" class="error-state">
+        ❌ {{ errorMessage }}
+      </div>
+
+      <div *ngIf="plant && !isLoading">
+        <header class="plant-header">
+          <h1>{{ plant.plantName }}</h1>
+          <h2 class="scientific-name">
+            <em>{{ getScientificName() }}</em>
+          </h2>
+        </header>
+
+        <div class="content-wrapper">
+          <section class="description-section">
+            <p class="plant-description">{{ plant.description }}</p>
+          </section>
+
+          <div class="attributes-grid">
+            <div class="attributes-column">
+              <div class="attribute-group">
+                <h3>Cycle</h3>
+                <p>{{ plant.cycle }}</p>
+              </div>
+
+              <div class="attribute-group">
+                <h3>Sun Requirements</h3>
+                <p>{{ plant.sunlight.join(' / ') }}</p>
+              </div>
+            </div>
+
+            <div class="attributes-column">
+              <div class="attribute-group">
+                <h3>Growth Rate</h3>
+                <p>{{ plant.growthRate }}</p>
+              </div>
+
+              <div class="attribute-group">
+                <h3>Watering Needs</h3>
+                <p>{{ plant.watering }}</p>
+              </div>
+
+              <div class="attribute-group">
+                <h3>Maintenance</h3>
+                <p>{{ plant.maintenance }}</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="action-buttons">
+            <button class="share-button">Share</button>
+            <button class="suggest-edit-button">Suggest Edit</button>
+          </div>
+        </div>
+      </div>
+  </main>
+</body>

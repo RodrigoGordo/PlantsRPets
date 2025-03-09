@@ -39,6 +39,7 @@ import { PlantationCardComponent } from './plantation-card/plantation-card.compo
 import { CreatePlantationComponent } from './create-plantation/create-plantation.component';
 import { WikiComponent } from './wiki/wiki.component';
 import { PlantCardComponent } from './plant-card/plant-card.component';
+import { PlantInfoPageComponent } from './plant-info-page/plant-info-page.component';
 
 
 @NgModule({
@@ -70,6 +71,7 @@ import { PlantCardComponent } from './plant-card/plant-card.component';
     CreatePlantationComponent,
     WikiComponent,
     PlantCardComponent,
+    PlantInfoPageComponent,
   ],
   imports: [
     BrowserModule,

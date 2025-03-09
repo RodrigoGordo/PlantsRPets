@@ -14,4 +14,8 @@ export class PlantsService {
   getPlants(): Observable<PlantInfo[]> { 
     return this.http.get<PlantInfo[]>(this.apiUrl);
   }
+
+  getPlantById(id: number): Observable<PlantInfo> {
+    return this.http.get<PlantInfo>(`${this.apiUrl}/${id}`);
+  }
 }
