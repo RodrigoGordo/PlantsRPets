@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Security.Claims;
+﻿using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using PlantsRPetsProjeto.Server.Data;
 using PlantsRPetsProjeto.Server.Models;
 
@@ -53,15 +51,23 @@ namespace PlantsRPetsProjeto.Server.Controllers
         [HttpPost]
         public async Task<ActionResult<Plantation>> CreatePlantation([FromBody] CreatePlantationModel model)
         {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
             var userId = User.FindFirst("UserId")?.Value;
             if (string.IsNullOrEmpty(userId))
                 return NotFound(new { message = "User not found." });
+
+            var plantInfo = await _context.PlantInfo.FindAsync(model.PlantInfoId);
+
+            if (plantInfo == null)
+                return NotFound(new { message = "Plant information not found." });
 
             var plantation = new Plantation
             {
                 OwnerId = userId,
                 PlantationName = model.PlantationName,
-                PlantType = model.PlantType,
+                PlantType = plantInfo.PlantType,
                 PlantingDate = DateTime.UtcNow,
                 LastWatered = DateTime.UtcNow,
                 GrowthStatus = "Growing",
@@ -94,8 +100,8 @@ namespace PlantsRPetsProjeto.Server.Controllers
             if (model.PlantationName != null)
                 existingPlantation.PlantationName = model.PlantationName;
 
-            if (model.PlantType.HasValue)
-                existingPlantation.PlantType = model.PlantType.Value;
+            if (!model.PlantType.IsNullOrEmpty())
+                existingPlantation.PlantType = model.PlantType;
 
             if (model.LastWatered.HasValue)
                 existingPlantation.LastWatered = model.LastWatered.Value;
@@ -160,18 +166,18 @@ namespace PlantsRPetsProjeto.Server.Controllers
             if (plantation == null)
                 return NotFound(new { message = "Plantation not found." });
 
-            var plant = await _context.Plant.FindAsync(model.PlantId);
+            var plant = await _context.PlantInfo.FindAsync(model.PlantInfoId);
             if (plant == null)
                 return NotFound(new { message = "Plant not found." });
 
-            if (plant.Type != plantation.PlantType)
+            if (plant.PlantType != plantation.PlantType)
                 return BadRequest(new { message = "This plant type is not allowed in this plantation." });
 
             if (model.Quantity <= 0)
                 return BadRequest(new { message = "Quantity must be greater than zero." });
 
             var existingPlant = await _context.PlantationPlants
-                .FirstOrDefaultAsync(pp => pp.PlantationId == plantationId && pp.PlantId == model.PlantId);
+                .FirstOrDefaultAsync(pp => pp.PlantationId == plantationId && pp.PlantInfoId == model.PlantInfoId);
 
             if (existingPlant != null)
             {
@@ -182,7 +188,7 @@ namespace PlantsRPetsProjeto.Server.Controllers
                 var plantationPlant = new PlantationPlants
                 {
                     PlantationId = plantationId,
-                    PlantId = model.PlantId,
+                    PlantInfoId = model.PlantInfoId,
                     Quantity = model.Quantity
                 };
 
@@ -200,12 +206,12 @@ namespace PlantsRPetsProjeto.Server.Controllers
             if (plantation == null)
                 return NotFound(new { message = "Plantation not found." });
 
-            var plant = await _context.Plant.FindAsync(plantId);
+            var plant = await _context.PlantInfo.FindAsync(plantId);
             if (plant == null)
                 return NotFound(new { message = "Plant not found." });
 
             var plantationPlant = await _context.PlantationPlants
-                .FirstOrDefaultAsync(pp => pp.PlantationId == plantationId && pp.PlantId == plantId);
+                .FirstOrDefaultAsync(pp => pp.PlantationId == plantationId && pp.PlantInfoId == plantId);
 
             if (plantationPlant == null)
                 return NotFound(new { message = "Plant not found in this plantation." });
@@ -247,15 +253,15 @@ namespace PlantsRPetsProjeto.Server.Controllers
     public class CreatePlantationModel
     {
         public required string PlantationName { get; set; }
-        public required PlantType PlantType { get; set; }
+        public required int PlantInfoId { get; set; }
     }
 
     public class UpdatePlantationModel
     {
         public string? PlantationName { get; set; }
-        public PlantType? PlantType { get; set; }
         public DateTime? LastWatered { get; set; }
         public DateTime? HarvestDate { get; set; }
+        public string PlantType { get; set; }
         public string? GrowthStatus { get; set; }
         public int? ExperiencePoints { get; set; }
         public int? Level { get; set; }
@@ -263,7 +269,7 @@ namespace PlantsRPetsProjeto.Server.Controllers
 
     public class AddPlantToPlantationModel
     {
-        public int PlantId { get; set; }
+        public int PlantInfoId { get; set; }
         [Range(1, int.MaxValue, ErrorMessage = "Quantity must be at least 1.")]
         public int Quantity { get; set; }
     }

@@ -23,7 +23,7 @@ namespace PlantsRPetsProjeto.Server.Data
         public DbSet<PlantsRPetsProjeto.Server.Models.Metric> Metric { get; set; } = default!;
         public DbSet<PlantsRPetsProjeto.Server.Models.Notification> Notification { get; set; } = default!;
         public DbSet<PlantsRPetsProjeto.Server.Models.Pet> Pet { get; set; } = default!;
-        public DbSet<PlantsRPetsProjeto.Server.Models.Plant> Plant { get; set; } = default!;
+        //public DbSet<PlantsRPetsProjeto.Server.Models.Plant> Plant { get; set; } = default!;
         public DbSet<PlantsRPetsProjeto.Server.Models.Plantation> Plantation { get; set; } = default!;
         public DbSet<PlantsRPetsProjeto.Server.Models.Profile> Profile { get; set; } = default!;
         public DbSet<PlantsRPetsProjeto.Server.Models.Settings> Settings { get; set; } = default!;

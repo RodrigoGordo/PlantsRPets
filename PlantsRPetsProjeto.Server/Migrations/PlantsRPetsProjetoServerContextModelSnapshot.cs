@@ -390,35 +390,6 @@ namespace PlantsRPetsProjeto.Server.Migrations
                     b.ToTable("Pet");
                 });
 
-            modelBuilder.Entity("PlantsRPetsProjeto.Server.Models.Plant", b =>
-                {
-                    b.Property<int>("PlantId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PlantId"));
-
-                    b.Property<int>("GrowthTime")
-                        .HasColumnType("int");
-
-                    b.Property<string>("PlantName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Type")
-                        .HasColumnType("int");
-
-                    b.Property<int>("WaterFrequency")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("isGrown")
-                        .HasColumnType("bit");
-
-                    b.HasKey("PlantId");
-
-                    b.ToTable("Plant");
-                });
-
             modelBuilder.Entity("PlantsRPetsProjeto.Server.Models.PlantInfo", b =>
                 {
                     b.Property<int>("PlantInfoId")
@@ -551,8 +522,9 @@ namespace PlantsRPetsProjeto.Server.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("PlantType")
-                        .HasColumnType("int");
+                    b.Property<string>("PlantType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PlantationName")
                         .IsRequired()
@@ -584,7 +556,7 @@ namespace PlantsRPetsProjeto.Server.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PlantationPlantsId"));
 
-                    b.Property<int>("PlantId")
+                    b.Property<int>("PlantInfoId")
                         .HasColumnType("int");
 
                     b.Property<int>("PlantationId")
@@ -595,7 +567,7 @@ namespace PlantsRPetsProjeto.Server.Migrations
 
                     b.HasKey("PlantationPlantsId");
 
-                    b.HasIndex("PlantId");
+                    b.HasIndex("PlantInfoId");
 
                     b.HasIndex("PlantationId");
 
@@ -973,9 +945,9 @@ namespace PlantsRPetsProjeto.Server.Migrations
 
             modelBuilder.Entity("PlantsRPetsProjeto.Server.Models.PlantationPlants", b =>
                 {
-                    b.HasOne("PlantsRPetsProjeto.Server.Models.Plant", "ReferencePlant")
+                    b.HasOne("PlantsRPetsProjeto.Server.Models.PlantInfo", "ReferencePlant")
                         .WithMany()
-                        .HasForeignKey("PlantId")
+                        .HasForeignKey("PlantInfoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

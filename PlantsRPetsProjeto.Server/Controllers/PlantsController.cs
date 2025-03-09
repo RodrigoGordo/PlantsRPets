@@ -6,6 +6,7 @@ using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using PlantsRPetsProjeto.Server.Data;
 using PlantsRPetsProjeto.Server.Models;
 using PlantsRPetsProjeto.Server.Services;
@@ -27,9 +28,9 @@ namespace PlantsRPetsProjeto.Server.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Plant>>> GetPlants()
+        public async Task<ActionResult<IEnumerable<PlantInfo>>> GetPlants()
         {
-            var plants = await _context.Plant.ToListAsync();
+            var plants = await _context.PlantInfo.ToListAsync();
             return Ok(plants);
         }
 
@@ -41,82 +42,82 @@ namespace PlantsRPetsProjeto.Server.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Plant>> GetPlant(int id)
+        public async Task<ActionResult<PlantInfo>> GetPlant(int id)
         {
-            var plant = await _context.Plant.FindAsync(id);
+            var plant = await _context.PlantInfo.FindAsync(id);
             if (plant == null)
                 return NotFound(new { message = "Plant not found." });
 
             return Ok(plant);
         }
 
-        [HttpPost]
-        [Authorize(Roles = "Admin")]
-        public async Task<ActionResult<Plant>> CreatePlant([FromBody] CreatePlantModel model)
-        {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+        //[HttpPost]
+        //[Authorize(Roles = "Admin")]
+        //public async Task<ActionResult<PlantInfo>> CreatePlant([FromBody] CreatePlantModel model)
+        //{
+        //    if (!ModelState.IsValid)
+        //        return BadRequest(ModelState);
 
-            var plant = new Plant
-            {
-                PlantName = model.PlantName,
-                Type = model.Type,
-                GrowthTime = model.GrowthTime,
-                WaterFrequency = model.WaterFrequency
-            };
+        //    var plant = new PlantInfo
+        //    {
+        //        PlantName = model.PlantName,
+        //        Type = model.Type,
+        //        GrowthTime = model.GrowthTime,
+        //        WaterFrequency = model.WaterFrequency
+        //    };
 
-            _context.Plant.Add(plant);
-            await _context.SaveChangesAsync();
+        //    _context.PlantInfo.Add(plant);
+        //    await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetPlant), new { id = plant.PlantId }, plant);
-        }
+        //    return CreatedAtAction(nameof(GetPlant), new { id = plant.PlantId }, plant);
+        //}
 
-        [HttpPut("{id}")]
-        [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> UpdatePlant(int id, [FromBody] UpdatePlantModel model)
-        {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+        //[HttpPut("{id}")]
+        //[Authorize(Roles = "Admin")]
+        //public async Task<IActionResult> UpdatePlant(int id, [FromBody] UpdatePlantModel model)
+        //{
+        //    if (!ModelState.IsValid)
+        //        return BadRequest(ModelState);
 
-            var existingPlant = await _context.Plant.FindAsync(id);
-            if (existingPlant == null)
-                return NotFound(new { message = "Plant not found." });
+        //    var existingPlant = await _context.PlantInfo.FindAsync(id);
+        //    if (existingPlant == null)
+        //        return NotFound(new { message = "Plant not found." });
 
-            if (model.PlantName != null)
-                existingPlant.PlantName = model.PlantName;
+        //    if (model.PlantName != null)
+        //        existingPlant.PlantName = model.PlantName;
 
-            if (model.Type.HasValue)
-                existingPlant.Type = model.Type.Value;
+        //    if (!model.Type.IsNullOrEmpty())
+        //        existingPlant.Type = model.Type;
 
-            if (model.GrowthTime.HasValue)
-                existingPlant.GrowthTime = model.GrowthTime.Value;
+        //    if (model.GrowthTime.HasValue)
+        //        existingPlant.GrowthTime = model.GrowthTime.Value;
 
-            if (model.WaterFrequency.HasValue)
-                existingPlant.WaterFrequency = model.WaterFrequency.Value;
+        //    if (model.WaterFrequency.HasValue)
+        //        existingPlant.WaterFrequency = model.WaterFrequency.Value;
 
-            _context.Entry(existingPlant).State = EntityState.Modified;
+        //    _context.Entry(existingPlant).State = EntityState.Modified;
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                return Conflict(new { message = "Conflict updating plant, please try again." });
-            }
+        //    try
+        //    {
+        //        await _context.SaveChangesAsync();
+        //    }
+        //    catch (DbUpdateConcurrencyException)
+        //    {
+        //        return Conflict(new { message = "Conflict updating plant, please try again." });
+        //    }
 
-            return NoContent();
-        }
+        //    return NoContent();
+        //}
 
         [HttpDelete("{id}")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeletePlant(int id)
         {
-            var plant = await _context.Plant.FindAsync(id);
+            var plant = await _context.PlantInfo.FindAsync(id);
             if (plant == null)
                 return NotFound(new { message = "Plant not found." });
 
-            _context.Plant.Remove(plant);
+            _context.PlantInfo.Remove(plant);
             await _context.SaveChangesAsync();
 
             return Ok(new { message = "Plant deleted successfully." });
@@ -228,7 +229,7 @@ namespace PlantsRPetsProjeto.Server.Controllers
     public class CreatePlantModel
     {
         public required string PlantName { get; set; }
-        public required PlantType Type { get; set; }
+        public required string Type { get; set; }
         [Range(1, int.MaxValue, ErrorMessage = "Growth time must be at least 1 day.")]
         public required int GrowthTime { get; set; }
         [Range(1, int.MaxValue, ErrorMessage = "Water frequency must be at least 1 day.")]
@@ -239,7 +240,7 @@ namespace PlantsRPetsProjeto.Server.Controllers
     {
         [Required]
         public string? PlantName { get; set; }
-        public PlantType? Type { get; set; }
+        public string? Type { get; set; }
         [Range(1, int.MaxValue, ErrorMessage = "Growth time must be at least 1 day.")]
         public int? GrowthTime { get; set; }
         [Range(1, int.MaxValue, ErrorMessage = "Water frequency must be at least 1 day.")]
