@@ -12,7 +12,7 @@ using PlantsRPetsProjeto.Server.Data;
 namespace PlantsRPetsProjeto.Server.Migrations
 {
     [DbContext(typeof(PlantsRPetsProjetoServerContext))]
-    [Migration("20250309182850_Initial")]
+    [Migration("20250310015127_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -698,7 +698,7 @@ namespace PlantsRPetsProjeto.Server.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("SustainabilityTipsListId")
+                    b.Property<int>("SustainabilityTipsListId")
                         .HasColumnType("int");
 
                     b.Property<string>("Type")
@@ -1006,7 +1006,9 @@ namespace PlantsRPetsProjeto.Server.Migrations
                 {
                     b.HasOne("PlantsRPetsProjeto.Server.Models.SustainabilityTipsList", null)
                         .WithMany("SustainabilityTip")
-                        .HasForeignKey("SustainabilityTipsListId");
+                        .HasForeignKey("SustainabilityTipsListId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("PlantsRPetsProjeto.Server.Models.Chat", b =>

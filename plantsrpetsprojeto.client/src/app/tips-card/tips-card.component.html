@@ -1,6 +1,10 @@
 <div class="tips-container">
   <div *ngFor="let tip of tips" class="tip-card">
-    <h2 class="tip-title">{{ tip.tipType }}</h2>
-    <p class="tip-content">{{ tip.tipDescription }}</p>
+    <h3 class="tip-type">{{ tip.tipType }}</h3>
+    <p class="tip-description">{{ tip.tipDescription }}</p>
+  </div>
+
+  <div *ngIf="tips.length === 0" class="no-tips">
+    No care tips available for this plant.
   </div>
 </div>

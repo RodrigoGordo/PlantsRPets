@@ -425,7 +425,7 @@ namespace PlantsRPetsProjeto.Server.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Type = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    SustainabilityTipsListId = table.Column<int>(type: "int", nullable: true)
+                    SustainabilityTipsListId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -434,7 +434,8 @@ namespace PlantsRPetsProjeto.Server.Migrations
                         name: "FK_SustainabilityTip_SustainabilityTipsList_SustainabilityTipsListId",
                         column: x => x.SustainabilityTipsListId,
                         principalTable: "SustainabilityTipsList",
-                        principalColumn: "SustainabilityTipsListId");
+                        principalColumn: "SustainabilityTipsListId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(

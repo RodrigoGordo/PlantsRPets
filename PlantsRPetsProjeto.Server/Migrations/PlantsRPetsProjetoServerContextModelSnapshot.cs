@@ -695,7 +695,7 @@ namespace PlantsRPetsProjeto.Server.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("SustainabilityTipsListId")
+                    b.Property<int>("SustainabilityTipsListId")
                         .HasColumnType("int");
 
                     b.Property<string>("Type")
@@ -1003,7 +1003,9 @@ namespace PlantsRPetsProjeto.Server.Migrations
                 {
                     b.HasOne("PlantsRPetsProjeto.Server.Models.SustainabilityTipsList", null)
                         .WithMany("SustainabilityTip")
-                        .HasForeignKey("SustainabilityTipsListId");
+                        .HasForeignKey("SustainabilityTipsListId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("PlantsRPetsProjeto.Server.Models.Chat", b =>

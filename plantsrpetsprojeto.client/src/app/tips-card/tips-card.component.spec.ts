@@ -1,20 +1,22 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { TipCardsComponent } from './tips-card.component';
+import { TipsCardComponent } from './tips-card.component';
 
 describe('TipsCardComponent', () => {
-  let component: TipCardsComponent;
-  let fixture: ComponentFixture<TipCardsComponent>;
+  let component: TipsCardComponent;
+  let fixture: ComponentFixture<TipsCardComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [TipCardsComponent]
+      declarations: [TipsCardComponent]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(TipCardsComponent);
+    fixture = TestBed.createComponent(TipsCardComponent);
     component = fixture.componentInstance;
     component.tips = [{
-      tipType: 'Watering',
-      tipDescription: 'Sample watering tip content...',
+      tipId: 0,
+      plantInfoId: 0,
+      tipDescription: "test",
+      tipType: "test"
     }];
 
     fixture.detectChanges();

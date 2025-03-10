@@ -1,11 +1,14 @@
 import { Component, Input } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { Tip } from '../models/tip-model';
 
 @Component({
-  selector: 'app-tip-cards',
-  templateUrl: './tip-cards.component.html',
-  styleUrls: ['./tip-cards.component.css']
+  selector: 'app-tips-card',
+  standalone: false,
+  templateUrl: './tips-card.component.html',
+  styleUrls: ['./tips-card.component.css']
 })
-export class TipCardsComponent {
-  @Input() tips: Tip[] = [];
+export class TipsCardComponent {
+  @Input() plantInfoId!: number; // Plant ID
+  @Input() tips: Tip[] = []; // List of tips
 }

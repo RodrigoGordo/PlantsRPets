@@ -17,7 +17,7 @@ import { SettingsComponent } from './settings/settings.component';
 import { ProfileComponent } from './profile/profile.component';
 import { HomeComponent } from './home/home.component';
 import { WikiComponent } from './wiki/wiki.component';
-import { TipCardsComponent } from './tips-card/tips-card.component';
+import { TipsCardComponent } from './tips-card/tips-card.component';
 import { PlantInfoPageComponent } from './plant-info-page/plant-info-page.component';
 
 const routes: Routes = [
@@ -38,7 +38,7 @@ const routes: Routes = [
   { path: 'profile', component: ProfileComponent },
   { path: 'home', component: HomeComponent },
   { path: 'wiki', component: WikiComponent },
-  { path: 'plant-information', component: PlantInfoPageComponent },
+  { path: 'plant-information/:id', component: PlantInfoPageComponent },
   { path: '**', redirectTo: '' },
 ];
 
