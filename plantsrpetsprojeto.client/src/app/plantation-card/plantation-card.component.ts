@@ -1,4 +1,5 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Router } from '@angular/router';
 import { PlantationsService } from '../plantations.service';
 
 @Component({
@@ -17,7 +18,7 @@ export class PlantationCardComponent {
   isEditing: boolean = false;
   newPlantationName: string = '';
 
-  constructor(private plantationsService: PlantationsService) { }
+  constructor(private plantationsService: PlantationsService, private router: Router) { }
 
   enableEdit(): void {
     this.isEditing = true;
@@ -44,5 +45,9 @@ export class PlantationCardComponent {
       this.plantationsService.deletePlantation(this.plantation.plantationId)
         .subscribe(() => this.deleted.emit());
     }
+  }
+
+  goToDetails(): void {
+    this.router.navigate(['/plantation', this.plantation.plantationId]);
   }
 }

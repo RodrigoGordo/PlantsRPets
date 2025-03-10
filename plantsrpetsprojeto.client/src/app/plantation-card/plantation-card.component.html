@@ -1,4 +1,4 @@
-<div class="plantation-card">
+<div [routerLink]="['/plantation', plantation.plantationId]" class="plantation-card">
   <div class="plantation-info">
     <input *ngIf="isEditing" [(ngModel)]="newPlantationName" type="text" class="edit-input" />
     <h3 *ngIf="!isEditing" class="plantation-name">{{ plantation.plantationName }}</h3>

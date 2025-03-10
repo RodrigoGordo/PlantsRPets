@@ -17,6 +17,8 @@ import { SettingsComponent } from './settings/settings.component';
 import { ProfileComponent } from './profile/profile.component';
 import { HomeComponent } from './home/home.component';
 import { WikiComponent } from './wiki/wiki.component';
+import { PlantationDetailsComponent } from './plantation-details/plantation-details.component';
+
 
 const routes: Routes = [
   { path: '', component: LandingPageComponent },
@@ -29,6 +31,7 @@ const routes: Routes = [
   { path: 'signin', component: SigninComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'plantations', component: PlantationsComponent },
+  { path: 'plantation/:id', component: PlantationDetailsComponent },
   { path: 'collections', component: CollectionComponent },
   { path: 'communities', component: CommunitiesComponent },
   { path: 'dashboard', component: DashboardComponent },

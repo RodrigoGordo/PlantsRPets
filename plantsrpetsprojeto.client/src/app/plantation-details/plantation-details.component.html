@@ -1,0 +1,24 @@
+<body>
+  <app-navbar></app-navbar>
+  <div>
+    <h1>{{ plantation.plantationName }}</h1>
+    <p><strong>Plant Type:</strong> {{ plantation.plantTypeName }}</p>
+    <p><strong>Planted On:</strong> {{ plantation.plantingDate | date }}</p>
+    <p><strong>Last Watered:</strong> {{ plantation.lastWatered | date }}</p>
+    <p><strong>Growth Status:</strong> {{ plantation.growthStatus }}</p>
+    <p><strong>Experience Points:</strong> {{ plantation.experiencePoints }}</p>
+
+    <h2>Plants in this Plantation</h2>
+    <ul *ngIf="plantation.plantationPlants?.length > 0; else noPlants">
+      <li *ngFor="let plant of plantation.plantationPlants">
+        {{ plant.referencePlant.plantName }} - {{ plant.quantity }} units
+      </li>
+    </ul>
+
+    <ng-template #noPlants>
+      <p>No plants added yet.</p>
+    </ng-template>
+
+    <button (click)="goBack()">Back</button>
+  </div>
+</body>
