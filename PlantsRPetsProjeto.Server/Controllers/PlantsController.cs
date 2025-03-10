@@ -34,6 +34,16 @@ namespace PlantsRPetsProjeto.Server.Controllers
             return Ok(plants);
         }
 
+        [HttpGet("/plants/get/{id}")]
+        public async Task<ActionResult<PlantInfo>> GetPlantInfo(int id)
+        {
+            var plant = await _context.PlantInfo.FindAsync(id);
+            if (plant == null)
+                return NotFound(new { message = "Plant not found." });
+
+            return Ok(plant);
+        }
+
         [HttpGet("{id}")]
         public async Task<ActionResult<PlantInfo>> GetPlant(int id)
         {

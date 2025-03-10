@@ -38,6 +38,7 @@ const routes: Routes = [
   { path: 'home', component: HomeComponent },
   { path: 'wiki', component: WikiComponent },
   { path: 'plant-information/:id', component: PlantInfoPageComponent },
+  { path: 'plants/:id', component: PlantInfoPageComponent },
   { path: '**', redirectTo: '' },
 ];
 

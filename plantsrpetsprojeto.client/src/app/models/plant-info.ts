@@ -1,3 +1,5 @@
+import { PruningCountInfo } from "./pruning-count-info";
+
 export interface PlantInfo {
   plantInfoId: number;
   plantName: string;
@@ -5,9 +7,9 @@ export interface PlantInfo {
   cycle: string;
   watering: string;
   pruningMonth: string[];
-  pruningCount: string;
+  pruningCount: PruningCountInfo;
   growthRate: string;
-  sun: string; 
+  sunlight: string[]; 
   edible: string;
   careLevel: string;
   flowers: string;
@@ -16,8 +18,12 @@ export interface PlantInfo {
   maintenance: string;
   saltTolerant: string;
   indoor: boolean;
-  sunDuration: string;
   floweringSeason: string;
   description: string;
   image: string;
+  harvestSeason: string;
+  scientificName: string[];
+  droughtTolerant: boolean;
+  cuisine: boolean;
+  medicinal: boolean;
 }

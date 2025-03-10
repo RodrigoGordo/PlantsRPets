@@ -4,6 +4,7 @@
   overflow: hidden;
   margin: 10px;
   width: 280px;
+  height: 300px;
   transition: transform 0.2s;
   background: white;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
@@ -42,3 +43,13 @@
   font-size: 0.9rem;
   font-style: italic;
 }
+
+.plant-card {
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+  .plant-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  }

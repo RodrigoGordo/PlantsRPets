@@ -1,18 +1,105 @@
-<div class="plant-info-container">
-  <h1>Plant Care Tips</h1>
+<body>
+  <app-navbar></app-navbar>
 
-  <!-- Loading State -->
-  <div *ngIf="isLoading" class="loading-state">
-    <div class="loading-text">Loading plant information...</div>
-  </div>
+  <main class="plant-details-container">
+    <div *ngIf="errorMessage" class="error-state">
+      ❌ {{ errorMessage }}
+    </div>
 
-  <!-- Error State -->
-  <div *ngIf="errorMessage" class="error-state">
-    {{ errorMessage }}
-  </div>
+    <!-- Back Arrow -->
+    <button class="back-button" (click)="goBack()">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+        <path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z" />
+      </svg>
+    </button>
 
-  <!-- Tips Card -->
-  <app-tips-card *ngIf="!isLoading && !errorMessage"
-                 [plantInfoId]="plantInfoId"
-                 [tips]="tips"></app-tips-card>
-</div>
+    <div *ngIf="plant && !isLoading" class="plant-content-wrapper">
+      <!-- Left Column -->
+      <div class="left-column">
+        <img [src]="plant.image" [alt]="plant.plantName" class="plant-image">
+        <button class="suggest-edit-button">Suggest Edit</button>
+      </div>
+
+      <!-- Right Column -->
+      <div class="right-column">
+        <header class="plant-header">
+          <h1>{{ plant.plantName | uppercase }}</h1>
+          <h2 class="scientific-name">
+            <em>{{ getScientificName() }}</em>
+          </h2>
+        </header>
+
+        <section class="description-section">
+          <p class="plant-description">{{ plant.description }}</p>
+        </section>
+
+        <div class="attributes-grid">
+          <!-- Left Attributes -->
+          <div class="attributes-column">
+            <div class="attribute-item" *ngIf="plant.cycle">
+              <span class="attribute-label">Cycle:</span>
+              {{ plant.cycle }}
+            </div>
+            <div class="attribute-item" *ngIf="plant.sunlight?.length">
+              <span class="attribute-label">Sun:</span>
+              {{ plant.sunlight | sunlightFormat }}
+            </div>
+            <div class="attribute-item" *ngIf="plant.edible">
+              <span class="attribute-label">Edible:</span>
+              {{ plant.edible }}
+            </div>
+            <div class="attribute-item" *ngIf="plant.growthRate">
+              <span class="attribute-label">Growth Rate:</span>
+              {{ plant.growthRate }}
+            </div>
+          </div>
+
+          <!-- Right Attributes -->
+          <div class="attributes-column">
+            <div class="attribute-item" *ngIf="plant.watering">
+              <span class="attribute-label">Watering:</span>
+              {{ plant.watering }}
+            </div>
+            <div class="attribute-item" *ngIf="plant.flowers">
+              <span class="attribute-label">Flowers:</span>
+              {{ plant.flowers }}
+            </div>
+            <div class="attribute-item" *ngIf="plant.fruits">
+              <span class="attribute-label">Fruits:</span>
+              {{ plant.fruits }}
+            </div>
+            <div class="attribute-item" *ngIf="plant.leaf !== undefined">
+              <span class="attribute-label">Leaf:</span>
+              {{ plant.leaf ? 'Yes' : 'No' }}
+            </div>
+            <div class="attribute-item" *ngIf="plant.maintenance">
+              <span class="attribute-label">Maintenance:</span>
+              {{ plant.maintenance }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="plant-info-container">
+      <h1>Plant Care Tips</h1>
+
+      <!-- Loading State -->
+      <div *ngIf="isLoading" class="loading-state">
+        <div class="loading-text">Loading plant information...</div>
+      </div>
+
+      <!-- Error State -->
+      <div *ngIf="errorMessage" class="error-state">
+        {{ errorMessage }}
+      </div>
+
+      <!-- Tips Card -->
+      <app-tips-card *ngIf="!isLoading && !errorMessage"
+                    [plantInfoId]="plantInfoId"
+                    [tips]="tips"></app-tips-card>
+    </div>
+
+  </main>
+</body>
+

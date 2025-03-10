@@ -1,9 +1,9 @@
-<section class="plant-card">
+<section class="plant-card" (click)="navigateToDetails()">
   <div class="image-container">
-    <img [src]="plant.image" [alt]="plant.plantName" class="plant-image">
+    <img [src]="plant.image || 'assets/logo.png'"  [alt]="plant.plantName" class="plant-image">
   </div>
   <div class="plant-info">
     <h3 class="common-name">{{ plant.plantName }}</h3>
-    <p class="scientific-name"><em>{{ plant.plantType }}</em></p>
+    <p class="scientific-name"><em>{{ plant.scientificName[0] }}</em></p>
   </div>
 </section>
