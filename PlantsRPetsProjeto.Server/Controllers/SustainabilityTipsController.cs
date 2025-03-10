@@ -7,7 +7,7 @@ using PlantsRPetsProjeto.Server.Services;
 
 namespace PlantsRPetsProjeto.Server.Controllers
 {
-    //[Authorize]
+    [Authorize]
     [Route("api/SustainabilityTips")]
     [ApiController]
     public class SustainabilityTipsController : ControllerBase
@@ -84,37 +84,5 @@ namespace PlantsRPetsProjeto.Server.Controllers
                 .Include(l => l.SustainabilityTip)
                 .ToListAsync();
         }
-
-        [HttpGet("by-plant/{plantId}")]
-        public async Task<ActionResult<IEnumerable<TipDto>>> GetTipsByPlant(int plantId)
-        {
-            var query = from tipsList in _context.SustainabilityTipsList
-                        where tipsList.PlantInfoId == plantId
-                        join tip in _context.SustainabilityTip
-                            on tipsList.SustainabilityTipsListId equals tip.SustainabilityTipsListId
-                        select new TipDto
-                        {
-                            TipId = tip.SustainabilityTipId,
-                            PlantInfoId = tipsList.PlantInfoId,
-                            TipDescription = tip.Description,
-                            TipType = tip.Type
-                        };
-
-            var results = await query.ToListAsync();
-
-            if (!results.Any())
-            {
-                return NotFound("No tips found for this plant");
-            }
-
-            return Ok(results);
-        }
-    }
-    public class TipDto
-    {
-        public int TipId { get; set; }
-        public int PlantInfoId { get; set; }
-        public string TipDescription { get; set; }
-        public string TipType { get; set; }
     }
 }
