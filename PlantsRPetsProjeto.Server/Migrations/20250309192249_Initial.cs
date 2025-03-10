@@ -107,6 +107,19 @@ namespace PlantsRPetsProjeto.Server.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "PlantType",
+                columns: table => new
+                {
+                    PlantTypeId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    PlantTypeName = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PlantType", x => x.PlantTypeId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "PruningCountInfo",
                 columns: table => new
                 {
@@ -478,7 +491,7 @@ namespace PlantsRPetsProjeto.Server.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     OwnerId = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PlantationName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PlantType = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PlantTypeId = table.Column<int>(type: "int", nullable: false),
                     PlantingDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     LastWatered = table.Column<DateTime>(type: "datetime2", nullable: false),
                     HarvestDate = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -496,6 +509,12 @@ namespace PlantsRPetsProjeto.Server.Migrations
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Plantation_PlantType_PlantTypeId",
+                        column: x => x.PlantTypeId,
+                        principalTable: "PlantType",
+                        principalColumn: "PlantTypeId",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Plantation_Profile_ProfileId",
                         column: x => x.ProfileId,
@@ -638,6 +657,11 @@ namespace PlantsRPetsProjeto.Server.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Plantation_PlantTypeId",
+                table: "Plantation",
+                column: "PlantTypeId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Plantation_ProfileId",
                 table: "Plantation",
                 column: "ProfileId");
@@ -748,6 +772,9 @@ namespace PlantsRPetsProjeto.Server.Migrations
 
             migrationBuilder.DropTable(
                 name: "PruningCountInfo");
+
+            migrationBuilder.DropTable(
+                name: "PlantType");
 
             migrationBuilder.DropTable(
                 name: "Profile");

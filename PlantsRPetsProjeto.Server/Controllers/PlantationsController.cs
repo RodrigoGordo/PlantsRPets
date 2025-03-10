@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using PlantsRPetsProjeto.Server.Data;
 using PlantsRPetsProjeto.Server.Models;
+using PlantsRPetsProjeto.Server.Services;
 
 namespace PlantsRPetsProjeto.Server.Controllers
 {
@@ -14,14 +15,16 @@ namespace PlantsRPetsProjeto.Server.Controllers
     public class PlantationsController : ControllerBase
     {
         private readonly PlantsRPetsProjetoServerContext _context;
+        private readonly PlantInfoService _plantInfoService;
 
-        public PlantationsController(PlantsRPetsProjetoServerContext context)
+        public PlantationsController(PlantsRPetsProjetoServerContext context, PlantInfoService plantInfoService)
         {
             _context = context;
+            _plantInfoService = plantInfoService;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Plantation>>> GetUserPlantations()
+        public async Task<ActionResult<IEnumerable<object>>> GetUserPlantations()
         {
             var userId = User.FindFirst("UserId")?.Value;
             if (string.IsNullOrEmpty(userId))
@@ -29,6 +32,25 @@ namespace PlantsRPetsProjeto.Server.Controllers
 
             var plantations = await _context.Plantation
                 .Where(p => p.OwnerId == userId)
+                .Join(
+                    _context.PlantType,
+                    plantation => plantation.PlantTypeId,
+                    plantType => plantType.PlantTypeId,
+                    (plantation, plantType) => new
+                    {
+                        plantation.PlantationId,
+                        plantation.OwnerId,
+                        plantation.PlantationName,
+                        plantation.PlantTypeId,
+                        plantType.PlantTypeName,
+                        plantation.PlantingDate,
+                        plantation.LastWatered,
+                        plantation.HarvestDate,
+                        plantation.GrowthStatus,
+                        plantation.ExperiencePoints,
+                        plantation.Level
+                    }
+                )
                 .ToListAsync();
 
             return Ok(plantations);
@@ -58,16 +80,15 @@ namespace PlantsRPetsProjeto.Server.Controllers
             if (string.IsNullOrEmpty(userId))
                 return NotFound(new { message = "User not found." });
 
-            var plantInfo = await _context.PlantInfo.FindAsync(model.PlantInfoId);
-
-            if (plantInfo == null)
-                return NotFound(new { message = "Plant information not found." });
+            var plantType = await _context.PlantType.FindAsync(model.PlantTypeId);
+            if (plantType == null)
+                return NotFound(new { message = "Plant type not found." });
 
             var plantation = new Plantation
             {
                 OwnerId = userId,
                 PlantationName = model.PlantationName,
-                PlantType = plantInfo.PlantType,
+                PlantTypeId = model.PlantTypeId,
                 PlantingDate = DateTime.UtcNow,
                 LastWatered = DateTime.UtcNow,
                 GrowthStatus = "Growing",
@@ -100,8 +121,14 @@ namespace PlantsRPetsProjeto.Server.Controllers
             if (model.PlantationName != null)
                 existingPlantation.PlantationName = model.PlantationName;
 
-            if (!model.PlantType.IsNullOrEmpty())
-                existingPlantation.PlantType = model.PlantType;
+            if (model.PlantTypeId.HasValue)
+            {
+                var plantType = await _context.PlantType.FindAsync(model.PlantTypeId.Value);
+                if (plantType == null)
+                    return NotFound(new { message = "Plant type not found." });
+
+                existingPlantation.PlantTypeId = model.PlantTypeId.Value;
+            }
 
             if (model.LastWatered.HasValue)
                 existingPlantation.LastWatered = model.LastWatered.Value;
@@ -170,7 +197,11 @@ namespace PlantsRPetsProjeto.Server.Controllers
             if (plant == null)
                 return NotFound(new { message = "Plant not found." });
 
-            if (plant.PlantType != plantation.PlantType)
+            var plantType = await _context.PlantType.FindAsync(plantation.PlantTypeId);
+            if (plantType == null)
+                return NotFound(new { message = "Plant Type not found." });
+
+            if (plant.PlantType != plantType.PlantTypeName)
                 return BadRequest(new { message = "This plant type is not allowed in this plantation." });
 
             if (model.Quantity <= 0)
@@ -253,7 +284,7 @@ namespace PlantsRPetsProjeto.Server.Controllers
     public class CreatePlantationModel
     {
         public required string PlantationName { get; set; }
-        public required int PlantInfoId { get; set; }
+        public required int PlantTypeId { get; set; }
     }
 
     public class UpdatePlantationModel
@@ -261,7 +292,7 @@ namespace PlantsRPetsProjeto.Server.Controllers
         public string? PlantationName { get; set; }
         public DateTime? LastWatered { get; set; }
         public DateTime? HarvestDate { get; set; }
-        public string PlantType { get; set; }
+        public int? PlantTypeId { get; set; }
         public string? GrowthStatus { get; set; }
         public int? ExperiencePoints { get; set; }
         public int? Level { get; set; }

@@ -494,6 +494,22 @@ namespace PlantsRPetsProjeto.Server.Migrations
                     b.ToTable("PlantInfo");
                 });
 
+            modelBuilder.Entity("PlantsRPetsProjeto.Server.Models.PlantType", b =>
+                {
+                    b.Property<int>("PlantTypeId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PlantTypeId"));
+
+                    b.Property<string>("PlantTypeName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("PlantTypeId");
+
+                    b.ToTable("PlantType");
+                });
+
             modelBuilder.Entity("PlantsRPetsProjeto.Server.Models.Plantation", b =>
                 {
                     b.Property<int>("PlantationId")
@@ -522,9 +538,8 @@ namespace PlantsRPetsProjeto.Server.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PlantType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("PlantTypeId")
+                        .HasColumnType("int");
 
                     b.Property<string>("PlantationName")
                         .IsRequired()
@@ -540,6 +555,8 @@ namespace PlantsRPetsProjeto.Server.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("PlantationId");
+
+                    b.HasIndex("PlantTypeId");
 
                     b.HasIndex("ProfileId");
 
@@ -934,6 +951,12 @@ namespace PlantsRPetsProjeto.Server.Migrations
 
             modelBuilder.Entity("PlantsRPetsProjeto.Server.Models.Plantation", b =>
                 {
+                    b.HasOne("PlantsRPetsProjeto.Server.Models.PlantType", "PlantType")
+                        .WithMany()
+                        .HasForeignKey("PlantTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("PlantsRPetsProjeto.Server.Models.Profile", null)
                         .WithMany("HighlightedPlantations")
                         .HasForeignKey("ProfileId");
@@ -941,6 +964,8 @@ namespace PlantsRPetsProjeto.Server.Migrations
                     b.HasOne("PlantsRPetsProjeto.Server.Models.User", null)
                         .WithMany("Plantations")
                         .HasForeignKey("UserId");
+
+                    b.Navigation("PlantType");
                 });
 
             modelBuilder.Entity("PlantsRPetsProjeto.Server.Models.PlantationPlants", b =>

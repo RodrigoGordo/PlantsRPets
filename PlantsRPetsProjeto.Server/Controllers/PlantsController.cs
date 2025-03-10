@@ -34,13 +34,6 @@ namespace PlantsRPetsProjeto.Server.Controllers
             return Ok(plants);
         }
 
-        [HttpGet("/plants/get")]
-        public async Task<ActionResult<IEnumerable<PlantInfo>>> GetPlantsInfo()
-        {
-            var plants = await _context.PlantInfo.ToListAsync();
-            return Ok(plants);
-        }
-
         [HttpGet("{id}")]
         public async Task<ActionResult<PlantInfo>> GetPlant(int id)
         {

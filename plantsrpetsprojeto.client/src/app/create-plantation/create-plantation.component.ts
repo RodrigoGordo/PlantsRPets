@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PlantationsService } from '../plantations.service';
+import { PlantTypesService } from '../plant-type.service';
 import { PlantType } from '../models/plant-type.model';
 
 @Component({
@@ -13,16 +14,34 @@ import { PlantType } from '../models/plant-type.model';
 })
 export class CreatePlantationComponent {
   plantationForm: FormGroup;
-  plantTypes = Object.values(PlantType);
+  plantTypes: PlantType[] = [];
 
   constructor(
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<CreatePlantationComponent>,
-    private plantationsService: PlantationsService
+    private plantationsService: PlantationsService,
+    private plantTypesService: PlantTypesService
   ) {
     this.plantationForm = this.fb.group({
-      plantationName: ['', [Validators.required, Validators.minLength(3)]],
-      plantType: ['', Validators.required]
+      plantationName: ['', [Validators.required, Validators.minLength(3)]], 
+      plantTypeId: ['', Validators.required]
+    });
+  }
+
+  ngOnInit(): void {
+    this.loadPlantTypes();
+  }
+
+  loadPlantTypes(): void {
+    this.plantTypesService.getPlantTypes().subscribe({
+      next: (data) => {
+        console.log("Dados recebidos do backend:", data);
+        this.plantTypes = data.filter(
+          (type, index, self) =>
+            index === self.findIndex((t) => t.plantTypeId === type.plantTypeId)
+        );
+      },
+      error: (error) => console.error("Erro ao carregar os tipos de plantas:", error)
     });
   }
 
@@ -30,7 +49,7 @@ export class CreatePlantationComponent {
     if (this.plantationForm.valid) {
       const requestData = {
         plantationName: this.plantationForm.value.plantationName,
-        plantType: this.plantTypes.indexOf(this.plantationForm.value.plantType)
+        plantTypeId: this.plantationForm.value.plantTypeId
       };
 
       this.plantationsService.createPlantation(requestData).subscribe({

@@ -21,7 +21,7 @@ export class PlantationsService {
   }
 
   // Cria uma nova plantação
-  createPlantation(plantationData: any): Observable<any> {
+  createPlantation(plantationData: { plantationName: string; plantTypeId: number }): Observable<any> {
     return this.http.post<any>(this.apiUrl, plantationData);
   }
 

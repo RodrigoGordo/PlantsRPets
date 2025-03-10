@@ -3,16 +3,48 @@ using System.Net.Http;
 using System.Collections.Generic;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using PlantsRPetsProjeto.Server.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace PlantsRPetsProjeto.Server.Services
 {
     public class PlantInfoService
     {
+        private readonly PlantsRPetsProjetoServerContext _context;
         private readonly HttpClient _httpClient;
         private readonly string _apiKey = "sk-uyOs67c9be8fd5f0c8989";
-        public PlantInfoService(HttpClient httpClient)
+        public PlantInfoService(HttpClient httpClient, PlantsRPetsProjetoServerContext context)
         {
             _httpClient = httpClient;
+            _context = context;
+        }
+
+        public async Task PopulatePlantTypesAsync()
+        {
+            var distinctPlantTypes = await _context.PlantInfo
+                .Where(p => !string.IsNullOrEmpty(p.PlantType))
+                .Select(p => p.PlantType.Trim().ToLower())
+                .Distinct()
+                .OrderBy(p => p)
+                .ToListAsync();
+
+            var existingPlantTypes = await _context.PlantType
+                .Select(pt => (pt.PlantTypeName ?? "").ToLower())
+                .ToListAsync();
+
+            var newPlantTypes = distinctPlantTypes
+                .Where(pt => !existingPlantTypes.Contains(pt))
+                .Select(pt => new PlantType
+                {
+                    PlantTypeName = char.ToUpper(pt[0]) + pt.Substring(1)
+                })
+                .ToList();
+
+            if (newPlantTypes.Any())
+            {
+                _context.PlantType.AddRange(newPlantTypes);
+                await _context.SaveChangesAsync();
+            }
         }
 
         public async Task<List<PlantInfo>> GetPlantsAsync(int startId, int maxId)

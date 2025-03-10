@@ -30,6 +30,7 @@ namespace PlantsRPetsProjeto.Server.Data
         public DbSet<PlantsRPetsProjeto.Server.Models.Tutorial> Tutorial { get; set; } = default!;
         public DbSet<PlantsRPetsProjeto.Server.Models.PlantationPlants> PlantationPlants { get; set; } = default!;
         public DbSet<PlantsRPetsProjeto.Server.Models.PlantInfo> PlantInfo { get; set; } = default!;
+        public DbSet<PlantsRPetsProjeto.Server.Models.PlantType> PlantType { get; set; } = default!;
         public DbSet<PlantsRPetsProjeto.Server.Models.SustainabilityTipsList> SustainabilityTipsList { get; set; } = default!;
     }
 }

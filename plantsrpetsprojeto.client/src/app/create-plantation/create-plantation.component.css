@@ -3,8 +3,9 @@
   padding: 20px;
   border-radius: 10px;
   text-align: center;
-  width: 100%;
-  max-width: 400px;
+  width: 90%;
+  max-width: 450px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 h2 {
@@ -15,10 +16,13 @@ h2 {
 .form-group {
   margin-bottom: 15px;
   text-align: left;
+  display: flex;
+  flex-direction: column;
 }
 
 label {
   font-weight: bold;
+  margin-bottom: 5px;
 }
 
 input, select {
@@ -26,26 +30,38 @@ input, select {
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 5px;
+  font-size: 16px;
+  box-sizing: border-box;
 }
+
+  input:focus, select:focus {
+    border-color: #2e7d32;
+    outline: none;
+  }
 
 .error {
   color: red;
   font-size: 0.9em;
   margin-top: 5px;
+  display: block;
 }
 
 .buttons {
   display: flex;
   justify-content: space-between;
+  gap: 10px;
   margin-top: 15px;
 }
 
 button {
-  padding: 10px;
+  flex: 1;
+  padding: 12px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
   font-weight: bold;
+  transition: 0.3s;
+  font-size: 16px;
 }
 
 .confirm-btn {
@@ -53,15 +69,32 @@ button {
   color: white;
 }
 
-.confirm-btn:disabled {
-  background: #ccc;
-}
+  .confirm-btn:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+  }
 
 .cancel-btn {
   background: #ff4d4d;
   color: white;
 }
 
-.cancel-btn:hover {
-  background: #cc0000;
+  .cancel-btn:hover {
+    background: #cc0000;
+  }
+
+@media (max-width: 480px) {
+  .dialog-container {
+    padding: 15px;
+    width: 95%;
+  }
+
+  h2 {
+    font-size: 1.4em;
+  }
+
+  button {
+    font-size: 14px;
+    padding: 10px;
+  }
 }

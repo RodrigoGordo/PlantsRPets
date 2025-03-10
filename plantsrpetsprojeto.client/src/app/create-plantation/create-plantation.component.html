@@ -4,7 +4,7 @@
   <form [formGroup]="plantationForm" (ngSubmit)="createPlantation()">
     <div class="form-group">
       <label for="name">Plantation Name</label>
-      <input id="name" type="text" formControlName="plantationName" placeholder="Enter a name">
+      <input id="name" type="text" formControlName="plantationName" placeholder="Enter a name" aria-label="Enter plantation name">
       <div class="error" *ngIf="plantationForm.get('plantationName')?.invalid && plantationForm.get('plantationName')?.touched">
         Name must be at least 3 characters.
       </div>
@@ -12,9 +12,14 @@
 
     <div class="form-group">
       <label for="type">Plant Type</label>
-      <select id="type" formControlName="plantType">
-        <option *ngFor="let type of plantTypes" [value]="type">{{ type }}</option>
+      <select id="type" formControlName="plantTypeId" aria-label="Select plant type">
+        <option *ngFor="let type of plantTypes" [value]="type.plantTypeId">
+          {{ type.plantTypeName }}
+        </option>
       </select>
+      <div class="error" *ngIf="plantationForm.get('plantTypeId')?.invalid && plantationForm.get('plantTypeId')?.touched">
+        Please select a plant type.
+      </div>
     </div>
 
     <div class="buttons">

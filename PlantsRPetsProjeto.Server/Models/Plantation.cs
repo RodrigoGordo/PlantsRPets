@@ -7,7 +7,8 @@ namespace PlantsRPetsProjeto.Server.Models
         public int PlantationId { get; set; }
         public string OwnerId { get; set; }
         public string PlantationName { get; set; }
-        public string PlantType { get; set; }
+        public int PlantTypeId { get; set; }
+        public virtual PlantType PlantType { get; set; }
         public DateTime PlantingDate { get; set; }
         public DateTime LastWatered { get; set; }
         public DateTime HarvestDate { get; set; }
