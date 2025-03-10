@@ -40,6 +40,7 @@ import { CreatePlantationComponent } from './create-plantation/create-plantation
 import { WikiComponent } from './wiki/wiki.component';
 import { PlantCardComponent } from './plant-card/plant-card.component';
 import { PlantInfoPageComponent } from './plant-info-page/plant-info-page.component';
+import { SunlightFormatPipe } from './sunlight-format.pipe';
 
 
 @NgModule({
@@ -72,6 +73,7 @@ import { PlantInfoPageComponent } from './plant-info-page/plant-info-page.compon
     WikiComponent,
     PlantCardComponent,
     PlantInfoPageComponent,
+    SunlightFormatPipe
   ],
   imports: [
     BrowserModule,

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { PlantsService } from '../plants.service';
 import { PlantInfo } from '../models/plant-info';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-plant-info-page',
@@ -16,7 +17,8 @@ export class PlantInfoPageComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private plantsService: PlantsService
+    private plantsService: PlantsService,
+    private location: Location
   ) { }
 
   ngOnInit(): void {
@@ -43,5 +45,9 @@ export class PlantInfoPageComponent implements OnInit {
 
   getScientificName(): string {
     return this.plant?.scientificName?.join(' ') || '';
+  }
+
+  goBack() {
+    this.location.back();
   }
 }
