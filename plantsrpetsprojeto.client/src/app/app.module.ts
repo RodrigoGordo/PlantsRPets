@@ -39,6 +39,9 @@ import { PlantationCardComponent } from './plantation-card/plantation-card.compo
 import { CreatePlantationComponent } from './create-plantation/create-plantation.component';
 import { WikiComponent } from './wiki/wiki.component';
 import { PlantCardComponent } from './plant-card/plant-card.component';
+import { TipsCardComponent } from './tips-card/tips-card.component';
+import { PlantInfoPageComponent } from './plant-info-page/plant-info-page.component';
+import { CommonModule } from '@angular/common';
 
 
 @NgModule({
@@ -70,11 +73,14 @@ import { PlantCardComponent } from './plant-card/plant-card.component';
     CreatePlantationComponent,
     WikiComponent,
     PlantCardComponent,
+    PlantInfoPageComponent,
+    TipsCardComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
+    CommonModule,
     ReactiveFormsModule,
     HttpClientModule,
     RouterModule,
