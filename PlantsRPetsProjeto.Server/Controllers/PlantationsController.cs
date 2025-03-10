@@ -30,6 +30,8 @@ namespace PlantsRPetsProjeto.Server.Controllers
             if (string.IsNullOrEmpty(userId))
                 return NotFound(new { message = "User not found." });
 
+            await _plantInfoService.PopulatePlantTypesAsync();
+
             var plantations = await _context.Plantation
                 .Where(p => p.OwnerId == userId)
                 .Join(
