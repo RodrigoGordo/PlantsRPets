@@ -62,6 +62,7 @@ namespace PlantsRPetsProjeto.Server.Controllers
         public async Task<ActionResult<Plantation>> GetPlantation(int id)
         {
             var plantation = await _context.Plantation
+                //.Include(p => p.PlantType)
                 .Include(p => p.PlantationPlants)
                 .ThenInclude(pp => pp.ReferencePlant)
                 .FirstOrDefaultAsync(p => p.PlantationId == id);

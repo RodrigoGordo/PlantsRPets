@@ -1,0 +1,29 @@
+<body>
+  <app-navbar></app-navbar>
+
+  <div class="plantation-container">
+    <h1 class="plantation-title">{{ plantation.plantationName }}</h1>
+
+    <div class="plantation-details">
+      <p><strong>Plant Type:</strong> {{ plantation.plantTypeName }}</p>
+      <p><strong>Planted On:</strong> {{ plantation.plantingDate | date }}</p>
+      <p><strong>Last Watered:</strong> {{ plantation.lastWatered | date }}</p>
+      <p><strong>Growth Status:</strong> {{ plantation.growthStatus }}</p>
+      <p><strong>Experience Points:</strong> {{ plantation.experiencePoints }}</p>
+    </div>
+
+    <h2 class="plantation-subtitle">Plants in this Plantation</h2>
+    <ng-container *ngIf="plantation">
+      <ul class="plantation-plants-list" *ngIf="plantation.plantationPlants.length > 0; else noPlants">
+        <li class="plantation-plant" *ngFor="let plant of plantation.plantationPlants">
+          <span class="plant-name">{{ plant.referencePlant.plantName }}</span>
+          <span class="plant-quantity">{{ plant.quantity }} units</span>
+        </li>
+      </ul>
+    </ng-container>
+
+    <ng-template #noPlants>
+      <p class="no-plants">No plants added yet.</p>
+    </ng-template>
+  </div>
+</body>
