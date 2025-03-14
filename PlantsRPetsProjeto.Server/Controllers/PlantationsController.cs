@@ -62,10 +62,27 @@ namespace PlantsRPetsProjeto.Server.Controllers
         public async Task<ActionResult<Plantation>> GetPlantation(int id)
         {
             var plantation = await _context.Plantation
-                //.Include(p => p.PlantType)
-                .Include(p => p.PlantationPlants)
-                .ThenInclude(pp => pp.ReferencePlant)
-                .FirstOrDefaultAsync(p => p.PlantationId == id);
+                .Where(p => p.PlantationId == id)
+                .Join(
+                    _context.PlantType,
+                    plantation => plantation.PlantTypeId,
+                    plantType => plantType.PlantTypeId,
+                    (plantation, plantType) => new
+                    {
+                        plantation.PlantationId,
+                        plantation.OwnerId,
+                        plantation.PlantationName,
+                        plantation.PlantTypeId,
+                        plantType.PlantTypeName,
+                        plantation.PlantingDate,
+                        plantation.LastWatered,
+                        plantation.HarvestDate,
+                        plantation.GrowthStatus,
+                        plantation.ExperiencePoints,
+                        plantation.Level
+                    }
+                )
+                .FirstOrDefaultAsync();
 
             if (plantation == null)
                 return NotFound(new { message = "Plantation not found." });
@@ -204,7 +221,7 @@ namespace PlantsRPetsProjeto.Server.Controllers
             if (plantType == null)
                 return NotFound(new { message = "Plant Type not found." });
 
-            if (plant.PlantType != plantType.PlantTypeName)
+            if (plant.PlantType.ToLower() != plantType.PlantTypeName.ToLower())
                 return BadRequest(new { message = "This plant type is not allowed in this plantation." });
 
             if (model.Quantity <= 0)

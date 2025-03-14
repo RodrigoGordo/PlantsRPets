@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { PlantationsService } from '../plantations.service';
 import { Plantation } from '../models/plantation.model';
+import { PlantInfo } from '../models/plant-info';
 
 @Component({
   selector: 'app-plantation-details',
@@ -11,7 +12,21 @@ import { Plantation } from '../models/plantation.model';
   styleUrl: './plantation-details.component.css'
 })
 export class PlantationDetailsComponent implements OnInit {
-  plantation!: Plantation;
+  plantation: Plantation = {
+    plantationId: 0,
+    plantationName: '',
+    plantTypeId: 0,
+    plantTypeName: '',
+    lastWatered: new Date(),
+    plantingDate: new Date(),
+    harvestDate: new Date(),
+    growthStatus: '',
+    experiencePoints: 0,
+    level: 0,
+    plantationPlants: []
+  };
+
+  plantationPlants: PlantInfo[] = [];
   loading: boolean = true;
   errorMessage: string = '';
 
@@ -22,6 +37,7 @@ export class PlantationDetailsComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadPlantation();
+    this.loadPlantationPlants();
   }
 
   loadPlantation(): void {
@@ -40,6 +56,21 @@ export class PlantationDetailsComponent implements OnInit {
       error: () => {
         this.errorMessage = "Failed to load plantation details.";
         this.loading = false;
+      }
+    });
+  }
+
+  loadPlantationPlants(): void {
+    const plantationId = Number(this.route.snapshot.paramMap.get('id'));
+    if (!plantationId) return;
+
+    this.plantationsService.getPlantsInPlantation(plantationId).subscribe({
+      next: (data) => {
+        console.log("Plants received:", data);
+        this.plantationPlants = data.map(pp => pp.referencePlant);
+      },
+      error: () => {
+        this.errorMessage = "Failed to load plants.";
       }
     });
   }

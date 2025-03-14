@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { PlantInfo } from './models/plant-info';
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +19,11 @@ export class PlantationsService {
   // Obtém uma plantação específica
   getPlantationById(id: number): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/${id}`);
+  }
+
+  // Gets plants inside a plantation
+  getPlantsInPlantation(plantationId: number): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/${plantationId}/plants`);
   }
 
   // Cria uma nova plantação

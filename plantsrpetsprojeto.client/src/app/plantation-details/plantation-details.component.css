@@ -3,7 +3,7 @@
   padding: 25px;
   margin: 20px auto;
   width: 90%;
-  max-width: 600px;
+  max-width: 60%;
   border-radius: 10px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
   text-align: center;
@@ -35,10 +35,27 @@
   margin-bottom: 10px;
 }
 
-.plantation-plants-list {
-  list-style: none;
-  padding: 0;
+.plantation-plants-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(30%, 1fr));
+  gap: 15px;
+  padding: 20px;
+  max-width: 100%;
+  margin: 0 auto;
+  justify-content: center;
+  align-items: stretch;
 }
+
+app-plant-card {
+  list-style: none;
+  max-width: 100%;
+}
+
+  .plant-card img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+  }
 
 .plantation-plant {
   display: flex;
@@ -79,6 +96,30 @@
   .back-btn:hover {
     background: #1b5e20;
   }
+
+@media (max-width: 1024px) {
+  .plantation-plants-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .plantation-plants-grid {
+    grid-template-columns: repeat(1, 1fr);
+  }
+}
+
+app-plant-card {
+  max-width: 100%;
+}
+
+.plant-card {
+  max-width: 280px;
+  margin: auto;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  overflow: hidden;
+}
 
 @media (max-width: 480px) {
   .plantation-container {
