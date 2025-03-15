@@ -23,6 +23,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { PlantationsComponent } from './plantations/plantations.component';
@@ -44,6 +45,7 @@ import { CommonModule } from '@angular/common';
 import { PlantInfoPageComponent } from './plant-info-page/plant-info-page.component';
 import { SunlightFormatPipe } from './sunlight-format.pipe';
 import { PlantationDetailsComponent } from './plantation-details/plantation-details.component';
+import { AddPlantComponent } from './add-plant/add-plant.component';
 
 
 @NgModule({
@@ -79,6 +81,7 @@ import { PlantationDetailsComponent } from './plantation-details/plantation-deta
     TipsCardComponent,
     SunlightFormatPipe,
     PlantationDetailsComponent,
+    AddPlantComponent,
   ],
   imports: [
     BrowserModule,
@@ -93,6 +96,7 @@ import { PlantationDetailsComponent } from './plantation-details/plantation-deta
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
+    MatAutocompleteModule
   ],
   providers: [
     provideAnimationsAsync(),

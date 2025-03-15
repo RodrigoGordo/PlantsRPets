@@ -26,6 +26,12 @@ export class PlantationsService {
     return this.http.get<any[]>(`${this.apiUrl}/${plantationId}/plants`);
   }
 
+
+  // Adds a plant to a plantation
+  addPlantToPlantation(plantationId: number, plantData: { plantInfoId: number; quantity: number }): Observable<any> {
+    return this.http.post(`${this.apiUrl}/${plantationId}/add-plant`, plantData);
+  }
+
   // Cria uma nova plantação
   createPlantation(plantationData: { plantationName: string; plantTypeId: number }): Observable<any> {
     return this.http.post<any>(this.apiUrl, plantationData);

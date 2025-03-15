@@ -15,6 +15,8 @@
 
     <h2 class="plantation-subtitle">Plants in this Plantation</h2>
 
+    <button class="add-plant-btn" (click)="openAddPlantDialog()">➕ Add Plant</button>
+
     <article class="plantation-plants-grid">
       <app-plant-card *ngFor="let plant of plantationPlants" [plant]="plant"></app-plant-card>
     </article>

@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
+import { AddPlantComponent } from '../add-plant/add-plant.component';
 import { PlantationsService } from '../plantations.service';
 import { Plantation } from '../models/plantation.model';
 import { PlantInfo } from '../models/plant-info';
@@ -32,7 +34,8 @@ export class PlantationDetailsComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private plantationsService: PlantationsService
+    private plantationsService: PlantationsService,
+    private dialog: MatDialog
   ) { }
 
   ngOnInit(): void {
@@ -71,6 +74,19 @@ export class PlantationDetailsComponent implements OnInit {
       },
       error: () => {
         this.errorMessage = "Failed to load plants.";
+      }
+    });
+  }
+
+  openAddPlantDialog(): void {
+    const dialogRef = this.dialog.open(AddPlantComponent, {
+      width: '400px',
+      data: this.plantation.plantationId
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.loadPlantationPlants();
       }
     });
   }
