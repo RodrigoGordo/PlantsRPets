@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 
 /**
  * Componente responsável pela gestão e visualização da coleção de pets do utilizador.
@@ -12,5 +13,14 @@ import { Component } from '@angular/core';
   styleUrl: './collection.component.css'
 })
 export class CollectionComponent {
+  pets: any[] = [];
+
+  constructor(private http: HttpClient) { }
+
+  ngOnInit(): void {
+    this.http.get<any[]>('/api/pets').subscribe(data => {
+      this.pets = data;
+    });
+  }
 
 }
