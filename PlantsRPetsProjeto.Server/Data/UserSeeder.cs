@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using PlantsRPetsProjeto.Server.Models;
+using System.Data.Common;
 namespace PlantsRPetsProjeto.Server.Data
 {
     public class UserSeeder
     {
-        public static async Task SeedUsersAsync(UserManager<User> userManager)
+        public static async Task SeedUsersAsync(UserManager<User> userManager, PlantsRPetsProjetoServerContext _context)
         {
             //Criar administrador
             if (userManager.FindByEmailAsync("plantsrpets@outlook.com").Result == null)
@@ -32,9 +34,21 @@ namespace PlantsRPetsProjeto.Server.Data
                     Nickname = "gega",
                     RegistrationDate = DateTime.UtcNow
                 };
+                var result = await userManager.CreateAsync(user, "gegassaurorex#");
 
-                await userManager.CreateAsync(user, "gegassaurorex#");
+                if (result.Succeeded)
+                {
+                    var profile = new Profile
+                    {
+                        UserId = user.Id,
+                        Bio = "Bio teste",
+                    };
+
+                    _context.Profile.Add(profile);
+                    await _context.SaveChangesAsync();
+                }
             }
+
         }
     }
 }

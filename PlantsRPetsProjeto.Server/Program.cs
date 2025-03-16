@@ -130,7 +130,7 @@ using (var scope = app.Services.CreateScope())
 
     // Chamar os seeders
     await RoleSeeder.SeedRoles(roleManager);
-    await UserSeeder.SeedUsersAsync(userManager);
+    await UserSeeder.SeedUsersAsync(userManager,context);
     //await PlantSeeder.SeedPlants(context);
     //await TipSeeder.SeedSustainabilityTips(context);
 }

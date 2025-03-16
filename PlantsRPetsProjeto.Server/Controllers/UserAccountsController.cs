@@ -4,7 +4,11 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
+using NuGet.Common;
+using PlantsRPetsProjeto.Server.Data;
 using PlantsRPetsProjeto.Server.Models;
 using PlantsRPetsProjeto.Server.Services;
 using System.Data;
@@ -25,6 +29,7 @@ namespace PlantsRPetsProjeto.Server.Controllers
         private readonly UserManager<User> _userManager;
         private readonly IConfiguration _configuration;
         private readonly IEmailService _emailService;
+        private readonly PlantsRPetsProjetoServerContext _context;
 
         /// <summary>
         /// Inicializa uma nova instância do <see cref="UserAccountsController"/>.
@@ -32,11 +37,12 @@ namespace PlantsRPetsProjeto.Server.Controllers
         /// <param name="userManager">Serviço de gestão de utilizadores.</param>
         /// <param name="configuration">Configurações da aplicação, incluindo chaves JWT.</param>
         /// <param name="emailService">Serviço para envio de e-mails.</param>
-        public UserAccountsController(UserManager<User> userManager, IConfiguration configuration, IEmailService emailService)
+        public UserAccountsController(UserManager<User> userManager, IConfiguration configuration, IEmailService emailService, PlantsRPetsProjetoServerContext context)
         {
             _userManager = userManager;
             _configuration = configuration;
             _emailService = emailService;
+            _context = context;
         }
 
         /// <summary>
@@ -92,14 +98,16 @@ namespace PlantsRPetsProjeto.Server.Controllers
                     return BadRequest(new { message = "Invalid email or password." });
                 }
 
-                var roles = await _userManager.GetRolesAsync(user);
+                var profile = await _context.Profile
+                    .FirstOrDefaultAsync(p => p.UserId == user.Id);
 
-                // Gerar os claims do utilizador
+                var roles = await _userManager.GetRolesAsync(user);
                 var claims = new List<Claim>
                 {
-                new Claim("Nickname", user.Nickname),
-                new Claim("Email", user.Email),
-                new Claim("UserId", user.Id)
+                    new Claim("Nickname", user.Nickname),
+                    new Claim("UserId", user.Id),
+                    new Claim("Email", user.Email),
+                    new Claim("Profile", JsonConvert.SerializeObject(profile))
                 };
 
                 foreach (var role in roles)
@@ -107,7 +115,7 @@ namespace PlantsRPetsProjeto.Server.Controllers
                     claims.Add(new Claim(ClaimTypes.Role, role));
                 }
 
-                // Gerar o token JWT
+                // Generate the JWT token
                 var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
                 var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
@@ -115,13 +123,11 @@ namespace PlantsRPetsProjeto.Server.Controllers
                     issuer: _configuration["Jwt:Issuer"],
                     audience: _configuration["Jwt:Audience"],
                     claims: claims,
-                    expires: DateTime.UtcNow.AddDays(1), // Definir o tempo de expiração
+                    expires: DateTime.UtcNow.AddDays(1),
                     signingCredentials: creds);
 
                 var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
-                Console.WriteLine($"[DEBUG] Password Reset Token: {token}");// Pode ser removido depois (DEBUG)
 
-                // Retornar o token ao cliente
                 return Ok(new
                 {
                     token = tokenString,
@@ -198,6 +204,37 @@ namespace PlantsRPetsProjeto.Server.Controllers
                 {
                     message = "Failed to reset password.",
                     errors = result.Errors.Select(e => e.Description) // Pode ser removido depois (DEBUG)
+                });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[ERROR] {ex.Message}");
+                return StatusCode(500, new { message = "An error occurred while processing your request." });
+            }
+        }
+
+        [HttpGet("api/user-profile")]
+        [Authorize]
+        public IActionResult GetUserProfile()
+        {
+            try
+            {
+                // Get the claims from the token
+                var nickname = User.FindFirstValue("Nickname");
+                var profileJson = User.FindFirstValue("Profile");
+
+                if (string.IsNullOrEmpty(nickname))
+                {
+                    return Unauthorized(new { message = "User not authenticated." });
+                }
+
+                // Deserialize the profile
+                var profile = profileJson != null ? JsonConvert.DeserializeObject<Profile>(profileJson) : null;
+
+                return Ok(new
+                {
+                    nickname,
+                    profile
                 });
             }
             catch (Exception ex)

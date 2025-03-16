@@ -1,1 +1,13 @@
-<p>profile works!</p>
+<body>
+  <app-navbar></app-navbar>
+  <div *ngIf="nickname">
+    <h1>{{ nickname }}</h1>
+    <div *ngIf="profile">
+      <p>{{ profile.bio }}</p>
+      <img *ngIf="profile.profilePictureUrl" [src]="profile.profilePictureUrl" alt="Profile Picture">
+    </div>
+  </div>
+  <div *ngIf="!nickname">
+    <p>No profile data found.</p>
+  </div>
+</body>

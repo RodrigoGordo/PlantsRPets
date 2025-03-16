@@ -1,19 +1,19 @@
-import { HttpClient, HttpErrorResponse, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, Subject, catchError, map, of } from 'rxjs';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { BehaviorSubject, Observable, of } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 import { UserInfo } from './authorize.dto';
-
+import { UserProfile } from './models/user-profile';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AuthorizeService {  
-
+export class AuthorizeService {
   private _authStateChanged: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(this.hasToken());
 
   constructor(private http: HttpClient) { }
 
-  public onStateChanged() {
+  public onStateChanged(): Observable<boolean> {
     return this._authStateChanged.asObservable();
   }
 
@@ -65,7 +65,7 @@ export class AuthorizeService {
     return this.hasToken();
   }
 
-  public user() {
+  public user(): Observable<UserInfo> {
     return this.http.get<UserInfo>('/manage/info', {
       withCredentials: true
     }).pipe(
@@ -83,6 +83,18 @@ export class AuthorizeService {
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
     return this.http.get<UserInfo>('/api/userinfo', { headers }).pipe(
       catchError(() => of({} as UserInfo))
+    );
+  }
+
+  public getUserProfile(): Observable<UserProfile> {
+    const token = localStorage.getItem('authToken');
+    if (!token) {
+      return of({ nickname: null, profile: null });
+    }
+
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http.get<UserProfile>('/api/user-profile', { headers }).pipe(
+      catchError(() => of({ nickname: null, profile: null }))
     );
   }
 }

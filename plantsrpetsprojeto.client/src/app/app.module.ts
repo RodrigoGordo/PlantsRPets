@@ -44,7 +44,6 @@ import { CommonModule } from '@angular/common';
 import { PlantInfoPageComponent } from './plant-info-page/plant-info-page.component';
 import { SunlightFormatPipe } from './sunlight-format.pipe';
 
-
 @NgModule({
   declarations: [
     AppComponent,

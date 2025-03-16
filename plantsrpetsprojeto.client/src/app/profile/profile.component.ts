@@ -1,17 +1,28 @@
-import { Component } from '@angular/core';
+// profile.component.ts
+import { Component, OnInit } from '@angular/core';
+import { AuthorizeService } from '../authorize.service';
 
-/**
- * Componente responsável pela exibição e gestão do perfil do utilizador.
- * Atualmente serve como base para futuras funcionalidades relacionadas com as informações do perfil,
- * como a edição de dados pessoais, preferências e visualização de atividades do utilizador.
- */
 @Component({
-  selector: 'app-profile',
   standalone: false,
-  
+  selector: 'app-profile',
   templateUrl: './profile.component.html',
-  styleUrl: './profile.component.css'
+  styleUrls: ['./profile.component.css']
 })
-export class ProfileComponent {
+export class ProfileComponent implements OnInit {
+  nickname: string | null = null;
+  profile: any | null = null;
 
+  constructor(private authService: AuthorizeService) { }
+
+  ngOnInit(): void {
+    this.authService.getUserProfile().subscribe({
+      next: (response) => {
+        this.nickname = response.nickname;
+        this.profile = response.profile;
+      },
+      error: (err) => {
+        console.error('Failed to fetch profile:', err);
+      }
+    });
+  }
 }
