@@ -13,12 +13,11 @@ namespace PlantsRPetsProjeto.Server.Services
 
         private readonly List<string> _vegetableFruitPlantEmojis = new List<string>
         {
-            "🌱", "🌿", "🍀", "🍃", "🍄", "🌻", "🌺", "🌼", "🥦", "🥕",
+            "🍄", "🌻", "🌺", "🌼", "🥦", "🥕",
             "🌽", "🍆", "🍅", "🥑", "🍇", "🍈", "🍉", "🍊", "🍋", "🍌",
             "🍍", "🥭", "🍎", "🍏", "🍐", "🍑", "🍒", "🍓", "🥝", "🥥"
         };
 
-        // List of funny faces and animals
         private readonly List<string> _funnyFaceAnimalEmojis = new List<string>
         {
             "😀", "😃", "😄", "😁", "😆", "😅", "😂", "🤣", "😊", "😇",
@@ -35,7 +34,6 @@ namespace PlantsRPetsProjeto.Server.Services
 
         public async Task<Pet> GeneratePetAsync()
         {
-            // Randomly select one vegetable/fruit/plant and one funny face/animal
             var vegetableFruitPlant = _vegetableFruitPlantEmojis[_random.Next(_vegetableFruitPlantEmojis.Count)];
             var funnyFaceAnimal = _funnyFaceAnimalEmojis[_random.Next(_funnyFaceAnimalEmojis.Count)];
 
@@ -48,7 +46,7 @@ namespace PlantsRPetsProjeto.Server.Services
             catch
             {
                 // If the combination fails, use a fallback image
-                imageUrl = "https://via.placeholder.com/128"; // Placeholder image
+                imageUrl = "https://via.placeholder.com/128";
             }
 
             string name = $"{vegetableFruitPlant}{funnyFaceAnimal} Pet";

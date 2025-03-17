@@ -1,51 +1,93 @@
-.pet-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
+.collection-container {
+  max-width: 1200px;
+  margin: 0 auto;
   padding: 20px;
-  justify-content: center;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.pet-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 20px;
+  padding: 20px 0;
 }
 
 .pet-card {
-  border: 1px solid #ccc;
   border-radius: 10px;
-  padding: 15px;
-  width: 200px;
-  text-align: center;
+  overflow: hidden;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  background-color: #f9f9f9;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  background-color: white;
+  cursor: pointer;
 }
 
-  .pet-card img {
-    width: 100%;
-    height: auto;
-    border-radius: 10px;
-  }
-
-  .pet-card h3 {
-    margin: 10px 0;
-    font-size: 1.2em;
-  }
-
-  .pet-card p {
-    margin: 5px 0;
-    font-size: 0.9em;
-  }
-
-  @media (max-width: 768px){
-      .pet-card {
-          width: 150px;
-      }
-  }
-
-@media (max-width: 480px) {
-  .pet-card {
-    width: 100%;
-  }
-}
-
-.pet-card:hover {
-    transform: scale(1.05);
+  .pet-card:not(.not-owned):hover {
+    transform: translateY(-5px);
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-    transition: transform 0.3s, box-shadow 0.3s;
+  }
+
+.pet-image-container {
+  position: relative;
+  width: 100%;
+  height: 180px;
+  overflow: hidden;
+}
+
+  .pet-image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+.not-owned .pet-image-container img {
+  filter: brightness(0) contrast(1);
+}
+
+.pet-info {
+  padding: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+  .pet-info h3 {
+    margin: 0;
+    font-size: 18px;
+  }
+
+.not-owned {
+  cursor: default;
+  opacity: 0.8;
+}
+
+.favorite-button {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: #888;
+  transition: color 0.2s ease;
+}
+
+  .favorite-button:hover, .favorite-button.is-favorite {
+    color: gold;
+  }
+
+.loading, .error-message, .empty-collection {
+  text-align: center;
+  padding: 20px;
+  font-size: 18px;
+}
+
+.error-message {
+  color: #d9534f;
+}
+
+.empty-collection {
+  color: #777;
+  font-style: italic;
 }

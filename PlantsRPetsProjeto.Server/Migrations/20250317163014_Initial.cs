@@ -66,18 +66,6 @@ namespace PlantsRPetsProjeto.Server.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Collection",
-                columns: table => new
-                {
-                    CollectionId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Collection", x => x.CollectionId);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Community",
                 columns: table => new
                 {
@@ -280,6 +268,25 @@ namespace PlantsRPetsProjeto.Server.Migrations
                     table.PrimaryKey("PK_AspNetUserTokens", x => new { x.UserId, x.LoginProvider, x.Name });
                     table.ForeignKey(
                         name: "FK_AspNetUserTokens_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Collection",
+                columns: table => new
+                {
+                    CollectionId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Collection", x => x.CollectionId);
+                    table.ForeignKey(
+                        name: "FK_Collection_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
@@ -532,7 +539,8 @@ namespace PlantsRPetsProjeto.Server.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     CollectionId = table.Column<int>(type: "int", nullable: false),
                     PetId = table.Column<int>(type: "int", nullable: false),
-                    IsFavorite = table.Column<bool>(type: "bit", nullable: false)
+                    IsFavorite = table.Column<bool>(type: "bit", nullable: false),
+                    IsOwned = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -616,6 +624,11 @@ namespace PlantsRPetsProjeto.Server.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Collection_UserId",
+                table: "Collection",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_CollectionPets_CollectionId",

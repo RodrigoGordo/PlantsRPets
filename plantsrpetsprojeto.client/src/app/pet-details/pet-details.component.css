@@ -1,0 +1,108 @@
+.pet-details-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.loading, .error-message {
+  text-align: center;
+  padding: 30px;
+  font-size: 18px;
+}
+
+.error-message {
+  color: #d9534f;
+}
+
+.pet-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.btn-back {
+  background-color: #f0f0f0;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: background-color 0.2s ease;
+}
+
+  .btn-back:hover {
+    background-color: #e0e0e0;
+  }
+
+.btn-favorite {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #888;
+  transition: color 0.2s ease;
+}
+
+  .btn-favorite:hover, .btn-favorite.is-favorite {
+    color: gold;
+  }
+
+.pet-content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+@media (min-width: 768px) {
+  .pet-content {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+
+  .pet-image {
+    flex: 0 0 40%;
+  }
+
+  .pet-info {
+    flex: 1;
+  }
+}
+
+.pet-image {
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+  .pet-image img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+.pet-info h2 {
+  margin-top: 0;
+  margin-bottom: 16px;
+  font-size: 28px;
+}
+
+.pet-type {
+  margin-bottom: 20px;
+  font-size: 18px;
+}
+
+.type-label {
+  font-weight: bold;
+}
+
+.pet-stats, .pet-description {
+  margin-bottom: 20px;
+}
+
+  .pet-stats h3, .pet-description h3 {
+    font-size: 20px;
+    margin-bottom: 10px;
+  }

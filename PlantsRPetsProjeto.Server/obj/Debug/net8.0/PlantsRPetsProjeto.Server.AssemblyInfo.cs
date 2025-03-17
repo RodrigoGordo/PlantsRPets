@@ -15,7 +15,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("PlantsRPetsProjeto.Server")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+0c815039dead28814e113f5f8c16763493d3564d")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+550647d08d1db3cca7b119e397f92ed920ebd606")]
 [assembly: System.Reflection.AssemblyProductAttribute("PlantsRPetsProjeto.Server")]
 [assembly: System.Reflection.AssemblyTitleAttribute("PlantsRPetsProjeto.Server")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

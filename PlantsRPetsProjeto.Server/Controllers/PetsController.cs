@@ -22,7 +22,8 @@ namespace PlantsRPetsProjeto.Server.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Pet>>> GetPets() {
+        public async Task<ActionResult<IEnumerable<Pet>>> GetPets()
+        {
             return await _context.Pet.ToListAsync();
         }
 

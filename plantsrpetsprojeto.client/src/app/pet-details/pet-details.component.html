@@ -1,8 +1,46 @@
 <app-navbar></app-navbar>
-<div *ngIf="pet" class="pet-detail">
-  <img [src]="pet.imageUrl" alt="{{ pet.name }}">
-  <h2>{{ pet.name }}</h2>
-  <p>{{ pet.details }}</p>
-  <p><strong>Type:</strong> {{ pet.type }}</p>
-  <p><strong>Stats:</strong> {{ pet.battleStats }}</p>
+
+<div class="pet-details-container">
+  <div *ngIf="loading" class="loading">
+    <p>Loading pet details...</p>
+  </div>
+
+  <div *ngIf="error" class="error-message">
+    <p>{{ error }}</p>
+    <button class="btn-back" (click)="goBack()">Back to Collection</button>
+  </div>
+
+  <div *ngIf="pet" class="pet-detail">
+    <div class="pet-header">
+      <button class="btn-back" (click)="goBack()">
+        <i class="fa fa-arrow-left"></i> Back
+      </button>
+      <button class="btn-favorite" [ngClass]="{'is-favorite': pet.isFavorite}" (click)="toggleFavorite()">
+        <i class="fa" [ngClass]="pet.isFavorite ? 'fa-star' : 'fa-star-o'"></i>
+      </button>
+    </div>
+
+    <div class="pet-content">
+      <div class="pet-image">
+        <img [src]="pet.imageUrl" alt="{{ pet.name }}">
+      </div>
+
+      <div class="pet-info">
+        <h2>{{ pet.name }}</h2>
+        <div class="pet-type">
+          <span class="type-label">Type:</span> {{ pet.type }}
+        </div>
+
+        <div class="pet-stats">
+          <h3>Battle Stats</h3>
+          <p>{{ pet.battleStats }}</p>
+        </div>
+
+        <div class="pet-description">
+          <h3>Details</h3>
+          <p>{{ pet.details }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

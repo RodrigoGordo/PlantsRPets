@@ -10,5 +10,6 @@ namespace PlantsRPetsProjeto.Server.Models
         public int PetId { get; set; }
         public virtual Pet ReferencePet { get; set; }
         public bool IsFavorite { get; set; }
+        public bool IsOwned { get; set; }
     }
 }
