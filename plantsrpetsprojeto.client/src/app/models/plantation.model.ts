@@ -1,4 +1,5 @@
 import { PlantType } from './plant-type.model';
+import { PlantationPlant } from "./plantation-plant";
 export interface Plantation {
   plantationId: number;
   plantationName: string;
@@ -10,4 +11,5 @@ export interface Plantation {
   growthStatus: string;
   experiencePoints: number;
   level: number;
+  plantationPlants: PlantationPlant[];
 }
