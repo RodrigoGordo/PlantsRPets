@@ -2,23 +2,19 @@ import { Component, OnInit } from '@angular/core';
 import { PlantsService } from '../plants.service';
 import { PlantInfo } from '../models/plant-info';
 
-
 @Component({
   selector: 'app-wiki',
   standalone: false,
-
   templateUrl: './wiki.component.html',
-  styleUrl: './wiki.component.css'
+  styleUrls: ['./wiki.component.css']
 })
 export class WikiComponent implements OnInit {
   plants: PlantInfo[] = [];
   searchQuery = '';
-  activeFilters: any = {};
+  activeFilters: { [key: string]: any } = {};
   showFilters = false;
 
-  constructor(private plantService: PlantsService) {
-
-  }
+  constructor(private plantService: PlantsService) { }
 
   ngOnInit(): void {
     this.plantService.getPlants().subscribe(plants => {
@@ -34,21 +30,39 @@ export class WikiComponent implements OnInit {
   }
 
   private matchesFilters(plant: PlantInfo): boolean {
-    return Object.keys(this.activeFilters).every((key: string) => {
+    return Object.keys(this.activeFilters).every(key => {
       const filterValue = this.activeFilters[key];
       if (!filterValue) return true;
 
       const plantKey = key as keyof PlantInfo;
+      const plantValue = plant[plantKey];
 
       if (plantKey === 'sunlight') {
-        return plant.sunlight.includes(filterValue);
+        const normalizedFilter = filterValue.toLowerCase()
+          .replace(/[-\/]/g, ' ')
+          .replace(/\s+/g, ' ')
+          .trim();
+
+        const plantSunlight = plant.sunlight || [];
+        return plantSunlight.some(s => {
+          const normalizedPlant = (s || '')
+            .toLowerCase()
+            .replace(/[-\/]/g, ' ')
+            .replace(/\s+/g, ' ')
+            .trim();
+
+          return normalizedPlant === normalizedFilter;
+        });
       }
 
-      if (typeof plant[plantKey] === 'boolean') {
-        return plant[plantKey] === (filterValue === 'true');
+      if (typeof plantValue === 'boolean') {
+        return plantValue === (filterValue === 'true');
       }
 
-      return plant[plantKey] === filterValue;
+      if (plantValue == null) return false;
+
+      return plantValue.toString().toLowerCase().trim() ===
+        filterValue.toString().toLowerCase().trim();
     });
   }
 
@@ -56,7 +70,11 @@ export class WikiComponent implements OnInit {
     this.activeFilters = filters;
   }
 
-  toggleFilters() {
+  toggleFilters(): void {
     this.showFilters = !this.showFilters;
+  }
+
+  onFiltersClosed(): void {
+    this.showFilters = false;
   }
 }

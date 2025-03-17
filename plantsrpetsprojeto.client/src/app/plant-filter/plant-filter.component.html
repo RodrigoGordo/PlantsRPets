@@ -1,40 +1,151 @@
-<div class="filter-container">
-  <h3>Filter Plants</h3>
-  <form [formGroup]="filterForm">
- 
-    <div class="filter-group">
-      <label>Edible:</label>
-      <select formControlName="edible">
-        <option value="">All</option>
-        <option value="Yes">Yes</option>
-        <option value="No">No</option>
-      </select>
+<div class="filter-modal" [@fadeInOut] *ngIf="isOpen">
+  <div class="modal-backdrop" (click)="closeModal()"></div>
+
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>Filter Plants</h3>
+      <button class="close-btn" (click)="closeModal()">&times;</button>
     </div>
 
-    <div class="filter-group">
-      <label>Indoor:</label>
-      <select formControlName="indoor">
-        <option value="">All</option>
-        <option value="true">Yes</option>
-        <option value="false">No</option>
-      </select>
-    </div>
-    <div class="filter-group">
-      <label>Sunlight:</label>
-      <select formControlName="sunlight">
-        <option value="">All</option>
-        <option *ngFor="let opt of filterOptions['sunlight']" [value]="opt">{{opt}}</option>
-      </select>
+    <div class="modal-body">
+      <form [formGroup]="filterForm">
+        <div class="filter-grid">
+          <div class="filter-column">
+            <div class="filter-group">
+              <label>Edible</label>
+              <div class="radio-group">
+                <label>
+                  <input type="radio" formControlName="edible" value=""> All
+                </label>
+                <label>
+                  <input type="radio" formControlName="edible" value="true"> Yes
+                </label>
+                <label>
+                  <input type="radio" formControlName="edible" value="false"> No
+                </label>
+              </div>
+            </div>
+
+            <div class="filter-group">
+              <label>Indoor</label>
+              <div class="radio-group">
+                <label>
+                  <input type="radio" formControlName="indoor" value=""> All
+                </label>
+                <label>
+                  <input type="radio" formControlName="indoor" value="true"> Yes
+                </label>
+                <label>
+                  <input type="radio" formControlName="indoor" value="false"> No
+                </label>
+              </div>
+            </div>
+
+            <div class="filter-group">
+              <label>Medicinal</label>
+              <div class="radio-group">
+                <label>
+                  <input type="radio" formControlName="medicinal" value=""> All
+                </label>
+                <label>
+                  <input type="radio" formControlName="medicinal" value="true"> Yes
+                </label>
+                <label>
+                  <input type="radio" formControlName="medicinal" value="false"> No
+                </label>
+              </div>
+            </div>
+
+            <div class="filter-group">
+              <label>Fruits</label>
+              <div class="radio-group">
+                <label>
+                  <input type="radio" formControlName="fruits" value=""> All
+                </label>
+                <label>
+                  <input type="radio" formControlName="fruits" value="true"> Yes
+                </label>
+                <label>
+                  <input type="radio" formControlName="fruits" value="false"> No
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="filter-column">
+            <div class="filter-group">
+              <label>Sunlight</label>
+              <select formControlName="sunlight">
+                <option value="">Any</option>
+                <option *ngFor="let opt of sunlightOptions" [value]="opt">{{opt}}</option>
+              </select>
+            </div>
+
+            <div class="filter-group">
+              <label>Watering</label>
+              <select formControlName="watering">
+                <option value="">Any</option>
+                <option *ngFor="let opt of wateringOptions" [value]="opt">{{opt}}</option>
+              </select>
+            </div>
+
+            <div class="filter-group">
+              <label>Cycle</label>
+              <select formControlName="cycle">
+                <option value="">Any</option>
+                <option *ngFor="let opt of cycleOptions" [value]="opt">{{opt}}</option>
+              </select>
+            </div>
+
+            <div class="filter-group">
+              <label>Flowering Season</label>
+              <select formControlName="floweringSeason">
+                <option value="">Any</option>
+                <option *ngFor="let opt of floweringSeasonOptions" [value]="opt">{{opt}}</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="filter-column">
+            <div class="filter-group">
+              <label>Growth Rate</label>
+              <select formControlName="growthRate">
+                <option value="">Any</option>
+                <option *ngFor="let opt of growthRateOptions" [value]="opt">{{opt}}</option>
+              </select>
+            </div>
+
+            <div class="filter-group">
+              <label>Care Level</label>
+              <select formControlName="careLevel">
+                <option value="">Any</option>
+                <option *ngFor="let opt of careLevelOptions" [value]="opt">{{opt}}</option>
+              </select>
+            </div>
+
+            <div class="filter-group">
+              <label>Maintenance</label>
+              <select formControlName="maintenance">
+                <option value="">Any</option>
+                <option *ngFor="let opt of maintenanceOptions" [value]="opt">{{opt}}</option>
+              </select>
+            </div>
+
+            <div class="filter-group">
+              <label>Harvest Season</label>
+              <select formControlName="harvestSeason">
+                <option value="">Any</option>
+                <option *ngFor="let opt of harvestSeasonOptions" [value]="opt">{{opt}}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </form>
     </div>
 
-    <div class="filter-group">
-      <label>Watering:</label>
-      <select formControlName="watering">
-        <option value="">All</option>
-        <option *ngFor="let opt of filterOptions['watering']" [value]="opt">{{opt}}</option>
-      </select>
+    <div class="modal-footer">
+      <button class="btn reset" (click)="resetFilters()">Reset Filters</button>
+      <button class="btn apply" (click)="applyFilters()">Show Results</button>
     </div>
-
-
-  </form>
+  </div>
 </div>

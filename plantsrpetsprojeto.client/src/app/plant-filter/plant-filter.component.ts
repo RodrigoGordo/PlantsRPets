@@ -1,21 +1,50 @@
-import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { trigger, transition, style, animate } from '@angular/animations';
 import { PlantInfo } from '../models/plant-info';
 
 @Component({
   selector: 'app-plant-filter',
   standalone: false,
   templateUrl: './plant-filter.component.html',
-  styleUrls: ['./plant-filter.component.css']
+  styleUrls: ['./plant-filter.component.css'],
+  animations: [
+    trigger('fadeInOut', [
+      transition(':enter', [
+        style({ opacity: 0 }),
+        animate('300ms ease-out', style({ opacity: 1 }))
+      ]),
+      transition(':leave', [
+        animate('200ms ease-in', style({ opacity: 0 }))
+      ])
+    ])
+  ]
 })
-export class PlantFilterComponent implements OnChanges {
-  @Input() plants: PlantInfo[] = [];
-  @Output() filtersChanged = new EventEmitter<any>();
 
-  filterForm: FormGroup;
-  filterOptions: { [key: string]: string[] } = {};
+export class PlantFilterComponent implements OnInit {
+  @Input() plants!: PlantInfo[]; // Add this line
+  @Input() isOpen = false;
+  @Output() closed = new EventEmitter<void>();
+  @Output() filtersChange = new EventEmitter<any>();
 
-  constructor(private fb: FormBuilder) {
+  filterForm!: FormGroup;
+
+  sunlightOptions = ['Full Sun', 'Part Shade', 'Part Sun/Part Shade', 'Full Shade', 'Filtered Shade'];
+  wateringOptions = ['Frequent', 'Average', 'Minimal'];
+  cycleOptions = ['Perennial', 'Annual', 'Biennial'];
+  growthRateOptions = ['High', 'Moderate', 'Low'];
+  careLevelOptions = ['Medium', 'Moderate', 'High'];
+  maintenanceOptions = ['High', 'Moderate', 'Low'];
+  floweringSeasonOptions = ['Spring', 'Summer', 'Fall', 'Winter'];
+  harvestSeasonOptions = ['Spring', 'Summer', 'Fall', 'Winter'];
+
+  constructor(private fb: FormBuilder) { }
+
+  ngOnInit(): void {
+    this.initializeForm();
+  }
+
+  private initializeForm(): void {
     this.filterForm = this.fb.group({
       edible: [''],
       indoor: [''],
@@ -23,6 +52,7 @@ export class PlantFilterComponent implements OnChanges {
       fruits: [''],
       flowers: [''],
       cuisine: [''],
+
       sunlight: [''],
       watering: [''],
       cycle: [''],
@@ -32,38 +62,35 @@ export class PlantFilterComponent implements OnChanges {
       floweringSeason: [''],
       harvestSeason: ['']
     });
+  }
 
-    this.filterForm.valueChanges.subscribe(values => {
-      this.filtersChanged.emit(values);
+  closeModal(): void {
+    this.isOpen = false;
+    this.closed.emit();
+  }
+
+  applyFilters(): void {
+    this.filtersChange.emit(this.filterForm.value);
+    this.closeModal();
+  }
+
+  resetFilters(): void {
+    this.filterForm.reset({
+      edible: '',
+      indoor: '',
+      medicinal: '',
+      fruits: '',
+      flowers: '',
+      cuisine: '',
+      sunlight: '',
+      watering: '',
+      cycle: '',
+      growthRate: '',
+      careLevel: '',
+      maintenance: '',
+      floweringSeason: '',
+      harvestSeason: ''
     });
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['plants'] && this.plants) {
-      this.initializeFilterOptions();
-    }
-  }
-
-  private initializeFilterOptions(): void {
-    this.filterOptions = {
-      sunlight: this.getUniqueArrayValues('sunlight'),
-      watering: this.getUniqueValues('watering'),
-      cycle: this.getUniqueValues('cycle'),
-      growthRate: this.getUniqueValues('growthRate'),
-      careLevel: this.getUniqueValues('careLevel'),
-      maintenance: this.getUniqueValues('maintenance'),
-      floweringSeason: this.getUniqueValues('floweringSeason'),
-      harvestSeason: this.getUniqueValues('harvestSeason')
-    };
-  }
-
-  private getUniqueValues(field: keyof PlantInfo): string[] {
-    return [...new Set(
-      this.plants.map(p => p[field]).filter(v => v != undefined && v != null)
-    )] as string[];
-  }
-
-  private getUniqueArrayValues(field: keyof PlantInfo): string[] {
-    return [...new Set(this.plants.flatMap(p => p[field] as string[]))];
+    this.filtersChange.emit({});
   }
 }

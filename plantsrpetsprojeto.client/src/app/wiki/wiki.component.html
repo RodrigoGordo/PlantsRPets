@@ -4,9 +4,9 @@
     <div class="search-container">
       <div class="search-controls">
         <button class="filter-toggle" (click)="toggleFilters()">
-          {{ showFilters ? 'Hide Filters' : 'Show Filters' }}
+          {{ showFilters ? 'Hide Filters' : 'Filter Plants' }}
         </button>
-        <form>
+        <form class="search-form">
           <input type="text"
                  placeholder="Search For A Plant Guide"
                  [(ngModel)]="searchQuery"
@@ -15,9 +15,9 @@
         </form>
       </div>
 
-      <app-plant-filter *ngIf="showFilters"
-                        [plants]="plants"
-                        (filtersChanged)="onFiltersChanged($event)">
+      <app-plant-filter [isOpen]="showFilters"
+                        (filtersChange)="onFiltersChanged($event)"
+                        (closed)="onFiltersClosed()">
       </app-plant-filter>
     </div>
 
