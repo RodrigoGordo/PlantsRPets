@@ -1,0 +1,8 @@
+<app-navbar></app-navbar>
+<div *ngIf="pet" class="pet-detail">
+  <img [src]="pet.imageUrl" alt="{{ pet.name }}">
+  <h2>{{ pet.name }}</h2>
+  <p>{{ pet.details }}</p>
+  <p><strong>Type:</strong> {{ pet.type }}</p>
+  <p><strong>Stats:</strong> {{ pet.battleStats }}</p>
+</div>

@@ -1,9 +1,6 @@
 <app-navbar></app-navbar>
 <div class="pet-container">
-  <div *ngFor="let pet of pets" class="pet-card">
+  <div *ngFor="let pet of pets" class="pet-card" (click)="viewPet(pet.petId)">
     <img [src]="pet.imageUrl" alt="{{ pet.name }}">
-    <h3>{{ pet.name }}</h3>
-    <p>{{ pet.details }}</p>
-    <p><strong>Stats:</strong> {{ pet.battleStats }}</p>
   </div>
 </div>

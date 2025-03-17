@@ -43,6 +43,7 @@ import { TipsCardComponent } from './tips-card/tips-card.component';
 import { CommonModule } from '@angular/common';
 import { PlantInfoPageComponent } from './plant-info-page/plant-info-page.component';
 import { SunlightFormatPipe } from './sunlight-format.pipe';
+import { PetDetailsComponent } from './pet-details/pet-details.component';
 
 
 @NgModule({
@@ -77,6 +78,7 @@ import { SunlightFormatPipe } from './sunlight-format.pipe';
     PlantInfoPageComponent,
     TipsCardComponent,
     SunlightFormatPipe,
+    PetDetailsComponent,
   ],
   imports: [
     BrowserModule,

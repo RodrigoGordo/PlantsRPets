@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 /**
  * Componente responsável pela gestão e visualização da coleção de pets do utilizador.
@@ -15,12 +16,16 @@ import { HttpClient } from '@angular/common/http';
 export class CollectionComponent {
   pets: any[] = [];
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private router: Router) { }
 
   ngOnInit(): void {
     this.http.get<any[]>('/api/pets').subscribe(data => {
       this.pets = data;
     });
+  }
+
+  viewPet(petId: number): void {
+    this.router.navigate(['/pet', petId]);
   }
 
 }

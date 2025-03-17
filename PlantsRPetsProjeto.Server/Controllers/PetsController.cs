@@ -25,6 +25,19 @@ namespace PlantsRPetsProjeto.Server.Controllers
         public async Task<ActionResult<IEnumerable<Pet>>> GetPets() {
             return await _context.Pet.ToListAsync();
         }
-        
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Pet>> GetPet(int id)
+        {
+            var pet = await _context.Pet.FindAsync(id);
+
+            if (pet == null)
+            {
+                return NotFound();
+            }
+
+            return pet;
+        }
+
     }
 }
