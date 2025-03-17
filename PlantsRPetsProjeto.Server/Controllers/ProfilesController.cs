@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
+using System.Security.Claims;
+
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using PlantsRPetsProjeto.Server.Data;
 using PlantsRPetsProjeto.Server.Models;
 
@@ -13,145 +16,91 @@ namespace PlantsRPetsProjeto.Server.Controllers
     public class ProfilesController : Controller
     {
         private readonly PlantsRPetsProjetoServerContext _context;
+        private readonly UserManager<User> _userManager;
 
-        public ProfilesController(PlantsRPetsProjetoServerContext context)
+        public ProfilesController(PlantsRPetsProjetoServerContext context, UserManager<User> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
-        // GET: Profiles
-        public async Task<IActionResult> Index()
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> GetProfile()
         {
-            return View(await _context.Profile.ToListAsync());
-        }
-
-        // GET: Profiles/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userId))
             {
-                return NotFound();
+                return Unauthorized(new { message = "User not authenticated." });
             }
 
             var profile = await _context.Profile
-                .FirstOrDefaultAsync(m => m.ProfileId == id);
+                .FirstOrDefaultAsync(p => p.UserId == userId);
+
             if (profile == null)
             {
-                return NotFound();
+                return NotFound(new { message = "Profile not found." });
             }
 
-            return View(profile);
+            return Ok(profile);
         }
 
-        // GET: Profiles/Create
-        public IActionResult Create()
+        [HttpPut]
+        [Authorize]
+        [Route("api/update-profile")]
+        public async Task<IActionResult> UpdateProfile([FromBody] UpdateProfileModel model)
         {
-            return View();
-        }
-
-        // POST: Profiles/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ProfileId,UserId,Bio,ProfilePicture")] Profile profile)
-        {
-            if (ModelState.IsValid)
+            var userId = User.FindFirstValue("UserId");
+            if (string.IsNullOrEmpty(userId))
             {
-                _context.Add(profile);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(profile);
-        }
-
-        // GET: Profiles/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var profile = await _context.Profile.FindAsync(id);
-            if (profile == null)
-            {
-                return NotFound();
-            }
-            return View(profile);
-        }
-
-        // POST: Profiles/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ProfileId,UserId,Bio,ProfilePicture")] Profile profile)
-        {
-            if (id != profile.ProfileId)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(profile);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ProfileExists(profile.ProfileId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(profile);
-        }
-
-        // GET: Profiles/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
+                var claims = User.Claims.Select(c => new { c.Type, c.Value }).ToList();
+                Console.WriteLine("Claims: " + JsonConvert.SerializeObject(claims));
+                return Unauthorized(new { message = "User not authenticated." });
             }
 
             var profile = await _context.Profile
-                .FirstOrDefaultAsync(m => m.ProfileId == id);
+                .FirstOrDefaultAsync(p => p.UserId == userId);
+
             if (profile == null)
             {
-                return NotFound();
+                return NotFound(new { message = "Profile not found." });
             }
 
-            return View(profile);
-        }
-
-        // POST: Profiles/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var profile = await _context.Profile.FindAsync(id);
-            if (profile != null)
+            if (model.Bio != null)
             {
-                _context.Profile.Remove(profile);
+                profile.Bio = model.Bio;
             }
 
+            if (model.ProfilePictureUrl != null)
+            {
+                profile.ProfilePicture = model.ProfilePictureUrl;
+            }
+
+            if (model.FavoritePets != null)
+            {
+                profile.FavoritePets = model.FavoritePets;
+            }
+
+            if (model.HighlightedPlantations != null)
+            {
+                profile.HighlightedPlantations = model.HighlightedPlantations;
+            }
+
+            _context.Profile.Update(profile);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+
+            return Ok(profile);
         }
 
-        private bool ProfileExists(int id)
-        {
-            return _context.Profile.Any(e => e.ProfileId == id);
-        }
+
+
+    }
+
+    public class UpdateProfileModel
+    {
+        public string Bio { get; set; }
+        public string ProfilePictureUrl { get; set; }
+        public ICollection<Pet>? FavoritePets { get; set; }
+        public ICollection<Plantation>? HighlightedPlantations { get; set; }
     }
 }

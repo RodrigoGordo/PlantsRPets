@@ -1,13 +1,41 @@
 <body>
   <app-navbar></app-navbar>
-  <div *ngIf="nickname">
-    <h1>{{ nickname }}</h1>
-    <div *ngIf="profile">
-      <p>{{ profile.bio }}</p>
-      <img *ngIf="profile.profilePictureUrl" [src]="profile.profilePictureUrl" alt="Profile Picture">
+    <app-navbar></app-navbar>
+    <div class="profile-container">
+      <div *ngIf="nickname" class="profile-header">
+        <h1>{{ nickname }}</h1>
+        <div *ngIf="profile" class="profile-details">
+          <div class="profile-picture">
+            <img *ngIf="profile.profilePictureUrl" [src]="profile.profilePictureUrl" alt="Profile Picture">
+          </div>
+          <div class="profile-bio">
+            <p>{{ profile.bio }}</p>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="!nickname">
+        <p>No profile data found.</p>
+      </div>
+
+      <!-- Favorite Pets Section -->
+      <div *ngIf="profile?.favoritePets?.length" class="scrollable-section">
+        <h2>Favorite Pets</h2>
+        <div class="scrollable-list">
+          <div *ngFor="let pet of profile.favoritePets" class="list-item">
+            {{ pet }}
+          </div>
+        </div>
+      </div>
+
+      <!-- Highlighted Plantations Section -->
+      <div *ngIf="profile?.highlightedPlantations?.length" class="scrollable-section">
+        <h2>Highlighted Plantations</h2>
+        <div class="scrollable-list">
+          <div *ngFor="let plantation of profile.highlightedPlantations" class="list-item">
+            {{ plantation }}
+          </div>
+        </div>
+      </div>
     </div>
-  </div>
-  <div *ngIf="!nickname">
-    <p>No profile data found.</p>
-  </div>
 </body>

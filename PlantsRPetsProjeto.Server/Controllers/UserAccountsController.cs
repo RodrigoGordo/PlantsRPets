@@ -98,8 +98,6 @@ namespace PlantsRPetsProjeto.Server.Controllers
                     return BadRequest(new { message = "Invalid email or password." });
                 }
 
-                var profile = await _context.Profile
-                    .FirstOrDefaultAsync(p => p.UserId == user.Id);
 
                 var roles = await _userManager.GetRolesAsync(user);
                 var claims = new List<Claim>
@@ -107,7 +105,6 @@ namespace PlantsRPetsProjeto.Server.Controllers
                     new Claim("Nickname", user.Nickname),
                     new Claim("UserId", user.Id),
                     new Claim("Email", user.Email),
-                    new Claim("Profile", JsonConvert.SerializeObject(profile))
                 };
 
                 foreach (var role in roles)
@@ -219,18 +216,16 @@ namespace PlantsRPetsProjeto.Server.Controllers
         {
             try
             {
-                // Get the claims from the token
                 var nickname = User.FindFirstValue("Nickname");
-                var profileJson = User.FindFirstValue("Profile");
+                var userId = User.FindFirstValue("UserId");
+
+                var profile = _context.Profile
+                    .FirstOrDefault(p => p.UserId == userId);
 
                 if (string.IsNullOrEmpty(nickname))
                 {
                     return Unauthorized(new { message = "User not authenticated." });
                 }
-
-                // Deserialize the profile
-                var profile = profileJson != null ? JsonConvert.DeserializeObject<Profile>(profileJson) : null;
-
                 return Ok(new
                 {
                     nickname,

@@ -1,6 +1,5 @@
-// profile.component.ts
 import { Component, OnInit } from '@angular/core';
-import { AuthorizeService } from '../authorize.service';
+import { ProfileService } from '../../services/profile.service';
 
 @Component({
   standalone: false,
@@ -10,12 +9,16 @@ import { AuthorizeService } from '../authorize.service';
 })
 export class ProfileComponent implements OnInit {
   nickname: string | null = null;
-  profile: any | null = null;
+  profile: any = null;
 
-  constructor(private authService: AuthorizeService) { }
+  constructor(private profileService: ProfileService) { }
 
   ngOnInit(): void {
-    this.authService.getUserProfile().subscribe({
+    this.loadProfile();
+  }
+
+  loadProfile(): void {
+    this.profileService.getProfile().subscribe({
       next: (response) => {
         this.nickname = response.nickname;
         this.profile = response.profile;
