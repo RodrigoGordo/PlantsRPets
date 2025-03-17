@@ -1,0 +1,40 @@
+<div class="filter-container">
+  <h3>Filter Plants</h3>
+  <form [formGroup]="filterForm">
+ 
+    <div class="filter-group">
+      <label>Edible:</label>
+      <select formControlName="edible">
+        <option value="">All</option>
+        <option value="Yes">Yes</option>
+        <option value="No">No</option>
+      </select>
+    </div>
+
+    <div class="filter-group">
+      <label>Indoor:</label>
+      <select formControlName="indoor">
+        <option value="">All</option>
+        <option value="true">Yes</option>
+        <option value="false">No</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <label>Sunlight:</label>
+      <select formControlName="sunlight">
+        <option value="">All</option>
+        <option *ngFor="let opt of filterOptions['sunlight']" [value]="opt">{{opt}}</option>
+      </select>
+    </div>
+
+    <div class="filter-group">
+      <label>Watering:</label>
+      <select formControlName="watering">
+        <option value="">All</option>
+        <option *ngFor="let opt of filterOptions['watering']" [value]="opt">{{opt}}</option>
+      </select>
+    </div>
+
+
+  </form>
+</div>

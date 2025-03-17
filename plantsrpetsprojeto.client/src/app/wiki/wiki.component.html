@@ -2,21 +2,29 @@
   <app-navbar></app-navbar>
   <main>
     <div class="search-container">
-    <form>
-      <input 
-        type="text" 
-        placeholder="Search For A Plant Guide" 
-        [(ngModel)]="searchQuery"
-        name="plantSearch"
-        class="search-input"
-      >
-    </form>
-  </div>
-  <article class="plant-grid">
-    <app-plant-card 
-      *ngFor="let plant of filteredPlants"
-      [plant]="plant">
-    </app-plant-card>
-  </article>
+      <div class="search-controls">
+        <button class="filter-toggle" (click)="toggleFilters()">
+          {{ showFilters ? 'Hide Filters' : 'Show Filters' }}
+        </button>
+        <form>
+          <input type="text"
+                 placeholder="Search For A Plant Guide"
+                 [(ngModel)]="searchQuery"
+                 name="plantSearch"
+                 class="search-input">
+        </form>
+      </div>
+
+      <app-plant-filter *ngIf="showFilters"
+                        [plants]="plants"
+                        (filtersChanged)="onFiltersChanged($event)">
+      </app-plant-filter>
+    </div>
+
+    <article class="plant-grid">
+      <app-plant-card *ngFor="let plant of filteredPlants"
+                      [plant]="plant">
+      </app-plant-card>
+    </article>
   </main>
 </body>

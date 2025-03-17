@@ -28,6 +28,30 @@
   margin: 0 auto;
 }
 
+.search-controls {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.filter-toggle {
+  background-color: #2c541d;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: all 0.3s;
+  white-space: nowrap;
+}
+
+  .filter-toggle:hover {
+    background-color: #4a7c3a;
+    transform: translateY(-1px);
+  }
+
+
 @media (max-width: 768px) {
   .plant-grid {
     padding: 1rem;
