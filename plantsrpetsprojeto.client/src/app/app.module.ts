@@ -46,6 +46,7 @@ import { PlantInfoPageComponent } from './plant-info-page/plant-info-page.compon
 import { SunlightFormatPipe } from './sunlight-format.pipe';
 import { PlantationDetailsComponent } from './plantation-details/plantation-details.component';
 import { AddPlantComponent } from './add-plant/add-plant.component';
+import { PlantFilterComponent } from './plant-filter/plant-filter.component';
 
 
 @NgModule({
@@ -82,6 +83,7 @@ import { AddPlantComponent } from './add-plant/add-plant.component';
     SunlightFormatPipe,
     PlantationDetailsComponent,
     AddPlantComponent,
+    PlantFilterComponent,
   ],
   imports: [
     BrowserModule,
