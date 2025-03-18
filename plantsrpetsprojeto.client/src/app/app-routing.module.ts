@@ -19,6 +19,7 @@ import { HomeComponent } from './home/home.component';
 import { WikiComponent } from './wiki/wiki.component';
 import { PlantInfoPageComponent } from './plant-info-page/plant-info-page.component';
 import { PlantationDetailsComponent } from './plantation-details/plantation-details.component';
+import { PetDetailsComponent } from './pet-details/pet-details.component';
 
 
 const routes: Routes = [
@@ -42,6 +43,7 @@ const routes: Routes = [
   { path: 'wiki', component: WikiComponent },
   { path: 'plant-information/:id', component: PlantInfoPageComponent },
   { path: 'plants/:id', component: PlantInfoPageComponent },
+  { path: 'pet/:id', component: PetDetailsComponent },
   { path: '**', redirectTo: '' },
 ];
 
