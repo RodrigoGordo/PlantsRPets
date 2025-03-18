@@ -66,19 +66,34 @@ namespace PlantsRPetsProjeto.Server.Controllers
 
                 var result = await _userManager.CreateAsync(user, model.Password);
 
-                if (result.Succeeded)
+                if (!result.Succeeded)
                 {
-                    return Ok(new { message = "Registration Sucessful!" });
+                    return BadRequest(new { message = "An unexpected error occurred, try again later!" });
                 }
 
-                return BadRequest(new { message = "An unexpected error occurred, try again later!" });
+                var profile = new Profile { UserId = user.Id };
+
+                await _context.Profile.AddAsync(profile);
+                var saveProfileResult = await _context.SaveChangesAsync();
+
+                if (saveProfileResult > 0)
+                {
+                    return Ok(new { message = "Registration successful!" });
+                }
+                else
+                {
+                    await _userManager.DeleteAsync(user);
+                    return StatusCode(500, new { message = "Failed to create user profile." });
+                }
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"[ERROR] {ex.Message}");
                 return StatusCode(500, new { message = "An error occurred while processing your request." });
             }
+
         }
+
 
         /// <summary>
         /// Autentica um utilizador e gera um token JWT para sessões autenticadas.

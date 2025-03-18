@@ -86,6 +86,7 @@
           },
           "defaultConfiguration": "development",
           "options": {
+            "ssl": false,
             "proxyConfig": "src/proxy.conf.js"
           }
         },
