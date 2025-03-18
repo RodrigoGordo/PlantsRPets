@@ -8,6 +8,7 @@ using PlantsRPetsProjeto.Server.Controllers;
 using PlantsRPetsProjeto.Server.Models;
 using PlantsRPetsProjeto.Server.Services;
 using System.Collections.Generic;
+using PlantsRPetsProjeto.Server.Data;
 
 namespace PlantsRPetsProjeto.Tests.xUnitTests.ControllerTests
 {
@@ -16,6 +17,7 @@ namespace PlantsRPetsProjeto.Tests.xUnitTests.ControllerTests
         private readonly Mock<UserManager<User>> _mockUserManager;
         private readonly Mock<IEmailService> _mockEmailService;
         private readonly Mock<IConfiguration> _mockConfiguration;
+        private readonly Mock<PlantsRPetsProjetoServerContext> _mockContext;
         private readonly UserAccountsController _controller;
 
         public UserAccountsControllerTests()
@@ -29,7 +31,8 @@ namespace PlantsRPetsProjeto.Tests.xUnitTests.ControllerTests
             _controller = new UserAccountsController(
                 _mockUserManager.Object,
                 _mockConfiguration.Object,
-                _mockEmailService.Object
+                _mockEmailService.Object,
+                _mockContext.Object
             );
         }
 

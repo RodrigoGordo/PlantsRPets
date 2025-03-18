@@ -6,7 +6,7 @@ namespace PlantsRPetsProjeto.Server.Data
 {
     public class UserSeeder
     {
-        public static async Task SeedUsersAsync(UserManager<User> userManager, PlantsRPetsProjetoServerContext _context)
+        public static async Task SeedUsersAsync(UserManager<User> userManager)
         {
             //Criar administrador
             if (userManager.FindByEmailAsync("plantsrpets@outlook.com").Result == null)
@@ -35,18 +35,6 @@ namespace PlantsRPetsProjeto.Server.Data
                     RegistrationDate = DateTime.UtcNow
                 };
                 var result = await userManager.CreateAsync(user, "gegassaurorex#");
-
-                if (result.Succeeded)
-                {
-                    var profile = new Profile
-                    {
-                        UserId = user.Id,
-                        Bio = "Bio teste",
-                    };
-
-                    _context.Profile.Add(profile);
-                    await _context.SaveChangesAsync();
-                }
             }
 
         }

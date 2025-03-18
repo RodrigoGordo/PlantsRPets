@@ -258,7 +258,11 @@ namespace PlantsRPetsProjeto.Server.Controllers
 
                 var nickname = user.Nickname;
                 var baseUrl = $"{Request.Scheme}://{Request.Host}";
-                profile.ProfilePicture = $"{baseUrl}/{profile.ProfilePicture.Replace("\\", "/")}";
+
+                if(profile.ProfilePicture != null)
+                {
+                    profile.ProfilePicture = $"{baseUrl}/{profile.ProfilePicture.Replace("\\", "/")}";
+                }
 
                 return Ok(new
                 {
