@@ -89,12 +89,65 @@ export class AuthorizeService {
   public getUserProfile(): Observable<UserProfile> {
     const token = localStorage.getItem('authToken');
     if (!token) {
-      return of({ nickname: null, profile: null });
+      return of({
+        nickname: '',
+        profile: {
+          bio: '',
+          profilePictureUrl: null, // Use profilePictureUrl
+          favoritePets: [],
+          highlightedPlantations: [],
+          profileId: 0,
+          userId: ''
+        }
+      });
     }
 
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
     return this.http.get<UserProfile>('/api/user-profile', { headers }).pipe(
-      catchError(() => of({ nickname: null, profile: null }))
+      catchError(() => of({
+        nickname: '',
+        profile: {
+          bio: '',
+          profilePictureUrl: null, // Use profilePictureUrl
+          favoritePets: [],
+          highlightedPlantations: [],
+          profileId: 0,
+          userId: ''
+        }
+      }))
+    );
+  }
+
+  public updateProfile(profileData: UserProfile): Observable<UserProfile> {
+    const token = localStorage.getItem('authToken');
+    if (!token) {
+      return of({
+        nickname: '',
+        profile: {
+          bio: '',
+          profilePictureUrl: null, // Use profilePictureUrl
+          favoritePets: [],
+          highlightedPlantations: [],
+          profileId: 0,
+          userId: ''
+        }
+      });
+    }
+
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    console.log("Sending profile data:", profileData);
+    return this.http.put<UserProfile>('/api/update-profile', profileData, { headers }).pipe(
+      catchError(() => of({
+        nickname: '',
+        profile: {
+          bio: '',
+          profilePictureUrl: null,
+          favoritePets: [],
+          highlightedPlantations: [],
+          profileId: 0,
+          userId: ''
+        }
+      }))
     );
   }
 }

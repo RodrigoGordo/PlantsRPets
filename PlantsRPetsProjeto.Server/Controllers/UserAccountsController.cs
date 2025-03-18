@@ -30,6 +30,9 @@ namespace PlantsRPetsProjeto.Server.Controllers
         private readonly IConfiguration _configuration;
         private readonly IEmailService _emailService;
         private readonly PlantsRPetsProjetoServerContext _context;
+        private UserManager<User> object1;
+        private IConfiguration object2;
+        private IEmailService object3;
 
         /// <summary>
         /// Inicializa uma nova instância do <see cref="UserAccountsController"/>.
@@ -102,7 +105,6 @@ namespace PlantsRPetsProjeto.Server.Controllers
                 var roles = await _userManager.GetRolesAsync(user);
                 var claims = new List<Claim>
                 {
-                    new Claim("Nickname", user.Nickname),
                     new Claim("UserId", user.Id),
                     new Claim("Email", user.Email),
                 };
@@ -200,7 +202,7 @@ namespace PlantsRPetsProjeto.Server.Controllers
                 return BadRequest(new
                 {
                     message = "Failed to reset password.",
-                    errors = result.Errors.Select(e => e.Description) // Pode ser removido depois (DEBUG)
+                    errors = result.Errors.Select(e => e.Description)
                 });
             }
             catch (Exception ex)
@@ -216,16 +218,31 @@ namespace PlantsRPetsProjeto.Server.Controllers
         {
             try
             {
-                var nickname = User.FindFirstValue("Nickname");
                 var userId = User.FindFirstValue("UserId");
+
+                if (string.IsNullOrEmpty(userId))
+                {
+                    return Unauthorized(new { message = "User not authenticated." });
+                }
 
                 var profile = _context.Profile
                     .FirstOrDefault(p => p.UserId == userId);
 
-                if (string.IsNullOrEmpty(nickname))
+                if (profile == null)
                 {
-                    return Unauthorized(new { message = "User not authenticated." });
+                    return NotFound(new { message = "Profile not found." });
                 }
+
+                var user = _context.Users
+                    .FirstOrDefault(u => u.Id == userId);
+
+                if (user == null)
+                {
+                    return NotFound(new { message = "User not found." });
+                }
+
+                var nickname = user.Nickname;
+
                 return Ok(new
                 {
                     nickname,

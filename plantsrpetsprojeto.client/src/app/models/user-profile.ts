@@ -1,8 +1,11 @@
 export interface UserProfile {
-  nickname: string | null;
+  nickname: string;
   profile: {
     bio: string;
-    profilePictureUrl: string;
-    dateOfBirth?: Date;
-  } | null;
+    profilePictureUrl: string | null;
+    favoritePets: number[];
+    highlightedPlantations: number[];
+    profileId: number;
+    userId: string;
+  };
 }

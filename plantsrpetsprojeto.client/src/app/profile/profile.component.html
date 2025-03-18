@@ -1,41 +1,61 @@
 <body>
   <app-navbar></app-navbar>
-    <app-navbar></app-navbar>
-    <div class="profile-container">
-      <div *ngIf="nickname" class="profile-header">
-        <h1>{{ nickname }}</h1>
-        <div *ngIf="profile" class="profile-details">
-          <div class="profile-picture">
-            <img *ngIf="profile.profilePictureUrl" [src]="profile.profilePictureUrl" alt="Profile Picture">
-          </div>
-          <div class="profile-bio">
-            <p>{{ profile.bio }}</p>
-          </div>
-        </div>
-      </div>
-
-      <div *ngIf="!nickname">
-        <p>No profile data found.</p>
-      </div>
-
-      <!-- Favorite Pets Section -->
-      <div *ngIf="profile?.favoritePets?.length" class="scrollable-section">
-        <h2>Favorite Pets</h2>
-        <div class="scrollable-list">
-          <div *ngFor="let pet of profile.favoritePets" class="list-item">
-            {{ pet }}
-          </div>
-        </div>
-      </div>
-
-      <!-- Highlighted Plantations Section -->
-      <div *ngIf="profile?.highlightedPlantations?.length" class="scrollable-section">
-        <h2>Highlighted Plantations</h2>
-        <div class="scrollable-list">
-          <div *ngFor="let plantation of profile.highlightedPlantations" class="list-item">
-            {{ plantation }}
-          </div>
-        </div>
+  <div class="profile-container">
+    <div class="profile-header">
+      <h1 class="nickname" *ngIf="!isEditing; else editNickname">
+        {{ profile.nickname || 'No nickname' }}
+      </h1>
+      <ng-template #editNickname>
+        <input [(ngModel)]="profile.nickname" class="edit-input" placeholder="Enter your nickname">
+      </ng-template>
+      <div class="profile-actions">
+        <button class="edit-profile-btn" (click)="toggleEdit()">
+          <i class="fas fa-edit"></i> {{ isEditing ? 'Save' : 'Edit Profile' }}
+        </button>
       </div>
     </div>
+
+    <div class="profile-info">
+      <div class="profile-picture">
+        <img [src]="profile.profile.profilePictureUrl || 'assets/logo.png'" alt="Profile Picture">
+        <button *ngIf="isEditing" class="upload-button" (click)="triggerFileUpload()">
+          <i class="fas fa-camera"></i>
+        </button>
+        <input type="file" id="file-upload" style="display: none;" (change)="onFileSelected($event)">
+      </div>
+
+      <div class="bio">
+        <p *ngIf="!isEditing; else editBio">
+          {{ profile.profile.bio || 'No bio available.' }}
+        </p>
+        <ng-template #editBio>
+          <textarea [(ngModel)]="profile.profile.bio" class="edit-input" placeholder="Enter your bio"></textarea>
+        </ng-template>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Favorite Pets</h2>
+      <div *ngIf="profile.profile.favoritePets && profile.profile.favoritePets.length > 0; else noPets" class="scrollable-list">
+        <div *ngFor="let pet of profile.profile.favoritePets" class="list-item">
+          {{ pet }}
+        </div>
+      </div>
+      <ng-template #noPets>
+        <p>No favorite pets added yet.</p>
+      </ng-template>
+    </div>
+
+    <div class="section">
+      <h2>Highlighted Plantations</h2>
+      <div *ngIf="profile.profile.highlightedPlantations && profile.profile.highlightedPlantations.length > 0; else noPlantations" class="scrollable-list">
+        <div *ngFor="let plantation of profile.profile.highlightedPlantations" class="list-item">
+          {{ plantation }}
+        </div>
+      </div>
+      <ng-template #noPlantations>
+        <p>No highlighted plantations added yet.</p>
+      </ng-template>
+    </div>
+  </div>
 </body>

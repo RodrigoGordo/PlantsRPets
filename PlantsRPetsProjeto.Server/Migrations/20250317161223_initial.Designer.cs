@@ -12,7 +12,7 @@ using PlantsRPetsProjeto.Server.Data;
 namespace PlantsRPetsProjeto.Server.Migrations
 {
     [DbContext(typeof(PlantsRPetsProjetoServerContext))]
-    [Migration("20250316011110_initial")]
+    [Migration("20250317161223_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -374,9 +374,6 @@ namespace PlantsRPetsProjeto.Server.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ProfileId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Type")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -385,8 +382,6 @@ namespace PlantsRPetsProjeto.Server.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("PetId");
-
-                    b.HasIndex("ProfileId");
 
                     b.HasIndex("UserId");
 
@@ -551,17 +546,12 @@ namespace PlantsRPetsProjeto.Server.Migrations
                     b.Property<DateTime>("PlantingDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("ProfileId")
-                        .HasColumnType("int");
-
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("PlantationId");
 
                     b.HasIndex("PlantTypeId");
-
-                    b.HasIndex("ProfileId");
 
                     b.HasIndex("UserId");
 
@@ -603,6 +593,12 @@ namespace PlantsRPetsProjeto.Server.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProfileId"));
 
                     b.Property<string>("Bio")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.PrimitiveCollection<string>("FavoritePets")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.PrimitiveCollection<string>("HighlightedPlantations")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ProfilePicture")
@@ -932,10 +928,6 @@ namespace PlantsRPetsProjeto.Server.Migrations
 
             modelBuilder.Entity("PlantsRPetsProjeto.Server.Models.Pet", b =>
                 {
-                    b.HasOne("PlantsRPetsProjeto.Server.Models.Profile", null)
-                        .WithMany("FavoritePets")
-                        .HasForeignKey("ProfileId");
-
                     b.HasOne("PlantsRPetsProjeto.Server.Models.User", null)
                         .WithMany("Pets")
                         .HasForeignKey("UserId");
@@ -957,10 +949,6 @@ namespace PlantsRPetsProjeto.Server.Migrations
                         .HasForeignKey("PlantTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("PlantsRPetsProjeto.Server.Models.Profile", null)
-                        .WithMany("HighlightedPlantations")
-                        .HasForeignKey("ProfileId");
 
                     b.HasOne("PlantsRPetsProjeto.Server.Models.User", null)
                         .WithMany("Plantations")
@@ -1024,13 +1012,6 @@ namespace PlantsRPetsProjeto.Server.Migrations
             modelBuilder.Entity("PlantsRPetsProjeto.Server.Models.Plantation", b =>
                 {
                     b.Navigation("PlantationPlants");
-                });
-
-            modelBuilder.Entity("PlantsRPetsProjeto.Server.Models.Profile", b =>
-                {
-                    b.Navigation("FavoritePets");
-
-                    b.Navigation("HighlightedPlantations");
                 });
 
             modelBuilder.Entity("PlantsRPetsProjeto.Server.Models.SustainabilityTipsList", b =>

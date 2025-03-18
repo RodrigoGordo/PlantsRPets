@@ -24,27 +24,6 @@ namespace PlantsRPetsProjeto.Server.Controllers
             _userManager = userManager;
         }
 
-        [HttpGet]
-        [Authorize]
-        public async Task<IActionResult> GetProfile()
-        {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (string.IsNullOrEmpty(userId))
-            {
-                return Unauthorized(new { message = "User not authenticated." });
-            }
-
-            var profile = await _context.Profile
-                .FirstOrDefaultAsync(p => p.UserId == userId);
-
-            if (profile == null)
-            {
-                return NotFound(new { message = "Profile not found." });
-            }
-
-            return Ok(profile);
-        }
-
         [HttpPut]
         [Authorize]
         [Route("api/update-profile")]
@@ -58,29 +37,40 @@ namespace PlantsRPetsProjeto.Server.Controllers
                 return Unauthorized(new { message = "User not authenticated." });
             }
 
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+            if (user == null)
+            {
+                return NotFound(new { message = "User not found." });
+            }
+
             var profile = await _context.Profile
                 .FirstOrDefaultAsync(p => p.UserId == userId);
-
             if (profile == null)
             {
                 return NotFound(new { message = "Profile not found." });
+            }
+
+            Console.WriteLine("UpdateProfile Model: " + JsonConvert.SerializeObject(model));
+
+            if (model.Nickname != null)
+            {
+                user.Nickname = model.Nickname;
+                _context.Users.Update(user);
+                await _context.SaveChangesAsync();
             }
 
             if (model.Bio != null)
             {
                 profile.Bio = model.Bio;
             }
-
             if (model.ProfilePictureUrl != null)
             {
                 profile.ProfilePicture = model.ProfilePictureUrl;
             }
-
             if (model.FavoritePets != null)
             {
                 profile.FavoritePets = model.FavoritePets;
             }
-
             if (model.HighlightedPlantations != null)
             {
                 profile.HighlightedPlantations = model.HighlightedPlantations;
@@ -98,9 +88,10 @@ namespace PlantsRPetsProjeto.Server.Controllers
 
     public class UpdateProfileModel
     {
-        public string Bio { get; set; }
-        public string ProfilePictureUrl { get; set; }
-        public ICollection<Pet>? FavoritePets { get; set; }
-        public ICollection<Plantation>? HighlightedPlantations { get; set; }
+        public string? Nickname { get; set; }
+        public string? Bio { get; set; }
+        public string? ProfilePictureUrl { get; set; }
+        public ICollection<int>? FavoritePets { get; set; }
+        public ICollection<int>? HighlightedPlantations { get; set; }
     }
 }

@@ -8,8 +8,8 @@
 
         public string? ProfilePicture { get; set; }
 
-        public ICollection<Pet>? FavoritePets { get; set; }
+        public ICollection<int>? FavoritePets { get; set; }
 
-        public ICollection<Plantation>? HighlightedPlantations { get; set; }
+        public ICollection<int>? HighlightedPlantations { get; set; }
     }
 }
