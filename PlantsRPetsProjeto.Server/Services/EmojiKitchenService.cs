@@ -13,7 +13,7 @@ namespace PlantsRPetsProjeto.Server.Services
             _httpClient = httpClient;
         }
 
-        public async Task<string> GeneratePetImageAsync(string emoji1, string emoji2, int size = 128)
+        public async Task<string> GeneratePetImageAsync(string emoji1, string emoji2, int size = 256)
         {
             string url = $"https://emojik.vercel.app/s/{emoji1}_{emoji2}?size={size}";
 
