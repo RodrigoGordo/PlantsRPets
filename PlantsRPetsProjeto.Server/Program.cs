@@ -138,6 +138,7 @@ using (var scope = app.Services.CreateScope())
     //await PlantSeeder.SeedPlants(context);
     //await TipSeeder.SeedSustainabilityTips(context);
     await petSeeder.SeedAsync();
+
 }
 
 

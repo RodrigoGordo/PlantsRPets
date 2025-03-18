@@ -1,19 +1,19 @@
-import { HttpClient, HttpErrorResponse, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, Subject, catchError, map, of } from 'rxjs';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { BehaviorSubject, Observable, of } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 import { UserInfo } from './authorize.dto';
-
+import { UserProfile } from './models/user-profile';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AuthorizeService {  
-
+export class AuthorizeService {
   private _authStateChanged: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(this.hasToken());
 
   constructor(private http: HttpClient) { }
 
-  public onStateChanged() {
+  public onStateChanged(): Observable<boolean> {
     return this._authStateChanged.asObservable();
   }
 
@@ -65,7 +65,7 @@ export class AuthorizeService {
     return this.hasToken();
   }
 
-  public user() {
+  public user(): Observable<UserInfo> {
     return this.http.get<UserInfo>('/manage/info', {
       withCredentials: true
     }).pipe(
@@ -83,6 +83,84 @@ export class AuthorizeService {
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
     return this.http.get<UserInfo>('/api/userinfo', { headers }).pipe(
       catchError(() => of({} as UserInfo))
+    );
+  }
+
+  public getUserProfile(): Observable<UserProfile> {
+    const token = localStorage.getItem('authToken');
+    if (!token) {
+      return of({
+        nickname: '',
+        profile: {
+          bio: '',
+          profilePicture: null,
+          favoritePets: [],
+          highlightedPlantations: [],
+          profileId: 0,
+          userId: ''
+        }
+      });
+    }
+
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http.get<UserProfile>('/api/user-profile', { headers }).pipe(
+      catchError(() => of({
+        nickname: '',
+        profile: {
+          bio: '',
+          profilePicture: null,
+          favoritePets: [],
+          highlightedPlantations: [],
+          profileId: 0,
+          userId: ''
+        }
+      }))
+    );
+  }
+
+  public updateProfile(profileData: UserProfile, file: File | null): Observable<UserProfile> {
+    const token = localStorage.getItem('authToken');
+    if (!token) {
+      return of({
+        nickname: '',
+        profile: {
+          bio: '',
+          profilePicture: null,
+          favoritePets: [],
+          highlightedPlantations: [],
+          profileId: 0,
+          userId: ''
+        }
+      });
+    }
+
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
+    // Create a FormData object to send the file and other profile data
+    const formData = new FormData();
+    formData.append('Nickname', profileData.nickname);
+    formData.append('Bio', profileData.profile.bio);
+    if (file) {
+      formData.append('ProfilePicture', file);
+    }
+    formData.append('FavoritePets', JSON.stringify(profileData.profile.favoritePets));
+    formData.append('HighlightedPlantations', JSON.stringify(profileData.profile.highlightedPlantations));
+
+    console.log("Sending profile data:", formData); // Log the data being sent
+
+    // Do NOT set the Content-Type header manually
+    return this.http.put<UserProfile>('/api/update-profile', formData, { headers }).pipe(
+      catchError(() => of({
+        nickname: '',
+        profile: {
+          bio: '',
+          profilePicture: null,
+          favoritePets: [],
+          highlightedPlantations: [],
+          profileId: 0,
+          userId: ''
+        }
+      }))
     );
   }
 }

@@ -7,7 +7,7 @@ import { Tip } from '../app/models/tip-model';
   providedIn: 'root'
 })
 export class TipService {
-  private apiUrl = 'api/SustainabilityTips'; // Replace with your API endpoint
+  private apiUrl = 'api/SustainabilityTips';
 
   constructor(private http: HttpClient) { }
 
