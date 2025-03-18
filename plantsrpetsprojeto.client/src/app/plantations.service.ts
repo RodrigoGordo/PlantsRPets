@@ -7,7 +7,7 @@ import { PlantInfo } from './models/plant-info';
   providedIn: 'root'
 })
 export class PlantationsService {
-  private apiUrl = 'https://localhost:7024/api/plantations';
+  private apiUrl = 'api/plantations';
 
   constructor(private http: HttpClient) { }
 

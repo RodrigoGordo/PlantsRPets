@@ -194,7 +194,13 @@ namespace PlantsRPetsProjeto.Server.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CollectionId"));
 
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("CollectionId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Collection");
                 });
@@ -211,6 +217,9 @@ namespace PlantsRPetsProjeto.Server.Migrations
                         .HasColumnType("int");
 
                     b.Property<bool>("IsFavorite")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsOwned")
                         .HasColumnType("bit");
 
                     b.Property<int>("PetId")
@@ -364,6 +373,10 @@ namespace PlantsRPetsProjeto.Server.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Details")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImageUrl")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -883,6 +896,17 @@ namespace PlantsRPetsProjeto.Server.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("PlantsRPetsProjeto.Server.Models.Collection", b =>
+                {
+                    b.HasOne("PlantsRPetsProjeto.Server.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("PlantsRPetsProjeto.Server.Models.CollectionPets", b =>
