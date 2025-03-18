@@ -93,7 +93,7 @@ export class AuthorizeService {
         nickname: '',
         profile: {
           bio: '',
-          profilePictureUrl: null, // Use profilePictureUrl
+          profilePicture: null,
           favoritePets: [],
           highlightedPlantations: [],
           profileId: 0,
@@ -108,7 +108,7 @@ export class AuthorizeService {
         nickname: '',
         profile: {
           bio: '',
-          profilePictureUrl: null, // Use profilePictureUrl
+          profilePicture: null,
           favoritePets: [],
           highlightedPlantations: [],
           profileId: 0,
@@ -118,14 +118,14 @@ export class AuthorizeService {
     );
   }
 
-  public updateProfile(profileData: UserProfile): Observable<UserProfile> {
+  public updateProfile(profileData: UserProfile, file: File | null): Observable<UserProfile> {
     const token = localStorage.getItem('authToken');
     if (!token) {
       return of({
         nickname: '',
         profile: {
           bio: '',
-          profilePictureUrl: null, // Use profilePictureUrl
+          profilePicture: null,
           favoritePets: [],
           highlightedPlantations: [],
           profileId: 0,
@@ -135,13 +135,26 @@ export class AuthorizeService {
     }
 
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    console.log("Sending profile data:", profileData);
-    return this.http.put<UserProfile>('/api/update-profile', profileData, { headers }).pipe(
+
+    // Create a FormData object to send the file and other profile data
+    const formData = new FormData();
+    formData.append('Nickname', profileData.nickname);
+    formData.append('Bio', profileData.profile.bio);
+    if (file) {
+      formData.append('ProfilePicture', file);
+    }
+    formData.append('FavoritePets', JSON.stringify(profileData.profile.favoritePets));
+    formData.append('HighlightedPlantations', JSON.stringify(profileData.profile.highlightedPlantations));
+
+    console.log("Sending profile data:", formData); // Log the data being sent
+
+    // Do NOT set the Content-Type header manually
+    return this.http.put<UserProfile>('/api/update-profile', formData, { headers }).pipe(
       catchError(() => of({
         nickname: '',
         profile: {
           bio: '',
-          profilePictureUrl: null,
+          profilePicture: null,
           favoritePets: [],
           highlightedPlantations: [],
           profileId: 0,

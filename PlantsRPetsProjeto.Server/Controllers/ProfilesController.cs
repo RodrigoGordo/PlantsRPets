@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-
+﻿using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -27,13 +23,11 @@ namespace PlantsRPetsProjeto.Server.Controllers
         [HttpPut]
         [Authorize]
         [Route("api/update-profile")]
-        public async Task<IActionResult> UpdateProfile([FromBody] UpdateProfileModel model)
+        public async Task<IActionResult> UpdateProfile([FromForm] UpdateProfileModel model)
         {
             var userId = User.FindFirstValue("UserId");
             if (string.IsNullOrEmpty(userId))
             {
-                var claims = User.Claims.Select(c => new { c.Type, c.Value }).ToList();
-                Console.WriteLine("Claims: " + JsonConvert.SerializeObject(claims));
                 return Unauthorized(new { message = "User not authenticated." });
             }
 
@@ -45,6 +39,7 @@ namespace PlantsRPetsProjeto.Server.Controllers
 
             var profile = await _context.Profile
                 .FirstOrDefaultAsync(p => p.UserId == userId);
+
             if (profile == null)
             {
                 return NotFound(new { message = "Profile not found." });
@@ -63,14 +58,18 @@ namespace PlantsRPetsProjeto.Server.Controllers
             {
                 profile.Bio = model.Bio;
             }
-            if (model.ProfilePictureUrl != null)
+
+            if (model.ProfilePicture != null)
             {
-                profile.ProfilePicture = model.ProfilePictureUrl;
+                var filePath = await SaveProfilePicture(model.ProfilePicture);
+                profile.ProfilePicture = filePath;
             }
+
             if (model.FavoritePets != null)
             {
                 profile.FavoritePets = model.FavoritePets;
             }
+
             if (model.HighlightedPlantations != null)
             {
                 profile.HighlightedPlantations = model.HighlightedPlantations;
@@ -82,16 +81,32 @@ namespace PlantsRPetsProjeto.Server.Controllers
             return Ok(profile);
         }
 
+        private async Task<string> SaveProfilePicture(IFormFile file)
+        {
+            var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads");
+            if (!Directory.Exists(uploadsFolder))
+            {
+                Directory.CreateDirectory(uploadsFolder);
+            }
 
+            var uniqueFileName = Guid.NewGuid().ToString() + "_" + file.FileName;
+            var filePath = Path.Combine(uploadsFolder, uniqueFileName);
 
-    }
+            using (var fileStream = new FileStream(filePath, FileMode.Create))
+            {
+                await file.CopyToAsync(fileStream);
+            }
 
-    public class UpdateProfileModel
-    {
-        public string? Nickname { get; set; }
-        public string? Bio { get; set; }
-        public string? ProfilePictureUrl { get; set; }
-        public ICollection<int>? FavoritePets { get; set; }
-        public ICollection<int>? HighlightedPlantations { get; set; }
+            return Path.Combine("uploads", uniqueFileName);
+        }
+
+        public class UpdateProfileModel
+        {
+            public string? Nickname { get; set; }
+            public string? Bio { get; set; }
+            public IFormFile? ProfilePicture { get; set; }
+            public ICollection<int>? FavoritePets { get; set; }
+            public ICollection<int>? HighlightedPlantations { get; set; }
+        }
     }
 }

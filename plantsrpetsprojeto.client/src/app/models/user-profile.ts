@@ -2,7 +2,7 @@ export interface UserProfile {
   nickname: string;
   profile: {
     bio: string;
-    profilePictureUrl: string | null;
+    profilePicture: string | null;
     favoritePets: number[];
     highlightedPlantations: number[];
     profileId: number;
