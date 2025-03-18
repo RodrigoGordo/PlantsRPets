@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Globalization;
 using System.Linq;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Authorization;
@@ -45,64 +46,6 @@ namespace PlantsRPetsProjeto.Server.Controllers
             return Ok(plant);
         }
 
-        //[HttpPost]
-        //[Authorize(Roles = "Admin")]
-        //public async Task<ActionResult<PlantInfo>> CreatePlant([FromBody] CreatePlantModel model)
-        //{
-        //    if (!ModelState.IsValid)
-        //        return BadRequest(ModelState);
-
-        //    var plant = new PlantInfo
-        //    {
-        //        PlantName = model.PlantName,
-        //        Type = model.Type,
-        //        GrowthTime = model.GrowthTime,
-        //        WaterFrequency = model.WaterFrequency
-        //    };
-
-        //    _context.PlantInfo.Add(plant);
-        //    await _context.SaveChangesAsync();
-
-        //    return CreatedAtAction(nameof(GetPlant), new { id = plant.PlantId }, plant);
-        //}
-
-        //[HttpPut("{id}")]
-        //[Authorize(Roles = "Admin")]
-        //public async Task<IActionResult> UpdatePlant(int id, [FromBody] UpdatePlantModel model)
-        //{
-        //    if (!ModelState.IsValid)
-        //        return BadRequest(ModelState);
-
-        //    var existingPlant = await _context.PlantInfo.FindAsync(id);
-        //    if (existingPlant == null)
-        //        return NotFound(new { message = "Plant not found." });
-
-        //    if (model.PlantName != null)
-        //        existingPlant.PlantName = model.PlantName;
-
-        //    if (!model.Type.IsNullOrEmpty())
-        //        existingPlant.Type = model.Type;
-
-        //    if (model.GrowthTime.HasValue)
-        //        existingPlant.GrowthTime = model.GrowthTime.Value;
-
-        //    if (model.WaterFrequency.HasValue)
-        //        existingPlant.WaterFrequency = model.WaterFrequency.Value;
-
-        //    _context.Entry(existingPlant).State = EntityState.Modified;
-
-        //    try
-        //    {
-        //        await _context.SaveChangesAsync();
-        //    }
-        //    catch (DbUpdateConcurrencyException)
-        //    {
-        //        return Conflict(new { message = "Conflict updating plant, please try again." });
-        //    }
-
-        //    return NoContent();
-        //}
-
         [HttpDelete("{id}")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeletePlant(int id)
@@ -115,6 +58,30 @@ namespace PlantsRPetsProjeto.Server.Controllers
             await _context.SaveChangesAsync();
 
             return Ok(new { message = "Plant deleted successfully." });
+        }
+
+        [HttpGet("check-planting-period/{id}")]
+        public async Task<IActionResult> CheckPlantingPeriod(int id)
+        {
+            var plant = await _context.PlantInfo.FindAsync(id);
+            if (plant == null)
+                return NotFound(new { message = "Plant not found." });
+
+            Console.WriteLine($"HarvestSeason: {plant.HarvestSeason}");
+            Console.WriteLine($"PruningMonths: {string.Join(",", plant.PruningMonth)}");
+
+            var isIdeal = PlantingAdvisor.IsIdealPlantingTime(plant);
+
+            var idealMonths = PlantingAdvisor.GetIdealPlantingMonths(plant)
+                                             .Select(m => CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(m))
+                                             .ToList();
+
+            return Ok(new
+            {
+                isIdealTime = isIdeal,
+                currentMonth = DateTime.UtcNow.ToString("MMMM"),
+                idealMonths
+            });
         }
 
         [HttpGet("fetch-range/{startId}/{maxId}")]

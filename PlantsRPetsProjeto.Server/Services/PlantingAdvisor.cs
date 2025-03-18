@@ -1,22 +1,21 @@
-﻿using System.Globalization;
+﻿using PlantsRPetsProjeto.Server.Models;
+using System.Globalization;
 
 namespace PlantsRPetsProjeto.Server.Services
 {
     public class PlantingAdvisor
     {
-        // Tabela para tempos de crescimento (em meses) por tipo e growthRate
         private static readonly Dictionary<string, Dictionary<string, int>> GrowthTable = new()
-    {
-        { "tree", new() { { "High", 24 }, { "Moderate", 36 }, { "Low", 48 } } },
-        { "flower", new() { { "High", 3 }, { "Moderate", 6 }, { "Low", 9 } } },
-        { "herb", new() { { "High", 2 }, { "Moderate", 4 }, { "Low", 6 } } },
-        { "succulent", new() { { "High", 4 }, { "Moderate", 8 }, { "Low", 12 } } },
-        { "shrub", new() { { "High", 6 }, { "Moderate", 12 }, { "Low", 18 } } },
-        { "vegetable", new() { { "High", 2 }, { "Moderate", 4 }, { "Low", 6 } } },
-        { "vine", new() { { "High", 3 }, { "Moderate", 6 }, { "Low", 9 } } }
-    };
+        {
+            { "tree", new() { { "High", 24 }, { "Moderate", 36 }, { "Low", 48 } } },
+            { "flower", new() { { "High", 3 }, { "Moderate", 6 }, { "Low", 9 } } },
+            { "herb", new() { { "High", 2 }, { "Moderate", 4 }, { "Low", 6 } } },
+            { "succulent", new() { { "High", 4 }, { "Moderate", 8 }, { "Low", 12 } } },
+            { "shrub", new() { { "High", 6 }, { "Moderate", 12 }, { "Low", 18 } } },
+            { "vegetable", new() { { "High", 2 }, { "Moderate", 4 }, { "Low", 6 } } },
+            { "vine", new() { { "High", 3 }, { "Moderate", 6 }, { "Low", 9 } } }
+        };
 
-        // Obtém o tempo total de crescimento para uma planta com base no tipo e growthRate
         public static int GetTotalGrowthMonths(string plantType, string growthRate)
         {
             plantType = plantType.ToLower();
@@ -25,28 +24,9 @@ namespace PlantsRPetsProjeto.Server.Services
             if (GrowthTable.TryGetValue(plantType, out var rateMap) && rateMap.TryGetValue(growthRate, out int months))
                 return months;
 
-            // Valor padrão caso não encontrado
             return 6;
         }
 
-        // Calcula os meses ideais de plantação baseado nos meses de colheita e tempo de crescimento
-        public static List<int> CalculateIdealPlantingMonths(List<int> harvestMonths, int growthDurationMonths)
-        {
-            var idealMonths = new List<int>();
-
-            foreach (var harvestMonth in harvestMonths)
-            {
-                int plantingMonth = harvestMonth - growthDurationMonths;
-                if (plantingMonth <= 0)
-                    plantingMonth += 12; // Ajuste para ciclo anual
-
-                idealMonths.Add(plantingMonth);
-            }
-
-            return idealMonths.Distinct().OrderBy(m => m).ToList();
-        }
-
-        // Converte os nomes dos meses da string harvestSeason para inteiros (1 a 12)
         public static List<int> ParseHarvestSeason(string harvestSeason)
         {
             var monthNames = CultureInfo.CurrentCulture.DateTimeFormat.MonthNames;
@@ -61,6 +41,69 @@ namespace PlantsRPetsProjeto.Server.Services
                 .Where(monthsMap.ContainsKey)
                 .Select(m => monthsMap[m])
                 .ToList();
+        }
+
+        private static int ParseMonthToInt(string monthName)
+        {
+            var monthNames = CultureInfo.CurrentCulture.DateTimeFormat.MonthNames;
+            for (int i = 0; i < 12; i++)
+            {
+                if (monthNames[i].Equals(monthName, StringComparison.InvariantCultureIgnoreCase))
+                    return i + 1;
+            }
+            return 0;
+        }
+
+        public static List<int> GetIdealPlantingMonths(PlantInfo plant)
+        {
+            var idealMonths = new List<int>();
+            var monthNames = CultureInfo.CurrentCulture.DateTimeFormat.MonthNames;
+
+            if (!string.IsNullOrWhiteSpace(plant.HarvestSeason))
+            {
+                var harvestMonths = ParseHarvestSeason(plant.HarvestSeason);
+                int growthMonths = GetTotalGrowthMonths(plant.PlantType, plant.GrowthRate);
+
+                foreach (var harvestMonth in harvestMonths)
+                {
+                    int plantingMonth = harvestMonth - growthMonths;
+                    if (plantingMonth <= 0)
+                        plantingMonth += 12;
+
+                    idealMonths.Add(plantingMonth);
+                }
+
+                return idealMonths.Distinct().OrderBy(m => m).ToList();
+            }
+
+            if (plant.PruningMonth != null && plant.PruningMonth.Any())
+            {
+                var pruningMonths = plant.PruningMonth
+                    .Select(pm => ParseMonthToInt(pm))
+                    .Where(m => m != 0)
+                    .ToList();
+
+                if (pruningMonths.Any())
+                {
+                    var adjustedMonths = pruningMonths
+                        .Select(m => m == 1 ? 12 : m - 1)
+                        .Union(pruningMonths)
+                        .Distinct()
+                        .OrderBy(m => m)
+                        .ToList();
+
+                    return adjustedMonths;
+                }
+            }
+
+            return new List<int> { 3, 4, 5 };
+        }
+
+        public static bool IsIdealPlantingTime(PlantInfo plant)
+        {
+            var idealMonths = GetIdealPlantingMonths(plant);
+            int currentMonth = DateTime.UtcNow.Month;
+            return idealMonths.Contains(currentMonth);
         }
     }
 }
