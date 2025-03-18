@@ -54,6 +54,7 @@ builder.Services.AddAuthorization();
 builder.Services.AddTransient<IEmailService, SendGridEmailService>();
 builder.Services.AddHttpClient<WeatherService>();
 builder.Services.AddHttpClient<PlantInfoService>();
+builder.Services.AddHttpClient<PlantingAdvisor>();
 builder.Services.AddHttpClient<SustainabilityTipService>();
 
 
