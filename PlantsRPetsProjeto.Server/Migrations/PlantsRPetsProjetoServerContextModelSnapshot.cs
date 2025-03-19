@@ -521,16 +521,6 @@ namespace PlantsRPetsProjeto.Server.Migrations
                     b.Property<int>("ExperiencePoints")
                         .HasColumnType("int");
 
-                    b.Property<string>("GrowthStatus")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("HarvestDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("LastWatered")
-                        .HasColumnType("datetime2");
-
                     b.Property<int>("Level")
                         .HasColumnType("int");
 
@@ -573,11 +563,24 @@ namespace PlantsRPetsProjeto.Server.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PlantationPlantsId"));
 
+                    b.Property<string>("GrowthStatus")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("HarvestDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("LastWatered")
+                        .HasColumnType("datetime2");
+
                     b.Property<int>("PlantInfoId")
                         .HasColumnType("int");
 
                     b.Property<int>("PlantationId")
                         .HasColumnType("int");
+
+                    b.Property<DateTime>("PlantingDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");

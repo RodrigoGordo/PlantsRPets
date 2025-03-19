@@ -47,6 +47,9 @@ import { SunlightFormatPipe } from './sunlight-format.pipe';
 import { PlantationDetailsComponent } from './plantation-details/plantation-details.component';
 import { AddPlantComponent } from './add-plant/add-plant.component';
 import { PlantFilterComponent } from './plant-filter/plant-filter.component';
+import { PlantationPlantCardComponent } from './plantation-plant-card/plantation-plant-card.component';
+import { PlantationPlantDetailsComponent } from './plantation-plant-details/plantation-plant-details.component';
+import { FormatDatePipe } from './format-date.pipe';
 
 
 @NgModule({
@@ -84,6 +87,9 @@ import { PlantFilterComponent } from './plant-filter/plant-filter.component';
     PlantationDetailsComponent,
     AddPlantComponent,
     PlantFilterComponent,
+    PlantationPlantCardComponent,
+    PlantationPlantDetailsComponent,
+    FormatDatePipe,
   ],
   imports: [
     BrowserModule,

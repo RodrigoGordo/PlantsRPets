@@ -1,7 +1,13 @@
 import { PlantInfo } from "./plant-info";
 
 export interface PlantationPlant {
+  plantationPlantsId: number;
+  plantationId: number;
   plantInfoId: number;
-  quantity: number;
   referencePlant: PlantInfo;
+  quantity: number;
+  plantingDate: Date;
+  lastWatered: Date | null;
+  harvestDate: Date | null;
+  growthStatus: string;
 }

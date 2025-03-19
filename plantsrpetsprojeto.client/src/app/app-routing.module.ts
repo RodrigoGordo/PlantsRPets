@@ -19,6 +19,8 @@ import { HomeComponent } from './home/home.component';
 import { WikiComponent } from './wiki/wiki.component';
 import { PlantInfoPageComponent } from './plant-info-page/plant-info-page.component';
 import { PlantationDetailsComponent } from './plantation-details/plantation-details.component';
+import { PlantationPlantDetailsComponent } from './plantation-plant-details/plantation-plant-details.component';
+/*import { PlantationPlantDetailsComponent } from './plantation-plant-details/plantation-plant-details.component';*/
 
 
 const routes: Routes = [
@@ -42,6 +44,7 @@ const routes: Routes = [
   { path: 'wiki', component: WikiComponent },
   { path: 'plant-information/:id', component: PlantInfoPageComponent },
   { path: 'plants/:id', component: PlantInfoPageComponent },
+  { path: 'plantation/:plantationId/plant/:plantInfoId', component: PlantationPlantDetailsComponent },
   { path: '**', redirectTo: '' },
 ];
 

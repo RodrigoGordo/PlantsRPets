@@ -1,0 +1,67 @@
+<body>
+  <app-navbar></app-navbar>
+
+  <main class="plant-details-container">
+    <div *ngIf="errorMessage" class="error-state">
+      ❌ {{ errorMessage }}
+    </div>
+
+    <!-- Back Arrow -->
+    <button class="back-button" (click)="goBack()">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+        <path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z" />
+      </svg>
+    </button>
+
+    <div *ngIf="plantationPlant.referencePlant && !isLoading" class="plant-content-wrapper">
+      <!-- Left Column -->
+      <div class="left-column">
+        <img [src]="plantationPlant.referencePlant.image" [alt]="plantationPlant.referencePlant.plantName" class="plant-image">
+        <button class="harvest-button">Harvest</button>
+        <button class="water-button">Water</button>
+      </div>
+
+      <!-- Right Column -->
+      <div class="right-column">
+        <header class="plant-header">
+          <h1>{{ plantationPlant.referencePlant.plantName | uppercase }}</h1>
+          <h2 class="scientific-name">
+            <em>{{ plantationPlant.referencePlant.scientificName[0] }}</em>
+          </h2>
+        </header>
+
+        <section class="description-section">
+          <p class="plant-description">{{ plantationPlant.referencePlant.description }}</p>
+        </section>
+
+        <div class="attributes-grid">
+          <!-- Left Attributes -->
+          <div class="attributes-column">
+            <div class="attribute-item">
+              <span class="attribute-label">Quantity:</span>
+              {{ plantationPlant.quantity }}
+            </div>
+            <div class="attribute-item">
+              <span class="attribute-label">Planting Date:</span>
+              {{ plantationPlant.plantingDate | formatDate }}
+            </div>
+          </div>
+
+          <!-- Right Attributes -->
+          <div class="attributes-column">
+            <div class="attribute-item">
+              <span class="attribute-label">Last Watered:</span>
+              {{ plantationPlant.lastWatered | formatDate }}
+            </div>
+            <div class="attribute-item">
+              <span class="attribute-label">Growth Status:</span>
+              {{ plantationPlant.growthStatus }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</body>
+
+

@@ -8,5 +8,9 @@
         public int PlantInfoId { get; set; }
         public virtual PlantInfo ReferencePlant { get; set; }
         public int Quantity { get; set; }
+        public DateTime PlantingDate { get; set; }
+        public DateTime? LastWatered { get; set; }
+        public DateTime? HarvestDate { get; set; }
+        public string GrowthStatus { get; set; }
     }
 }

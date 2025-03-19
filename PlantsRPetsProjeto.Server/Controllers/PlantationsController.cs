@@ -46,9 +46,6 @@ namespace PlantsRPetsProjeto.Server.Controllers
                         plantation.PlantTypeId,
                         plantType.PlantTypeName,
                         plantation.PlantingDate,
-                        plantation.LastWatered,
-                        plantation.HarvestDate,
-                        plantation.GrowthStatus,
                         plantation.ExperiencePoints,
                         plantation.Level
                     }
@@ -75,9 +72,6 @@ namespace PlantsRPetsProjeto.Server.Controllers
                         plantation.PlantTypeId,
                         plantType.PlantTypeName,
                         plantation.PlantingDate,
-                        plantation.LastWatered,
-                        plantation.HarvestDate,
-                        plantation.GrowthStatus,
                         plantation.ExperiencePoints,
                         plantation.Level
                     }
@@ -110,12 +104,9 @@ namespace PlantsRPetsProjeto.Server.Controllers
                 PlantationName = model.PlantationName,
                 PlantTypeId = model.PlantTypeId,
                 PlantingDate = DateTime.UtcNow,
-                LastWatered = DateTime.UtcNow,
-                GrowthStatus = "Growing",
                 ExperiencePoints = 0,
                 Level = 1,
-                PlantationPlants = [],
-                HarvestDate = DateTime.UtcNow
+                PlantationPlants = []
             };
 
             _context.Plantation.Add(plantation);
@@ -149,15 +140,6 @@ namespace PlantsRPetsProjeto.Server.Controllers
 
                 existingPlantation.PlantTypeId = model.PlantTypeId.Value;
             }
-
-            if (model.LastWatered.HasValue)
-                existingPlantation.LastWatered = model.LastWatered.Value;
-
-            if (model.HarvestDate.HasValue)
-                existingPlantation.HarvestDate = model.HarvestDate.Value;
-
-            if (model.GrowthStatus != null)
-                existingPlantation.GrowthStatus = model.GrowthStatus;
 
             if (model.ExperiencePoints.HasValue)
                 existingPlantation.ExperiencePoints = model.ExperiencePoints.Value;
@@ -240,7 +222,11 @@ namespace PlantsRPetsProjeto.Server.Controllers
                 {
                     PlantationId = plantationId,
                     PlantInfoId = model.PlantInfoId,
-                    Quantity = model.Quantity
+                    Quantity = model.Quantity,
+                    GrowthStatus = "Growing",
+                    PlantingDate = DateTime.Now,
+                    LastWatered = null,
+                    HarvestDate = null,
                 };
 
                 _context.PlantationPlants.Add(plantationPlant);
@@ -297,6 +283,42 @@ namespace PlantsRPetsProjeto.Server.Controllers
                 .ToListAsync();
 
             return Ok(plants);
+        }
+
+        [HttpGet("{plantationId}/plant/{plantInfoId}")]
+        public async Task<ActionResult<PlantationPlants>> GetPlantInPlantation(int plantationId, int plantInfoId)
+        {
+            var plant = await _context.PlantationPlants
+                .Include(pp => pp.ReferencePlant)
+                .FirstOrDefaultAsync(pp =>
+                    pp.PlantationId == plantationId &&
+                    pp.PlantInfoId == plantInfoId
+                );
+
+            if (plant == null) return NotFound();
+            return Ok(plant);
+        }
+
+        [HttpPost("{plantationId}/water-plant/{plantId}")]
+        public async Task<IActionResult> WaterPlant(int plantationId, int plantId)
+        {
+            var plantationPlant = await _context.PlantationPlants
+                .FirstOrDefaultAsync(pp => pp.PlantationId == plantationId && pp.PlantInfoId == plantId);
+
+            if (plantationPlant == null)
+                return NotFound("Plant not found in plantation");
+
+            plantationPlant.LastWatered = DateTime.UtcNow;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+                return Ok(plantationPlant);
+            }
+            catch (DbUpdateException)
+            {
+                return StatusCode(500, "Error updating watering time");
+            }
         }
 
     }
