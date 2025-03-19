@@ -48,6 +48,9 @@ import { PlantationDetailsComponent } from './plantation-details/plantation-deta
 import { AddPlantComponent } from './add-plant/add-plant.component';
 import { PlantFilterComponent } from './plant-filter/plant-filter.component';
 import { PetDetailsComponent } from './pet-details/pet-details.component';
+import { PlantationPlantCardComponent } from './plantation-plant-card/plantation-plant-card.component';
+import { PlantationPlantDetailsComponent } from './plantation-plant-details/plantation-plant-details.component';
+import { FormatDatePipe } from './format-date.pipe';
 
 @NgModule({
   declarations: [
@@ -85,6 +88,9 @@ import { PetDetailsComponent } from './pet-details/pet-details.component';
     AddPlantComponent,
     PlantFilterComponent,
     PetDetailsComponent,
+    PlantationPlantCardComponent,
+    PlantationPlantDetailsComponent,
+    FormatDatePipe,
   ],
   imports: [
     BrowserModule,

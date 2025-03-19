@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { PlantInfo } from './models/plant-info';
+import { PlantationPlant } from './models/plantation-plant';
+import { Plantation } from './models/plantation.model'; 
 
 @Injectable({
   providedIn: 'root'
@@ -46,4 +48,14 @@ export class PlantationsService {
   deletePlantation(id: number): Observable<any> {
     return this.http.delete(`${this.apiUrl}/${id}`);
   }
+
+  getPlantationPlantById(plantationId: number, plantInfoId: number): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/${plantationId}/plant/${plantInfoId}`);
+  }
+
+  waterPlant(plantationId: number, plantInfoId: number): Observable<PlantationPlant> {
+    return this.http.post<PlantationPlant>(
+      `${this.apiUrl}/${plantationId}/water-plant/${plantInfoId}`, {});
+  }
+
 }
