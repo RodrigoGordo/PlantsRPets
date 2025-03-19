@@ -153,6 +153,7 @@ export class PlantationPlantDetailsComponent implements OnInit {
         next: (updatedPlant) => {
           if (this.plantationPlant) {
             this.plantationPlant.lastWatered = updatedPlant.lastWatered;
+            this.updateCooldownStatus();
           }
 
         },
