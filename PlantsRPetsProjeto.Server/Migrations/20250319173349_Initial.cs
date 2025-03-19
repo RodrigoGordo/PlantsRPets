@@ -414,9 +414,6 @@ namespace PlantsRPetsProjeto.Server.Migrations
                     PlantationName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PlantTypeId = table.Column<int>(type: "int", nullable: false),
                     PlantingDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    LastWatered = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    HarvestDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    GrowthStatus = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ExperiencePoints = table.Column<int>(type: "int", nullable: false),
                     Level = table.Column<int>(type: "int", nullable: false),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
@@ -557,7 +554,11 @@ namespace PlantsRPetsProjeto.Server.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     PlantationId = table.Column<int>(type: "int", nullable: false),
                     PlantInfoId = table.Column<int>(type: "int", nullable: false),
-                    Quantity = table.Column<int>(type: "int", nullable: false)
+                    Quantity = table.Column<int>(type: "int", nullable: false),
+                    PlantingDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    LastWatered = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    HarvestDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    GrowthStatus = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
