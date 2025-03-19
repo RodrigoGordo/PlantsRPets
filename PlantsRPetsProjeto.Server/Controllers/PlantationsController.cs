@@ -299,11 +299,11 @@ namespace PlantsRPetsProjeto.Server.Controllers
             return Ok(plant);
         }
 
-        [HttpPost("{plantationId}/water-plant/{plantId}")]
-        public async Task<IActionResult> WaterPlant(int plantationId, int plantId)
+        [HttpPost("{plantationId}/water-plant/{plantInfoId}")]
+        public async Task<IActionResult> WaterPlant(int plantationId, int plantInfoId)
         {
             var plantationPlant = await _context.PlantationPlants
-                .FirstOrDefaultAsync(pp => pp.PlantationId == plantationId && pp.PlantInfoId == plantId);
+                .FirstOrDefaultAsync(pp => pp.PlantationId == plantationId && pp.PlantInfoId == plantInfoId);
 
             if (plantationPlant == null)
                 return NotFound("Plant not found in plantation");

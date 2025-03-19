@@ -53,10 +53,9 @@ export class PlantationsService {
     return this.http.get<any>(`${this.apiUrl}/${plantationId}/plant/${plantInfoId}`);
   }
 
-  waterPlant(plantationId: number, plantId: number): Observable<PlantationPlant> {
+  waterPlant(plantationId: number, plantInfoId: number): Observable<PlantationPlant> {
     return this.http.post<PlantationPlant>(
-      `${this.apiUrl}/api/plantations/${plantationId}/water-plant/${plantId}`, {}
-    );
+      `${this.apiUrl}/${plantationId}/water-plant/${plantInfoId}`, {});
   }
 
 }

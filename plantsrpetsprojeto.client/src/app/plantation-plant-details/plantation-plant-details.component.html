@@ -17,8 +17,20 @@
       <!-- Left Column -->
       <div class="left-column">
         <img [src]="plantationPlant.referencePlant.image" [alt]="plantationPlant.referencePlant.plantName" class="plant-image">
-        <button class="harvest-button">Harvest</button>
-        <button class="water-button">Water</button>
+
+        <div class="button-container">
+          <button class="harvest-button">Harvest</button>
+          <button class="water-button" (click)="waterPlants()" [disabled]="!canWater()">
+            Water Plant
+          </button>
+        </div>
+
+        <div *ngIf="remainingCooldown" class="cooldown-message">
+          ⏳ Next watering available in {{ remainingCooldown }}
+        </div>
+        <div *ngIf="canWater() && plantationPlant?.lastWatered" class="cooldown-message">
+          ✅ Ready to water!
+        </div>
       </div>
 
       <!-- Right Column -->
