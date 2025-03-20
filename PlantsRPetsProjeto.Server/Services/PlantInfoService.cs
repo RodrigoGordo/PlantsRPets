@@ -34,13 +34,19 @@ namespace PlantsRPetsProjeto.Server.Services
 
             var newPlantTypes = distinctPlantTypes
                 .Where(pt => !existingPlantTypes.Contains(pt))
-                .Select(pt => new PlantType
+                .Select(pt =>
                 {
-                    PlantTypeName = char.ToUpper(pt[0]) + pt.Substring(1)
+                    bool hasRecurringHarvest = PlantingAdvisor.HasRecurringHarvest(pt);
+
+                    return new PlantType
+                    {
+                        PlantTypeName = char.ToUpper(pt[0]) + pt.Substring(1),
+                        HasRecurringHarvest = hasRecurringHarvest
+                    };
                 })
                 .ToList();
 
-            if (newPlantTypes.Any())
+            if (newPlantTypes.Count != 0)
             {
                 _context.PlantType.AddRange(newPlantTypes);
                 await _context.SaveChangesAsync();

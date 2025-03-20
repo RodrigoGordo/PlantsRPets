@@ -16,6 +16,52 @@ namespace PlantsRPetsProjeto.Server.Services
             { "vine", new() { { "High", 3 }, { "Moderate", 6 }, { "Low", 9 } } }
         };
 
+        private static readonly Dictionary<string, Dictionary<string, GrowthData>> HarvestTable = new()
+        {
+            { "tree", new()
+                {
+                    { "high", new GrowthData { MaturityMonths = 18, HarvestOffsetMonths = 12 } },
+                    { "moderate", new GrowthData { MaturityMonths = 24, HarvestOffsetMonths = 12 } },
+                    { "low", new GrowthData { MaturityMonths = 36, HarvestOffsetMonths = 12 } },
+                }
+            },
+            { "shrub", new()
+                {
+                    { "high", new GrowthData { MaturityMonths = 12, HarvestOffsetMonths = 6 } },
+                    { "moderate", new GrowthData { MaturityMonths = 18, HarvestOffsetMonths = 6 } },
+                    { "low", new GrowthData { MaturityMonths = 24, HarvestOffsetMonths = 6 } },
+                }
+            },
+            { "vine", new()
+                {
+                    { "high", new GrowthData { MaturityMonths = 12, HarvestOffsetMonths = 6 } },
+                    { "moderate", new GrowthData { MaturityMonths = 18, HarvestOffsetMonths = 6 } },
+                    { "low", new GrowthData { MaturityMonths = 24, HarvestOffsetMonths = 6 } },
+                }
+            },
+            { "flower", new()
+                {
+                    { "high", new GrowthData { MaturityMonths = 1, HarvestOffsetMonths = 0 } },
+                    { "moderate", new GrowthData { MaturityMonths = 2, HarvestOffsetMonths = 0 } },
+                    { "low", new GrowthData { MaturityMonths = 3, HarvestOffsetMonths = 0 } },
+                }
+            },
+            { "herb", new()
+                {
+                    { "high", new GrowthData { MaturityMonths = 1, HarvestOffsetMonths = 0 } },
+                    { "moderate", new GrowthData { MaturityMonths = 2, HarvestOffsetMonths = 0 } },
+                    { "low", new GrowthData { MaturityMonths = 3, HarvestOffsetMonths = 0 } },
+                }
+            },
+            { "vegetable", new()
+                {
+                    { "high", new GrowthData { MaturityMonths = 1, HarvestOffsetMonths = 0 } },
+                    { "moderate", new GrowthData { MaturityMonths = 2, HarvestOffsetMonths = 0 } },
+                    { "low", new GrowthData { MaturityMonths = 3, HarvestOffsetMonths = 0 } },
+                }
+            }
+        };
+
         public static int GetTotalGrowthMonths(string plantType, string growthRate)
         {
             plantType = plantType.ToLower();
@@ -105,5 +151,78 @@ namespace PlantsRPetsProjeto.Server.Services
             int currentMonth = DateTime.UtcNow.Month;
             return idealMonths.Contains(currentMonth);
         }
+
+        public static DateTime GetNextHarvestDate(DateTime plantingDate, string plantType, string growthRate, bool isRecurring, DateTime? lastHarvestDate = null)
+        {
+            var totalMonths = GetTotalHarvestMonths(plantType, growthRate);
+
+            if (isRecurring && lastHarvestDate.HasValue)
+            {
+                var offset = GetHarvestOffsetMonths(plantType, growthRate);
+                return lastHarvestDate.Value.AddMonths(offset);
+            }
+
+            return plantingDate.AddMonths(totalMonths);
+        }
+
+        public static int GetHarvestOffsetMonths(string plantType, string growthRate)
+        {
+            plantType = plantType.Trim().ToLower();
+            growthRate = growthRate.Trim().ToLower();
+
+            if (HarvestTable.TryGetValue(plantType, out var rateMap)
+                && rateMap.TryGetValue(growthRate, out var data))
+            {
+                return data.HarvestOffsetMonths;
+            }
+
+            return 0;
+        }
+
+        public static int GetTotalHarvestMonths(string plantType, string growthRate)
+        {
+            plantType = plantType.Trim().ToLower();
+            growthRate = growthRate.Trim().ToLower();
+
+            if (HarvestTable.TryGetValue(plantType, out var rateMap)
+                && rateMap.TryGetValue(growthRate, out var data))
+            {
+                return data.TotalHarvestMonths;
+            }
+
+            return 3;
+        }
+        public static (bool canHarvest, TimeSpan timeRemaining) CanHarvest(DateTime plantingDate, string plantType, string growthRate, bool isRecurring, DateTime? lastHarvestDate = null)
+        {
+            var nextHarvestDate = GetNextHarvestDate(plantingDate, plantType, growthRate, isRecurring, lastHarvestDate);
+            var now = DateTime.UtcNow;
+
+            if (now >= nextHarvestDate)
+                return (true, TimeSpan.Zero);
+
+            var timeRemaining = nextHarvestDate - now;
+            return (false, timeRemaining);
+        }
+
+        public static bool HasRecurringHarvest(string plantType)
+        {
+            plantType = plantType.Trim().ToLower();
+
+            if (HarvestTable.TryGetValue(plantType, out var rateMap))
+            {
+                var sample = rateMap.Values.FirstOrDefault();
+                if (sample != null)
+                    return sample.HarvestOffsetMonths > 0;
+            }
+
+            return false;
+        }
+    }
+
+    public class GrowthData
+    {
+        public int MaturityMonths { get; set; }
+        public int HarvestOffsetMonths { get; set; }
+        public int TotalHarvestMonths => MaturityMonths + HarvestOffsetMonths;
     }
 }
