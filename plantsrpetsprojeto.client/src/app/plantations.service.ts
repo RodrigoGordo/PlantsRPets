@@ -23,12 +23,12 @@ export class PlantationsService {
     return this.http.get<any>(`${this.apiUrl}/${id}`);
   }
 
-  // Gets plants inside a plantation
+  // Obtém as plantas de uma plantação
   getPlantsInPlantation(plantationId: number): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/${plantationId}/plants`);
   }
 
-  // Adds a plant to a plantation
+  // Adiciona uma planta a uma plantação
   addPlantToPlantation(plantationId: number, plantData: { plantInfoId: number; quantity: number }): Observable<any> {
     return this.http.post(`${this.apiUrl}/${plantationId}/add-plant`, plantData);
   }
@@ -55,6 +55,20 @@ export class PlantationsService {
   waterPlant(plantationId: number, plantInfoId: number): Observable<PlantationPlant> {
     return this.http.post<PlantationPlant>(
       `${this.apiUrl}/${plantationId}/water-plant/${plantInfoId}`, {});
+  }
+
+  // Verifica quando é a próxima colheita
+  checkHarvest(plantationId: number, plantInfoId: number): Observable<any> {
+    return this.http.get<any>(
+      `${this.apiUrl}/${plantationId}/plant/${plantInfoId}/check-harvest`
+    );
+  }
+
+  // Colhe uma planta (executa a colheita)
+  harvestPlant(plantationId: number, plantInfoId: number): Observable<any> {
+    return this.http.post<any>(
+      `${this.apiUrl}/${plantationId}/harvest-plant/${plantInfoId}`, {}
+    );
   }
 
 }
