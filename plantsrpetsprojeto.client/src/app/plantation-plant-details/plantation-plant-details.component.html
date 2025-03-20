@@ -19,10 +19,19 @@
         <img [src]="plantationPlant.referencePlant.image" [alt]="plantationPlant.referencePlant.plantName" class="plant-image">
 
         <div class="button-container">
-          <button class="harvest-button">Harvest</button>
+          <button class="harvest-button" (click)="harvestPlant()" [disabled]="!canHarvest">
+            Harvest
+          </button>
           <button class="water-button" (click)="waterPlants()" [disabled]="!canWater()">
             Water Plant
           </button>
+        </div>
+
+        <div *ngIf="!canHarvest && harvestCooldownMsg" class="cooldown-message">
+          {{ harvestCooldownMsg }}
+        </div>
+        <div *ngIf="canHarvest" class="cooldown-message">
+          ✅ Ready to harvest!
         </div>
 
         <div *ngIf="remainingCooldown" class="cooldown-message">
@@ -56,6 +65,10 @@
             <div class="attribute-item">
               <span class="attribute-label">Planting Date:</span>
               {{ plantationPlant.plantingDate | formatDate }}
+            </div>
+            <div class="attribute-item">
+              <span class="attribute-label">Last Harvest:</span>
+              {{ plantationPlant.lastHarvested ? (plantationPlant.lastHarvested | formatDate) : 'N/A' }}
             </div>
           </div>
 

@@ -21,6 +21,11 @@ export class PlantationPlantDetailsComponent implements OnInit {
 
   plantationPlant!: PlantationPlant;
 
+  canHarvest: boolean = false;
+  harvestCooldownMsg: string = '';
+  nextHarvestDate: string = '';
+  timeRemainingDays: number = 0;
+
   isLoading: boolean = false;
   errorMessage: string = '';
 
@@ -64,6 +69,7 @@ export class PlantationPlantDetailsComponent implements OnInit {
         this.plantationPlant = data;
         this.logPlantData();
         this.updateCooldownStatus();
+        this.checkHarvestStatus();
         this.isLoading = false;
       },
       error: () => {
@@ -104,6 +110,29 @@ export class PlantationPlantDetailsComponent implements OnInit {
     return this.cooldownConfig[plantType][wateringFrequency];
   }
 
+  private updateHarvestCooldownMsgFromDate(nextHarvestDateStr: string) {
+    const now = new Date();
+    const nextHarvestDate = new Date(nextHarvestDateStr);
+    const diffMs = nextHarvestDate.getTime() - now.getTime();
+
+    if (diffMs <= 0) {
+      this.harvestCooldownMsg = '✅ Ready to harvest!';
+      return;
+    }
+
+    const diffMinutes = Math.floor(diffMs / 60000);
+    const days = Math.floor(diffMinutes / (24 * 60));
+    const hours = Math.floor((diffMinutes % (24 * 60)) / 60);
+    const minutes = diffMinutes % 60;
+
+    const msgParts = [];
+    if (days > 0) msgParts.push(`${days}d`);
+    if (hours > 0) msgParts.push(`${hours}h`);
+    if (minutes > 0) msgParts.push(`${minutes}m`);
+
+    this.harvestCooldownMsg = `⏳ Next harvest available in ${msgParts.join(' ')}`;
+  }
+
   logPlantData() {
     console.log('Plant Type:', this.plantationPlant?.referencePlant?.plantType);
     console.log('Watering Frequency:', this.plantationPlant?.referencePlant?.watering);
@@ -133,9 +162,18 @@ export class PlantationPlantDetailsComponent implements OnInit {
       return;
     }
 
-    const hours = Math.floor(remaining);
-    const minutes = Math.round((remaining % 1) * 60);
-    this.remainingCooldown = `${hours}h ${minutes}m remaining`;
+    let totalHours = Math.floor(remaining);
+    let minutes = Math.round((remaining % 1) * 60);
+
+    if (minutes === 60) {
+      totalHours += 1;
+      minutes = 0;
+    }
+
+    const days = Math.floor(totalHours / 24);
+    const hours = totalHours % 24;
+
+    this.remainingCooldown = `${days}d ${hours}h ${minutes}m remaining`;
   }
 
 
@@ -161,6 +199,44 @@ export class PlantationPlantDetailsComponent implements OnInit {
           console.error("Watering Failed", error);
         }
       })
+  }
+
+  harvestPlant() {
+    if (!this.canHarvest) {
+      alert('Plant is not ready for harvest yet!');
+      return;
+    }
+
+    this.plantationsService.harvestPlant(this.plantationId, this.plantInfoId)
+      .subscribe({
+        next: (res) => {
+          this.loadPlantationPlantDetails();
+        },
+        error: (err) => {
+          console.error('Harvest failed:', err);
+          alert('Failed to harvest plant.');
+        }
+      });
+  }
+
+  checkHarvestStatus() {
+    this.plantationsService.checkHarvest(this.plantationId, this.plantInfoId)
+      .subscribe({
+        next: (res) => {
+          this.canHarvest = res.canHarvest;
+          this.nextHarvestDate = res.nextHarvestDate;
+
+          if (!res.canHarvest && res.nextHarvestDate) {
+            this.updateHarvestCooldownMsgFromDate(res.nextHarvestDate);
+          } else {
+            this.harvestCooldownMsg = '✅ Ready to harvest!';
+          }
+        },
+        error: (err) => {
+          console.error('Error checking harvest status:', err);
+          this.harvestCooldownMsg = '';
+        }
+      });
   }
 
   goBack() {

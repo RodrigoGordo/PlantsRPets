@@ -237,6 +237,7 @@ namespace PlantsRPetsProjeto.Server.Controllers
                     GrowthStatus = "Growing",
                     PlantingDate = plantingDate,
                     LastWatered = null,
+                    LastHarvested = null,
                     HarvestDate = firstHarvestDate
                 };
 
@@ -348,16 +349,13 @@ namespace PlantsRPetsProjeto.Server.Controllers
             if (plantType == null)
                 return NotFound("Plant type not found");
 
-            var (canHarvest, timeRemaining) = PlantingAdvisor.CanHarvest(
-                plantationPlant.PlantingDate,
-                plantationPlant.ReferencePlant.PlantType,
-                plantationPlant.ReferencePlant.GrowthRate,
-                plantType.HasRecurringHarvest,
-                plantationPlant.HarvestDate
-            );
+            if (plantationPlant.HarvestDate == null)
+                return BadRequest("Harvest date not set for this plant.");
 
-            if (!canHarvest)
+            var now = DateTime.UtcNow;
+            if (now < plantationPlant.HarvestDate.Value)
             {
+                var timeRemaining = plantationPlant.HarvestDate.Value - now;
                 return BadRequest(new
                 {
                     message = "Plant is not ready for harvest",
@@ -367,25 +365,29 @@ namespace PlantsRPetsProjeto.Server.Controllers
 
             if (plantType.HasRecurringHarvest)
             {
+                plantationPlant.LastHarvested = now;
                 plantationPlant.HarvestDate = PlantingAdvisor.GetNextHarvestDate(
                     plantationPlant.PlantingDate,
                     plantationPlant.ReferencePlant.PlantType,
                     plantationPlant.ReferencePlant.GrowthRate,
                     isRecurring: true,
-                    lastHarvestDate: DateTime.UtcNow
+                    lastHarvestDate: now
                 );
                 plantationPlant.GrowthStatus = "Growing";
                 await _context.SaveChangesAsync();
+
                 return Ok(new
                 {
                     message = "Plant harvested successfully. Next harvest in progress.",
-                    nextHarvestDate = plantationPlant.HarvestDate
+                    nextHarvestDate = plantationPlant.HarvestDate,
+                    lastHarvested = plantationPlant.LastHarvested
                 });
             }
             else
             {
                 _context.PlantationPlants.Remove(plantationPlant);
                 await _context.SaveChangesAsync();
+
                 return Ok(new { message = "Plant harvested and removed (non-recurring)." });
             }
         }
@@ -421,6 +423,21 @@ namespace PlantsRPetsProjeto.Server.Controllers
                 timeRemainingDays = canHarvest ? 0 : (int)Math.Ceiling(timeRemaining.TotalDays),
                 nextHarvestDate = currentHarvestDate
             });
+        }
+
+        [HttpPost("{plantationId}/plant/{plantInfoId}/set-harvest-date")]
+        public async Task<IActionResult> SetHarvestDate(int plantationId, int plantInfoId, [FromBody] DateTime newHarvestDate)
+        {
+            var plantationPlant = await _context.PlantationPlants
+                .FirstOrDefaultAsync(pp => pp.PlantationId == plantationId && pp.PlantInfoId == plantInfoId);
+
+            if (plantationPlant == null)
+                return NotFound("Plant not found in plantation");
+
+            plantationPlant.HarvestDate = newHarvestDate;
+            await _context.SaveChangesAsync();
+
+            return Ok(new { message = "HarvestDate updated", newHarvestDate });
         }
 
     }

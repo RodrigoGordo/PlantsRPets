@@ -558,6 +558,7 @@ namespace PlantsRPetsProjeto.Server.Migrations
                     Quantity = table.Column<int>(type: "int", nullable: false),
                     PlantingDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     LastWatered = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastHarvested = table.Column<DateTime>(type: "datetime2", nullable: true),
                     HarvestDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     GrowthStatus = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },

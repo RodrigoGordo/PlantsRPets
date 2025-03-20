@@ -192,6 +192,7 @@ namespace PlantsRPetsProjeto.Server.Services
 
             return 3;
         }
+
         public static (bool canHarvest, TimeSpan timeRemaining) CanHarvest(DateTime plantingDate, string plantType, string growthRate, bool isRecurring, DateTime? lastHarvestDate = null)
         {
             var nextHarvestDate = GetNextHarvestDate(plantingDate, plantType, growthRate, isRecurring, lastHarvestDate);

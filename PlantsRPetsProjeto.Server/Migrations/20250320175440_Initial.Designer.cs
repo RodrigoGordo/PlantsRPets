@@ -12,7 +12,7 @@ using PlantsRPetsProjeto.Server.Data;
 namespace PlantsRPetsProjeto.Server.Migrations
 {
     [DbContext(typeof(PlantsRPetsProjetoServerContext))]
-    [Migration("20250320005518_Initial")]
+    [Migration("20250320175440_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -577,6 +577,9 @@ namespace PlantsRPetsProjeto.Server.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("HarvestDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("LastHarvested")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("LastWatered")
