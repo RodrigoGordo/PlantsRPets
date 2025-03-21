@@ -3,6 +3,8 @@ import { ActivatedRoute } from '@angular/router';
 import { PlantationsService } from '../plantations.service';
 import { PlantationPlant } from '../models/plantation-plant';
 import { Location } from '@angular/common';
+import { Plantation } from '../models/plantation.model';
+import { tap } from 'rxjs';
 
 type PlantType = 'Tree' | 'Shrub' | 'Vegetable';
 type WaterFrequency = 'Minimal' | 'Average' | 'Frequent';
@@ -20,6 +22,7 @@ export class PlantationPlantDetailsComponent implements OnInit {
   plantationId!: number;
 
   plantationPlant!: PlantationPlant;
+  plantation!: Plantation;
 
   canHarvest: boolean = false;
   harvestCooldownMsg: string = '';
@@ -50,7 +53,19 @@ export class PlantationPlantDetailsComponent implements OnInit {
       this.plantInfoId = Number(this.route.snapshot.paramMap.get('plantInfoId'));
     })
 
+    console.log(this.plantationId);
+
     this.loadPlantationPlantDetails();
+
+    this.plantationsService.getPlantationById(this.plantationId).subscribe({
+      next: (plantation) => {
+        this.plantation = plantation;
+        console.log('Plantation loaded:', this.plantation);
+      },
+      error: (err) => {
+        console.error('Error fetching plantation:', err);
+      }
+    });
 
     this.cooldownCheckInterval = setInterval(() => {
       this.updateCooldownStatus();
@@ -192,6 +207,7 @@ export class PlantationPlantDetailsComponent implements OnInit {
           if (this.plantationPlant) {
             this.plantationPlant.lastWatered = updatedPlant.lastWatered;
             this.updateCooldownStatus();
+            this.increaseExperience(false);
           }
 
         },
@@ -237,6 +253,27 @@ export class PlantationPlantDetailsComponent implements OnInit {
           this.harvestCooldownMsg = '';
         }
       });
+    }
+
+  increaseExperience(isHarvesting: boolean) {
+    if (!this.plantation) {
+      console.error(`No plantation${this.plantation}`);
+    }
+    if (!this.plantationPlant) {
+      console.error(`No plantationPlant${this.plantationPlant}`);
+    }
+
+    this.plantationsService.gainExperience(this.plantationId, this.plantInfoId, isHarvesting)
+      .subscribe({
+        next: (updatedPlantation) => {
+          if (this.plantation) {
+            this.plantation.experiencePoints = updatedPlantation.experiencePoints;
+          }
+        },
+        error: (error) => {
+          console.error("Experience Increase Failed", error);
+        }
+      })
   }
 
   goBack() {

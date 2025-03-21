@@ -43,6 +43,11 @@ export class PlantationsService {
     return this.http.put(`${this.apiUrl}/${id}`, { plantationName: newName });
   }
 
+  gainExperience(id: number, plantInfoId: number, isHarvesting: boolean): Observable<any>
+  {
+    return this.http.put(`${this.apiUrl}/${id}/gain-xp/${plantInfoId}`, isHarvesting);
+  }
+
   // Remove uma plantação pelo ID
   deletePlantation(id: number): Observable<any> {
     return this.http.delete(`${this.apiUrl}/${id}`);

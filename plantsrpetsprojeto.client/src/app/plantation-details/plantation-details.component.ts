@@ -61,6 +61,7 @@ export class PlantationDetailsComponent implements OnInit {
         this.loading = false;
       }
     });
+
   }
 
   loadPlantationPlants(): void {

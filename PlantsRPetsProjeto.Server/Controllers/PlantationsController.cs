@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -440,7 +441,77 @@ namespace PlantsRPetsProjeto.Server.Controllers
             return Ok(new { message = "HarvestDate updated", newHarvestDate });
         }
 
+        [HttpPut("{id}/gain-xp/{plantInfoId}")]
+        public async Task<IActionResult> GainExperience(int id, int plantInfoId, bool isHarvesting)
+        {
+            var userId = User.FindFirst("UserId")?.Value;
+            if (string.IsNullOrEmpty(userId))
+                return NotFound(new { message = "User not found." });
+
+            var existingPlantation = await _context.Plantation.FindAsync(id);
+            if (existingPlantation == null)
+                return NotFound(new { message = "Plantation not found." });
+
+            var plantationPlant = await _context.PlantationPlants
+                .Include(pp => pp.ReferencePlant)
+                .FirstOrDefaultAsync(pp => pp.PlantationId == id && pp.PlantInfoId == plantInfoId);
+
+            int experienceAmount = 0;
+
+            string plantationPlantTypeString = plantationPlant!.ReferencePlant.PlantType;
+            string plantationPlantGrowthRate = plantationPlant!.ReferencePlant.GrowthRate;
+            string plantationPlantWateringFrequency = plantationPlant!.ReferencePlant.Watering;
+            int plantationPlantQuantity = plantationPlant!.Quantity;
+
+            DateTime? plantationPlantLastHarvest = plantationPlant!.LastHarvested;
+
+            //Console.WriteLine(existingPlantation.PlantType.HasRecurringHarvest);
+            //bool plantationTypeRecurringHarvest = existingPlantation.PlantType.HasRecurringHarvest;
+
+
+            if (isHarvesting)
+            {
+                experienceAmount = LevelUpService.GetHarvestExperienceAmount(plantationPlantTypeString, plantationPlantGrowthRate, true, plantationPlantLastHarvest);
+            } else
+            {
+                experienceAmount = LevelUpService.GetWateringExperience(plantationPlantTypeString, plantationPlantWateringFrequency);
+            }
+
+            existingPlantation.ExperiencePoints += experienceAmount * plantationPlantQuantity;
+
+            int plantationExperienceThreshold = 500;
+
+            if (existingPlantation.ExperiencePoints >= plantationExperienceThreshold)
+            {
+                int leftoverExperience = existingPlantation.ExperiencePoints;
+
+                int numberOfLevels = 0;
+                while (leftoverExperience >= plantationExperienceThreshold)
+                {
+                    numberOfLevels++;
+                    leftoverExperience -= plantationExperienceThreshold;
+                }
+
+                existingPlantation.Level += numberOfLevels;
+                existingPlantation.ExperiencePoints = leftoverExperience;
+            }
+
+            _context.Entry(existingPlantation).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                return Conflict(new { message = "Conflict updating plantation when increasing experience, please try again." });
+            }
+
+            return NoContent();
+        }
     }
+
+
 
     public class CreatePlantationModel
     {
