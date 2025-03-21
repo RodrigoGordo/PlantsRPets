@@ -18,7 +18,6 @@ namespace PlantsRPetsProjeto.Tests.xUnitTests.ControllerTests
 
         public TutorialsControllerTests()
         {
-            // Set up an in-memory database for testing
             var options = new DbContextOptionsBuilder<PlantsRPetsProjetoServerContext>()
                             .UseInMemoryDatabase("InMemoryDbTutorials")
                             .Options;
