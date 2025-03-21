@@ -155,21 +155,6 @@ namespace PlantsRPetsProjeto.Server.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Tutorial",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    AuthorId = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Tutorial", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
@@ -740,9 +725,6 @@ namespace PlantsRPetsProjeto.Server.Migrations
 
             migrationBuilder.DropTable(
                 name: "SustainabilityTip");
-
-            migrationBuilder.DropTable(
-                name: "Tutorial");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

@@ -12,7 +12,7 @@ using PlantsRPetsProjeto.Server.Data;
 namespace PlantsRPetsProjeto.Server.Migrations
 {
     [DbContext(typeof(PlantsRPetsProjetoServerContext))]
-    [Migration("20250321005307_Initial")]
+    [Migration("20250321175344_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -739,31 +739,6 @@ namespace PlantsRPetsProjeto.Server.Migrations
                     b.HasKey("SustainabilityTipsListId");
 
                     b.ToTable("SustainabilityTipsList");
-                });
-
-            modelBuilder.Entity("PlantsRPetsProjeto.Server.Models.Tutorial", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("AuthorId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Content")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Tutorial");
                 });
 
             modelBuilder.Entity("PlantsRPetsProjeto.Server.Models.User", b =>

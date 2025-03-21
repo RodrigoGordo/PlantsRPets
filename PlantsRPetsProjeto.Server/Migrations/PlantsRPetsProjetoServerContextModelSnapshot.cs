@@ -738,31 +738,6 @@ namespace PlantsRPetsProjeto.Server.Migrations
                     b.ToTable("SustainabilityTipsList");
                 });
 
-            modelBuilder.Entity("PlantsRPetsProjeto.Server.Models.Tutorial", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("AuthorId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Content")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Tutorial");
-                });
-
             modelBuilder.Entity("PlantsRPetsProjeto.Server.Models.User", b =>
                 {
                     b.Property<string>("Id")
