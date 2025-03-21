@@ -7,5 +7,6 @@
         public string Type { get; set; }
         public string Details { get; set; }
         public string BattleStats { get; set; }
+        public string ImageUrl { get; set; }
     }
 }

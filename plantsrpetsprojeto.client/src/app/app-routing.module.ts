@@ -18,6 +18,10 @@ import { ProfileComponent } from './profile/profile.component';
 import { HomeComponent } from './home/home.component';
 import { WikiComponent } from './wiki/wiki.component';
 import { PlantInfoPageComponent } from './plant-info-page/plant-info-page.component';
+import { PlantationDetailsComponent } from './plantation-details/plantation-details.component';
+import { PetDetailsComponent } from './pet-details/pet-details.component';
+import { PlantationPlantDetailsComponent } from './plantation-plant-details/plantation-plant-details.component';
+
 
 const routes: Routes = [
   { path: '', component: LandingPageComponent },
@@ -31,6 +35,7 @@ const routes: Routes = [
   { path: 'register', component: RegisterComponent },
   { path: 'plantations', component: PlantationsComponent },
   { path: 'collections', component: CollectionComponent },
+  { path: 'plantation/:id', component: PlantationDetailsComponent },
   { path: 'communities', component: CommunitiesComponent },
   { path: 'dashboard', component: DashboardComponent },
   { path: 'settings', component: SettingsComponent },
@@ -39,6 +44,8 @@ const routes: Routes = [
   { path: 'wiki', component: WikiComponent },
   { path: 'plant-information/:id', component: PlantInfoPageComponent },
   { path: 'plants/:id', component: PlantInfoPageComponent },
+  { path: 'pet/:id', component: PetDetailsComponent },
+  { path: 'plantation/:plantationId/plant/:plantInfoId', component: PlantationPlantDetailsComponent },
   { path: '**', redirectTo: '' },
 ];
 

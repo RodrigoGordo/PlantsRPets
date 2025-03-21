@@ -1,0 +1,38 @@
+<div class="dialog-container">
+  <h2>Add Plant to Plantation</h2>
+
+  <form [formGroup]="addPlantForm" (ngSubmit)="addPlant()">
+
+    <div class="form-group">
+      <label for="plant">Select Plant</label>
+
+      <mat-form-field appearance="outline">
+        <input type="text" matInput [placeholder]="'Search for a plant'" [formControl]="plantFilter"
+               [matAutocomplete]="auto">
+        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selectPlant($event)" [displayWith]="displayPlantName">
+          <mat-option *ngFor="let plant of filteredPlants" [value]="plant">
+            {{ plant.plantName }}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+
+      <div class="error" *ngIf="addPlantForm.get('plantInfoId')?.invalid && addPlantForm.get('plantInfoId')?.touched">
+        Please select a plant.
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="quantity">Quantity</label>
+      <input id="quantity" type="number" formControlName="quantity" placeholder="Enter quantity" min="1" aria-label="Enter plant quantity">
+      <div class="error" *ngIf="addPlantForm.get('quantity')?.invalid && addPlantForm.get('quantity')?.touched">
+        Quantity must be at least 1.
+      </div>
+    </div>
+
+    <div class="buttons">
+      <button type="button" class="cancel-btn" (click)="closeDialog()">Cancel</button>
+      <button type="submit" class="confirm-btn" [disabled]="addPlantForm.invalid">Add Plant</button>
+    </div>
+  </form>
+</div>
+

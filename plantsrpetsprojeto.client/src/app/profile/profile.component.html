@@ -1,1 +1,61 @@
-<p>profile works!</p>
+<body>
+  <app-navbar></app-navbar>
+  <div class="profile-container">
+    <div class="profile-header">
+      <h1 class="nickname" *ngIf="!isEditing; else editNickname">
+        {{ userProfile.nickname || 'No nickname' }}
+      </h1>
+      <ng-template #editNickname>
+        <input [(ngModel)]="userProfile.nickname" class="edit-input" placeholder="Enter your nickname">
+      </ng-template>
+      <div class="profile-actions">
+        <button class="edit-profile-btn" (click)="toggleEdit()">
+          <i class="fas fa-edit"></i> {{ isEditing ? 'Save' : 'Edit Profile' }}
+        </button>
+      </div>
+    </div>
+
+    <div class="profile-info">
+      <div class="profile-picture">
+        <img [src]="userProfile.profile.profilePicture || 'assets/logo.png'" alt="Profile Picture">
+        <button *ngIf="isEditing" class="upload-button" (click)="triggerFileUpload()">
+          <i class="fas fa-camera"></i>
+        </button>
+        <input type="file" id="file-upload" style="display: none;" (change)="onFileSelected($event)">
+      </div>
+
+      <div class="bio">
+        <p *ngIf="!isEditing; else editBio">
+          {{ userProfile.profile.bio || 'No bio available.' }}
+        </p>
+        <ng-template #editBio>
+          <textarea [(ngModel)]="userProfile.profile.bio" class="edit-input" placeholder="Enter your bio"></textarea>
+        </ng-template>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Favorite Pets</h2>
+      <div *ngIf="userProfile.profile.favoritePets && userProfile.profile.favoritePets.length > 0; else noPets" class="scrollable-list">
+        <div *ngFor="let pet of userProfile.profile.favoritePets" class="list-item">
+          {{ pet }}
+        </div>
+      </div>
+      <ng-template #noPets>
+        <p>No favorite pets added yet.</p>
+      </ng-template>
+    </div>
+
+    <div class="section">
+      <h2>Highlighted Plantations</h2>
+      <div *ngIf="userProfile.profile.highlightedPlantations && userProfile.profile.highlightedPlantations.length > 0; else noPlantations" class="scrollable-list">
+        <div *ngFor="let plantation of userProfile.profile.highlightedPlantations" class="list-item">
+          {{ plantation }}
+        </div>
+      </div>
+      <ng-template #noPlantations>
+        <p>No highlighted plantations added yet.</p>
+      </ng-template>
+    </div>
+  </div>
+</body>

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +12,9 @@ using PlantsRPetsProjeto.Server.Models;
 
 namespace PlantsRPetsProjeto.Server.Controllers
 {
+    [Route("api/[controller]")]
+    [ApiController]
+    [Authorize]
     public class CollectionsController : Controller
     {
         private readonly PlantsRPetsProjetoServerContext _context;
@@ -19,139 +24,124 @@ namespace PlantsRPetsProjeto.Server.Controllers
             _context = context;
         }
 
-        // GET: Collections
-        public async Task<IActionResult> Index()
+        [HttpGet]
+        public async Task<ActionResult<object>> GetUserCollection()
         {
-            return View(await _context.Collection.ToListAsync());
-        }
-
-        // GET: Collections/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
+            var userId = User.FindFirstValue("UserId");
+            if (string.IsNullOrEmpty(userId))
             {
-                return NotFound();
+                return Unauthorized();
             }
 
+            // Get or create user's collection
             var collection = await _context.Collection
-                .FirstOrDefaultAsync(m => m.CollectionId == id);
+                .Include(c => c.CollectionPets)
+                .ThenInclude(cp => cp.ReferencePet)
+                .FirstOrDefaultAsync(c => c.UserId == userId);
+
             if (collection == null)
             {
-                return NotFound();
-            }
-
-            return View(collection);
-        }
-
-        // GET: Collections/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: Collections/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CollectionId")] Collection collection)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(collection);
+                collection = new Collection { UserId = userId, CollectionPets = new List<CollectionPets>() };
+                _context.Collection.Add(collection);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(collection);
-        }
-
-        // GET: Collections/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
             }
 
-            var collection = await _context.Collection.FindAsync(id);
-            if (collection == null)
-            {
-                return NotFound();
-            }
-            return View(collection);
-        }
+            var allPets = await _context.Pet.ToListAsync();
 
-        // POST: Collections/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("CollectionId")] Collection collection)
-        {
-            if (id != collection.CollectionId)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
+            var result = allPets.Select(pet => {
+                var collectionPet = collection.CollectionPets.FirstOrDefault(cp => cp.PetId == pet.PetId);
+                return new
                 {
-                    _context.Update(collection);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!CollectionExists(collection.CollectionId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(collection);
+                    pet.PetId,
+                    pet.Name,
+                    pet.Type,
+                    pet.Details,
+                    pet.BattleStats,
+                    pet.ImageUrl,
+                    IsOwned = collectionPet != null && collectionPet.IsOwned,
+                    IsFavorite = collectionPet != null && collectionPet.IsFavorite
+                };
+            });
+
+            return Ok(result);
         }
 
-        // GET: Collections/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        [HttpPost("add/{petId}")]
+        public async Task<IActionResult> AddPetToCollection(int petId)
         {
-            if (id == null)
+            var userId = User.FindFirstValue("UserId");
+            if (string.IsNullOrEmpty(userId))
             {
-                return NotFound();
+                return Unauthorized();
             }
 
+            // Check if pet exists
+            var pet = await _context.Pet.FindAsync(petId);
+            if (pet == null)
+            {
+                return NotFound("Pet not found");
+            }
+
+            // Get or create user's collection
             var collection = await _context.Collection
-                .FirstOrDefaultAsync(m => m.CollectionId == id);
+                .Include(c => c.CollectionPets)
+                .FirstOrDefaultAsync(c => c.UserId == userId);
+
             if (collection == null)
             {
-                return NotFound();
+                collection = new Collection { UserId = userId };
+                _context.Collection.Add(collection);
+                await _context.SaveChangesAsync();
             }
 
-            return View(collection);
-        }
-
-        // POST: Collections/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var collection = await _context.Collection.FindAsync(id);
-            if (collection != null)
+            // Check if pet is already in collection
+            var existingPet = collection.CollectionPets.FirstOrDefault(cp => cp.PetId == petId);
+            if (existingPet != null)
             {
-                _context.Collection.Remove(collection);
+                existingPet.IsOwned = true;
+            }
+            else
+            {
+                collection.CollectionPets.Add(new CollectionPets
+                {
+                    PetId = petId,
+                    IsOwned = true,
+                    IsFavorite = false
+                });
             }
 
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return Ok("Pet added to collection");
         }
 
-        private bool CollectionExists(int id)
+        [HttpPut("favorite/{petId}")]
+        public async Task<IActionResult> ToggleFavorite(int petId)
         {
-            return _context.Collection.Any(e => e.CollectionId == id);
+            var userId = User.FindFirstValue("UserId");
+            if (string.IsNullOrEmpty(userId))
+            {
+                return Unauthorized();
+            }
+
+            var collection = await _context.Collection
+                .Include(c => c.CollectionPets)
+                .FirstOrDefaultAsync(c => c.UserId == userId);
+
+            if (collection == null)
+            {
+                return NotFound("Collection not found");
+            }
+
+            var collectionPet = collection.CollectionPets.FirstOrDefault(cp => cp.PetId == petId);
+            if (collectionPet == null || !collectionPet.IsOwned)
+            {
+                return BadRequest("You don't own this pet");
+            }
+
+            collectionPet.IsFavorite = !collectionPet.IsFavorite;
+            await _context.SaveChangesAsync();
+
+            return Ok(new { isFavorite = collectionPet.IsFavorite });
         }
     }
 }

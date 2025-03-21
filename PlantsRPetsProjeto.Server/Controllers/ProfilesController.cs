@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using PlantsRPetsProjeto.Server.Data;
 using PlantsRPetsProjeto.Server.Models;
 
@@ -13,145 +12,101 @@ namespace PlantsRPetsProjeto.Server.Controllers
     public class ProfilesController : Controller
     {
         private readonly PlantsRPetsProjetoServerContext _context;
+        private readonly UserManager<User> _userManager;
 
-        public ProfilesController(PlantsRPetsProjetoServerContext context)
+        public ProfilesController(PlantsRPetsProjetoServerContext context, UserManager<User> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
-        // GET: Profiles
-        public async Task<IActionResult> Index()
+        [HttpPut]
+        [Authorize]
+        [Route("api/update-profile")]
+        public async Task<IActionResult> UpdateProfile([FromForm] UpdateProfileModel model)
         {
-            return View(await _context.Profile.ToListAsync());
-        }
-
-        // GET: Profiles/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
+            var userId = User.FindFirstValue("UserId");
+            if (string.IsNullOrEmpty(userId))
             {
-                return NotFound();
+                return Unauthorized(new { message = "User not authenticated." });
+            }
+
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+            if (user == null)
+            {
+                return NotFound(new { message = "User not found." });
             }
 
             var profile = await _context.Profile
-                .FirstOrDefaultAsync(m => m.ProfileId == id);
+                .FirstOrDefaultAsync(p => p.UserId == userId);
+
             if (profile == null)
             {
-                return NotFound();
+                return NotFound(new { message = "Profile not found." });
             }
 
-            return View(profile);
-        }
+            Console.WriteLine("UpdateProfile Model: " + JsonConvert.SerializeObject(model));
 
-        // GET: Profiles/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: Profiles/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ProfileId,UserId,Bio,ProfilePicture")] Profile profile)
-        {
-            if (ModelState.IsValid)
+            if (model.Nickname != null)
             {
-                _context.Add(profile);
+                user.Nickname = model.Nickname;
+                _context.Users.Update(user);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
             }
-            return View(profile);
-        }
 
-        // GET: Profiles/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
+            if (model.Bio != null)
             {
-                return NotFound();
+                profile.Bio = model.Bio;
             }
 
-            var profile = await _context.Profile.FindAsync(id);
-            if (profile == null)
+            if (model.ProfilePicture != null)
             {
-                return NotFound();
+                var filePath = await SaveProfilePicture(model.ProfilePicture);
+                profile.ProfilePicture = filePath;
             }
-            return View(profile);
-        }
 
-        // POST: Profiles/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ProfileId,UserId,Bio,ProfilePicture")] Profile profile)
-        {
-            if (id != profile.ProfileId)
+            if (model.FavoritePets != null)
             {
-                return NotFound();
+                profile.FavoritePets = model.FavoritePets;
             }
 
-            if (ModelState.IsValid)
+            if (model.HighlightedPlantations != null)
             {
-                try
-                {
-                    _context.Update(profile);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ProfileExists(profile.ProfileId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(profile);
-        }
-
-        // GET: Profiles/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
+                profile.HighlightedPlantations = model.HighlightedPlantations;
             }
 
-            var profile = await _context.Profile
-                .FirstOrDefaultAsync(m => m.ProfileId == id);
-            if (profile == null)
-            {
-                return NotFound();
-            }
-
-            return View(profile);
-        }
-
-        // POST: Profiles/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var profile = await _context.Profile.FindAsync(id);
-            if (profile != null)
-            {
-                _context.Profile.Remove(profile);
-            }
-
+            _context.Profile.Update(profile);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+
+            return Ok(profile);
         }
 
-        private bool ProfileExists(int id)
+        private async Task<string> SaveProfilePicture(IFormFile file)
         {
-            return _context.Profile.Any(e => e.ProfileId == id);
+            var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads");
+            if (!Directory.Exists(uploadsFolder))
+            {
+                Directory.CreateDirectory(uploadsFolder);
+            }
+
+            var uniqueFileName = Guid.NewGuid().ToString() + "_" + file.FileName;
+            var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+            using (var fileStream = new FileStream(filePath, FileMode.Create))
+            {
+                await file.CopyToAsync(fileStream);
+            }
+
+            return Path.Combine("uploads", uniqueFileName);
+        }
+
+        public class UpdateProfileModel
+        {
+            public string? Nickname { get; set; }
+            public string? Bio { get; set; }
+            public IFormFile? ProfilePicture { get; set; }
+            public ICollection<int>? FavoritePets { get; set; }
+            public ICollection<int>? HighlightedPlantations { get; set; }
         }
     }
 }

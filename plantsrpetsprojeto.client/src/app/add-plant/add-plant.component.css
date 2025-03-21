@@ -1,0 +1,156 @@
+.dialog-container {
+  background: #fff;
+  padding: 25px;
+  border-radius: 10px;
+  text-align: center;
+  width: 100%;
+  max-width: 100%;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+h2 {
+  color: #2e7d32;
+  margin-bottom: 15px;
+  font-size: 1.5em;
+}
+
+.form-group {
+  margin-bottom: 15px;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+}
+
+.mat-form-field {
+  width: 100%;
+}
+
+.mat-form-field-appearance-outline .mat-form-field-wrapper {
+  padding: 0;
+}
+
+.mdc-text-field {
+  height: 40px !important; /* Adjust height */
+  min-height: 40px !important;
+}
+
+/* Reduce padding inside the field */
+.mdc-text-field__input {
+  padding-top: 8px !important;
+  padding-bottom: 8px !important;
+  font-size: 14px !important; /* Adjust font size */
+}
+
+/* Adjust the floating label position */
+.mdc-floating-label {
+  top: 16px !important;
+  font-size: 14px !important;
+}
+
+/* Make the dropdown items smaller */
+.mat-mdc-option {
+  height: 32px !important; /* Adjust dropdown item height */
+  font-size: 14px !important;
+}
+
+/* Reduce the overall mat-form-field spacing */
+.mat-mdc-form-field {
+  margin-bottom: 8px !important;
+}
+
+
+input.mat-input-element:focus {
+  border-color: #2e7d32 !important;
+  outline: none !important;
+  box-shadow: 0 0 3px #2e7d32 !important;
+}
+
+/* Fix dropdown items */
+.mat-option {
+  font-size: 16px;
+  padding: 10px;
+}
+
+/* Label styles */
+label {
+  font-weight: bold;
+  margin-bottom: 5px;
+  font-size: 14px;
+}
+
+input, select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+  box-sizing: border-box;
+}
+
+  input:focus, select:focus {
+    border-color: #2e7d32;
+    outline: none;
+  }
+
+/* Error message styling */
+.error {
+  color: red;
+  font-size: 0.9em;
+  margin-top: 5px;
+  display: block;
+}
+
+/* Button styles */
+.buttons {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+button {
+  flex: 1;
+  padding: 12px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.3s;
+  font-size: 16px;
+}
+
+.confirm-btn {
+  background: #2e7d32;
+  color: white;
+}
+
+  .confirm-btn:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+  }
+
+.cancel-btn {
+  background: #ff4d4d;
+  color: white;
+}
+
+  .cancel-btn:hover {
+    background: #cc0000;
+  }
+
+/* Responsive styles */
+@media (max-width: 480px) {
+  .dialog-container {
+    padding: 15px;
+    width: 95%;
+  }
+
+  h2 {
+    font-size: 1.4em;
+  }
+
+  button {
+    font-size: 14px;
+    padding: 10px;
+  }
+}

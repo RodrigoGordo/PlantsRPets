@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using PlantsRPetsProjeto.Server.Models;
+using System.Data.Common;
 namespace PlantsRPetsProjeto.Server.Data
 {
     public class UserSeeder
@@ -32,9 +34,9 @@ namespace PlantsRPetsProjeto.Server.Data
                     Nickname = "gega",
                     RegistrationDate = DateTime.UtcNow
                 };
-
-                await userManager.CreateAsync(user, "gegassaurorex#");
+                var result = await userManager.CreateAsync(user, "gegassaurorex#");
             }
+
         }
     }
 }

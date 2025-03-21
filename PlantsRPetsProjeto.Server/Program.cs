@@ -54,7 +54,11 @@ builder.Services.AddAuthorization();
 builder.Services.AddTransient<IEmailService, SendGridEmailService>();
 builder.Services.AddHttpClient<WeatherService>();
 builder.Services.AddHttpClient<PlantInfoService>();
+builder.Services.AddHttpClient<PlantingAdvisor>();
 builder.Services.AddHttpClient<SustainabilityTipService>();
+builder.Services.AddHttpClient<EmojiKitchenService>();
+builder.Services.AddScoped<PetGeneratorService>();
+builder.Services.AddScoped<PetSeeder>();
 
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -125,6 +129,7 @@ using (var scope = app.Services.CreateScope())
     var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
     var userManager = services.GetRequiredService<UserManager<User>>();
     var context = services.GetRequiredService<PlantsRPetsProjetoServerContext>();
+    var petSeeder = services.GetRequiredService<PetSeeder>();
     
     await context.Database.MigrateAsync();
 
@@ -133,6 +138,8 @@ using (var scope = app.Services.CreateScope())
     await UserSeeder.SeedUsersAsync(userManager);
     //await PlantSeeder.SeedPlants(context);
     //await TipSeeder.SeedSustainabilityTips(context);
+    await petSeeder.SeedAsync();
+
 }
 
 

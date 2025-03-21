@@ -18,4 +18,8 @@ export class PlantsService {
   getPlantById(id: number): Observable<PlantInfo> {
     return this.http.get<PlantInfo>(`${this.apiUrl}/${id}`);
   }
+
+  getPlantingPeriodCheck(id: number): Observable<any> {
+    return this.http.get<any>(`api/plants/check-planting-period/${id}`);
+  }
 }

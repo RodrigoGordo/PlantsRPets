@@ -4,7 +4,11 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
+using NuGet.Common;
+using PlantsRPetsProjeto.Server.Data;
 using PlantsRPetsProjeto.Server.Models;
 using PlantsRPetsProjeto.Server.Services;
 using System.Data;
@@ -25,6 +29,10 @@ namespace PlantsRPetsProjeto.Server.Controllers
         private readonly UserManager<User> _userManager;
         private readonly IConfiguration _configuration;
         private readonly IEmailService _emailService;
+        private readonly PlantsRPetsProjetoServerContext _context;
+        private UserManager<User> object1;
+        private IConfiguration object2;
+        private IEmailService object3;
 
         /// <summary>
         /// Inicializa uma nova instância do <see cref="UserAccountsController"/>.
@@ -32,11 +40,12 @@ namespace PlantsRPetsProjeto.Server.Controllers
         /// <param name="userManager">Serviço de gestão de utilizadores.</param>
         /// <param name="configuration">Configurações da aplicação, incluindo chaves JWT.</param>
         /// <param name="emailService">Serviço para envio de e-mails.</param>
-        public UserAccountsController(UserManager<User> userManager, IConfiguration configuration, IEmailService emailService)
+        public UserAccountsController(UserManager<User> userManager, IConfiguration configuration, IEmailService emailService, PlantsRPetsProjetoServerContext context)
         {
             _userManager = userManager;
             _configuration = configuration;
             _emailService = emailService;
+            _context = context;
         }
 
         /// <summary>
@@ -57,19 +66,34 @@ namespace PlantsRPetsProjeto.Server.Controllers
 
                 var result = await _userManager.CreateAsync(user, model.Password);
 
-                if (result.Succeeded)
+                if (!result.Succeeded)
                 {
-                    return Ok(new { message = "Registration Sucessful!" });
+                    return BadRequest(new { message = "An unexpected error occurred, try again later!" });
                 }
 
-                return BadRequest(new { message = "An unexpected error occurred, try again later!" });
+                var profile = new Profile { UserId = user.Id };
+
+                await _context.Profile.AddAsync(profile);
+                var saveProfileResult = await _context.SaveChangesAsync();
+
+                if (saveProfileResult > 0)
+                {
+                    return Ok(new { message = "Registration successful!" });
+                }
+                else
+                {
+                    await _userManager.DeleteAsync(user);
+                    return StatusCode(500, new { message = "Failed to create user profile." });
+                }
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"[ERROR] {ex.Message}");
                 return StatusCode(500, new { message = "An error occurred while processing your request." });
             }
+
         }
+
 
         /// <summary>
         /// Autentica um utilizador e gera um token JWT para sessões autenticadas.
@@ -92,14 +116,12 @@ namespace PlantsRPetsProjeto.Server.Controllers
                     return BadRequest(new { message = "Invalid email or password." });
                 }
 
-                var roles = await _userManager.GetRolesAsync(user);
 
-                // Gerar os claims do utilizador
+                var roles = await _userManager.GetRolesAsync(user);
                 var claims = new List<Claim>
                 {
-                new Claim("Nickname", user.Nickname),
-                new Claim("Email", user.Email),
-                new Claim("UserId", user.Id)
+                    new Claim("UserId", user.Id),
+                    new Claim("Email", user.Email),
                 };
 
                 foreach (var role in roles)
@@ -107,7 +129,7 @@ namespace PlantsRPetsProjeto.Server.Controllers
                     claims.Add(new Claim(ClaimTypes.Role, role));
                 }
 
-                // Gerar o token JWT
+                // Generate the JWT token
                 var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
                 var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
@@ -115,13 +137,11 @@ namespace PlantsRPetsProjeto.Server.Controllers
                     issuer: _configuration["Jwt:Issuer"],
                     audience: _configuration["Jwt:Audience"],
                     claims: claims,
-                    expires: DateTime.UtcNow.AddDays(1), // Definir o tempo de expiração
+                    expires: DateTime.UtcNow.AddDays(1),
                     signingCredentials: creds);
 
                 var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
-                Console.WriteLine($"[DEBUG] Password Reset Token: {token}");// Pode ser removido depois (DEBUG)
 
-                // Retornar o token ao cliente
                 return Ok(new
                 {
                     token = tokenString,
@@ -197,7 +217,57 @@ namespace PlantsRPetsProjeto.Server.Controllers
                 return BadRequest(new
                 {
                     message = "Failed to reset password.",
-                    errors = result.Errors.Select(e => e.Description) // Pode ser removido depois (DEBUG)
+                    errors = result.Errors.Select(e => e.Description)
+                });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[ERROR] {ex.Message}");
+                return StatusCode(500, new { message = "An error occurred while processing your request." });
+            }
+        }
+
+        [HttpGet("api/user-profile")]
+        [Authorize]
+        public IActionResult GetUserProfile()
+        {
+            try
+            {
+                var userId = User.FindFirstValue("UserId");
+
+                if (string.IsNullOrEmpty(userId))
+                {
+                    return Unauthorized(new { message = "User not authenticated." });
+                }
+
+                var profile = _context.Profile
+                    .FirstOrDefault(p => p.UserId == userId);
+
+                if (profile == null)
+                {
+                    return NotFound(new { message = "Profile not found." });
+                }
+
+                var user = _context.Users
+                    .FirstOrDefault(u => u.Id == userId);
+
+                if (user == null)
+                {
+                    return NotFound(new { message = "User not found." });
+                }
+
+                var nickname = user.Nickname;
+                var baseUrl = $"{Request.Scheme}://{Request.Host}";
+
+                if(profile.ProfilePicture != null)
+                {
+                    profile.ProfilePicture = $"{baseUrl}/{profile.ProfilePicture.Replace("\\", "/")}";
+                }
+
+                return Ok(new
+                {
+                    nickname,
+                    profile,
                 });
             }
             catch (Exception ex)

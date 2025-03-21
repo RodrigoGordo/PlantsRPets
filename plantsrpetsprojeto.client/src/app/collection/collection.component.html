@@ -1,1 +1,41 @@
-<p>collection works!</p>
+<app-navbar></app-navbar>
+
+<div class="collection-container">
+  <h1>My Pet Collection</h1>
+
+  <div *ngIf="loading" class="loading">
+    <p>Loading your collection...</p>
+  </div>
+
+  <div *ngIf="error" class="error-message">
+    <p>{{ error }}</p>
+  </div>
+
+  <div *ngIf="!loading && !error" class="pet-container">
+    <div *ngFor="let pet of pets"
+         class="pet-card"
+         [ngClass]="{'not-owned': !pet.isOwned}"
+         (click)="viewPet(pet)">
+
+      <div class="pet-image-container">
+        <img [src]="pet.imageUrl" alt="{{ pet.name }}">
+        <div *ngIf="!pet.isOwned" class="silhouette-overlay"></div>
+      </div>
+
+      <div class="pet-info">
+        <h3>{{ pet.isOwned ? pet.name : '???' }}</h3>
+
+        <button *ngIf="pet.isOwned"
+                class="favorite-button"
+                [ngClass]="{'is-favorite': pet.isFavorite}"
+                (click)="toggleFavorite($event, pet.petId)">
+          <i class="fa" [ngClass]="pet.isFavorite ? 'fa-star' : 'fa-star-o'"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="!loading && pets.length === 0" class="empty-collection">
+    <p>You don't have any pets in your collection yet!</p>
+  </div>
+</div>
