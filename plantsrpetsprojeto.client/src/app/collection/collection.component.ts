@@ -38,7 +38,13 @@ export class CollectionComponent implements OnInit {
     this.loading = true;
     this.http.get<PetItem[]>('/api/collections').subscribe({
       next: (data) => {
-        this.pets = data;
+        // Ordenar: owned primeiro, depois favoritos
+        this.pets = data.sort((a, b) => {
+          if (b.isOwned !== a.isOwned) {
+            return Number(b.isOwned) - Number(a.isOwned); // Owned vem primeiro
+          }
+          return Number(b.isFavorite) - Number(a.isFavorite); // Dentro de owned, favoritos primeiro
+        });
         this.loading = false;
       },
       error: (err) => {
@@ -70,4 +76,6 @@ export class CollectionComponent implements OnInit {
       }
     });
   }
+
+
 }

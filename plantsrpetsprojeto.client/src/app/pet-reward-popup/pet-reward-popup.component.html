@@ -1,0 +1,22 @@
+<div class="popup-overlay">
+  <div class="popup-content">
+    <h2>Choose Your Reward Pet!</h2>
+
+    <div class="reward-pets">
+      <div *ngFor="let pet of pets"
+           class="reward-pet-card"
+           [ngClass]="{'selected': pet.petId === selectedPetId}"
+           (click)="selectPet(pet.petId)">
+        <div class="pet-image-wrapper">
+          <img [src]="pet.imageUrl" [alt]="pet.name">
+        </div>
+        <h3>{{ pet.name }}</h3>
+      </div>
+    </div>
+
+    <button [disabled]="selectedPetId === null || confirming"
+            (click)="confirmSelection()">
+      {{ confirming ? 'Claiming...' : 'Confirm Selection' }}
+    </button>
+  </div>
+</div>
