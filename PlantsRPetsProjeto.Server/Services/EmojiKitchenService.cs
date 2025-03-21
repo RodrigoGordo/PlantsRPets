@@ -12,7 +12,7 @@ namespace PlantsRPetsProjeto.Server.Services
     public class EmojiKitchenService
     {
         private readonly HttpClient _httpClient;
-        private readonly string localImagePath = "C:\\Users\\35196\\Desktop\\Projeto de ESA\\PlantsRPets\\plantsrpetsprojeto.client\\src\\assets\\reference.png";
+        private readonly string localImagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", "reference.png");
 
         public EmojiKitchenService(HttpClient httpClient)
         {
