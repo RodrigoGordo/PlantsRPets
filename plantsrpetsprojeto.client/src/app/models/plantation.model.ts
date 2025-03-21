@@ -11,5 +11,6 @@ export interface Plantation {
   growthStatus: string;
   experiencePoints: number;
   level: number;
+  bankedLevelUps: number,
   plantationPlants: PlantationPlant[];
 }

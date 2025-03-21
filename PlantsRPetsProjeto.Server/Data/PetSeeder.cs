@@ -25,10 +25,24 @@ namespace PlantsRPetsProjeto.Server.Data
         {
             if (!await _context.Pet.AnyAsync())
             {
+                var allPets = new List<Pet>();
                 for (int i = 0; i < numberOfPets; i++)
                 {
                     var pet = await _petGeneratorService.GeneratePetAsync();
-                    _context.Pet.Add(pet);
+
+                    if (pet != null)
+                    {
+                        if (allPets.Contains(pet))
+                        {
+                            i--;
+                            continue;
+                        }
+                        _context.Pet.Add(pet);
+                        allPets.Add(pet);
+                    } else
+                    {
+                        i--;
+                    }
                 }
 
                 await _context.SaveChangesAsync();
@@ -36,6 +50,7 @@ namespace PlantsRPetsProjeto.Server.Data
 
             await SetupAdminCollectionsAsync();
         }
+
 
         private async Task SetupAdminCollectionsAsync()
         {

@@ -32,21 +32,19 @@ namespace PlantsRPetsProjeto.Server.Services
             _emojiKitchenService = emojiKitchenService;
         }
 
-        public async Task<Pet> GeneratePetAsync()
+        public async Task<Pet?> GeneratePetAsync()
         {
             var vegetableFruitPlant = _vegetableFruitPlantEmojis[_random.Next(_vegetableFruitPlantEmojis.Count)];
             var funnyFaceAnimal = _funnyFaceAnimalEmojis[_random.Next(_funnyFaceAnimalEmojis.Count)];
 
             // Generate the pet image URL
             string imageUrl;
-            try
+           
+            imageUrl = await _emojiKitchenService.GeneratePetImageAsync(vegetableFruitPlant, funnyFaceAnimal);
+
+            if (imageUrl == "")
             {
-                imageUrl = await _emojiKitchenService.GeneratePetImageAsync(vegetableFruitPlant, funnyFaceAnimal);
-            }
-            catch
-            {
-                // If the combination fails, use a fallback image
-                imageUrl = "https://via.placeholder.com/128";
+                return null;
             }
 
             string name = $"{vegetableFruitPlant}{funnyFaceAnimal} Pet";

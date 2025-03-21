@@ -25,6 +25,7 @@ export class PlantationDetailsComponent implements OnInit {
     growthStatus: '',
     experiencePoints: 0,
     level: 0,
+    bankedLevelUps: 0,
     plantationPlants: []
   };
 
@@ -91,4 +92,31 @@ export class PlantationDetailsComponent implements OnInit {
       }
     });
   }
+
+
+
+  openPetChoiceDialog(): void {
+    if (!this.plantation) {
+      console.error('Plantation data not loaded');
+      return;
+    }
+
+    console.log(this.plantation.bankedLevelUps);
+    this.plantationsService.usePlantationBankedLevelUp(this.plantation.plantationId)
+      .subscribe({
+        next: (updatedPlantation) => {
+          if (this.plantation) {
+            this.plantation.bankedLevelUps = updatedPlantation.bankedLevelUps;
+            console.log("After using banked Level Up");
+            console.log(this.plantation.bankedLevelUps);
+            console.log(updatedPlantation);
+          }
+        },
+        error: (error) => {
+          console.error("Error when trying to decrement banked level ups", error);
+        }
+      })
+  }
+
+
 }

@@ -74,7 +74,8 @@ namespace PlantsRPetsProjeto.Server.Controllers
                         plantType.PlantTypeName,
                         plantation.PlantingDate,
                         plantation.ExperiencePoints,
-                        plantation.Level
+                        plantation.Level,
+                        plantation.BankedLevelUps
                     }
                 )
                 .FirstOrDefaultAsync();
@@ -147,6 +148,9 @@ namespace PlantsRPetsProjeto.Server.Controllers
 
             if (model.Level.HasValue)
                 existingPlantation.Level = model.Level.Value;
+
+            if (model.BankedLevelUps.HasValue)
+                existingPlantation.BankedLevelUps = model.BankedLevelUps.Value;
 
             _context.Entry(existingPlantation).State = EntityState.Modified;
 
@@ -426,6 +430,19 @@ namespace PlantsRPetsProjeto.Server.Controllers
             });
         }
 
+        [HttpPost("{id}/use-banked-levelup")]
+        public async Task<IActionResult> UseBankedLevelUp(int id)
+        {
+            var plantation = await _context.Plantation.FindAsync(id);
+            if (plantation == null)
+                return NotFound(new { message = "Plantation not found." });
+
+            plantation.BankedLevelUps -= 1;
+            await _context.SaveChangesAsync();
+
+            return Ok(plantation);
+        }
+
         [HttpPost("{plantationId}/plant/{plantInfoId}/set-harvest-date")]
         public async Task<IActionResult> SetHarvestDate(int plantationId, int plantInfoId, [FromBody] DateTime newHarvestDate)
         {
@@ -465,7 +482,6 @@ namespace PlantsRPetsProjeto.Server.Controllers
 
             DateTime? plantationPlantLastHarvest = plantationPlant!.LastHarvested;
 
-            //Console.WriteLine(existingPlantation.PlantType.HasRecurringHarvest);
             //bool plantationTypeRecurringHarvest = existingPlantation.PlantType.HasRecurringHarvest;
 
 
@@ -494,6 +510,7 @@ namespace PlantsRPetsProjeto.Server.Controllers
 
                 existingPlantation.Level += numberOfLevels;
                 existingPlantation.ExperiencePoints = leftoverExperience;
+                existingPlantation.BankedLevelUps = numberOfLevels;
             }
 
             _context.Entry(existingPlantation).State = EntityState.Modified;
@@ -528,6 +545,7 @@ namespace PlantsRPetsProjeto.Server.Controllers
         public string? GrowthStatus { get; set; }
         public int? ExperiencePoints { get; set; }
         public int? Level { get; set; }
+        public int? BankedLevelUps {  get; set; }
     }
 
     public class AddPlantToPlantationModel
