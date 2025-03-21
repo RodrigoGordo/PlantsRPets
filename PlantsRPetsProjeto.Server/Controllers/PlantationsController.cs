@@ -218,15 +218,27 @@ namespace PlantsRPetsProjeto.Server.Controllers
             }
             else
             {
+                var plantingDate = DateTime.UtcNow;
+
+                var firstHarvestDate = PlantingAdvisor.GetNextHarvestDate(
+                    plantingDate,
+                    plant.PlantType,
+                    plant.GrowthRate,
+                    isRecurring: false
+                );
+
+                Console.WriteLine($"HarvestDate Calculated: {firstHarvestDate}");
+
                 var plantationPlant = new PlantationPlants
                 {
                     PlantationId = plantationId,
                     PlantInfoId = model.PlantInfoId,
                     Quantity = model.Quantity,
                     GrowthStatus = "Growing",
-                    PlantingDate = DateTime.Now,
+                    PlantingDate = plantingDate,
                     LastWatered = null,
-                    HarvestDate = null,
+                    LastHarvested = null,
+                    HarvestDate = firstHarvestDate
                 };
 
                 _context.PlantationPlants.Add(plantationPlant);
@@ -319,6 +331,113 @@ namespace PlantsRPetsProjeto.Server.Controllers
             {
                 return StatusCode(500, "Error updating watering time");
             }
+        }
+
+        [HttpPost("{plantationId}/harvest-plant/{plantInfoId}")]
+        public async Task<IActionResult> HarvestPlant(int plantationId, int plantInfoId)
+        {
+            var plantationPlant = await _context.PlantationPlants
+                .Include(pp => pp.ReferencePlant)
+                .FirstOrDefaultAsync(pp => pp.PlantationId == plantationId && pp.PlantInfoId == plantInfoId);
+
+            if (plantationPlant == null)
+                return NotFound("Plant not found in plantation");
+
+            var plantType = await _context.PlantType
+                .FirstOrDefaultAsync(pt => pt.PlantTypeName.ToLower() == plantationPlant.ReferencePlant.PlantType.ToLower());
+
+            if (plantType == null)
+                return NotFound("Plant type not found");
+
+            if (plantationPlant.HarvestDate == null)
+                return BadRequest("Harvest date not set for this plant.");
+
+            var now = DateTime.UtcNow;
+            if (now < plantationPlant.HarvestDate.Value)
+            {
+                var timeRemaining = plantationPlant.HarvestDate.Value - now;
+                return BadRequest(new
+                {
+                    message = "Plant is not ready for harvest",
+                    timeRemainingDays = (int)Math.Ceiling(timeRemaining.TotalDays)
+                });
+            }
+
+            if (plantType.HasRecurringHarvest)
+            {
+                plantationPlant.LastHarvested = now;
+                plantationPlant.HarvestDate = PlantingAdvisor.GetNextHarvestDate(
+                    plantationPlant.PlantingDate,
+                    plantationPlant.ReferencePlant.PlantType,
+                    plantationPlant.ReferencePlant.GrowthRate,
+                    isRecurring: true,
+                    lastHarvestDate: now
+                );
+                plantationPlant.GrowthStatus = "Growing";
+                await _context.SaveChangesAsync();
+
+                return Ok(new
+                {
+                    message = "Plant harvested successfully. Next harvest in progress.",
+                    nextHarvestDate = plantationPlant.HarvestDate,
+                    lastHarvested = plantationPlant.LastHarvested
+                });
+            }
+            else
+            {
+                _context.PlantationPlants.Remove(plantationPlant);
+                await _context.SaveChangesAsync();
+
+                return Ok(new { message = "Plant harvested and removed (non-recurring)." });
+            }
+        }
+
+        [HttpGet("{plantationId}/plant/{plantInfoId}/check-harvest")]
+        public async Task<IActionResult> CheckHarvest(int plantationId, int plantInfoId)
+        {
+            var plantationPlant = await _context.PlantationPlants
+                .Include(pp => pp.ReferencePlant)
+                .FirstOrDefaultAsync(pp => pp.PlantationId == plantationId && pp.PlantInfoId == plantInfoId);
+
+            if (plantationPlant == null)
+                return NotFound("Plant not found in plantation");
+
+            var plantType = await _context.PlantType
+                .FirstOrDefaultAsync(pt => pt.PlantTypeName.ToLower() == plantationPlant.ReferencePlant.PlantType.ToLower());
+
+            if (plantType == null)
+                return NotFound("Plant type not found");
+
+            var currentHarvestDate = plantationPlant.HarvestDate;
+
+            if (currentHarvestDate == null)
+                return BadRequest("Harvest date not set for this plant.");
+
+            var now = DateTime.UtcNow;
+            bool canHarvest = now >= currentHarvestDate;
+            var timeRemaining = currentHarvestDate.Value - now;
+
+            return Ok(new
+            {
+                canHarvest,
+                timeRemainingDays = canHarvest ? 0 : (int)Math.Ceiling(timeRemaining.TotalDays),
+                nextHarvestDate = currentHarvestDate
+            });
+        }
+
+        [HttpPost("{plantationId}/plant/{plantInfoId}/set-harvest-date")]
+        public async Task<IActionResult> SetHarvestDate(int plantationId, int plantInfoId, [FromBody] DateTime newHarvestDate)
+        {
+            var plantationPlant = await _context.PlantationPlants
+                .FirstOrDefaultAsync(pp => pp.PlantationId == plantationId && pp.PlantInfoId == plantInfoId);
+
+            if (plantationPlant == null)
+                return NotFound("Plant not found in plantation");
+
+            plantationPlant.HarvestDate = newHarvestDate;
+            await _context.SaveChangesAsync();
+
+            return Ok(new { message = "HarvestDate updated", newHarvestDate });
         }
 
     }

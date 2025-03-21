@@ -576,6 +576,9 @@ namespace PlantsRPetsProjeto.Server.Migrations
                     b.Property<DateTime?>("HarvestDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime?>("LastHarvested")
+                        .HasColumnType("datetime2");
+
                     b.Property<DateTime?>("LastWatered")
                         .HasColumnType("datetime2");
 

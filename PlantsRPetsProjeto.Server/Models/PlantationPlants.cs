@@ -10,7 +10,7 @@
         public int Quantity { get; set; }
         public DateTime PlantingDate { get; set; }
         public DateTime? LastWatered { get; set; }
-
+        public DateTime? LastHarvested { get; set; }
         public DateTime? HarvestDate { get; set; }
         public string GrowthStatus { get; set; }
     }

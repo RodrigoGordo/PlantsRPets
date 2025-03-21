@@ -8,6 +8,7 @@ export interface PlantationPlant {
   quantity: number;
   plantingDate: Date;
   lastWatered: Date | null;
+  lastHarvested: Date | null;
   harvestDate: Date | null;
   growthStatus: string;
 }
