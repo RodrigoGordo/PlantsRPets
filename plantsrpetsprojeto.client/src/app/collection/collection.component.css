@@ -66,6 +66,13 @@ h1:after {
   filter: brightness(0) contrast(1);
 }
 
+/*.favorite-border {
+  outline: 5px solid #ffc107;
+  outline-offset: -2px;
+  box-shadow: 0 0 10px rgba(255, 193, 7, 0.5);
+}*/
+
+
 .silhouette-overlay {
   position: absolute;
   top: 0;
@@ -109,29 +116,23 @@ h1:after {
 }
 
 .favorite-button {
+  font-size: 24px;
+  cursor: pointer;
   background: none;
   border: none;
-  font-size: 22px;
-  cursor: pointer;
-  color: #aaa;
-  transition: all 0.3s ease;
-  z-index: 2;
-  padding: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  color: #ccc;
+  transition: transform 0.2s ease, color 0.2s ease;
 }
 
-.favorite-button:hover {
-  transform: scale(1.2);
-  color: #ffc107;
-}
+  .favorite-button:hover {
+    transform: scale(1.2);
+    color: #ffc107;
+  }
 
-.favorite-button.is-favorite {
-  color: #ffc107;
-  animation: pulse 1s;
-  text-shadow: 0 0 10px rgba(255, 193, 7, 0.4);
-}
+  .favorite-button.is-favorite {
+    color: #ffc107;
+    text-shadow: 0 0 6px rgba(255, 193, 7, 0.5);
+  }
 
 @keyframes pulse {
   0% { transform: scale(1); }

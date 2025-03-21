@@ -14,7 +14,7 @@
   <div *ngIf="!loading && !error" class="pet-container">
     <div *ngFor="let pet of pets"
          class="pet-card"
-         [ngClass]="{'not-owned': !pet.isOwned}"
+         [ngClass]="{'not-owned': !pet.isOwned, 'favorite-border': pet.isOwned && pet.isFavorite}"
          (click)="viewPet(pet)">
 
       <div class="pet-image-container">
@@ -25,9 +25,9 @@
       <div class="pet-info">
         <h3>{{ pet.isOwned ? pet.name : '???' }}</h3>
 
-        <button *ngIf="pet.isOwned"
-                class="favorite-button"
+        <button class="favorite-button"
                 [ngClass]="{'is-favorite': pet.isFavorite}"
+                [disabled]="!pet.isOwned"
                 (click)="toggleFavorite($event, pet.petId)">
           <i class="fa" [ngClass]="pet.isFavorite ? 'fa-star' : 'fa-star-o'"></i>
         </button>

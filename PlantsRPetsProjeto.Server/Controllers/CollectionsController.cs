@@ -143,5 +143,110 @@ namespace PlantsRPetsProjeto.Server.Controllers
 
             return Ok(new { isFavorite = collectionPet.IsFavorite });
         }
+
+        [HttpPut("owned/{petId}")]
+        public async Task<IActionResult> UpdateOwnedStatus(int petId, [FromBody] UpdateOwnedStatusModel model)
+        {
+            var userId = User.FindFirstValue("UserId");
+            if (string.IsNullOrEmpty(userId))
+            {
+                return Unauthorized();
+            }
+
+            var pet = await _context.Pet.FindAsync(petId);
+            if (pet == null)
+            {
+                return NotFound(new { message = "Pet not found." });
+            }
+
+            var collection = await _context.Collection
+                .Include(c => c.CollectionPets)
+                .FirstOrDefaultAsync(c => c.UserId == userId);
+
+            if (collection == null)
+            {
+                collection = new Collection { UserId = userId, CollectionPets = new List<CollectionPets>() };
+                _context.Collection.Add(collection);
+                await _context.SaveChangesAsync();
+            }
+
+            var collectionPet = collection.CollectionPets.FirstOrDefault(cp => cp.PetId == petId);
+
+            if (collectionPet == null)
+            {
+                collectionPet = new CollectionPets
+                {
+                    PetId = petId,
+                    IsOwned = model.IsOwned,
+                    IsFavorite = false,
+                    ReferenceCollection = collection
+                };
+                collection.CollectionPets.Add(collectionPet);
+            }
+            else
+            {
+                collectionPet.IsOwned = model.IsOwned;
+            }
+
+            await _context.SaveChangesAsync();
+
+            return Ok(new { petId, isOwned = collectionPet.IsOwned });
+        }
+
+        [HttpGet("random-unowned")]
+        public async Task<IActionResult> GetRandomUnownedPets()
+        {
+            var userId = User.FindFirstValue("UserId");
+            if (string.IsNullOrEmpty(userId))
+            {
+                return Unauthorized();
+            }
+
+            var collection = await _context.Collection
+                .Include(c => c.CollectionPets)
+                .FirstOrDefaultAsync(c => c.UserId == userId);
+
+            if (collection == null)
+            {
+                return NotFound("Collection not found.");
+            }
+
+            var allPets = await _context.Pet.ToListAsync();
+
+            var unownedPets = allPets
+                .Where(pet =>
+                {
+                    var cp = collection.CollectionPets.FirstOrDefault(cp => cp.PetId == pet.PetId);
+                    return cp == null || !cp.IsOwned;
+                })
+                .ToList();
+
+            if (unownedPets.Count == 0)
+            {
+                return Ok(new List<Pet>());
+            }
+
+            var random = new Random();
+            var selectedPets = unownedPets
+                .OrderBy(p => random.Next())
+                .Take(3)
+                .Select(pet => new
+                {
+                    pet.PetId,
+                    pet.Name,
+                    pet.Type,
+                    pet.Details,
+                    pet.BattleStats,
+                    pet.ImageUrl
+                })
+                .ToList();
+
+            return Ok(selectedPets);
+        }
+
+        public class UpdateOwnedStatusModel
+        {
+            public bool IsOwned { get; set; }
+        }
     }
 }

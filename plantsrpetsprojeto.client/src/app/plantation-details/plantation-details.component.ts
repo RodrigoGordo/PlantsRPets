@@ -5,6 +5,8 @@ import { AddPlantComponent } from '../add-plant/add-plant.component';
 import { PlantationsService } from '../plantations.service';
 import { Plantation } from '../models/plantation.model';
 import { PlantInfo } from '../models/plant-info';
+import { CollectionService } from '../collections.service';
+import { PetRewardPopupComponent } from '../pet-reward-popup/pet-reward-popup.component';
 
 @Component({
   selector: 'app-plantation-details',
@@ -36,6 +38,7 @@ export class PlantationDetailsComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private plantationsService: PlantationsService,
+    private collectionService: CollectionService,
     private dialog: MatDialog
   ) { }
 
@@ -93,8 +96,6 @@ export class PlantationDetailsComponent implements OnInit {
     });
   }
 
-
-
   openPetChoiceDialog(): void {
     if (!this.plantation) {
       console.error('Plantation data not loaded');
@@ -118,5 +119,29 @@ export class PlantationDetailsComponent implements OnInit {
       })
   }
 
+  openRewardPopup(): void {
+    this.collectionService.getRandomUnownedPets().subscribe({
+      next: (pets) => {
+        if (pets.length > 0) {
+          const dialogRef = this.dialog.open(PetRewardPopupComponent, {
+            width: '600px',
+            data: { pets }
+          });
+
+          dialogRef.afterClosed().subscribe(result => {
+            if (result) {
+              console.log('Reward claimed!');
+              // Atualizar nº de rewards a recolher
+            }
+          });
+        } else {
+          alert("You already own all available pets!");
+        }
+      },
+      error: (err) => {
+        console.error('Failed to load reward pets:', err);
+      }
+    });
+  }
 
 }
