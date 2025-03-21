@@ -35,6 +35,8 @@ export class PlantationDetailsComponent implements OnInit {
   loading: boolean = true;
   errorMessage: string = '';
 
+  isCollectionFull: boolean = false;
+
   constructor(
     private route: ActivatedRoute,
     private plantationsService: PlantationsService,
@@ -96,7 +98,7 @@ export class PlantationDetailsComponent implements OnInit {
     });
   }
 
-  openPetChoiceDialog(): void {
+  useBankedLevelUp(): void {
     if (!this.plantation) {
       console.error('Plantation data not loaded');
       return;
@@ -132,10 +134,11 @@ export class PlantationDetailsComponent implements OnInit {
             if (result) {
               console.log('Reward claimed!');
               // Atualizar nº de rewards a recolher
+              this.useBankedLevelUp();
             }
           });
         } else {
-          alert("You already own all available pets!");
+          this.isCollectionFull = true;
         }
       },
       error: (err) => {

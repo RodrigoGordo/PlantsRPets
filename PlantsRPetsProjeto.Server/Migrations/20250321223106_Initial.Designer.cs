@@ -12,7 +12,7 @@ using PlantsRPetsProjeto.Server.Data;
 namespace PlantsRPetsProjeto.Server.Migrations
 {
     [DbContext(typeof(PlantsRPetsProjetoServerContext))]
-    [Migration("20250321190648_Initial")]
+    [Migration("20250321223106_Initial")]
     partial class Initial
     {
         /// <inheritdoc />

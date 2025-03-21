@@ -15,13 +15,15 @@
           <div class="xp-fill" [style.width.%]="(plantation.experiencePoints / 500) * 100"></div>
         </div>
       </div>
-      <div class="pet-choice-container" *ngIf="plantation.bankedLevelUps > 0">
-        <button class="pet-choice-button" (click)="openPetChoiceDialog()">
+      <div class="pet-choice-container" *ngIf="plantation.bankedLevelUps > 0 && !isCollectionFull">
+        <button class="pet-choice-button" (click)="openRewardPopup()">
           🐾 Choose a Pet
         </button>
         <span class="choices-remaining">{{ plantation.bankedLevelUps }} choices remaining</span>
       </div>
-      <button class="reward-btn" (click)="openRewardPopup()">🎁 Claim Reward</button> <!-- Exemplo -->
+      <p *ngIf="isCollectionFull" class="celebration-message">
+        🎉🍀 <strong>You have already unlocked all pets, check back soon!</strong> 🎉🍀
+      </p>
     </div>
 
     <h2 class="plantation-subtitle">Plants in this Plantation</h2>

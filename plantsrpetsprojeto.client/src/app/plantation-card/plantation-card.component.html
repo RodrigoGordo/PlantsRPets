@@ -2,8 +2,8 @@
   <div class="plantation-info">
     <input *ngIf="isEditing" [(ngModel)]="newPlantationName" type="text" class="edit-input" />
     <h3 *ngIf="!isEditing" class="plantation-name">{{ plantation.plantationName }}</h3>
-    <p class="plantation-type">{{ plantation.plantTypeName }}</p>
-    <p class="last-watered">Last Watered: {{ plantation.lastWatered | date }}</p>
+    <p class="plantation-type">Plantation of Type: {{ plantation.plantTypeName }}</p>
+    <p class="last-watered">Creation Date: {{ plantation.plantingDate | date }}</p>
   </div>
 
   <div class="plantation-actions">

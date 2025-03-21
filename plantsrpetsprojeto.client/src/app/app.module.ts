@@ -52,6 +52,7 @@ import { PlantationPlantCardComponent } from './plantation-plant-card/plantation
 import { PlantationPlantDetailsComponent } from './plantation-plant-details/plantation-plant-details.component';
 import { FormatDatePipe } from './format-date.pipe';
 import { PlantPeriodWarningComponent } from './plant-period-warning/plant-period-warning.component';
+import { PetRewardPopupComponent } from './pet-reward-popup/pet-reward-popup.component';
 
 @NgModule({
   declarations: [
@@ -93,6 +94,7 @@ import { PlantPeriodWarningComponent } from './plant-period-warning/plant-period
     PlantationPlantDetailsComponent,
     FormatDatePipe,
     PlantPeriodWarningComponent,
+    PetRewardPopupComponent
   ],
   imports: [
     BrowserModule,
