@@ -12,6 +12,7 @@ namespace PlantsRPetsProjeto.Server.Models
         public DateTime PlantingDate { get; set; }
         public int ExperiencePoints { get; set; }
         public int Level { get; set; }
+        public int BankedLevelUps { get; set; }
         public virtual ICollection<PlantationPlants> PlantationPlants { get; set; }
     }
 }

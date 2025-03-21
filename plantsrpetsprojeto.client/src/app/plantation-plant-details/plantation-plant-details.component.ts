@@ -227,6 +227,7 @@ export class PlantationPlantDetailsComponent implements OnInit {
       .subscribe({
         next: (res) => {
           this.loadPlantationPlantDetails();
+          this.increaseExperience(true);
         },
         error: (err) => {
           console.error('Harvest failed:', err);

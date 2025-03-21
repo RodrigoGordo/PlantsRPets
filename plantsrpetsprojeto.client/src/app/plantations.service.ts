@@ -43,6 +43,10 @@ export class PlantationsService {
     return this.http.put(`${this.apiUrl}/${id}`, { plantationName: newName });
   }
 
+  usePlantationBankedLevelUp(id: number): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/${id}/use-banked-levelup`, {});
+  }
+
   gainExperience(id: number, plantInfoId: number, isHarvesting: boolean): Observable<any>
   {
     return this.http.put(`${this.apiUrl}/${id}/gain-xp/${plantInfoId}`, isHarvesting);

@@ -529,6 +529,9 @@ namespace PlantsRPetsProjeto.Server.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PlantationId"));
 
+                    b.Property<int>("BankedLevelUps")
+                        .HasColumnType("int");
+
                     b.Property<int>("ExperiencePoints")
                         .HasColumnType("int");
 
