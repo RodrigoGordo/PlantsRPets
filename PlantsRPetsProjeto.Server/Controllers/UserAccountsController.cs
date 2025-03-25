@@ -58,9 +58,30 @@ namespace PlantsRPetsProjeto.Server.Controllers
         {
             try
             {
-                var userExists = await _userManager.FindByEmailAsync(model.Email);
-                if (userExists != null)
-                    return BadRequest(new { message = "This email is already in use." });
+                var existingUser = await _userManager.FindByEmailAsync(model.Email);
+                if (existingUser != null)
+                {
+                    if (existingUser.EmailConfirmed)
+                    {
+                        return BadRequest(new { message = "This email is already in use." });
+                    }
+                    else
+                    {
+                        var token = await _userManager.GenerateEmailConfirmationTokenAsync(existingUser);
+                        var encodedToken = WebUtility.UrlEncode(token);
+                        var confirmationLink = $"{_configuration["Frontend:BaseUrl"]}/confirm-email?email={existingUser.Email}&token={encodedToken}";
+
+                        await _emailService.SendEmailAsync(
+                            existingUser.Email!,
+                            "Email Confirmation",
+                            $"<p>Hello {existingUser.Nickname},</p>" +
+                            $"<p>Please confirm your email by clicking the link below:</p>" +
+                            $"<p><a href='{confirmationLink}'>Confirm Email</a></p>" +
+                            $"<p>If you did not register, please ignore this email.</p>"
+                        );
+                        return Ok(new { message = "A new verification token has been sent to your email." });
+                    }
+                }
 
                 var user = new User { UserName = model.Email, Email = model.Email, Nickname = model.Nickname, RegistrationDate = DateTime.UtcNow };
 
@@ -72,13 +93,25 @@ namespace PlantsRPetsProjeto.Server.Controllers
                 }
 
                 var profile = new Profile { UserId = user.Id };
-
                 await _context.Profile.AddAsync(profile);
                 var saveProfileResult = await _context.SaveChangesAsync();
 
                 if (saveProfileResult > 0)
                 {
-                    return Ok(new { message = "Registration successful!" });
+                    var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                    var encodedToken = WebUtility.UrlEncode(token);
+                    var confirmationLink = $"{_configuration["Frontend:BaseUrl"]}/confirm-email?email={user.Email}&token={encodedToken}";
+                    Console.WriteLine($"[DEBUG] Email Confirmation Token: {token}");
+
+                    await _emailService.SendEmailAsync(
+                        user.Email!,
+                        "Email Confirmation",
+                        $"<p>Hello {user.Nickname},</p>" +
+                        $"<p>Please confirm your email by clicking the link below:</p>" +
+                        $"<p><a href='{confirmationLink}'>Confirm Email</a></p>" +
+                        $"<p>If you did not register, please ignore this email.</p>"
+                    );
+                    return Ok(new { message = "Registration successful! Please check your email to confirm your account." });
                 }
                 else
                 {
@@ -114,6 +147,11 @@ namespace PlantsRPetsProjeto.Server.Controllers
                 if (!passwordValid)
                 {
                     return BadRequest(new { message = "Invalid email or password." });
+                }
+
+                if (!user.EmailConfirmed)
+                {
+                    return BadRequest(new { message = "Verify your email!" });
                 }
 
 
@@ -154,6 +192,43 @@ namespace PlantsRPetsProjeto.Server.Controllers
                 return StatusCode(500, new { message = "An error occurred while processing your request." });
             }
         }
+
+
+        /// <summary>
+        /// Confirma o e-mail do utilizador utilizando o token enviado por e-mail.
+        /// </summary>
+        /// <param name="email">Endereço de e-mail do utilizador a ser confirmado.</param>
+        /// <param name="token">Token de confirmação enviado para o e-mail.</param>
+        /// <returns>Retorna um código HTTP 200 com uma mensagem de sucesso ou 400 em caso de erro.</returns>
+        [HttpGet("api/confirm-email")]
+        public async Task<IActionResult> ConfirmEmail([FromQuery] string email, [FromQuery] string token)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(token))
+                    return BadRequest(new { message = "Invalid confirmation link." });
+
+                var user = await _userManager.FindByEmailAsync(email);
+                if (user == null)
+                    return BadRequest(new { message = "Invalid email." });
+
+                var result = await _userManager.ConfirmEmailAsync(user, token);
+                if (result.Succeeded)
+                    return Ok(new { message = "Email confirmed successfully." });
+
+                return BadRequest(new
+                {
+                    message = "Email confirmation failed.",
+                    errors = result.Errors.Select(e => e.Description)
+                });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[ERROR] {ex.Message}");
+                return StatusCode(500, new { message = "An error occurred while processing your request." });
+            }
+        }
+
 
         /// <summary>
         /// Inicia o processo de recuperação de palavra-passe, enviando um link para o e-mail do utilizador.
