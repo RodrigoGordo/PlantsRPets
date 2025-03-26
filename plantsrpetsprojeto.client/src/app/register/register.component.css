@@ -98,13 +98,11 @@
     text-decoration: underline;
   }
 
-/* Prevent scrolling */
 body {
   margin: 0;
   overflow: hidden;
 }
 
-/* Error message styling */
 .error-message {
   color: #e53e3e;
   font-size: 0.875rem;
@@ -114,13 +112,11 @@ body {
   padding-left: 0.5rem;
 }
 
-/* Input error state */
 .input-error {
   border-color: #e53e3e !important;
   box-shadow: 0 0 0 1px #e53e3e;
 }
 
-/* Disabled button styling */
 .auth-button:disabled {
   opacity: 0.7;
   cursor: not-allowed;

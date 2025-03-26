@@ -97,14 +97,14 @@ export class RegisterComponent implements OnInit {
       password
     }).subscribe({
       next: (response) => {
-        this.isLoading = false;
         if (response) {
           this.registerSucceeded = true;
           this.registerForm.reset();
           this.errorMessage = "";
           setTimeout(() => {
-            this.router.navigateByUrl("/");
+            this.router.navigateByUrl("/email-verification-sent");
           }, 1300);
+          this.isLoading = false;
         }
       },
       error: err => {
@@ -119,9 +119,11 @@ export class RegisterComponent implements OnInit {
    * Abre o diálogo modal para o formulário de login, permitindo que o utilizador faça login rapidamente após o registo.
    */
   openLogin(): void {
+    this.isLoading = true;
     this.dialog.open(SigninComponent, {
       width: '520px',
       panelClass: 'auth-dialog'
     });
+    this.isLoading = false;
   }
 }

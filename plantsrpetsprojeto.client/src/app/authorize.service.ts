@@ -56,6 +56,15 @@ export class AuthorizeService {
     );
   }
 
+  public confirmEmail(email: string, token: string): Observable<boolean> {
+    return this.http.get<{ message: string }>(
+      `/api/confirm-email?email=${encodeURIComponent(email)}&token=${encodeURIComponent(token)}`
+    ).pipe(
+      map(() => true),
+      catchError(() => of(false))
+    );
+  }
+
   public signOut(): void {
     this.clearToken();
     this._authStateChanged.next(false);
@@ -136,7 +145,6 @@ export class AuthorizeService {
 
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
 
-    // Create a FormData object to send the file and other profile data
     const formData = new FormData();
     formData.append('Nickname', profileData.nickname);
     formData.append('Bio', profileData.profile.bio);
@@ -146,9 +154,8 @@ export class AuthorizeService {
     formData.append('FavoritePets', JSON.stringify(profileData.profile.favoritePets));
     formData.append('HighlightedPlantations', JSON.stringify(profileData.profile.highlightedPlantations));
 
-    console.log("Sending profile data:", formData); // Log the data being sent
+    console.log("Sending profile data:", formData);
 
-    // Do NOT set the Content-Type header manually
     return this.http.put<UserProfile>('/api/update-profile', formData, { headers }).pipe(
       catchError(() => of({
         nickname: '',

@@ -53,6 +53,8 @@ import { PlantationPlantDetailsComponent } from './plantation-plant-details/plan
 import { FormatDatePipe } from './format-date.pipe';
 import { PlantPeriodWarningComponent } from './plant-period-warning/plant-period-warning.component';
 import { PetRewardPopupComponent } from './pet-reward-popup/pet-reward-popup.component';
+import { EmailVerificationSentComponent } from './email-verification-sent/email-verification-sent.component';
+import { ConfirmEmailComponent } from './confirm-email/confirm-email.component';
 
 @NgModule({
   declarations: [
@@ -94,7 +96,9 @@ import { PetRewardPopupComponent } from './pet-reward-popup/pet-reward-popup.com
     PlantationPlantDetailsComponent,
     FormatDatePipe,
     PlantPeriodWarningComponent,
-    PetRewardPopupComponent
+    PetRewardPopupComponent,
+    EmailVerificationSentComponent,
+    ConfirmEmailComponent
   ],
   imports: [
     BrowserModule,

@@ -206,19 +206,24 @@ namespace PlantsRPetsProjeto.Server.Controllers
             try
             {
                 if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(token))
-                    return BadRequest(new { message = "Invalid confirmation link." });
+                    return BadRequest(new { message = "Invalid confirmation link. Please try again." });
 
                 var user = await _userManager.FindByEmailAsync(email);
                 if (user == null)
-                    return BadRequest(new { message = "Invalid email." });
+                    return BadRequest(new { message = "Email not found. Please register again." });
+
+                if (user.EmailConfirmed)
+                {
+                    return Ok(new { message = "Email is already confirmed." });
+                }
 
                 var result = await _userManager.ConfirmEmailAsync(user, token);
                 if (result.Succeeded)
-                    return Ok(new { message = "Email confirmed successfully." });
+                    return Ok(new { message = "Your email has been successfully confirmed." });
 
                 return BadRequest(new
                 {
-                    message = "Email confirmation failed.",
+                    message = "We couldn't confirm your email. The link may be invalid or expired.",
                     errors = result.Errors.Select(e => e.Description)
                 });
             }

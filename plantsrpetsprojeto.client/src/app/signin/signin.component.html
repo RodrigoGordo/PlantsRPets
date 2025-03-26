@@ -12,6 +12,7 @@
   <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="signin-form">
     <div class="form-group">
       <input type="email"
+             autocomplete="email"
              formControlName="email"
              placeholder="Email address"
              class="form-input"
@@ -25,6 +26,7 @@
 
     <div class="form-group">
       <input type="password"
+             autocomplete="current-password"
              formControlName="password"
              placeholder="Password"
              class="form-input"
@@ -50,4 +52,5 @@
     </div>
   </form>
 </div>
+
 <app-loading-indicator [isLoading]="isLoading"></app-loading-indicator>

@@ -1,5 +1,10 @@
 <nav class="menu">
-  <div class="logo">
+  <div class="logo"  *ngIf="!isSignedIn">
+    <a routerLink="/" class="logo-link">
+      <img src="assets/logo.png" alt="Plants R Pets Logo" matTooltip="Click to return to the homepage" />
+    </a>
+  </div>
+  <div class="logo" *ngIf="isSignedIn">
     <a routerLink="/home" class="logo-link">
       <img src="assets/logo.png" alt="Plants R Pets Logo" matTooltip="Click to return to the homepage" />
     </a>

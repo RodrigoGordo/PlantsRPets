@@ -19,6 +19,7 @@ import { LogoutConfirmationComponent } from '../logout-confirmation/logout-confi
 export class LoginMenuComponent {
   isSignedIn: boolean = false;
   dropdownOpen: boolean = false;
+  isLoading: boolean = false;
 
   /**
    * Construtor do componente que injeta serviços para controlo de diálogos, autenticação e navegação.
@@ -42,11 +43,13 @@ export class LoginMenuComponent {
    * O modal está configurado para não poder ser fechado sem uma ação explícita (disableClose).
    */
   openSignInDialog(): void {
+    this.isLoading = true;
     this.dialog.open(SigninComponent, {
       width: '520px',
       panelClass: 'custom-dialog-container',
       disableClose: true
     });
+    this.isLoading = false;
   }
 
   /**
