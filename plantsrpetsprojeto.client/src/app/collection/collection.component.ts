@@ -1,17 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-
-interface PetItem {
-  petId: number;
-  name: string;
-  type: string;
-  details: string;
-  battleStats: string;
-  imageUrl: string;
-  isOwned: boolean;
-  isFavorite: boolean;
-}
+import { Pet } from '../models/pet';
 
 /**
  * Componente responsável pela gestão e visualização da coleção de pets do utilizador.
@@ -24,7 +14,7 @@ interface PetItem {
   styleUrl: './collection.component.css'
 })
 export class CollectionComponent implements OnInit {
-  pets: PetItem[] = [];
+  pets: Pet[] = [];
   loading: boolean = true;
   error: string | null = null;
 
@@ -36,7 +26,7 @@ export class CollectionComponent implements OnInit {
 
   loadUserCollection(): void {
     this.loading = true;
-    this.http.get<PetItem[]>('/api/collections').subscribe({
+    this.http.get<Pet[]>('/api/collections').subscribe({
       next: (data) => {
         // Ordenar: owned primeiro, depois favoritos
         this.pets = data.sort((a, b) => {
@@ -54,28 +44,5 @@ export class CollectionComponent implements OnInit {
       }
     });
   }
-
-  viewPet(pet: PetItem): void {
-    if (pet.isOwned) {
-      this.router.navigate(['/pet', pet.petId]);
-    }
-  }
-
-  toggleFavorite(event: Event, petId: number): void {
-    event.stopPropagation();
-
-    this.http.put<{ isFavorite: boolean }>(`/api/collections/favorite/${petId}`, {}).subscribe({
-      next: (response) => {
-        const petIndex = this.pets.findIndex(p => p.petId === petId);
-        if (petIndex !== -1) {
-          this.pets[petIndex].isFavorite = response.isFavorite;
-        }
-      },
-      error: (err) => {
-        console.error('Error toggling favorite status:', err);
-      }
-    });
-  }
-
 
 }

@@ -244,6 +244,21 @@ namespace PlantsRPetsProjeto.Server.Controllers
             return Ok(selectedPets);
         }
 
+        [HttpGet("{collectionId}/favoritePets")]
+        public async Task<ActionResult<IEnumerable<Pet>>> GetFavoritePetsInCollection(int collectionId)
+        {
+            var favoritePets = await _context.Collection
+                .Where(c => c.CollectionId == collectionId)
+                .Include(c => c.CollectionPets)
+                .ThenInclude(cp => cp.ReferencePet)
+                .SelectMany(c => c.CollectionPets
+                    .Where(cp => cp.IsFavorite)
+                    .Select(cp => cp.ReferencePet))
+                .ToListAsync();
+
+            return Ok(favoritePets);
+        }
+
         public class UpdateOwnedStatusModel
         {
             public bool IsOwned { get; set; }
