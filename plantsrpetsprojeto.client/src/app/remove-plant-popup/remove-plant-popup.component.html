@@ -1,0 +1,36 @@
+<div class="popup-overlay">
+  <div class="popup-content">
+    <h2>Remove Plant</h2>
+
+    <p>How many units of <strong>{{ data.plantName }}</strong> do you want to remove?</p>
+
+    <input type="number"
+           [value]="inputValue"
+           (input)="onInputChange($event)"
+           (blur)="onInputBlur()"
+           [disabled]="confirming || isSecondConfirmStep" />
+
+    <p class="warning" *ngIf="quantityToRemove === data.maxQuantity && !isSecondConfirmStep">
+      ⚠️ This will completely remove this plant from the plantation.
+    </p>
+
+    <p class="warning" *ngIf="isSecondConfirmStep">
+      ⚠️ This action will completely remove this plant from the plantation. Are you sure?
+    </p>
+
+    <div class="popup-buttons" *ngIf="!isSecondConfirmStep">
+      <button class="cancel-button" (click)="cancel()" [disabled]="confirming">Cancel</button>
+      <button class="confirm-button" (click)="confirmRemoval()"
+              [disabled]="confirming || quantityToRemove <= 0 || quantityToRemove > data.maxQuantity">
+        {{ confirming ? 'Removing...' : 'Confirm' }}
+      </button>
+    </div>
+
+    <div class="popup-buttons" *ngIf="isSecondConfirmStep">
+      <button class="cancel-button" (click)="cancel()" [disabled]="confirming">Cancel</button>
+      <button class="final-confirm-button" (click)="confirmRemoval()" [disabled]="confirming" class="final-confirm-button">
+        Yes, remove all
+      </button>
+    </div>
+  </div>
+</div>

@@ -5,6 +5,8 @@ import { PlantationPlant } from '../models/plantation-plant';
 import { Location } from '@angular/common';
 import { Plantation } from '../models/plantation.model';
 import { tap } from 'rxjs';
+import { MatDialog } from '@angular/material/dialog';
+import { RemovePlantPopupComponent } from '../remove-plant-popup/remove-plant-popup.component';
 
 type PlantType = 'Tree' | 'Shrub' | 'Vegetable';
 type WaterFrequency = 'Minimal' | 'Average' | 'Frequent';
@@ -42,6 +44,7 @@ export class PlantationPlantDetailsComponent implements OnInit {
   private cooldownCheckInterval!: any;
 
   constructor(
+    private dialog: MatDialog,
     private route: ActivatedRoute,
     private plantationsService: PlantationsService,
     private location: Location
@@ -96,6 +99,25 @@ export class PlantationPlantDetailsComponent implements OnInit {
 
   ngOnDestroy() {
     clearInterval(this.cooldownCheckInterval);
+  }
+
+  openRemoveDialog(): void {
+    const dialogRef = this.dialog.open(RemovePlantPopupComponent, {
+      width: '420px',
+      panelClass: 'custom-dialog-container',
+      data: {
+        plantName: this.plantationPlant.referencePlant.plantName,
+        maxQuantity: this.plantationPlant.quantity,
+        plantationId: this.plantationId,
+        plantInfoId: this.plantInfoId
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === true) {
+        this.loadPlantationPlantDetails();
+      }
+    });
   }
 
   get waterFrequency(): string {

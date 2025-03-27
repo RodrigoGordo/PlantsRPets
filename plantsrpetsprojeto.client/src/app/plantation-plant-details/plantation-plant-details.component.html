@@ -19,6 +19,9 @@
         <img [src]="plantationPlant.referencePlant.image" [alt]="plantationPlant.referencePlant.plantName" class="plant-image">
 
         <div class="button-container">
+          <button class="remove-button" (click)="openRemoveDialog()">
+            Remove Plant
+          </button>
           <button class="harvest-button" (click)="harvestPlant()" [disabled]="!canHarvest">
             Harvest
           </button>

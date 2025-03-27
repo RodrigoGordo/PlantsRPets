@@ -55,6 +55,8 @@ import { PlantPeriodWarningComponent } from './plant-period-warning/plant-period
 import { PetRewardPopupComponent } from './pet-reward-popup/pet-reward-popup.component';
 import { EmailVerificationSentComponent } from './email-verification-sent/email-verification-sent.component';
 import { ConfirmEmailComponent } from './confirm-email/confirm-email.component';
+import { RemovePlantPopupComponent } from './remove-plant-popup/remove-plant-popup.component';
+import { RemovePlantationPopupComponent } from './remove-plantation-popup/remove-plantation-popup.component';
 
 @NgModule({
   declarations: [
@@ -98,7 +100,9 @@ import { ConfirmEmailComponent } from './confirm-email/confirm-email.component';
     PlantPeriodWarningComponent,
     PetRewardPopupComponent,
     EmailVerificationSentComponent,
-    ConfirmEmailComponent
+    ConfirmEmailComponent,
+    RemovePlantPopupComponent,
+    RemovePlantationPopupComponent
   ],
   imports: [
     BrowserModule,
