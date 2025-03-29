@@ -1,15 +1,19 @@
-<div [routerLink]="['/plantation', plantation.plantationId]" class="plantation-card">
+<div class="plantation-card" [class.editing]="isEditing" [routerLink]="!isEditing ? ['/plantation', plantation.plantationId] : null" (click) ="onPlantationSelected()">
   <div class="plantation-info">
-    <input *ngIf="isEditing" [(ngModel)]="newPlantationName" type="text" class="edit-input" />
+    <input *ngIf="isEditing"
+           [(ngModel)]="newPlantationName"
+           type="text"
+           class="edit-input"
+           (click)="$event.stopPropagation()" />
     <h3 *ngIf="!isEditing" class="plantation-name">{{ plantation.plantationName }}</h3>
     <p class="plantation-type">Plantation of Type: {{ plantation.plantTypeName }}</p>
     <p class="last-watered">Creation Date: {{ plantation.plantingDate | date }}</p>
   </div>
 
   <div class="plantation-actions">
-    <button *ngIf="!isEditing" class="edit-btn" (click)="enableEdit()">✏️</button>
-    <button *ngIf="isEditing" class="save-btn" (click)="saveEdit()">✔️</button>
-    <button *ngIf="isEditing" class="cancel-btn" (click)="cancelEdit()">❌</button>
-    <button class="delete-btn" (click)="remove()">🗑️</button>
+    <button *ngIf="!isEditing" class="edit-btn" (click)="enableEdit(); $event.stopPropagation()">✏️</button>
+    <button *ngIf="isEditing" class="save-btn" (click)="saveEdit(); $event.stopPropagation()">✔️</button>
+    <button *ngIf="isEditing" class="cancel-btn" (click)="cancelEdit(); $event.stopPropagation()">❌</button>
+    <button *ngIf="!isEditing" class="delete-btn" (click)="remove(); $event.stopPropagation()">🗑️</button>
   </div>
 </div>

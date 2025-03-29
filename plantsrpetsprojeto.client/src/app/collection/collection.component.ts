@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { RecentActivityService } from '../recent-activity.service';
 
 interface PetItem {
   petId: number;
@@ -28,7 +29,7 @@ export class CollectionComponent implements OnInit {
   loading: boolean = true;
   error: string | null = null;
 
-  constructor(private http: HttpClient, private router: Router) { }
+  constructor(private http: HttpClient, private router: Router, private recentActivity: RecentActivityService) { }
 
   ngOnInit(): void {
     this.loadUserCollection();
@@ -38,7 +39,6 @@ export class CollectionComponent implements OnInit {
     this.loading = true;
     this.http.get<PetItem[]>('/api/collections').subscribe({
       next: (data) => {
-        // Ordenar: owned primeiro, depois favoritos
         this.pets = data.sort((a, b) => {
           if (b.isOwned !== a.isOwned) {
             return Number(b.isOwned) - Number(a.isOwned); // Owned vem primeiro
@@ -58,6 +58,7 @@ export class CollectionComponent implements OnInit {
   viewPet(pet: PetItem): void {
     if (pet.isOwned) {
       this.router.navigate(['/pet', pet.petId]);
+      this.recentActivity.savePet(String(pet.petId))
     }
   }
 

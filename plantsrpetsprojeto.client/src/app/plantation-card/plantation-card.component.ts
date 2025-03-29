@@ -1,5 +1,6 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { PlantationsService } from '../plantations.service';
+import { RecentActivityService } from '../recent-activity.service';
 
 @Component({
   selector: 'app-plantation-card',
@@ -17,7 +18,7 @@ export class PlantationCardComponent {
   isEditing: boolean = false;
   newPlantationName: string = '';
 
-  constructor(private plantationsService: PlantationsService) { }
+  constructor(private plantationsService: PlantationsService, private recentActivity: RecentActivityService) { }
 
   enableEdit(): void {
     this.isEditing = true;
@@ -43,6 +44,14 @@ export class PlantationCardComponent {
     if (confirm(`Are you sure you want to delete "${this.plantation.plantationName}"?`)) {
       this.plantationsService.deletePlantation(this.plantation.plantationId)
         .subscribe(() => this.deleted.emit());
+      this.recentActivity.removePlantation(this.plantation.plantationId);
     }
   }
+
+  onPlantationSelected(): void {
+    this.recentActivity.savePlantation(this.plantation.plantationId);
+    console.log(this.recentActivity.getRecentPlantations());
+  }
 }
+
+

@@ -14,7 +14,7 @@ export class PlantationPlantCardComponent {
   plantationId! : Number;
 
   constructor(private router: Router,
-              private route: ActivatedRoute) { }
+    private route: ActivatedRoute) { }
 
   ngOnInit() {
     this.route.paramMap.subscribe(params => {
@@ -26,6 +26,5 @@ export class PlantationPlantCardComponent {
 
   navigateToPlantPlantationDetails() {
     this.router.navigate([`/plantation/${this.plantationId}/plant/${this.plant.plantInfoId}`]);
-    
   }
 }

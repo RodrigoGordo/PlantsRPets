@@ -1,17 +1,33 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { RecentActivityService } from '../recent-activity.service';
+import { AuthorizeService } from '../authorize.service';
+import { filter } from 'rxjs/operators';
 
-/**
- * Componente responsável pela página principal (home) da aplicação.
- * Serve como ponto de entrada após o utilizador iniciar sessão, podendo exibir informações personalizadas,
- * resumos de atividades ou atalhos para diferentes funcionalidades da aplicação.
- */
 @Component({
-  selector: 'app-home',
   standalone: false,
-  
+  selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrl: './home.component.css'
+  styleUrls: ['./home.component.css']
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit {
+  recentPets: string[] = [];
+  recentPlantations: string[] = [];
 
+  constructor(
+    private recentActivityService: RecentActivityService,
+    private authService: AuthorizeService
+  ) { }
+
+  ngOnInit(): void {
+    this.authService.getUserProfile()
+      .pipe(filter(profile => !!profile.profile.userId))
+      .subscribe(() => {
+        this.loadRecentItems();
+      });
+  }
+
+  private loadRecentItems(): void {
+    this.recentPets = this.recentActivityService.getRecentPets();
+    this.recentPlantations = this.recentActivityService.getRecentPlantations();
+  }
 }
