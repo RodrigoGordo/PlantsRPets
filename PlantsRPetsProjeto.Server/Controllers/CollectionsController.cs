@@ -244,17 +244,29 @@ namespace PlantsRPetsProjeto.Server.Controllers
             return Ok(selectedPets);
         }
 
-        [HttpGet("{collectionId}/favoritePets")]
-        public async Task<ActionResult<IEnumerable<Pet>>> GetFavoritePetsInCollection(int collectionId)
+        [HttpGet("favoritePets")]
+        public async Task<ActionResult<IEnumerable<Pet>>> GetFavoritePetsInCollection()
         {
-            var favoritePets = await _context.Collection
-                .Where(c => c.CollectionId == collectionId)
+            var userId = User.FindFirstValue("UserId");
+            if (string.IsNullOrEmpty(userId))
+            {
+                return Unauthorized();
+            }
+
+            var collection = await _context.Collection
                 .Include(c => c.CollectionPets)
                 .ThenInclude(cp => cp.ReferencePet)
-                .SelectMany(c => c.CollectionPets
-                    .Where(cp => cp.IsFavorite)
-                    .Select(cp => cp.ReferencePet))
-                .ToListAsync();
+                .FirstOrDefaultAsync(c => c.UserId == userId);
+
+            if (collection == null)
+            {
+                return NotFound("Collection not found.");
+            }
+
+            var favoritePets = collection.CollectionPets
+               .Where(cp => cp.IsFavorite)
+               .Select(cp => cp.ReferencePet)
+               .ToList();
 
             return Ok(favoritePets);
         }

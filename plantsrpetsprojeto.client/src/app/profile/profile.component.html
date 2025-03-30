@@ -36,26 +36,24 @@
 
     <div class="section">
       <h2>Favorite Pets</h2>
-      <div *ngIf="userProfile.profile.favoritePets && userProfile.profile.favoritePets.length > 0; else noPets" class="scrollable-list">
-        <div *ngFor="let pet of userProfile.profile.favoritePets" class="list-item">
-          {{ pet }}
-        </div>
+      <div class="scrollable-list">
+        <app-pet-card *ngFor="let pet of favoritePets"
+                      [pet]="pet">
+        </app-pet-card>
       </div>
-      <ng-template #noPets>
-        <p>No favorite pets added yet.</p>
-      </ng-template>
+      
     </div>
 
     <div class="section">
       <h2>Highlighted Plantations</h2>
-      <div *ngIf="userProfile.profile.highlightedPlantations && userProfile.profile.highlightedPlantations.length > 0; else noPlantations" class="scrollable-list">
-        <div *ngFor="let plantation of userProfile.profile.highlightedPlantations" class="list-item">
-          {{ plantation }}
-        </div>
+      <div class="scrollable-list">
+        <app-plantation-card *ngFor="let plantation of highlightedPlantations"
+                             [plantation]="plantation"
+                             (updated)="loadHighlightedPlantations()"
+                             (deleted)="loadHighlightedPlantations()">
+        </app-plantation-card>
       </div>
-      <ng-template #noPlantations>
-        <p>No highlighted plantations added yet.</p>
-      </ng-template>
+      
     </div>
   </div>
 </body>

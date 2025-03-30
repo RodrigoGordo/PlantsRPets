@@ -1,6 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthorizeService } from '../authorize.service';
 import { UserProfile } from '../models/user-profile';
+import { Pet } from '../models/pet';
+import { HttpClient } from '@angular/common/http';
+import { CollectionService } from '../collections.service';
+import { Plantation } from '../models/plantation.model';
+import { PlantationsService } from '../plantations.service';
 
 @Component({
     standalone: false,
@@ -21,11 +26,18 @@ export class ProfileComponent implements OnInit {
             userId: ''
         }
     };
+    favoritePets: Pet[] = [];
+    highlightedPlantations: Plantation[] = []
+    loading: boolean = true;
+    error: string | null = null;
 
-    constructor(private authService: AuthorizeService) { }
+
+  constructor(private plantationsService: PlantationsService, private collectionService: CollectionService, private http: HttpClient, private authService: AuthorizeService) { }
 
     ngOnInit(): void {
-        this.loadProfile();
+      this.loadProfile();
+      this.loadFavoritePets();
+      this.loadHighlightedPlantations();
     }
 
     loadProfile(): void {
@@ -93,5 +105,57 @@ export class ProfileComponent implements OnInit {
             };
             reader.readAsDataURL(file);
         }
-    }
+  }
+
+  //getFavoritePets(): void {
+  //  this.loading = true;
+  //  this.collectionService.getFavoritePetsInCollection().subscribe({
+  //    next: (data) => {
+  //      // Ordenar: owned primeiro, depois favoritos
+  //      this.favoritePets = data.sort((a, b) => a.name.localeCompare(b.name));
+  //      this.loading = false;
+  //    },
+  //    error: (err) => {
+  //      this.error = 'Failed to load your collection. Please try again later.';
+  //      this.loading = false;
+  //      console.error('Error loading collection:', err);
+  //    }
+  //  });
+  //}
+
+  loadFavoritePets(): void {
+    this.loading = true;
+    this.http.get<Pet[]>('/api/collections').subscribe({
+      next: (data) => {
+        this.favoritePets = data
+          .filter(pet => pet.isFavorite)
+          .sort((a, b) => {
+            if (b.isOwned !== a.isOwned) {
+              return Number(b.isOwned) - Number(a.isOwned);
+            }
+            return a.name.localeCompare(b.name);
+          })
+          .slice(0, 5);
+
+        this.loading = false;
+      },
+      error: (err) => {
+        this.error = 'Failed to load your collection. Please try again later.';
+        this.loading = false;
+        console.error('Error loading collection:', err);
+      }
+    });
+  }
+
+  loadHighlightedPlantations() {
+    this.plantationsService.getUserPlantations().subscribe(
+      (data: Plantation[]) => {
+        console.log(data);
+        this.highlightedPlantations = data
+          .sort((a, b) => b.level - a.level) 
+          .slice(0, 3);
+      },
+      (error: any) => console.error('Error fetching plantations:', error)
+    );
+  }
 }
