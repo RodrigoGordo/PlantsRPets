@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\35196\\Desktop\\Projeto de ESA\\PlantsRPets\\PlantsRPetsProjeto.Server\\PlantsRPetsProjeto.Server.csproj": {}
+    "D:\\Git\\PlantsRPets\\PlantsRPetsProjeto.Server\\PlantsRPetsProjeto.Server.csproj": {}
   },
   "projects": {
-    "C:\\Users\\35196\\Desktop\\Projeto de ESA\\PlantsRPets\\PlantsRPetsProjeto.Server\\PlantsRPetsProjeto.Server.csproj": {
+    "D:\\Git\\PlantsRPets\\PlantsRPetsProjeto.Server\\PlantsRPetsProjeto.Server.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\35196\\Desktop\\Projeto de ESA\\PlantsRPets\\PlantsRPetsProjeto.Server\\PlantsRPetsProjeto.Server.csproj",
+        "projectUniqueName": "D:\\Git\\PlantsRPets\\PlantsRPetsProjeto.Server\\PlantsRPetsProjeto.Server.csproj",
         "projectName": "PlantsRPetsProjeto.Server",
-        "projectPath": "C:\\Users\\35196\\Desktop\\Projeto de ESA\\PlantsRPets\\PlantsRPetsProjeto.Server\\PlantsRPetsProjeto.Server.csproj",
-        "packagesPath": "C:\\Users\\35196\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\35196\\Desktop\\Projeto de ESA\\PlantsRPets\\PlantsRPetsProjeto.Server\\obj\\",
+        "projectPath": "D:\\Git\\PlantsRPets\\PlantsRPetsProjeto.Server\\PlantsRPetsProjeto.Server.csproj",
+        "packagesPath": "C:\\Users\\putot\\.nuget\\packages\\",
+        "outputPath": "D:\\Git\\PlantsRPets\\PlantsRPetsProjeto.Server\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\35196\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\putot\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -50,6 +50,10 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
+            "Google.Apis.FirebaseCloudMessaging.v1": {
+              "target": "Package",
+              "version": "[1.69.0.3722, )"
+            },
             "Microsoft.AspNetCore.Authentication.JwtBearer": {
               "target": "Package",
               "version": "[8.0.0, )"
