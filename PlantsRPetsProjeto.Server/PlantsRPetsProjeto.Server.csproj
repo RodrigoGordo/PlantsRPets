@@ -7,6 +7,7 @@
     <SpaRoot>..\plantsrpetsprojeto.client</SpaRoot>
     <SpaProxyLaunchCommand>npm start</SpaProxyLaunchCommand>
     <SpaProxyServerUrl>https://localhost:4200</SpaProxyServerUrl>
+    <UserSecretsId>02447624-71b7-41ce-a8b6-ba580f5d2bc3</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>

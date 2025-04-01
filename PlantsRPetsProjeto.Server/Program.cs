@@ -11,11 +11,14 @@ using PlantsRPetsProjeto.Server.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Configuration.AddUserSecrets<Program>();
+
 //Add services to the container
 builder.Services.AddControllers();
 
 builder.Services.AddDbContext<PlantsRPetsProjetoServerContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("PlantsRPetsProjetoServerContext") ?? throw new InvalidOperationException("Connection string 'PlantsRPetsProjetoServerContext' not found.")));
+
 
 //Add Identity
 builder.Services
