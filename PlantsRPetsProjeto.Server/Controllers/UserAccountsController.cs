@@ -175,7 +175,8 @@ namespace PlantsRPetsProjeto.Server.Controllers
                     issuer: _configuration["Jwt:Issuer"],
                     audience: _configuration["Jwt:Audience"],
                     claims: claims,
-                    expires: DateTime.UtcNow.AddDays(1),
+                    //expires: DateTime.UtcNow.AddDays(1),
+                    expires: DateTime.UtcNow.AddMinutes(1),
                     signingCredentials: creds);
 
                 var tokenString = new JwtSecurityTokenHandler().WriteToken(token);

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { UserInfo } from './authorize.dto';
 import { UserProfile } from './models/user-profile';
@@ -10,6 +10,8 @@ import { UserProfile } from './models/user-profile';
 })
 export class AuthorizeService {
   private _authStateChanged: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(this.hasToken());
+  private _loginRequested = new Subject<void>();
+  public loginRequested$ = this._loginRequested.asObservable();
 
   constructor(private http: HttpClient) { }
 
@@ -68,6 +70,10 @@ export class AuthorizeService {
   public signOut(): void {
     this.clearToken();
     this._authStateChanged.next(false);
+  }
+
+  public requestLoginPopup(): void {
+    this._loginRequested.next();
   }
 
   public isSignedIn(): boolean {
