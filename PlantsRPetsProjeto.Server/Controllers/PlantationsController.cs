@@ -518,13 +518,13 @@ namespace PlantsRPetsProjeto.Server.Controllers
             try
             {
                 await _context.SaveChangesAsync();
+                return Ok(existingPlantation);
             }
             catch (DbUpdateConcurrencyException)
             {
                 return Conflict(new { message = "Conflict updating plantation when increasing experience, please try again." });
             }
 
-            return NoContent();
         }
     }
 
