@@ -2,6 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { AuthorizeService } from './authorize.service';
 import { jwtDecode } from 'jwt-decode';
+import { MatDialog } from '@angular/material/dialog';
+import { SigninComponent } from './signin/signin.component';
 
 @Component({
   selector: 'app-root',
@@ -10,23 +12,51 @@ import { jwtDecode } from 'jwt-decode';
   styleUrl: './app.component.css'
 })
 export class AppComponent implements OnInit {
-  constructor(private authService: AuthorizeService) { }
+  constructor(private authService: AuthorizeService, private dialog: MatDialog) { }
 
   ngOnInit(): void {
     const token = localStorage.getItem('authToken');
+    const popupFlag = localStorage.getItem('showLoginPopup');
+
     if (token) {
       try {
         const decoded: any = jwtDecode(token);
         const exp = decoded.exp * 1000;
+
         if (Date.now() >= exp) {
           this.authService.signOut();
-          this.authService.requestLoginPopup();
+          localStorage.setItem('showLoginPopup', 'true');
+
+          if (window.location.pathname !== '/') {
+            window.location.href = '/';
+          }
         }
       } catch (error) {
-        console.error("Erro ao decodificar token:", error);
         this.authService.signOut();
-        this.authService.requestLoginPopup();
+        localStorage.setItem('showLoginPopup', 'true');
+
+        if (window.location.pathname !== '/') {
+        window.location.href = '/';
+        }
       }
     }
+
+    if (popupFlag === 'true') {
+      localStorage.removeItem('showLoginPopup');
+      this.dialog.open(SigninComponent, {
+        width: '520px',
+        panelClass: 'custom-dialog-container',
+        disableClose: true
+      });
+    }
+
+    this.authService.loginRequested$.subscribe(() => {
+      this.dialog.open(SigninComponent, {
+        width: '520px',
+        panelClass: 'custom-dialog-container',
+        disableClose: true
+      });
+    });
   }
+
 }

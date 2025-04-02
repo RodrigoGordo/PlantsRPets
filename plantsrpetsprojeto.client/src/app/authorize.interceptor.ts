@@ -9,7 +9,7 @@ import { AuthorizeService } from "./authorize.service";
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
-  constructor(private authService: AuthorizeService) { }
+  constructor(private authService: AuthorizeService, private router: Router) { }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     const token = localStorage.getItem('authToken');
@@ -29,12 +29,19 @@ export class AuthInterceptor implements HttpInterceptor {
           if (event instanceof HttpErrorResponse && event.status === 401) {
             localStorage.removeItem('authToken');
             this.authService.signOut();
-            this.authService.requestLoginPopup();
+
+            this.router.navigate(['/']).then(() => {
+              setTimeout(() => {
+                localStorage.setItem('showLoginPopup', 'true');
+              }, 100);
+            });
           }
         },
       })
     );
   }
 }
+
+
 
 
