@@ -48,15 +48,11 @@
       </a>
     </li>
     <li>
-      <a routerLink="/communities" routerLinkActive="active" class="mock-button" matTooltip="Join and interact with plant communities">
-        Communites
-      </a>
-    </li>
-    <li>
       <a routerLink="/wiki" routerLinkActive="active" class="mock-button" matTooltip="Check meaningful information about all plants available">
         Plant Wiki
       </a>
     </li>
   </ul>
+  <app-notification-card *ngIf="isSignedIn"></app-notification-card>
   <app-login-menu></app-login-menu>
 </nav>

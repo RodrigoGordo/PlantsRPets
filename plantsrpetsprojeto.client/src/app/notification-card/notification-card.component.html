@@ -1,0 +1,20 @@
+<div class="notification-icon" (click)="toggleNotifications()">
+  🛎️
+  <span class="badge" *ngIf="unreadNotifications.length > 0">
+    {{ unreadNotifications.length }}
+  </span>
+</div>
+
+<div class="notification-card" *ngIf="showNotifications">
+  <h3>Notifications</h3>
+  <ul>
+    <li *ngFor="let notification of notifications" [class.unread]="!notification.isRead">
+      <strong>{{ notification.notification.type }}</strong>
+      <p>{{ notification.notification.message }}</p>
+      <div class="notification-actions">
+        <button (click)="markAsRead(notification)">✔ Mark as Read</button>
+        <button (click)="deleteNotification(notification)">🗑️ Delete</button>
+      </div>
+    </li>
+  </ul>
+</div>
