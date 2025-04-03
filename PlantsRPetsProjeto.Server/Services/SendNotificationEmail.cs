@@ -19,30 +19,46 @@ namespace PlantsRPetsProjeto.Server.Services
 
         public async Task Execute(IJobExecutionContext context)
         {
-            var today = DateTime.UtcNow;
-            var users = await _dbContext.Users
-                .Where(u => u.NotificationFrequency != User.EmailFrequency.Never)
-                .ToListAsync();
-
-            foreach (var user in users)
+            try
             {
-                if (!ShouldSendEmail(user.NotificationFrequency, user.Id, today))
-                    continue;
+                Console.WriteLine("🔹 SendNotificationEmail job started.");
+                var today = DateTime.UtcNow;
 
-                var unreadNotifications = await _dbContext.UserNotifications
-                    .Where(n => n.UserId == user.Id && !n.isRead)
-                    .Include(n => n.Notification)
+                var users = await _dbContext.Users
+                    .Where(u => u.NotificationFrequency != User.EmailFrequency.Never)
                     .ToListAsync();
 
-                if (unreadNotifications.Any())
+                foreach (var user in users)
                 {
-                    var emailBody = string.Join("<br>", unreadNotifications.Select(n => n.Notification.Message), " ", unreadNotifications.Select(n=> n.ReceivedDate));
-                    await _emailService.SendEmailAsync(user.Email, "Your Notifications", emailBody);
+                    //if (!ShouldSendEmail(user.NotificationFrequency, user.Id, today))
+                    //    continue;
 
-                    await _dbContext.SaveChangesAsync();
+                    var unreadNotifications = await _dbContext.UserNotifications
+                        .Where(n => n.UserId == user.Id && !n.isRead)
+                        .Include(n => n.Notification)
+                        .ToListAsync();
+
+                    if (unreadNotifications.Any())
+                    {
+                        var emailBody = string.Join("<br>", unreadNotifications.Select(n => n.Notification.Message));
+
+                        Console.WriteLine($"📧 Sending email to: {user.Email}");
+                        await _emailService.SendEmailAsync(user.Email, "Your Notifications", emailBody);
+                        Console.WriteLine($"✅ Email sent successfully to {user.Email}");
+                    }
+                    else
+                    {
+                        Console.WriteLine($"ℹ️ No unread notifications for {user.Email}");
+                    }
                 }
             }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"❌ Error in SendNotificationEmail job: {ex.Message}");
+            }
+
         }
+
 
         private bool ShouldSendEmail(User.EmailFrequency frequency, string userId, DateTime today)
         {

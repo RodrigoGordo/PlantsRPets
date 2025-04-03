@@ -3,7 +3,7 @@
 "ServerUrl": "https://localhost:4200",
 "RedirectUrl": "",
 "LaunchCommand": "npm start",
-"WorkingDirectory": "C:\\Users\\putot\\Source\\Repos\\PlantsRPets\\PlantsRPetsProjeto.Server\\..\\plantsrpetsprojeto.client",
+"WorkingDirectory": "D:\\Git\\PlantsRPets\\PlantsRPetsProjeto.Server\\..\\plantsrpetsprojeto.client",
 "MaxTimeoutInSeconds": "120",
 "KeepRunning": "false"
 }
