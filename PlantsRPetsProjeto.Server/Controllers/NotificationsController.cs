@@ -122,5 +122,33 @@ namespace PlantsRPetsProjeto.Server.Controllers
 
             return Ok(unreadNotifications);
         }
+
+        [HttpPut("email-frequency/{frequencyId}")]
+        public async Task<IActionResult> UpdateEmailFrequency(int frequencyId)
+        {
+            var userId = User.FindFirstValue("UserId");
+            if (string.IsNullOrEmpty(userId))
+            {
+                return Unauthorized();
+            }
+
+            var user = await _context.Users.FindAsync(userId);
+            if (user == null)
+            {
+                return NotFound("User not found.");
+            }
+
+            if (!Enum.IsDefined(typeof(User.EmailFrequency), frequencyId))
+            {
+                return BadRequest("Invalid email frequency. Valid values: 0 (Never), 1 (Daily), 2 (Weekly), 3 (Monthly).");
+            }
+
+            user.NotificationFrequency = (User.EmailFrequency)frequencyId;
+            await _context.SaveChangesAsync();
+
+            return Ok($"Email frequency updated to {user.NotificationFrequency}.");
+        }
+
+
     }
 }

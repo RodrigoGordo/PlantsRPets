@@ -14,5 +14,13 @@ namespace PlantsRPetsProjeto.Server.Models
         public Dashboard? Dashboard { get; set; }
         public ICollection<Community> Communities { get; set; }
         public ICollection<UserNotification> Notifications { get; set; }
+        public EmailFrequency NotificationFrequency { get; set; }
+        public enum EmailFrequency
+        {
+            Never,
+            Daily,
+            Weekly,
+            Monthly
+        }
     }
 }
