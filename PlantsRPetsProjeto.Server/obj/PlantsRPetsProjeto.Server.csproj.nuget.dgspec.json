@@ -88,6 +88,10 @@
               "target": "Package",
               "version": "[3.14.0, )"
             },
+            "Quartz.Extensions.Hosting": {
+              "target": "Package",
+              "version": "[3.14.0, )"
+            },
             "SendGrid": {
               "target": "Package",
               "version": "[9.29.3, )"

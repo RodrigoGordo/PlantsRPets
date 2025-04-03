@@ -8,6 +8,7 @@ using PlantsRPetsProjeto.Server.Models;
 using PlantsRPetsProjeto.Server.Data;
 using Microsoft.IdentityModel.Tokens;
 using PlantsRPetsProjeto.Server.Services;
+using Quartz;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -59,6 +60,9 @@ builder.Services.AddHttpClient<SustainabilityTipService>();
 builder.Services.AddHttpClient<EmojiKitchenService>();
 builder.Services.AddScoped<PetGeneratorService>();
 builder.Services.AddScoped<PetSeeder>();
+builder.Services.AddScoped<IEmailService, SendGridEmailService>();
+builder.Services.AddScoped<SendNotificationEmail>();
+
 
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -118,6 +122,20 @@ builder.Services.AddCors(options =>
                   .AllowAnyHeader(); // Permite qualquer cabe�alho na requisi��o
         });
 });
+
+
+//Quartz Service for Notification Email
+builder.Services.AddQuartz(q =>
+{
+    var jobKey = new JobKey("SendNotificationEmail");
+    q.AddJob<SendNotificationEmail>(opts => opts.WithIdentity(jobKey));
+    q.AddTrigger(opts => opts
+        .ForJob(jobKey)
+        .WithIdentity("SendNotificationEmailTrigger")
+        .WithSchedule(CronScheduleBuilder.DailyAtHourAndMinute(8, 0)));
+});
+
+builder.Services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);
 
 
 var app = builder.Build();

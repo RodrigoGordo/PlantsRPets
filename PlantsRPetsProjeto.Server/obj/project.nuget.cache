@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "xAqZILpvbGs=",
+  "dgSpecHash": "8sZooWOYchg=",
   "success": true,
   "projectFilePath": "C:\\Users\\putot\\Source\\Repos\\PlantsRPets\\PlantsRPetsProjeto.Server\\PlantsRPetsProjeto.Server.csproj",
   "expectedPackageFiles": [
@@ -105,6 +105,7 @@
     "C:\\Users\\putot\\.nuget\\packages\\microsoft.extensions.diagnostics.abstractions\\9.0.2\\microsoft.extensions.diagnostics.abstractions.9.0.2.nupkg.sha512",
     "C:\\Users\\putot\\.nuget\\packages\\microsoft.extensions.fileproviders.abstractions\\8.0.0\\microsoft.extensions.fileproviders.abstractions.8.0.0.nupkg.sha512",
     "C:\\Users\\putot\\.nuget\\packages\\microsoft.extensions.fileproviders.embedded\\8.0.0\\microsoft.extensions.fileproviders.embedded.8.0.0.nupkg.sha512",
+    "C:\\Users\\putot\\.nuget\\packages\\microsoft.extensions.hosting.abstractions\\8.0.0\\microsoft.extensions.hosting.abstractions.8.0.0.nupkg.sha512",
     "C:\\Users\\putot\\.nuget\\packages\\microsoft.extensions.http\\9.0.2\\microsoft.extensions.http.9.0.2.nupkg.sha512",
     "C:\\Users\\putot\\.nuget\\packages\\microsoft.extensions.identity.core\\8.0.0\\microsoft.extensions.identity.core.8.0.0.nupkg.sha512",
     "C:\\Users\\putot\\.nuget\\packages\\microsoft.extensions.identity.stores\\8.0.0\\microsoft.extensions.identity.stores.8.0.0.nupkg.sha512",
@@ -145,6 +146,8 @@
     "C:\\Users\\putot\\.nuget\\packages\\nuget.protocol\\6.11.0\\nuget.protocol.6.11.0.nupkg.sha512",
     "C:\\Users\\putot\\.nuget\\packages\\nuget.versioning\\6.11.0\\nuget.versioning.6.11.0.nupkg.sha512",
     "C:\\Users\\putot\\.nuget\\packages\\quartz\\3.14.0\\quartz.3.14.0.nupkg.sha512",
+    "C:\\Users\\putot\\.nuget\\packages\\quartz.extensions.dependencyinjection\\3.14.0\\quartz.extensions.dependencyinjection.3.14.0.nupkg.sha512",
+    "C:\\Users\\putot\\.nuget\\packages\\quartz.extensions.hosting\\3.14.0\\quartz.extensions.hosting.3.14.0.nupkg.sha512",
     "C:\\Users\\putot\\.nuget\\packages\\sendgrid\\9.29.3\\sendgrid.9.29.3.nupkg.sha512",
     "C:\\Users\\putot\\.nuget\\packages\\sixlabors.imagesharp\\3.1.7\\sixlabors.imagesharp.3.1.7.nupkg.sha512",
     "C:\\Users\\putot\\.nuget\\packages\\starkbank-ecdsa\\1.3.3\\starkbank-ecdsa.1.3.3.nupkg.sha512",

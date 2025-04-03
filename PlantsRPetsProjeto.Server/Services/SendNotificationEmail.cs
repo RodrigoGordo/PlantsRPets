@@ -1,23 +1,21 @@
 ﻿using PlantsRPetsProjeto.Server.Models;
 using Microsoft.EntityFrameworkCore;
 using Quartz;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
 using PlantsRPetsProjeto.Server.Data;
 
 namespace PlantsRPetsProjeto.Server.Services
 {
     public class SendNotificationEmail : IJob
     {
-        private readonly SendGridEmailService _emailService;
+        private readonly IEmailService _emailService;
         private readonly PlantsRPetsProjetoServerContext _dbContext;
 
-        public SendNotificationEmail(SendGridEmailService emailService, PlantsRPetsProjetoServerContext dbContext)
+        public SendNotificationEmail(IEmailService emailService, PlantsRPetsProjetoServerContext dbContext)
         {
             _emailService = emailService;
             _dbContext = dbContext;
         }
+
 
         public async Task Execute(IJobExecutionContext context)
         {
