@@ -50,9 +50,11 @@ namespace PlantsRPetsProjeto.Server.Controllers
 
         /// <summary>
         /// Regista um novo utilizador na aplicação.
+        /// Caso o e-mail já esteja registado mas não confirmado, envia novamente o link de verificação.
+        /// Cria também o perfil associado ao utilizador após registo com sucesso.
         /// </summary>
         /// <param name="model">Modelo contendo o e-mail, nickname e palavra-passe do novo utilizador.</param>
-        /// <returns>Retorna um código HTTP 200 se o registo for bem-sucedido ou 400 em caso de erro.</returns>
+        /// <returns>Retorna um código HTTP 200 em caso de sucesso, ou 400/500 consoante o tipo de erro ocorrido.</returns>
         [HttpPost("api/signup")]
         public async Task<IActionResult> Register([FromBody] UserRegistrationModel model)
         {
@@ -129,10 +131,10 @@ namespace PlantsRPetsProjeto.Server.Controllers
 
 
         /// <summary>
-        /// Autentica um utilizador e gera um token JWT para sessões autenticadas.
+        /// Autentica um utilizador, verifica se o e-mail está confirmado, e gera um token JWT para sessões autenticadas.
         /// </summary>
         /// <param name="model">Modelo contendo o e-mail e a palavra-passe do utilizador.</param>
-        /// <returns>Token JWT para autenticação ou um código de erro em caso de falha.</returns>
+        /// <returns>Token JWT para autenticação ou uma mensagem de erro em caso de falha.</returns>
         [HttpPost("api/signin")]
         public async Task<IActionResult> Login([FromBody] UserLoginModel model)
         {
@@ -307,6 +309,12 @@ namespace PlantsRPetsProjeto.Server.Controllers
                 return StatusCode(500, new { message = "An error occurred while processing your request." });
             }
         }
+
+        /// <summary>
+        /// Obtém os dados do perfil do utilizador autenticado.
+        /// Inclui nickname e URL da imagem de perfil (caso exista).
+        /// </summary>
+        /// <returns>Informações do perfil do utilizador autenticado ou mensagem de erro caso o perfil não seja encontrado.</returns>
 
         [HttpGet("api/user-profile")]
         [Authorize]
