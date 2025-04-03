@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace PlantsRPetsProjeto.Server.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -406,6 +406,34 @@ namespace PlantsRPetsProjeto.Server.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "UserNotifications",
+                columns: table => new
+                {
+                    UserNotificationId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    NotificationId = table.Column<int>(type: "int", nullable: false),
+                    ReceivedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    isRead = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserNotifications", x => x.UserNotificationId);
+                    table.ForeignKey(
+                        name: "FK_UserNotifications_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_UserNotifications_Notification_NotificationId",
+                        column: x => x.NotificationId,
+                        principalTable: "Notification",
+                        principalColumn: "NotificationId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Plantation",
                 columns: table => new
                 {
@@ -695,6 +723,16 @@ namespace PlantsRPetsProjeto.Server.Migrations
                 name: "IX_SustainabilityTip_SustainabilityTipsListId",
                 table: "SustainabilityTip",
                 column: "SustainabilityTipsListId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserNotifications_NotificationId",
+                table: "UserNotifications",
+                column: "NotificationId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserNotifications_UserId",
+                table: "UserNotifications",
+                column: "UserId");
         }
 
         /// <inheritdoc />
@@ -728,9 +766,6 @@ namespace PlantsRPetsProjeto.Server.Migrations
                 name: "Metric");
 
             migrationBuilder.DropTable(
-                name: "Notification");
-
-            migrationBuilder.DropTable(
                 name: "PlantationPlants");
 
             migrationBuilder.DropTable(
@@ -744,6 +779,9 @@ namespace PlantsRPetsProjeto.Server.Migrations
 
             migrationBuilder.DropTable(
                 name: "Tutorial");
+
+            migrationBuilder.DropTable(
+                name: "UserNotifications");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
@@ -771,6 +809,9 @@ namespace PlantsRPetsProjeto.Server.Migrations
 
             migrationBuilder.DropTable(
                 name: "SustainabilityTipsList");
+
+            migrationBuilder.DropTable(
+                name: "Notification");
 
             migrationBuilder.DropTable(
                 name: "PruningCountInfo");

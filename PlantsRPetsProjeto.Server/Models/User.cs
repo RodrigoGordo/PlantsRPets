@@ -13,6 +13,6 @@ namespace PlantsRPetsProjeto.Server.Models
         public ICollection<Pet> Pets { get; set; }
         public Dashboard? Dashboard { get; set; }
         public ICollection<Community> Communities { get; set; }
-
+        public ICollection<UserNotification> Notifications { get; set; }
     }
 }

@@ -130,7 +130,7 @@ using (var scope = app.Services.CreateScope())
     var userManager = services.GetRequiredService<UserManager<User>>();
     var context = services.GetRequiredService<PlantsRPetsProjetoServerContext>();
     var petSeeder = services.GetRequiredService<PetSeeder>();
-    
+
     await context.Database.MigrateAsync();
 
     // Chamar os seeders
@@ -139,6 +139,7 @@ using (var scope = app.Services.CreateScope())
     //await PlantSeeder.SeedPlants(context);
     //await TipSeeder.SeedSustainabilityTips(context);
     await petSeeder.SeedAsync();
+    await NotificationSeeder.SeedAsync(context);
 
 }
 

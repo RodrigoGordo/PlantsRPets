@@ -838,6 +838,36 @@ namespace PlantsRPetsProjeto.Server.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("PlantsRPetsProjeto.Server.Models.UserNotification", b =>
+                {
+                    b.Property<int>("UserNotificationId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserNotificationId"));
+
+                    b.Property<int>("NotificationId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("ReceivedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<bool>("isRead")
+                        .HasColumnType("bit");
+
+                    b.HasKey("UserNotificationId");
+
+                    b.HasIndex("NotificationId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserNotifications");
+                });
+
             modelBuilder.Entity("CommunityUser", b =>
                 {
                     b.HasOne("PlantsRPetsProjeto.Server.Models.Community", null)
@@ -1027,6 +1057,25 @@ namespace PlantsRPetsProjeto.Server.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("PlantsRPetsProjeto.Server.Models.UserNotification", b =>
+                {
+                    b.HasOne("PlantsRPetsProjeto.Server.Models.Notification", "Notification")
+                        .WithMany()
+                        .HasForeignKey("NotificationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PlantsRPetsProjeto.Server.Models.User", "User")
+                        .WithMany("Notifications")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Notification");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("PlantsRPetsProjeto.Server.Models.Chat", b =>
                 {
                     b.Navigation("Messages");
@@ -1055,6 +1104,8 @@ namespace PlantsRPetsProjeto.Server.Migrations
             modelBuilder.Entity("PlantsRPetsProjeto.Server.Models.User", b =>
                 {
                     b.Navigation("Dashboard");
+
+                    b.Navigation("Notifications");
 
                     b.Navigation("Pets");
 
