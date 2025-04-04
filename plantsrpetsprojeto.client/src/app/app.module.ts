@@ -55,6 +55,8 @@ import { PlantPeriodWarningComponent } from './plant-period-warning/plant-period
 import { PetRewardPopupComponent } from './pet-reward-popup/pet-reward-popup.component';
 import { HomePlantationCardComponent } from './home-plantation-card/home-plantation-card.component';
 import { HomePetCardComponent } from './home-pet-card/home-pet-card.component';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
+
 
 @NgModule({
   declarations: [
@@ -113,7 +115,8 @@ import { HomePetCardComponent } from './home-pet-card/home-pet-card.component';
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
-    MatAutocompleteModule
+    MatAutocompleteModule,
+    NgxChartsModule
   ],
   providers: [
     provideAnimationsAsync(),

@@ -1,1 +1,103 @@
-<p>dashboard works!</p>
+<app-navbar></app-navbar>
+
+<div class="dashboard-container">
+  <div class="time-frame-selector">
+    <div class="btn-group">
+      <button [class.active]="timeFrame === 'day'" (click)="onTimeFrameChange('day')">Day</button>
+      <button [class.active]="timeFrame === 'week'" (click)="onTimeFrameChange('week')">Week</button>
+      <button [class.active]="timeFrame === 'month'" (click)="onTimeFrameChange('month')">Month</button>
+      <button [class.active]="timeFrame === 'year'" (click)="onTimeFrameChange('year')">Year</button>
+    </div>
+  </div>
+
+  <div class="loading-indicator" *ngIf="isLoading">
+    <div class="spinner"></div>
+    <p>Loading metrics...</p>
+  </div>
+
+  <div class="metrics-overview" *ngIf="!isLoading">
+    <div class="metric-card">
+      <div class="metric-icon">💧</div>
+      <div class="metric-value">{{ activityCounts.Watering }}</div>
+      <div class="metric-label">Plants Watered</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-icon">🌾</div>
+      <div class="metric-value">{{ activityCounts.Harvest }}</div>
+      <div class="metric-label">Plants Harvested</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-icon">🌱</div>
+      <div class="metric-value">{{ activityCounts.Planting }}</div>
+      <div class="metric-label">Plants Planted</div>
+    </div>
+  </div>
+
+  <div class="charts-container" *ngIf="!isLoading">
+    <div class="chart-section">
+      <h2>Watering Activity</h2>
+      <ngx-charts-line-chart [view]="view"
+                             [scheme]="colorScheme"
+                             [results]="wateringData"
+                             [gradient]="true"
+                             [xAxis]="showXAxis"
+                             [yAxis]="showYAxis"
+                             [legend]="showLegend"
+                             [showXAxisLabel]="showXAxisLabel"
+                             [showYAxisLabel]="showYAxisLabel"
+                             [xAxisLabel]="xAxisLabel"
+                             [yAxisLabel]="yAxisLabel"
+                             [autoScale]="true"
+                             [timeline]="true">
+      </ngx-charts-line-chart>
+    </div>
+
+    <div class="chart-section">
+      <h2>Harvesting Activity</h2>
+      <ngx-charts-line-chart [view]="view"
+                             [scheme]="colorScheme"
+                             [results]="harvestData"
+                             [gradient]="true"
+                             [xAxis]="showXAxis"
+                             [yAxis]="showYAxis"
+                             [legend]="showLegend"
+                             [showXAxisLabel]="showXAxisLabel"
+                             [showYAxisLabel]="showYAxisLabel"
+                             [xAxisLabel]="xAxisLabel"
+                             [yAxisLabel]="yAxisLabel"
+                             [autoScale]="true"
+                             [timeline]="true">
+      </ngx-charts-line-chart>
+    </div>
+
+    <div class="chart-section">
+      <h2>Planting Activity</h2>
+      <ngx-charts-line-chart [view]="view"
+                             [scheme]="colorScheme"
+                             [results]="plantingData"
+                             [gradient]="true"
+                             [xAxis]="showXAxis"
+                             [yAxis]="showYAxis"
+                             [legend]="showLegend"
+                             [showXAxisLabel]="showXAxisLabel"
+                             [showYAxisLabel]="showYAxisLabel"
+                             [xAxisLabel]="xAxisLabel"
+                             [yAxisLabel]="yAxisLabel"
+                             [autoScale]="true"
+                             [timeline]="true">
+      </ngx-charts-line-chart>
+    </div>
+
+    <div class="chart-section">
+      <h2>Plant Type Distribution</h2>
+      <ngx-charts-pie-chart [view]="view"
+                            [scheme]="colorScheme"
+                            [results]="plantTypeData"
+                            [gradient]="true"
+                            [legend]="showLegend"
+                            [labels]="true"
+                            [doughnut]="false">
+      </ngx-charts-pie-chart>
+    </div>
+  </div>
+</div>

@@ -59,6 +59,7 @@ builder.Services.AddHttpClient<SustainabilityTipService>();
 builder.Services.AddHttpClient<EmojiKitchenService>();
 builder.Services.AddScoped<PetGeneratorService>();
 builder.Services.AddScoped<PetSeeder>();
+builder.Services.AddScoped<MetricsService>();
 
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

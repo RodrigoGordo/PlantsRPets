@@ -2,156 +2,63 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using PlantsRPetsProjeto.Server.Data;
 using PlantsRPetsProjeto.Server.Models;
+using PlantsRPetsProjeto.Server.Services;
 
 namespace PlantsRPetsProjeto.Server.Controllers
 {
+    [Authorize]
+    [ApiController]
+    [Route("api/metrics")]
     public class MetricsController : Controller
     {
         private readonly PlantsRPetsProjetoServerContext _context;
+        private readonly MetricsService _metricsService;
 
-        public MetricsController(PlantsRPetsProjetoServerContext context)
+        public MetricsController(PlantsRPetsProjetoServerContext context, MetricsService metricsService)
         {
             _context = context;
+            _metricsService = metricsService;
         }
 
-        // GET: Metrics
-        public async Task<IActionResult> Index()
+        [HttpGet("metrics/activity-counts")]
+        public async Task<IActionResult> GetActivityCounts([FromQuery] string timeFrame = "week")
         {
-            return View(await _context.Metric.ToListAsync());
+            var userId = User.FindFirst("UserId")?.Value;
+            if (string.IsNullOrEmpty(userId))
+                return NotFound(new { message = "User not found." });
+
+            var counts = await _metricsService.GetActivityCountsAsync(userId, timeFrame);
+            return Ok(counts);
         }
 
-        // GET: Metrics/Details/5
-        public async Task<IActionResult> Details(int? id)
+        [HttpGet("metrics/activity-by-date")]
+        public async Task<IActionResult> GetActivityByDate([FromQuery] string eventType, [FromQuery] string timeFrame = "week")
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            var userId = User.FindFirst("UserId")?.Value;
+            if (string.IsNullOrEmpty(userId))
+                return NotFound(new { message = "User not found." });
 
-            var metric = await _context.Metric
-                .FirstOrDefaultAsync(m => m.MetricId == id);
-            if (metric == null)
-            {
-                return NotFound();
-            }
-
-            return View(metric);
+            var data = await _metricsService.GetActivityByDateAsync(userId, eventType, timeFrame);
+            return Ok(data);
         }
 
-        // GET: Metrics/Create
-        public IActionResult Create()
+        [HttpGet("metrics/plant-type-distribution")]
+        public async Task<IActionResult> GetPlantTypeDistribution()
         {
-            return View();
-        }
+            var userId = User.FindFirst("UserId")?.Value;
+            if (string.IsNullOrEmpty(userId))
+                return NotFound(new { message = "User not found." });
 
-        // POST: Metrics/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("MetricId,UserId,TotalPlants,WaterSaved,CarbonFootprintReduction")] Metric metric)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(metric);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(metric);
-        }
+            var data = await _metricsService.GetPlantTypeDistributionAsync(userId);
+            return Ok(data);
 
-        // GET: Metrics/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var metric = await _context.Metric.FindAsync(id);
-            if (metric == null)
-            {
-                return NotFound();
-            }
-            return View(metric);
-        }
-
-        // POST: Metrics/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("MetricId,UserId,TotalPlants,WaterSaved,CarbonFootprintReduction")] Metric metric)
-        {
-            if (id != metric.MetricId)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(metric);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!MetricExists(metric.MetricId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(metric);
-        }
-
-        // GET: Metrics/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var metric = await _context.Metric
-                .FirstOrDefaultAsync(m => m.MetricId == id);
-            if (metric == null)
-            {
-                return NotFound();
-            }
-
-            return View(metric);
-        }
-
-        // POST: Metrics/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var metric = await _context.Metric.FindAsync(id);
-            if (metric != null)
-            {
-                _context.Metric.Remove(metric);
-            }
-
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-
-        private bool MetricExists(int id)
-        {
-            return _context.Metric.Any(e => e.MetricId == id);
         }
     }
+
 }

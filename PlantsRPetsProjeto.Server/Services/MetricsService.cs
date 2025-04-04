@@ -1,6 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PlantsRPetsProjeto.Server.Data;
 using PlantsRPetsProjeto.Server.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace PlantsRPetsProjeto.Server.Services
 {
@@ -13,114 +17,130 @@ namespace PlantsRPetsProjeto.Server.Services
             _context = context;
         }
 
-        public async Task RecordWateringAsync(string userId, int plantationId, int plantTypeId)
+        public async Task RecordWateringEventAsync(string userId, int plantationId, int plantInfoId, DateTime timestamp)
         {
-            var today = DateTime.UtcNow.Date;
-            var metric = await GetOrCreateDailyMetric(userId, plantationId, plantTypeId, today);
-
-            metric.WateringCount++;
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task RecordHarvestAsync(string userId, int plantationId, int plantTypeId)
-        {
-            var today = DateTime.UtcNow.Date;
-            var metric = await GetOrCreateDailyMetric(userId, plantationId, plantTypeId, today);
-
-            metric.HarvestCount++;
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task RecordPlantingAsync(string userId, int plantationId, int plantTypeId)
-        {
-            var today = DateTime.UtcNow.Date;
-            var metric = await GetOrCreateDailyMetric(userId, plantationId, plantTypeId, today);
-
-            metric.PlantingCount++;
-            await _context.SaveChangesAsync();
-        }
-
-        private async Task<Metric> GetOrCreateDailyMetric(string userId, int plantationId, int plantTypeId, DateTime date)
-        {
-            var metric = await _context.Metric
-                .FirstOrDefaultAsync(m =>
-                    m.UserId == userId &&
-                    m.PlantationId == plantationId &&
-                    m.Date.Date == date.Date);
-
-            if (metric == null)
+            var metric = new Metric
             {
-                metric = new Metric
-                {
-                    UserId = userId,
-                    PlantationId = plantationId,
-                    PlantTypeId = plantTypeId,
-                    Date = date,
-                    WateringCount = 0,
-                    HarvestCount = 0,
-                    PlantingCount = 0
-                };
+                UserId = userId,
+                PlantationId = plantationId,
+                PlantInfoId = plantInfoId,
+                EventType = "Watering",
+                Timestamp = timestamp
+            };
 
-                _context.Metric.Add(metric);
-            }
-
-            return metric;
+            _context.Metric.Add(metric);
+            await _context.SaveChangesAsync();
         }
 
-        public async Task<object> GetUserMetricsSummaryAsync(string userId, int days = 30)
+        public async Task RecordHarvestEventAsync(string userId, int plantationId, int plantInfoId, DateTime timestamp)
         {
-            var startDate = DateTime.UtcNow.Date.AddDays(-days);
+            var metric = new Metric
+            {
+                UserId = userId,
+                PlantationId = plantationId,
+                PlantInfoId = plantInfoId,
+                EventType = "Harvest",
+                Timestamp = timestamp
+            };
 
-            var totals = await _context.Metric
-                .Where(m => m.UserId == userId && m.Date >= startDate)
-                .GroupBy(m => 1)
-                .Select(g => new
-                {
-                    TotalWatering = g.Sum(m => m.WateringCount),
-                    TotalHarvest = g.Sum(m => m.HarvestCount),
-                    TotalPlanting = g.Sum(m => m.PlantingCount)
-                })
-                .FirstOrDefaultAsync() ?? new { TotalWatering = 0, TotalHarvest = 0, TotalPlanting = 0 };
+            _context.Metric.Add(metric);
+            await _context.SaveChangesAsync();
+        }
 
-            var dailyMetrics = await _context.Metric
-                .Where(m => m.UserId == userId && m.Date >= startDate)
-                .GroupBy(m => m.Date.Date)
-                .Select(g => new
-                {
-                    Date = g.Key,
-                    WateringCount = g.Sum(m => m.WateringCount),
-                    HarvestCount = g.Sum(m => m.HarvestCount),
-                    PlantingCount = g.Sum(m => m.PlantingCount)
-                })
-                .OrderBy(m => m.Date)
+        public async Task RecordPlantingEventAsync(string userId, int plantationId, int plantInfoId, DateTime timestamp)
+        {
+            var metric = new Metric
+            {
+                UserId = userId,
+                PlantationId = plantationId,
+                PlantInfoId = plantInfoId,
+                EventType = "Planting",
+                Timestamp = timestamp
+            };
+
+            _context.Metric.Add(metric);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<Dictionary<string, int>> GetActivityCountsAsync(string userId, string timeFrame)
+        {
+            DateTime startDate = GetStartDateForTimeFrame(timeFrame);
+
+            var metrics = await _context.Metric
+                .Where(m => m.UserId == userId && m.Timestamp >= startDate)
+                .GroupBy(m => m.EventType)
+                .Select(g => new { EventType = g.Key, Count = g.Count() })
                 .ToListAsync();
 
-            var plantTypeDistribution = await _context.Metric
-                .Where(m => m.UserId == userId && m.Date >= startDate && m.PlantTypeId != null)
-                .GroupBy(m => m.PlantTypeId)
-                .Select(g => new
-                {
-                    PlantTypeId = g.Key,
-                    PlantingCount = g.Sum(m => m.PlantingCount)
-                })
+            var result = new Dictionary<string, int>
+            {
+                ["Watering"] = metrics.FirstOrDefault(m => m.EventType == "Watering")?.Count ?? 0,
+                ["Harvest"] = metrics.FirstOrDefault(m => m.EventType == "Harvest")?.Count ?? 0,
+                ["Planting"] = metrics.FirstOrDefault(m => m.EventType == "Planting")?.Count ?? 0
+            };
+
+            return result;
+        }
+
+        public async Task<List<object>> GetActivityByDateAsync(string userId, string eventType, string timeFrame)
+        {
+            DateTime startDate = GetStartDateForTimeFrame(timeFrame);
+
+            var groupingFormat = timeFrame.ToLower() switch
+            {
+                "day" => "yyyy-MM-dd HH:00:00",
+                "week" => "yyyy-MM-dd",
+                "month" => "yyyy-MM-dd",
+                "year" => "yyyy-MM",
+                _ => "yyyy-MM-dd"
+            };
+
+            var metrics = await _context.Metric
+                .Where(m => m.UserId == userId && m.EventType == eventType && m.Timestamp >= startDate)
                 .ToListAsync();
 
-            var plantTypeDetails = await Task.WhenAll(plantTypeDistribution.Select(async p =>
-            {
-                var plantType = await _context.PlantType.FindAsync(p.PlantTypeId);
-                return new
-                {
-                    TypeId = p.PlantTypeId,
-                    TypeName = plantType?.PlantTypeName ?? "Unknown",
-                    Count = p.PlantingCount
-                };
-            }));
+            var groupedMetrics = metrics
+                .GroupBy(m => m.Timestamp.ToString(groupingFormat))
+                .Select(g => new { Date = g.Key, Count = g.Count() })
+                .OrderBy(x => x.Date)
+                .ToList();
 
-            return new
+            return groupedMetrics.Cast<object>().ToList();
+        }
+
+        public async Task<List<object>> GetPlantTypeDistributionAsync(string userId)
+        {
+            var plantations = await _context.Plantation
+                .Where(p => p.OwnerId == userId)
+                .Join(
+                    _context.PlantationPlants,
+                    p => p.PlantationId,
+                    pp => pp.PlantationId,
+                    (p, pp) => new { Plantation = p, PlantationPlant = pp }
+                )
+                .Join(
+                    _context.PlantInfo,
+                    combined => combined.PlantationPlant.PlantInfoId,
+                    pi => pi.PlantInfoId,
+                    (combined, pi) => new { combined.Plantation, combined.PlantationPlant, PlantInfo = pi }
+                )
+                .GroupBy(x => x.PlantInfo.PlantType)
+                .Select(g => new { PlantType = g.Key, Count = g.Sum(x => x.PlantationPlant.Quantity) })
+                .ToListAsync();
+
+            return plantations.Cast<object>().ToList();
+        }
+
+        private DateTime GetStartDateForTimeFrame(string timeFrame)
+        {
+            var now = DateTime.UtcNow;
+            return timeFrame.ToLower() switch
             {
-                Summary = totals,
-                Daily = dailyMetrics,
-                PlantTypes = plantTypeDetails
+                "day" => now.AddHours(-24),
+                "week" => now.AddDays(-7),
+                "month" => now.AddMonths(-1),
+                "year" => now.AddYears(-1),
+                _ => now.AddDays(-7) // Default to week
             };
         }
     }

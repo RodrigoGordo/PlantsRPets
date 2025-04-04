@@ -17,11 +17,13 @@ namespace PlantsRPetsProjeto.Server.Controllers
     {
         private readonly PlantsRPetsProjetoServerContext _context;
         private readonly PlantInfoService _plantInfoService;
+        private readonly MetricsService _metricsService;
 
-        public PlantationsController(PlantsRPetsProjetoServerContext context, PlantInfoService plantInfoService)
+        public PlantationsController(PlantsRPetsProjetoServerContext context, PlantInfoService plantInfoService, MetricsService metricsService)
         {
             _context = context;
             _plantInfoService = plantInfoService;
+            _metricsService = metricsService;
         }
 
         [HttpGet]
@@ -196,6 +198,10 @@ namespace PlantsRPetsProjeto.Server.Controllers
         [HttpPost("{plantationId}/add-plant")]
         public async Task<IActionResult> AddPlantToPlantation(int plantationId, [FromBody] AddPlantToPlantationModel model)
         {
+            var userId = User.FindFirst("UserId")?.Value;
+            if (string.IsNullOrEmpty(userId))
+                return NotFound(new { message = "User not found." });
+
             var plantation = await _context.Plantation.FindAsync(plantationId);
             if (plantation == null)
                 return NotFound(new { message = "Plantation not found." });
@@ -250,6 +256,9 @@ namespace PlantsRPetsProjeto.Server.Controllers
             }
 
             await _context.SaveChangesAsync();
+
+            await _metricsService.RecordPlantingEventAsync(userId, plantationId, model.PlantInfoId, DateTime.UtcNow);
+
             return Ok(new { message = "Plant added to plantation successfully." });
         }
 
@@ -319,6 +328,10 @@ namespace PlantsRPetsProjeto.Server.Controllers
         [HttpPost("{plantationId}/water-plant/{plantInfoId}")]
         public async Task<IActionResult> WaterPlant(int plantationId, int plantInfoId)
         {
+            var userId = User.FindFirst("UserId")?.Value;
+            if (string.IsNullOrEmpty(userId))
+                return NotFound(new { message = "User not found." });
+
             var plantationPlant = await _context.PlantationPlants
                 .FirstOrDefaultAsync(pp => pp.PlantationId == plantationId && pp.PlantInfoId == plantInfoId);
 
@@ -330,6 +343,9 @@ namespace PlantsRPetsProjeto.Server.Controllers
             try
             {
                 await _context.SaveChangesAsync();
+
+                await _metricsService.RecordWateringEventAsync(userId, plantationId, plantInfoId, DateTime.UtcNow);
+
                 return Ok(plantationPlant);
             }
             catch (DbUpdateException)
@@ -341,6 +357,10 @@ namespace PlantsRPetsProjeto.Server.Controllers
         [HttpPost("{plantationId}/harvest-plant/{plantInfoId}")]
         public async Task<IActionResult> HarvestPlant(int plantationId, int plantInfoId)
         {
+            var userId = User.FindFirst("UserId")?.Value;
+            if (string.IsNullOrEmpty(userId))
+                return NotFound(new { message = "User not found." });
+
             var plantationPlant = await _context.PlantationPlants
                 .Include(pp => pp.ReferencePlant)
                 .FirstOrDefaultAsync(pp => pp.PlantationId == plantationId && pp.PlantInfoId == plantInfoId);
@@ -380,6 +400,8 @@ namespace PlantsRPetsProjeto.Server.Controllers
                 );
                 plantationPlant.GrowthStatus = "Growing";
                 await _context.SaveChangesAsync();
+
+                await _metricsService.RecordHarvestEventAsync(userId, plantationId, plantInfoId, DateTime.UtcNow);
 
                 return Ok(new
                 {
@@ -527,8 +549,6 @@ namespace PlantsRPetsProjeto.Server.Controllers
 
         }
     }
-
-
 
     public class CreatePlantationModel
     {
