@@ -288,10 +288,7 @@ export class PlantationPlantDetailsComponent implements OnInit {
 
     this.plantationsService.gainExperience(this.plantationId, this.plantInfoId, isHarvesting)
       .subscribe({
-        next: (updatedPlantation) => {
-          if (this.plantation) {
-            this.plantation.experiencePoints = updatedPlantation.experiencePoints;
-          }
+        next: () => {
         },
         error: (error) => {
           console.error("Experience Increase Failed", error);

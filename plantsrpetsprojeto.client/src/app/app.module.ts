@@ -61,6 +61,7 @@ import { RemovePlantPopupComponent } from './remove-plant-popup/remove-plant-pop
 import { RemovePlantationPopupComponent } from './remove-plantation-popup/remove-plantation-popup.component';
 import { PetCardComponent } from './pet-card/pet-card.component';
 import { NotificationCardComponent } from './notification-card/notification-card.component';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
 
 @NgModule({
   declarations: [
@@ -125,7 +126,8 @@ import { NotificationCardComponent } from './notification-card/notification-card
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
-    MatAutocompleteModule
+    MatAutocompleteModule,
+    NgxChartsModule
   ],
   providers: [
     provideAnimationsAsync(),

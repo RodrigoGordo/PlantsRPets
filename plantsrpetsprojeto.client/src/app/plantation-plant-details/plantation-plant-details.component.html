@@ -13,7 +13,7 @@
       </svg>
     </button>
 
-    <div *ngIf="plantationPlant.referencePlant && !isLoading" class="plant-content-wrapper">
+    <div *ngIf="plantationPlant?.referencePlant && !isLoading" class="plant-content-wrapper">
       <!-- Left Column -->
       <div class="left-column">
         <img [src]="plantationPlant.referencePlant.image" [alt]="plantationPlant.referencePlant.plantName" class="plant-image">
