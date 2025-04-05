@@ -19,4 +19,8 @@ export class CollectionService {
   updateOwnedStatus(petId: number, isOwned: boolean): Observable<any> {
     return this.http.put(`${this.apiUrl}/owned/${petId}`, { isOwned });
   }
+
+  getFavoritePetsInCollection(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/favoritePets`);
+  }
 }

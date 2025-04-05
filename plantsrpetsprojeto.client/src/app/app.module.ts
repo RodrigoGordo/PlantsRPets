@@ -59,6 +59,7 @@ import { EmailVerificationSentComponent } from './email-verification-sent/email-
 import { ConfirmEmailComponent } from './confirm-email/confirm-email.component';
 import { RemovePlantPopupComponent } from './remove-plant-popup/remove-plant-popup.component';
 import { RemovePlantationPopupComponent } from './remove-plantation-popup/remove-plantation-popup.component';
+import { PetCardComponent } from './pet-card/pet-card.component';
 
 @NgModule({
   declarations: [
@@ -106,7 +107,8 @@ import { RemovePlantationPopupComponent } from './remove-plantation-popup/remove
     EmailVerificationSentComponent,
     ConfirmEmailComponent,
     RemovePlantPopupComponent,
-    RemovePlantationPopupComponent
+    RemovePlantationPopupComponent,
+    PetCardComponent
   ],
   imports: [
     BrowserModule,

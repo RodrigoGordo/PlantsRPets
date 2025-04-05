@@ -244,6 +244,33 @@ namespace PlantsRPetsProjeto.Server.Controllers
             return Ok(selectedPets);
         }
 
+        [HttpGet("favoritePets")]
+        public async Task<ActionResult<IEnumerable<Pet>>> GetFavoritePetsInCollection()
+        {
+            var userId = User.FindFirstValue("UserId");
+            if (string.IsNullOrEmpty(userId))
+            {
+                return Unauthorized();
+            }
+
+            var collection = await _context.Collection
+                .Include(c => c.CollectionPets)
+                .ThenInclude(cp => cp.ReferencePet)
+                .FirstOrDefaultAsync(c => c.UserId == userId);
+
+            if (collection == null)
+            {
+                return NotFound("Collection not found.");
+            }
+
+            var favoritePets = collection.CollectionPets
+               .Where(cp => cp.IsFavorite)
+               .Select(cp => cp.ReferencePet)
+               .ToList();
+
+            return Ok(favoritePets);
+        }
+
         public class UpdateOwnedStatusModel
         {
             public bool IsOwned { get; set; }
