@@ -8,6 +8,7 @@ using PlantsRPetsProjeto.Server.Models;
 using PlantsRPetsProjeto.Server.Data;
 using Microsoft.IdentityModel.Tokens;
 using PlantsRPetsProjeto.Server.Services;
+using Quartz;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -62,6 +63,9 @@ builder.Services.AddHttpClient<SustainabilityTipService>();
 builder.Services.AddHttpClient<EmojiKitchenService>();
 builder.Services.AddScoped<PetGeneratorService>();
 builder.Services.AddScoped<PetSeeder>();
+builder.Services.AddScoped<IEmailService, SendGridEmailService>();
+builder.Services.AddScoped<SendNotificationEmail>();
+
 
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -123,6 +127,20 @@ builder.Services.AddCors(options =>
 });
 
 
+//Quartz Service for Notification Email
+builder.Services.AddQuartz(q =>
+{
+    var jobKey = new JobKey("SendNotificationEmail");
+    q.AddJob<SendNotificationEmail>(opts => opts.WithIdentity(jobKey));
+    q.AddTrigger(opts => opts
+        .ForJob(jobKey)
+        .WithIdentity("SendNotificationEmailTrigger")
+        .WithSchedule(CronScheduleBuilder.DailyAtHourAndMinute(8, 0)));
+});
+
+builder.Services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);
+
+
 var app = builder.Build();
 
 // User e Role seeders
@@ -133,7 +151,7 @@ using (var scope = app.Services.CreateScope())
     var userManager = services.GetRequiredService<UserManager<User>>();
     var context = services.GetRequiredService<PlantsRPetsProjetoServerContext>();
     var petSeeder = services.GetRequiredService<PetSeeder>();
-    
+
     await context.Database.MigrateAsync();
 
     // Chamar os seeders
@@ -142,6 +160,7 @@ using (var scope = app.Services.CreateScope())
     //await PlantSeeder.SeedPlants(context);
     //await TipSeeder.SeedSustainabilityTips(context);
     await petSeeder.SeedAsync();
+    await NotificationSeeder.SeedAsync(context);
 
 }
 

@@ -7,8 +7,8 @@ using PlantsRPetsProjeto.Server.Services;
 
 namespace PlantsRPetsProjeto.Server.Controllers
 {
-    //[Authorize]
-    [Route("api/SustainabilityTips")]
+    [Authorize]
+    [Route("api/[controller]")]
     [ApiController]
     public class SustainabilityTipsController : ControllerBase
     {
