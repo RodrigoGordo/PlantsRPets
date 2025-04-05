@@ -57,6 +57,7 @@ export class PlantationCardComponent {
       if (result === 'confirm') {
         this.plantationsService.deletePlantation(this.plantation.plantationId)
           .subscribe(() => this.deleted.emit());
+        this.recentActivity.removePlantation(this.plantation.plantationId);
       }
     });
   }
