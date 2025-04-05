@@ -7,6 +7,10 @@ using PlantsRPetsProjeto.Server.Services;
 
 namespace PlantsRPetsProjeto.Server.Controllers
 {
+    /// <summary>
+    /// Controlador responsável por gerir dicas de sustentabilidade associadas a plantas.
+    /// Permite buscar dicas de uma API externa, guardar e consultar dicas por planta.
+    /// </summary>
     [Authorize]
     [Route("api/[controller]")]
     [ApiController]
@@ -15,14 +19,22 @@ namespace PlantsRPetsProjeto.Server.Controllers
         private readonly SustainabilityTipService _tipsService;
         private readonly PlantsRPetsProjetoServerContext _context;
 
-        public SustainabilityTipsController(
-            SustainabilityTipService tipsService,
-            PlantsRPetsProjetoServerContext context)
+        /// <summary>
+        /// Construtor do controlador de dicas de sustentabilidade.
+        /// </summary>
+        /// <param name="tipsService">Serviço que comunica com a API externa de dicas.</param>
+        /// <param name="context">Contexto da base de dados.</param>
+        public SustainabilityTipsController(SustainabilityTipService tipsService, PlantsRPetsProjetoServerContext context)
         {
             _tipsService = tipsService;
             _context = context;
         }
-
+        /// <summary>
+        /// Procura dicas de sustentabilidade numa API externa, dentro de um intervalo de IDs, e guarda-as na base de dados.
+        /// </summary>
+        /// <param name="startId">ID inicial do intervalo.</param>
+        /// <param name="maxId">ID final do intervalo.</param>
+        /// <returns>Lista de dicas encontradas ou mensagem de erro apropriada.</returns>
         [HttpGet("fetch-range/{startId}/{maxId}")]
         public async Task<IActionResult> FetchAndStoreSustainabilityTips(int startId, int maxId)
         {
@@ -49,7 +61,12 @@ namespace PlantsRPetsProjeto.Server.Controllers
             }
         }
 
-        [HttpPost("save-sustainability-tips")]
+        /// <summary>
+        /// Guarda uma lista de dicas de sustentabilidade na base de dados.
+        /// Substitui os registos existentes e respetivas dicas, se já houver correspondência pelo ID da planta.
+        /// </summary>
+        /// <param name="tipsLists">Lista de objetos com dicas agrupadas por planta.</param>
+        /// <returns>Resultado da operação de armazenamento.</returns>[HttpPost("save-sustainability-tips")]
         public async Task<IActionResult> SaveSustainabilityTips(List<SustainabilityTipsList> tipsLists)
         {
             foreach (var tipsList in tipsLists)
@@ -77,6 +94,10 @@ namespace PlantsRPetsProjeto.Server.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// Devolve todas as listas de dicas de sustentabilidade armazenadas na base de dados.
+        /// </summary>
+        /// <returns>Lista completa de dicas organizadas por planta.</returns>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<SustainabilityTipsList>>> GetAllSustainabilityTips()
         {
@@ -85,6 +106,11 @@ namespace PlantsRPetsProjeto.Server.Controllers
                 .ToListAsync();
         }
 
+        /// <summary>
+        /// Devolve todas as dicas de sustentabilidade associadas a uma planta específica.
+        /// </summary>
+        /// <param name="plantId">Identificador da planta.</param>
+        /// <returns>Lista de dicas associadas ou uma mensagem de erro caso não existam.</returns>
         [HttpGet("by-plant/{plantId}")]
         public async Task<ActionResult<IEnumerable<TipDto>>> GetTipsByPlant(int plantId)
         {
@@ -110,6 +136,10 @@ namespace PlantsRPetsProjeto.Server.Controllers
             return Ok(results);
         }
     }
+
+    /// <summary>
+    /// Objeto de transferência de dados (DTO) para representar uma dica de sustentabilidade individual.
+    /// </summary>
     public class TipDto
     {
         public int TipId { get; set; }

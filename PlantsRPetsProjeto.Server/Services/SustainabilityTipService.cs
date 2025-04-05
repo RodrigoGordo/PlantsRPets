@@ -6,17 +6,33 @@ using PlantsRPetsProjeto.Server.Models;
 
 namespace PlantsRPetsProjeto.Server.Services
 {
+    /// <summary>
+    /// Serviço responsável por obter dicas de sustentabilidade para plantas
+    /// a partir da API externa da Perenual.
+    /// </summary>
     public class SustainabilityTipService
     {
         private readonly HttpClient _httpClient;
         private readonly string _apiKey;
 
+        /// <summary>
+        /// Inicializa uma nova instância de <see cref="SustainabilityTipService"/>.
+        /// </summary>
+        /// <param name="httpClient">Instância do cliente HTTP usada para comunicação com a API externa.</param>
+        /// <param name="configuration">Fonte de configuração usada para obter a chave de API.</param>
+        /// <exception cref="ArgumentNullException">Lançada se a chave de API estiver em falta.</exception>
         public SustainabilityTipService(HttpClient httpClient, IConfiguration configuration)
         {
             _httpClient = httpClient;
             _apiKey = configuration["ApiSettings:PerenualApiKey"] ?? throw new ArgumentNullException("API Key is missing!");
         }
 
+        /// <summary>
+        /// Obtém dicas de sustentabilidade para um intervalo de IDs de plantas.
+        /// </summary>
+        /// <param name="startId">ID inicial da planta.</param>
+        /// <param name="maxId">ID final da planta.</param>
+        /// <returns>Lista de objetos <see cref="SustainabilityTipsList"/> com as dicas correspondentes.</returns>
         public async Task<List<SustainabilityTipsList>> GetSustainabilityTipsAsync(int startId, int maxId)
         {
             var tasks = new List<Task<SustainabilityTipsList?>>();
@@ -29,6 +45,11 @@ namespace PlantsRPetsProjeto.Server.Services
             return results.Where(result => result != null).ToList()!;
         }
 
+        /// <summary>
+        /// Obtém dicas de sustentabilidade para uma planta específica.
+        /// </summary>
+        /// <param name="plantId">Identificador da planta.</param>
+        /// <returns>Objeto <see cref="SustainabilityTipsList"/> ou null caso ocorra erro ou a resposta seja inválida.</returns>
         private async Task<SustainabilityTipsList?> FetchSustainabilityTipsAsync(int plantId)
         {
             try
@@ -58,6 +79,12 @@ namespace PlantsRPetsProjeto.Server.Services
             }
         }
 
+        /// <summary>
+        /// Mapeia a resposta JSON da API para um objeto <see cref="SustainabilityTipsList"/>.
+        /// </summary>
+        /// <param name="jsonData">Dados em formato JSON devolvidos pela API.</param>
+        /// <param name="plantId">ID da planta associada às dicas.</param>
+        /// <returns>Objeto <see cref="SustainabilityTipsList"/> com a informação extraída.</returns>
         private SustainabilityTipsList MapToSustainabilityTipsList(JsonElement jsonData, int plantId)
         {
             if (!jsonData.TryGetProperty("data", out var dataArray) || dataArray.ValueKind != JsonValueKind.Array || dataArray.GetArrayLength() == 0)

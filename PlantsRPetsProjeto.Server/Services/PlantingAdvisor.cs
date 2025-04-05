@@ -3,8 +3,15 @@ using System.Globalization;
 
 namespace PlantsRPetsProjeto.Server.Services
 {
+    /// <summary>
+    /// Serviço utilitário que fornece lógica e cálculos relacionados com o crescimento e colheita de plantas.
+    /// Inclui funcionalidades como previsão de datas ideais de plantação, cálculo de ciclos de colheita e identificação de colheitas recorrentes.
+    /// </summary>
     public class PlantingAdvisor
     {
+        /// <summary>
+        /// Tabela de tempos de crescimento em meses, organizada por tipo de planta e ritmo de crescimento.
+        /// </summary>
         private static readonly Dictionary<string, Dictionary<string, int>> GrowthTable = new()
         {
             { "tree", new() { { "High", 24 }, { "Moderate", 36 }, { "Low", 48 } } },
@@ -16,6 +23,9 @@ namespace PlantsRPetsProjeto.Server.Services
             { "vine", new() { { "High", 3 }, { "Moderate", 6 }, { "Low", 9 } } }
         };
 
+        /// <summary>
+        /// Tabela com dados de maturação e intervalos de colheita por tipo de planta e ritmo de crescimento.
+        /// </summary>
         private static readonly Dictionary<string, Dictionary<string, GrowthData>> HarvestTable = new()
         {
             { "tree", new()
@@ -62,6 +72,9 @@ namespace PlantsRPetsProjeto.Server.Services
             }
         };
 
+        /// <summary>
+        /// Devolve o tempo total estimado de crescimento para uma determinada planta.
+        /// </summary>
         public static int GetTotalGrowthMonths(string plantType, string growthRate)
         {
             plantType = plantType.ToLower();
@@ -73,6 +86,9 @@ namespace PlantsRPetsProjeto.Server.Services
             return 6;
         }
 
+        /// <summary>
+        /// Converte uma string de meses (ex: "Março, Abril") para uma lista de inteiros representando os meses.
+        /// </summary>
         public static List<int> ParseHarvestSeason(string harvestSeason)
         {
             var monthNames = CultureInfo.CurrentCulture.DateTimeFormat.MonthNames;
@@ -89,6 +105,9 @@ namespace PlantsRPetsProjeto.Server.Services
                 .ToList();
         }
 
+        /// <summary>
+        /// Converte um nome de mês (ex: "Janeiro") para o respetivo número (1-12).
+        /// </summary>
         private static int ParseMonthToInt(string monthName)
         {
             var monthNames = CultureInfo.CurrentCulture.DateTimeFormat.MonthNames;
@@ -100,6 +119,9 @@ namespace PlantsRPetsProjeto.Server.Services
             return 0;
         }
 
+        /// <summary>
+        /// Calcula os meses ideais de plantação com base na época de colheita ou na época de poda.
+        /// </summary>
         public static List<int> GetIdealPlantingMonths(PlantInfo plant)
         {
             var idealMonths = new List<int>();
@@ -145,6 +167,9 @@ namespace PlantsRPetsProjeto.Server.Services
             return new List<int> { 3, 4, 5 };
         }
 
+        /// <summary>
+        /// Verifica se o mês atual é um mês ideal para plantar a planta indicada.
+        /// </summary>
         public static bool IsIdealPlantingTime(PlantInfo plant)
         {
             var idealMonths = GetIdealPlantingMonths(plant);
@@ -152,6 +177,9 @@ namespace PlantsRPetsProjeto.Server.Services
             return idealMonths.Contains(currentMonth);
         }
 
+        /// <summary>
+        /// Calcula a data da próxima colheita, considerando se é uma colheita recorrente.
+        /// </summary>
         public static DateTime GetNextHarvestDate(DateTime plantingDate, string plantType, string growthRate, bool isRecurring, DateTime? lastHarvestDate = null)
         {
             var totalMonths = GetTotalHarvestMonths(plantType, growthRate);
@@ -165,6 +193,9 @@ namespace PlantsRPetsProjeto.Server.Services
             return plantingDate.AddMonths(totalMonths);
         }
 
+        /// <summary>
+        /// Obtém o número de meses entre colheitas para plantas com colheita recorrente.
+        /// </summary>
         public static int GetHarvestOffsetMonths(string plantType, string growthRate)
         {
             plantType = plantType.Trim().ToLower();
@@ -179,6 +210,9 @@ namespace PlantsRPetsProjeto.Server.Services
             return 0;
         }
 
+        /// <summary>
+        /// Obtém o tempo total (em meses) até à primeira colheita da planta.
+        /// </summary>
         public static int GetTotalHarvestMonths(string plantType, string growthRate)
         {
             plantType = plantType.Trim().ToLower();
@@ -193,6 +227,9 @@ namespace PlantsRPetsProjeto.Server.Services
             return 3;
         }
 
+        /// <summary>
+        /// Verifica se a planta pode ser colhida no momento atual e, se não puder, devolve o tempo restante.
+        /// </summary>
         public static (bool canHarvest, TimeSpan timeRemaining) CanHarvest(DateTime plantingDate, string plantType, string growthRate, bool isRecurring, DateTime? lastHarvestDate = null)
         {
             var nextHarvestDate = GetNextHarvestDate(plantingDate, plantType, growthRate, isRecurring, lastHarvestDate);
@@ -205,6 +242,9 @@ namespace PlantsRPetsProjeto.Server.Services
             return (false, timeRemaining);
         }
 
+        /// <summary>
+        /// Indica se a planta tem colheitas recorrentes, com base nos dados da tabela de crescimento.
+        /// </summary>
         public static bool HasRecurringHarvest(string plantType)
         {
             plantType = plantType.Trim().ToLower();
@@ -220,6 +260,9 @@ namespace PlantsRPetsProjeto.Server.Services
         }
     }
 
+    /// <summary>
+    /// Estrutura auxiliar que representa os dados de maturação e intervalo de colheita de uma planta.
+    /// </summary>
     public class GrowthData
     {
         public int MaturityMonths { get; set; }

@@ -9,17 +9,32 @@ using PlantsRPetsProjeto.Server.Models;
 
 namespace PlantsRPetsProjeto.Server.Controllers
 {
+    /// <summary>
+    /// Controlador responsável pela gestão dos perfis de utilizador.
+    /// Permite a atualização de dados como nickname, biografia, imagem de perfil e preferências.
+    /// </summary>
     public class ProfilesController : Controller
     {
         private readonly PlantsRPetsProjetoServerContext _context;
         private readonly UserManager<User> _userManager;
 
+        /// <summary>
+        /// Construtor do controlador de perfis.
+        /// </summary>
+        /// <param name="context">Contexto da base de dados da aplicação.</param>
+        /// <param name="userManager">Gestor de utilizadores da identidade.</param>
         public ProfilesController(PlantsRPetsProjetoServerContext context, UserManager<User> userManager)
         {
             _context = context;
             _userManager = userManager;
         }
 
+        /// <summary>
+        /// Atualiza os dados do perfil do utilizador autenticado.
+        /// Pode incluir alterações ao nickname, biografia, imagem de perfil, pets favoritos e plantações em destaque.
+        /// </summary>
+        /// <param name="model">Modelo com os campos opcionais a atualizar.</param>
+        /// <returns>Perfil atualizado ou mensagem de erro em caso de falha.</returns>
         [HttpPut]
         [Authorize]
         [Route("api/update-profile")]
@@ -81,6 +96,11 @@ namespace PlantsRPetsProjeto.Server.Controllers
             return Ok(profile);
         }
 
+        /// <summary>
+        /// Guarda a imagem de perfil enviada para o diretório local e devolve o caminho relativo.
+        /// </summary>
+        /// <param name="file">Ficheiro da imagem de perfil enviada pelo utilizador.</param>
+        /// <returns>Caminho relativo para a imagem guardada.</returns>
         private async Task<string> SaveProfilePicture(IFormFile file)
         {
             var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads");
@@ -100,6 +120,10 @@ namespace PlantsRPetsProjeto.Server.Controllers
             return Path.Combine("uploads", uniqueFileName);
         }
 
+        /// <summary>
+        /// Modelo utilizado para atualizar os dados do perfil de um utilizador.
+        /// Todos os campos são opcionais e atualizados apenas se forem fornecidos.
+        /// </summary>
         public class UpdateProfileModel
         {
             public string? Nickname { get; set; }

@@ -8,8 +8,16 @@ using PlantsRPetsProjeto.Server.Models;
 
 namespace PlantsRPetsProjeto.Server.Data
 {
+    /// <summary>
+    /// Contexto principal da base de dados da aplicação PlantsRPets.
+    /// Herda de <see cref="IdentityDbContext{User}"/>, permitindo a gestão de utilizadores, papéis e entidades personalizadas.
+    /// </summary>
     public class PlantsRPetsProjetoServerContext : IdentityDbContext<User>
     {
+        /// <summary>
+        /// Construtor do contexto de base de dados, configurado através de injeção de dependência.
+        /// </summary>
+        /// <param name="options">Opções de configuração do contexto.</param>
         public PlantsRPetsProjetoServerContext (DbContextOptions<PlantsRPetsProjetoServerContext> options)
             : base(options)
         {

@@ -4,11 +4,18 @@ using PlantsRPetsProjeto.Server.Models;
 using System.Data.Common;
 namespace PlantsRPetsProjeto.Server.Data
 {
+    /// <summary>
+    /// Classe responsável por inserir utilizadores predefinidos na base de dados aquando da inicialização da aplicação.
+    /// Garante que existem pelo menos um administrador e um utilizador comum.
+    /// </summary>
     public class UserSeeder
     {
+        /// <summary>
+        /// Adiciona utilizadores iniciais à base de dados, caso ainda não existam.
+        /// </summary>
+        /// <param name="userManager">Instância do <see cref="UserManager{User}"/> utilizada para criar utilizadores e atribuir papéis.</param>
         public static async Task SeedUsersAsync(UserManager<User> userManager)
         {
-            //Criar administrador
             if (userManager.FindByEmailAsync("plantsrpets@outlook.com").Result == null)
             {
                 User user = new User
@@ -24,7 +31,6 @@ namespace PlantsRPetsProjeto.Server.Data
                 
             }
 
-            //Criar utilizador
             if (userManager.FindByEmailAsync("gega@gmail.com").Result == null)
             {
                 User user = new User
