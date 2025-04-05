@@ -12,7 +12,7 @@ using PlantsRPetsProjeto.Server.Data;
 namespace PlantsRPetsProjeto.Server.Migrations
 {
     [DbContext(typeof(PlantsRPetsProjetoServerContext))]
-    [Migration("20250405114039_Initial")]
+    [Migration("20250405123536_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -319,21 +319,25 @@ namespace PlantsRPetsProjeto.Server.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MetricId"));
 
-                    b.Property<double>("CarbonFootprintReduction")
-                        .HasColumnType("float");
-
                     b.Property<int?>("DashboardId")
                         .HasColumnType("int");
 
-                    b.Property<int>("TotalPlants")
+                    b.Property<string>("EventType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("PlantInfoId")
                         .HasColumnType("int");
+
+                    b.Property<int>("PlantationId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Timestamp")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("UserId")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<double>("WaterSaved")
-                        .HasColumnType("float");
 
                     b.HasKey("MetricId");
 

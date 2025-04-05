@@ -534,9 +534,10 @@ namespace PlantsRPetsProjeto.Server.Migrations
                     MetricId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    TotalPlants = table.Column<int>(type: "int", nullable: false),
-                    WaterSaved = table.Column<double>(type: "float", nullable: false),
-                    CarbonFootprintReduction = table.Column<double>(type: "float", nullable: false),
+                    PlantationId = table.Column<int>(type: "int", nullable: false),
+                    PlantInfoId = table.Column<int>(type: "int", nullable: true),
+                    EventType = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Timestamp = table.Column<DateTime>(type: "datetime2", nullable: false),
                     DashboardId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
