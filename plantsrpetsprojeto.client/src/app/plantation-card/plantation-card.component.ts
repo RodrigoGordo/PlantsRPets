@@ -1,6 +1,8 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { PlantationsService } from '../plantations.service';
 import { RecentActivityService } from '../recent-activity.service';
+import { MatDialog } from '@angular/material/dialog';
+import { RemovePlantationPopupComponent } from '../remove-plantation-popup/remove-plantation-popup.component';
 
 @Component({
   selector: 'app-plantation-card',
@@ -18,7 +20,12 @@ export class PlantationCardComponent {
   isEditing: boolean = false;
   newPlantationName: string = '';
 
-  constructor(private plantationsService: PlantationsService, private recentActivity: RecentActivityService) { }
+  constructor(
+    private plantationsService: PlantationsService,
+    private recentActivity: RecentActivityService,
+    private dialog: MatDialog
+  ) { }
+
 
   enableEdit(): void {
     this.isEditing = true;
@@ -41,11 +48,17 @@ export class PlantationCardComponent {
   }
 
   remove(): void {
-    if (confirm(`Are you sure you want to delete "${this.plantation.plantationName}"?`)) {
-      this.plantationsService.deletePlantation(this.plantation.plantationId)
-        .subscribe(() => this.deleted.emit());
-      this.recentActivity.removePlantation(this.plantation.plantationId);
-    }
+    const dialogRef = this.dialog.open(RemovePlantationPopupComponent, {
+      width: '360px',
+      disableClose: true
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === 'confirm') {
+        this.plantationsService.deletePlantation(this.plantation.plantationId)
+          .subscribe(() => this.deleted.emit());
+      }
+    });
   }
 
   onPlantationSelected(): void {

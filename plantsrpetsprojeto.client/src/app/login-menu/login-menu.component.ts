@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { SigninComponent } from '../signin/signin.component';
 import { AuthorizeService } from '../authorize.service';
@@ -16,9 +16,10 @@ import { LogoutConfirmationComponent } from '../logout-confirmation/logout-confi
   styleUrls: ['./login-menu.component.css'],
   standalone: false,
 })
-export class LoginMenuComponent {
+export class LoginMenuComponent implements OnInit {
   isSignedIn: boolean = false;
   dropdownOpen: boolean = false;
+  isLoading: boolean = false;
 
   /**
    * Construtor do componente que injeta serviços para controlo de diálogos, autenticação e navegação.
@@ -37,16 +38,28 @@ export class LoginMenuComponent {
     });
   }
 
+  ngOnInit(): void {
+    this.authService.onStateChanged().subscribe((state: boolean) => {
+      this.isSignedIn = state;
+    });
+
+    this.authService.loginRequested$.subscribe(() => {
+      this.openSignInDialog();
+    });
+  }
+
   /**
    * Abre o modal de login, permitindo que o utilizador inicie sessão.
    * O modal está configurado para não poder ser fechado sem uma ação explícita (disableClose).
    */
   openSignInDialog(): void {
+    this.isLoading = true;
     this.dialog.open(SigninComponent, {
       width: '520px',
       panelClass: 'custom-dialog-container',
       disableClose: true
     });
+    this.isLoading = false;
   }
 
   /**

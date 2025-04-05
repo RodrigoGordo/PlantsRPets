@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { UserInfo } from './authorize.dto';
 import { UserProfile } from './models/user-profile';
@@ -10,6 +10,8 @@ import { UserProfile } from './models/user-profile';
 })
 export class AuthorizeService {
   private _authStateChanged: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(this.hasToken());
+  private _loginRequested = new Subject<void>();
+  public loginRequested$ = this._loginRequested.asObservable();
 
   constructor(private http: HttpClient) { }
 
@@ -56,9 +58,22 @@ export class AuthorizeService {
     );
   }
 
+  public confirmEmail(email: string, token: string): Observable<boolean> {
+    return this.http.get<{ message: string }>(
+      `/api/confirm-email?email=${encodeURIComponent(email)}&token=${encodeURIComponent(token)}`
+    ).pipe(
+      map(() => true),
+      catchError(() => of(false))
+    );
+  }
+
   public signOut(): void {
     this.clearToken();
     this._authStateChanged.next(false);
+  }
+
+  public requestLoginPopup(): void {
+    this._loginRequested.next();
   }
 
   public isSignedIn(): boolean {
@@ -136,7 +151,6 @@ export class AuthorizeService {
 
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
 
-    // Create a FormData object to send the file and other profile data
     const formData = new FormData();
     formData.append('Nickname', profileData.nickname);
     formData.append('Bio', profileData.profile.bio);
@@ -146,9 +160,8 @@ export class AuthorizeService {
     formData.append('FavoritePets', JSON.stringify(profileData.profile.favoritePets));
     formData.append('HighlightedPlantations', JSON.stringify(profileData.profile.highlightedPlantations));
 
-    console.log("Sending profile data:", formData); // Log the data being sent
+    console.log("Sending profile data:", formData);
 
-    // Do NOT set the Content-Type header manually
     return this.http.put<UserProfile>('/api/update-profile', formData, { headers }).pipe(
       catchError(() => of({
         nickname: '',

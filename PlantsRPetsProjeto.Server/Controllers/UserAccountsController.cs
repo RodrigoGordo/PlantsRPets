@@ -50,17 +50,40 @@ namespace PlantsRPetsProjeto.Server.Controllers
 
         /// <summary>
         /// Regista um novo utilizador na aplicação.
+        /// Caso o e-mail já esteja registado mas não confirmado, envia novamente o link de verificação.
+        /// Cria também o perfil associado ao utilizador após registo com sucesso.
         /// </summary>
         /// <param name="model">Modelo contendo o e-mail, nickname e palavra-passe do novo utilizador.</param>
-        /// <returns>Retorna um código HTTP 200 se o registo for bem-sucedido ou 400 em caso de erro.</returns>
+        /// <returns>Retorna um código HTTP 200 em caso de sucesso, ou 400/500 consoante o tipo de erro ocorrido.</returns>
         [HttpPost("api/signup")]
         public async Task<IActionResult> Register([FromBody] UserRegistrationModel model)
         {
             try
             {
-                var userExists = await _userManager.FindByEmailAsync(model.Email);
-                if (userExists != null)
-                    return BadRequest(new { message = "This email is already in use." });
+                var existingUser = await _userManager.FindByEmailAsync(model.Email);
+                if (existingUser != null)
+                {
+                    if (existingUser.EmailConfirmed)
+                    {
+                        return BadRequest(new { message = "This email is already in use." });
+                    }
+                    else
+                    {
+                        var token = await _userManager.GenerateEmailConfirmationTokenAsync(existingUser);
+                        var encodedToken = WebUtility.UrlEncode(token);
+                        var confirmationLink = $"{_configuration["Frontend:BaseUrl"]}/confirm-email?email={existingUser.Email}&token={encodedToken}";
+
+                        await _emailService.SendEmailAsync(
+                            existingUser.Email!,
+                            "Email Confirmation",
+                            $"<p>Hello {existingUser.Nickname},</p>" +
+                            $"<p>Please confirm your email by clicking the link below:</p>" +
+                            $"<p><a href='{confirmationLink}'>Confirm Email</a></p>" +
+                            $"<p>If you did not register, please ignore this email.</p>"
+                        );
+                        return Ok(new { message = "A new verification token has been sent to your email." });
+                    }
+                }
 
                 var user = new User { UserName = model.Email, Email = model.Email, Nickname = model.Nickname, RegistrationDate = DateTime.UtcNow };
 
@@ -72,13 +95,25 @@ namespace PlantsRPetsProjeto.Server.Controllers
                 }
 
                 var profile = new Profile { UserId = user.Id };
-
                 await _context.Profile.AddAsync(profile);
                 var saveProfileResult = await _context.SaveChangesAsync();
 
                 if (saveProfileResult > 0)
                 {
-                    return Ok(new { message = "Registration successful!" });
+                    var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                    var encodedToken = WebUtility.UrlEncode(token);
+                    var confirmationLink = $"{_configuration["Frontend:BaseUrl"]}/confirm-email?email={user.Email}&token={encodedToken}";
+                    Console.WriteLine($"[DEBUG] Email Confirmation Token: {token}");
+
+                    await _emailService.SendEmailAsync(
+                        user.Email!,
+                        "Email Confirmation",
+                        $"<p>Hello {user.Nickname},</p>" +
+                        $"<p>Please confirm your email by clicking the link below:</p>" +
+                        $"<p><a href='{confirmationLink}'>Confirm Email</a></p>" +
+                        $"<p>If you did not register, please ignore this email.</p>"
+                    );
+                    return Ok(new { message = "Registration successful! Please check your email to confirm your account." });
                 }
                 else
                 {
@@ -96,10 +131,10 @@ namespace PlantsRPetsProjeto.Server.Controllers
 
 
         /// <summary>
-        /// Autentica um utilizador e gera um token JWT para sessões autenticadas.
+        /// Autentica um utilizador, verifica se o e-mail está confirmado, e gera um token JWT para sessões autenticadas.
         /// </summary>
         /// <param name="model">Modelo contendo o e-mail e a palavra-passe do utilizador.</param>
-        /// <returns>Token JWT para autenticação ou um código de erro em caso de falha.</returns>
+        /// <returns>Token JWT para autenticação ou uma mensagem de erro em caso de falha.</returns>
         [HttpPost("api/signin")]
         public async Task<IActionResult> Login([FromBody] UserLoginModel model)
         {
@@ -114,6 +149,11 @@ namespace PlantsRPetsProjeto.Server.Controllers
                 if (!passwordValid)
                 {
                     return BadRequest(new { message = "Invalid email or password." });
+                }
+
+                if (!user.EmailConfirmed)
+                {
+                    return BadRequest(new { message = "Verify your email!" });
                 }
 
 
@@ -137,7 +177,8 @@ namespace PlantsRPetsProjeto.Server.Controllers
                     issuer: _configuration["Jwt:Issuer"],
                     audience: _configuration["Jwt:Audience"],
                     claims: claims,
-                    expires: DateTime.UtcNow.AddDays(1),
+                    //expires: DateTime.UtcNow.AddDays(1),
+                    expires: DateTime.UtcNow.AddMinutes(1),
                     signingCredentials: creds);
 
                 var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
@@ -154,6 +195,48 @@ namespace PlantsRPetsProjeto.Server.Controllers
                 return StatusCode(500, new { message = "An error occurred while processing your request." });
             }
         }
+
+
+        /// <summary>
+        /// Confirma o e-mail do utilizador utilizando o token enviado por e-mail.
+        /// </summary>
+        /// <param name="email">Endereço de e-mail do utilizador a ser confirmado.</param>
+        /// <param name="token">Token de confirmação enviado para o e-mail.</param>
+        /// <returns>Retorna um código HTTP 200 com uma mensagem de sucesso ou 400 em caso de erro.</returns>
+        [HttpGet("api/confirm-email")]
+        public async Task<IActionResult> ConfirmEmail([FromQuery] string email, [FromQuery] string token)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(token))
+                    return BadRequest(new { message = "Invalid confirmation link. Please try again." });
+
+                var user = await _userManager.FindByEmailAsync(email);
+                if (user == null)
+                    return BadRequest(new { message = "Email not found. Please register again." });
+
+                if (user.EmailConfirmed)
+                {
+                    return Ok(new { message = "Email is already confirmed." });
+                }
+
+                var result = await _userManager.ConfirmEmailAsync(user, token);
+                if (result.Succeeded)
+                    return Ok(new { message = "Your email has been successfully confirmed." });
+
+                return BadRequest(new
+                {
+                    message = "We couldn't confirm your email. The link may be invalid or expired.",
+                    errors = result.Errors.Select(e => e.Description)
+                });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[ERROR] {ex.Message}");
+                return StatusCode(500, new { message = "An error occurred while processing your request." });
+            }
+        }
+
 
         /// <summary>
         /// Inicia o processo de recuperação de palavra-passe, enviando um link para o e-mail do utilizador.
@@ -226,6 +309,12 @@ namespace PlantsRPetsProjeto.Server.Controllers
                 return StatusCode(500, new { message = "An error occurred while processing your request." });
             }
         }
+
+        /// <summary>
+        /// Obtém os dados do perfil do utilizador autenticado.
+        /// Inclui nickname e URL da imagem de perfil (caso exista).
+        /// </summary>
+        /// <returns>Informações do perfil do utilizador autenticado ou mensagem de erro caso o perfil não seja encontrado.</returns>
 
         [HttpGet("api/user-profile")]
         [Authorize]

@@ -10,10 +10,16 @@
   width: 90%;
   max-width: 90%;
   transition: transform 0.2s ease-in-out;
+  cursor: pointer;
 }
 
   .plantation-card:hover {
     transform: scale(1.02);
+  }
+
+  .plantation-card.editing {
+    cursor: default;
+    background-color: #f3f3f3;
   }
 
 .plantation-info {

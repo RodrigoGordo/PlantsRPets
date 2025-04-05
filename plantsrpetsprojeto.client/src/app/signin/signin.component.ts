@@ -58,7 +58,6 @@ export class SigninComponent {
       password
     }).subscribe({
       next: (response) => {
-        this.isLoading = false;
         if (response) {
           this.authService.signIn(email, password).subscribe();
           this.loginSuccess = true;
@@ -67,6 +66,7 @@ export class SigninComponent {
             this.dialogRef.close(true);
             this.router.navigateByUrl("/home");
           }, 1300);
+          this.isLoading = false;
         }
       },
       error: err => {
@@ -82,8 +82,10 @@ export class SigninComponent {
    * Fecha o diálogo de login e redireciona o utilizador para a página de recuperação de palavra-passe.
    */
   openForgotPassword(): void {
+    this.isLoading = true;
     this.dialogRef.close();
     this.router.navigate(['/forgot-password']);
+    this.isLoading = false;
   }
 
   /**

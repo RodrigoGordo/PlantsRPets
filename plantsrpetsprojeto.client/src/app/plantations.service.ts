@@ -23,6 +23,16 @@ export class PlantationsService {
     return this.http.get<any>(`${this.apiUrl}/${id}`);
   }
 
+  // Cria uma nova plantação
+  createPlantation(plantationData: { plantationName: string; plantTypeId: number }): Observable<any> {
+    return this.http.post<any>(this.apiUrl, plantationData);
+  }
+
+  // Atualiza uma plantação
+  updatePlantationName(id: number, newName: string): Observable<any> {
+    return this.http.put(`${this.apiUrl}/${id}`, { plantationName: newName });
+  }
+
   // Obtém as plantas de uma plantação
   getPlantsInPlantation(plantationId: number): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/${plantationId}/plants`);
@@ -33,14 +43,11 @@ export class PlantationsService {
     return this.http.post(`${this.apiUrl}/${plantationId}/add-plant`, plantData);
   }
 
-  // Cria uma nova plantação
-  createPlantation(plantationData: { plantationName: string; plantTypeId: number }): Observable<any> {
-    return this.http.post<any>(this.apiUrl, plantationData);
-  }
-
-  // Atualiza uma plantação
-  updatePlantationName(id: number, newName: string): Observable<any> {
-    return this.http.put(`${this.apiUrl}/${id}`, { plantationName: newName });
+  // Remove uma planta de uma plantação
+  removePlantFromPlantation(plantationId: number, plantInfoId: number, quantity: number): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/${plantationId}/remove-plant/${plantInfoId}`, {
+      body: { quantity }
+    });
   }
 
   usePlantationBankedLevelUp(id: number): Observable<any> {
