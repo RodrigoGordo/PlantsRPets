@@ -33,7 +33,8 @@ namespace PlantsRPetsProjeto.Server.Services
                 if (user == null || string.IsNullOrWhiteSpace(user.Email)) continue;
 
                 var (canWater, _) = PlantingAdvisor.CanWater(pp);
-                var (canHarvest, _) = PlantingAdvisor.CanHarvest(pp.PlantingDate, pp.ReferencePlant.PlantType, pp.ReferencePlant.GrowthRate, PlantingAdvisor.HasRecurringHarvest(pp.ReferencePlant.PlantType), pp.LastHarvested);
+                var canHarvest = pp.HarvestDate.HasValue && pp.HarvestDate.Value.Date <= DateTime.UtcNow.Date;
+
 
                 if (!canWater && !canHarvest) continue;
 
