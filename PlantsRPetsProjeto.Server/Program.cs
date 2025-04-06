@@ -56,12 +56,14 @@ builder.Services.AddAuthorization();
 
 builder.Services.AddTransient<IEmailService, SendGridEmailService>();
 builder.Services.AddHttpClient<WeatherService>();
+builder.Services.AddHttpClient<CityService>();
 builder.Services.AddHttpClient<PlantInfoService>();
 builder.Services.AddHttpClient<PlantingAdvisor>();
 builder.Services.AddHttpClient<SustainabilityTipService>();
 builder.Services.AddHttpClient<EmojiKitchenService>();
 builder.Services.AddScoped<PetGeneratorService>();
 builder.Services.AddScoped<PetSeeder>();
+builder.Services.AddScoped<CityService>();
 
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

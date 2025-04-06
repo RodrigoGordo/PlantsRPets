@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { WeatherService } from "../weather.service";
+import { Location } from '../models/location.model';
 
 @Component({
   selector: 'app-weather',
@@ -8,6 +9,7 @@ import { WeatherService } from "../weather.service";
   styleUrls: ['./weather.component.css']
 })
 export class WeatherComponent implements OnInit {
+  @Input() location!: Location;
   weather: any;
   forecast: any[] = [];
   locationError: string = '';
@@ -16,7 +18,10 @@ export class WeatherComponent implements OnInit {
   constructor(private weatherService: WeatherService) { }
 
   ngOnInit() {
+    console.log("Localização do Weather Component");
+    console.log(this.location);
     this.getUserLocation();
+    this.getWeatherByCoords(this.location.latitude, this.location.longitude);
   }
 
   getUserLocation() {
@@ -25,15 +30,14 @@ export class WeatherComponent implements OnInit {
         (position) => {
           const { latitude, longitude } = position.coords;
           this.getWeatherByCoords(latitude, longitude);
+          this.locationError = "";
         },
         (error) => {
-          this.locationError = "Unable to retrieve location. Using default city.";
-          this.getWeatherByCity("Setúbal");
+          this.locationError = "Allow location permission in browser to display the weather";
         }
       );
     } else {
       this.locationError = "Geolocation is not supported by this browser.";
-      this.getWeatherByCity("Setúbal");
     }
   }
 
@@ -41,7 +45,10 @@ export class WeatherComponent implements OnInit {
     this.weatherService.getWeatherByCoords(lat, lon).subscribe(
       (data) => {
         this.weather = data;
+        console.log("Weather Data");
+        console.log(this.weather);
         this.forecast = data.forecast.forecastday;
+        this.locationError = "";
       },
       (error) => {
         this.locationError = "Could not retrieve weather data.";
@@ -54,9 +61,14 @@ export class WeatherComponent implements OnInit {
       (data) => {
         this.weather = data;
         this.forecast = data.forecast.forecastday;
+        this.locationError = ""
       },
       (error) => {
-        this.locationError = "Could not retrieve weather data.";
+        if (!this.weather) {
+          this.locationError = "Please specify the location of your plantation to display the weather!";
+        } else {
+          this.locationError = "Could not retrieve weather data.";
+        }
       }
     );
   }

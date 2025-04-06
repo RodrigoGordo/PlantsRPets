@@ -28,6 +28,7 @@ export class PlantationDetailsComponent implements OnInit {
     experiencePoints: 0,
     level: 0,
     bankedLevelUps: 0,
+    location: undefined,
     plantationPlants: []
   };
 

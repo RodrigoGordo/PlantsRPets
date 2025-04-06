@@ -1,13 +1,38 @@
 <div class="plantation-card" [class.editing]="isEditing" [routerLink]="!isEditing ? ['/plantation', plantation.plantationId] : null" (click) ="onPlantationSelected()">
   <div class="plantation-info">
-    <input *ngIf="isEditing"
-           [(ngModel)]="newPlantationName"
-           type="text"
-           class="edit-input"
-           (click)="$event.stopPropagation()" />
-    <h3 *ngIf="!isEditing" class="plantation-name">{{ plantation.plantationName }}</h3>
+    <div class="plantation-name">
+      <h3 *ngIf="!isEditing" class="plantation-name">{{ plantation.plantationName }}</h3>
+      <h3 *ngIf="isEditing" class="plantation-name">Plantation Name: </h3>
+      <input *ngIf="isEditing"
+             [(ngModel)]="newPlantationName"
+             type="text"
+             class="edit-input"
+             (click)="$event.stopPropagation()" />
+    </div>
+    <div class="location">
+      <p *ngIf="!isEditing">Location: {{ plantation.location.city || "Unknown"}}, {{ plantation.location.region}}, {{ plantation.location.country}} </p>
+      <p *ngIf="isEditing">Location: </p>
+      <div *ngIf="isEditing" class="location-search">
+        <input type="text"
+               [(ngModel)]="citySearchTerm"
+               (input)="onCitySearchInput()"
+               placeholder="Search city..."
+               class="edit-input"
+               (click)="$event.stopPropagation()" />
+        <div *ngIf="citySearchResults.length > 0" class="search-results">
+          <div *ngFor="let city of citySearchResults"
+               class="search-result-item"
+               (click)="selectCity(city)">
+            {{ city.name }}, {{ city.region }}, {{ city.country }}
+          </div>
+        </div>
+      </div>
+    </div>
     <p class="plantation-type">Plantation of Type: {{ plantation.plantTypeName }}</p>
     <p class="last-watered">Creation Date: {{ plantation.plantingDate | date }}</p>
+    <p class="plantation-type">Number of Species: {{ plantation.plantationPlants.length || 0 }}</p>
+    <p class="plantation-type">Number of Plants: {{ getTotalPlants() }}</p>
+    <p class="plantation-type">Level: {{ plantation.level }}</p>
   </div>
 
   <div class="plantation-actions">

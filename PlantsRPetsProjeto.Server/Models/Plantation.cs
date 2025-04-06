@@ -13,6 +13,7 @@ namespace PlantsRPetsProjeto.Server.Models
         public int ExperiencePoints { get; set; }
         public int Level { get; set; }
         public int BankedLevelUps { get; set; }
+        public Location? Location { get; set; }
         public virtual ICollection<PlantationPlants> PlantationPlants { get; set; }
     }
 }

@@ -3,7 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { PlantInfo } from './models/plant-info';
 import { PlantationPlant } from './models/plantation-plant';
-import { Plantation } from './models/plantation.model'; 
+import { Plantation } from './models/plantation.model';
+import { Location } from './models/location.model';
 
 @Injectable({
   providedIn: 'root'
@@ -41,6 +42,10 @@ export class PlantationsService {
   // Atualiza uma plantação
   updatePlantationName(id: number, newName: string): Observable<any> {
     return this.http.put(`${this.apiUrl}/${id}`, { plantationName: newName });
+  }
+
+  updateLocation(id: number, newLocation: Location): Observable<any> {
+    return this.http.put(`${this.apiUrl}/${id}`, { location: newLocation });
   }
 
   usePlantationBankedLevelUp(id: number): Observable<any> {
