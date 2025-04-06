@@ -16,6 +16,14 @@ namespace PlantsRPetsProjeto.Server.Services
             { "vine", new() { { "High", 3 }, { "Moderate", 6 }, { "Low", 9 } } }
         };
 
+        private static readonly Dictionary<string, Dictionary<string, int>> WateringTable = new()
+        {
+            { "Tree", new() { { "Minimal", 156 }, { "Average", 84 }, { "Frequent", 60 } } },
+            { "Shrub", new() { { "Minimal", 144 }, {"Average", 84 }, { "Frequent", 36 } } },
+            { "Vegetable", new(){ { "Minimal", 48 }, { "Average", 36 },{ "Frequent", 24 } } }
+
+        };
+
         private static readonly Dictionary<string, Dictionary<string, GrowthData>> HarvestTable = new()
         {
             { "tree", new()
@@ -218,6 +226,34 @@ namespace PlantsRPetsProjeto.Server.Services
 
             return false;
         }
+
+        public static (bool canWater, TimeSpan timeUntilNextWater) CanWater(PlantationPlants plantationPlant)
+        {
+            var plantInfo = plantationPlant.ReferencePlant;
+            var lastWatered = plantationPlant.LastWatered;
+
+            if (plantInfo == null || string.IsNullOrWhiteSpace(plantInfo.PlantType) || string.IsNullOrWhiteSpace(plantInfo.Watering))
+                return (true, TimeSpan.Zero);
+
+            string plantType = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(plantInfo.PlantType.Trim().ToLower());
+            string wateringNeeds = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(plantInfo.Watering.Trim().ToLower());
+
+            if (!WateringTable.TryGetValue(plantType, out var needsMap) || !needsMap.TryGetValue(wateringNeeds, out int intervalHours))
+                return (true, TimeSpan.Zero);
+
+            if (!lastWatered.HasValue)
+                return (true, TimeSpan.Zero);
+
+            DateTime nextWaterTime = lastWatered.Value.AddHours(intervalHours);
+            DateTime now = DateTime.UtcNow;
+
+            if (now >= nextWaterTime)
+                return (true, TimeSpan.Zero);
+
+            return (false, nextWaterTime - now);
+        }
+
+
     }
 
     public class GrowthData

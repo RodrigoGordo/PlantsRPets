@@ -6,6 +6,8 @@ namespace PlantsRPetsProjeto.Server.Models
     {
         public int PlantationId { get; set; }
         public string OwnerId { get; set; }
+        [ForeignKey("OwnerId")]
+        public virtual User User { get; set; }
         public string PlantationName { get; set; }
         public int PlantTypeId { get; set; }
         public virtual PlantType PlantType { get; set; }
