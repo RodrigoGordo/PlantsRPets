@@ -12,7 +12,7 @@ using PlantsRPetsProjeto.Server.Data;
 namespace PlantsRPetsProjeto.Server.Migrations
 {
     [DbContext(typeof(PlantsRPetsProjetoServerContext))]
-    [Migration("20250407103636_Initial")]
+    [Migration("20250407143212_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -581,7 +581,7 @@ namespace PlantsRPetsProjeto.Server.Migrations
 
                     b.Property<string>("OwnerId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("PlantTypeId")
                         .HasColumnType("int");
@@ -593,16 +593,13 @@ namespace PlantsRPetsProjeto.Server.Migrations
                     b.Property<DateTime>("PlantingDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.HasKey("PlantationId");
 
                     b.HasIndex("LocationId");
 
-                    b.HasIndex("PlantTypeId");
+                    b.HasIndex("OwnerId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("PlantTypeId");
 
                     b.ToTable("Plantation");
                 });
@@ -1057,19 +1054,23 @@ namespace PlantsRPetsProjeto.Server.Migrations
                         .WithMany()
                         .HasForeignKey("LocationId");
 
+                    b.HasOne("PlantsRPetsProjeto.Server.Models.User", "User")
+                        .WithMany("Plantations")
+                        .HasForeignKey("OwnerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("PlantsRPetsProjeto.Server.Models.PlantType", "PlantType")
                         .WithMany()
                         .HasForeignKey("PlantTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("PlantsRPetsProjeto.Server.Models.User", null)
-                        .WithMany("Plantations")
-                        .HasForeignKey("UserId");
-
                     b.Navigation("Location");
 
                     b.Navigation("PlantType");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("PlantsRPetsProjeto.Server.Models.PlantationPlants", b =>

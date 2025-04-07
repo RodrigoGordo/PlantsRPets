@@ -457,24 +457,24 @@ namespace PlantsRPetsProjeto.Server.Migrations
                 {
                     PlantationId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    OwnerId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    OwnerId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     PlantationName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PlantTypeId = table.Column<int>(type: "int", nullable: false),
                     PlantingDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ExperiencePoints = table.Column<int>(type: "int", nullable: false),
                     Level = table.Column<int>(type: "int", nullable: false),
                     BankedLevelUps = table.Column<int>(type: "int", nullable: false),
-                    LocationId = table.Column<int>(type: "int", nullable: true),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    LocationId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Plantation", x => x.PlantationId);
                     table.ForeignKey(
-                        name: "FK_Plantation_AspNetUsers_UserId",
-                        column: x => x.UserId,
+                        name: "FK_Plantation_AspNetUsers_OwnerId",
+                        column: x => x.OwnerId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Plantation_Location_LocationId",
                         column: x => x.LocationId,
@@ -719,14 +719,14 @@ namespace PlantsRPetsProjeto.Server.Migrations
                 column: "LocationId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Plantation_OwnerId",
+                table: "Plantation",
+                column: "OwnerId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Plantation_PlantTypeId",
                 table: "Plantation",
                 column: "PlantTypeId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Plantation_UserId",
-                table: "Plantation",
-                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PlantationPlants_PlantationId",

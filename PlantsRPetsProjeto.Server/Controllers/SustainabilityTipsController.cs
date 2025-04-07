@@ -66,7 +66,8 @@ namespace PlantsRPetsProjeto.Server.Controllers
         /// Substitui os registos existentes e respetivas dicas, se já houver correspondência pelo ID da planta.
         /// </summary>
         /// <param name="tipsLists">Lista de objetos com dicas agrupadas por planta.</param>
-        /// <returns>Resultado da operação de armazenamento.</returns>[HttpPost("save-sustainability-tips")]
+        /// <returns>Resultado da operação de armazenamento.</returns>
+        [HttpPost("save-sustainability-tips")]
         public async Task<IActionResult> SaveSustainabilityTips(List<SustainabilityTipsList> tipsLists)
         {
             foreach (var tipsList in tipsLists)
