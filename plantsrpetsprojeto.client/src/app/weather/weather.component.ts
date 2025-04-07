@@ -18,9 +18,11 @@ export class WeatherComponent implements OnInit {
   constructor(private weatherService: WeatherService) { }
 
   ngOnInit() {
-    this.getUserLocation();
     if (this.location && this.location.latitude && this.location.longitude) {
       this.getWeatherByCoords(this.location.latitude, this.location.longitude);
+    }
+    else {
+      this.getUserLocation();
     }
   }
 
