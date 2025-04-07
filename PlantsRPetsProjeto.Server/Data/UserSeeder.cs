@@ -21,7 +21,7 @@ namespace PlantsRPetsProjeto.Server.Data
 
                 await userManager.CreateAsync(user, "PrP#2025");
                 await userManager.AddToRoleAsync(user, "Admin");
-                
+                user.EmailConfirmed = true;
             }
 
             //Criar utilizador

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { PlantsService } from '../plants.service';
 import { PlantInfo } from '../models/plant-info';
 
@@ -14,11 +14,19 @@ export class WikiComponent implements OnInit {
   activeFilters: { [key: string]: any } = {};
   showFilters = false;
 
+  displayCount = 16;
+  hasMore = true;
+
   constructor(private plantService: PlantsService) { }
 
   ngOnInit(): void {
+    this.loadInitialPlants();
+  }
+
+  private loadInitialPlants(): void {
     this.plantService.getPlants().subscribe(plants => {
       this.plants = plants;
+      this.updateDisplayedPlants();
     });
   }
 
@@ -29,6 +37,37 @@ export class WikiComponent implements OnInit {
     );
   }
 
+  get displayedPlants(): PlantInfo[] {
+    return this.filteredPlants.slice(0, this.displayCount);
+  }
+
+  @HostListener('window:scroll', ['$event'])
+  onScroll(): void {
+    if (this.hasMore && this.isNearBottom()) {
+      this.loadMorePlants();
+    }
+  }
+
+  private isNearBottom(): boolean {
+    const threshold = 100;
+    const position = window.scrollY + window.innerHeight;
+    const height = document.body.scrollHeight;
+    return position > height - threshold;
+  }
+
+  private loadMorePlants(): void {
+    if (this.displayCount < this.filteredPlants.length) {
+      this.displayCount += 16;
+      this.hasMore = this.displayCount < this.filteredPlants.length;
+    }
+  }
+
+  private updateDisplayedPlants(): void {
+    this.displayCount = 16;
+    this.hasMore = this.filteredPlants.length > this.displayCount;
+  }
+
+
   private matchesFilters(plant: PlantInfo): boolean {
     return Object.keys(this.activeFilters).every(key => {
       const filterValue = this.activeFilters[key];
@@ -36,6 +75,16 @@ export class WikiComponent implements OnInit {
 
       const plantKey = key as keyof PlantInfo;
       const plantValue = plant[plantKey];
+
+      if (['edible', 'fruits'].includes(plantKey)) {
+        const plantBool = this.convertYesNoToBoolean(plantValue);
+        const filterBool = filterValue === 'true';
+        return plantBool === filterBool;
+      }
+
+      if (typeof plantValue === 'boolean') {
+        return plantValue === (filterValue === 'true');
+      }
 
       if (plantKey === 'sunlight') {
         const normalizedFilter = filterValue.toLowerCase()
@@ -55,10 +104,6 @@ export class WikiComponent implements OnInit {
         });
       }
 
-      if (typeof plantValue === 'boolean') {
-        return plantValue === (filterValue === 'true');
-      }
-
       if (plantValue == null) return false;
 
       return plantValue.toString().toLowerCase().trim() ===
@@ -66,8 +111,17 @@ export class WikiComponent implements OnInit {
     });
   }
 
+  private convertYesNoToBoolean(value: any): boolean {
+    if (typeof value === 'boolean') return value;
+    if (typeof value === 'string') {
+      return value.toLowerCase() === 'yes';
+    }
+    return false;
+  }
+
   onFiltersChanged(filters: any): void {
     this.activeFilters = filters;
+    this.updateDisplayedPlants();
   }
 
   toggleFilters(): void {
