@@ -16,6 +16,8 @@
         /// </summary>
         public string UserId { get; set; }
 
+        public virtual User User { get; set; }
+
         /// <summary>
         /// Biografia ou descrição pessoal do utilizador.
         /// </summary>
