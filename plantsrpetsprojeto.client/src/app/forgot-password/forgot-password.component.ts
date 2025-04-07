@@ -2,11 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 
-/**
- * Componente responsável pelo processo de recuperação de palavra-passe.
- * Permite que o utilizador solicite o envio de um link para redefinir a sua palavra-passe,
- * através do e-mail associado à conta.
- */
+
 @Component({
   selector: 'app-forgot-password',
   standalone: false,
@@ -14,6 +10,12 @@ import { HttpClient } from '@angular/common/http';
   templateUrl: './forgot-password.component.html',
   styleUrl: './forgot-password.component.css'
 })
+
+/**
+ * Componente responsável pelo processo de recuperação de palavra-passe.
+ * Permite que o utilizador solicite o envio de um link para redefinir a sua palavra-passe,
+ * através do e-mail associado à conta.
+ */
 export class ForgotPasswordComponent {
   forgotPasswordForm: FormGroup;
   message: string = '';

@@ -2,11 +2,7 @@ import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { AuthorizeService } from '../authorize.service';
 
-/**
- * Componente responsável pela barra de navegação da aplicação (navbar).
- * Gera dinamicamente a interface da navegação com base no estado de autenticação do utilizador.
- * Também permite a abertura de diálogos modais para funcionalidades como login e logout.
- */
+
 @Component({
   selector: 'app-navbar',
   standalone: false,
@@ -14,6 +10,12 @@ import { AuthorizeService } from '../authorize.service';
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css'
 })
+
+/**
+ * Componente responsável pela barra de navegação da aplicação (navbar).
+ * Gera dinamicamente a interface da navegação com base no estado de autenticação do utilizador.
+ * Também permite a abertura de diálogos modais para funcionalidades como login e logout.
+ */
 export class NavbarComponent {
   isSignedIn: boolean = false;
 

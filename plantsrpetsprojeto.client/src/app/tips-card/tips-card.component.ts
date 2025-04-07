@@ -8,7 +8,12 @@ import { Tip } from '../models/tip-model';
   templateUrl: './tips-card.component.html',
   styleUrls: ['./tips-card.component.css']
 })
+
+/**
+ * Componente responsável por exibir um conjunto de dicas de sustentabilidade
+ * relacionadas com uma planta específica.
+ */
 export class TipsCardComponent {
-  @Input() plantInfoId!: number; // Plant ID
-  @Input() tips: Tip[] = []; // List of tips
+  @Input() plantInfoId!: number;
+  @Input() tips: Tip[] = [];
 }

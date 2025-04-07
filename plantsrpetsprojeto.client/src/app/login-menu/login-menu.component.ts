@@ -5,17 +5,19 @@ import { AuthorizeService } from '../authorize.service';
 import { Router } from '@angular/router';
 import { LogoutConfirmationComponent } from '../logout-confirmation/logout-confirmation.component';
 
-/**
- * Componente responsável pelo menu de login da aplicação.
- * Gera a interface para iniciar sessão, terminar sessão e gerir o estado de autenticação do utilizador.
- * Inclui um dropdown para aceder rapidamente às opções de conta.
- */
+
 @Component({
   selector: 'app-login-menu',
   templateUrl: './login-menu.component.html',
   styleUrls: ['./login-menu.component.css'],
   standalone: false,
 })
+
+/**
+ * Componente responsável pelo menu de login da aplicação.
+ * Gera a interface para iniciar sessão, terminar sessão e gerir o estado de autenticação do utilizador.
+ * Inclui um dropdown para aceder rapidamente às opções de conta.
+ */
 export class LoginMenuComponent implements OnInit {
   isSignedIn: boolean = false;
   dropdownOpen: boolean = false;

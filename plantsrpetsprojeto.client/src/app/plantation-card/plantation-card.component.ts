@@ -12,6 +12,10 @@ import { RemovePlantationPopupComponent } from '../remove-plantation-popup/remov
   styleUrl: './plantation-card.component.css'
 })
 
+/**
+ * Componente responsável por apresentar o cartão de uma plantação individual.
+ * Permite editar o nome, apagar a plantação e registar a sua seleção como atividade recente.
+ */
 export class PlantationCardComponent {
   @Input() plantation: any;
   @Output() updated = new EventEmitter<void>();
@@ -20,18 +24,30 @@ export class PlantationCardComponent {
   isEditing: boolean = false;
   newPlantationName: string = '';
 
+  /**
+   * Construtor do componente.
+   * 
+   * @param plantationsService - Serviço para operações CRUD sobre plantações.
+   * @param recentActivity - Serviço responsável por registar plantações recentemente acedidas.
+   * @param dialog - Serviço para abrir caixas de diálogo (mat-dialog).
+   */
   constructor(
     private plantationsService: PlantationsService,
     private recentActivity: RecentActivityService,
     private dialog: MatDialog
   ) { }
 
-
+  /**
+   * Ativa o modo de edição e carrega o nome atual da plantação.
+   */
   enableEdit(): void {
     this.isEditing = true;
     this.newPlantationName = this.plantation.plantationName;
   }
 
+  /**
+   * Guarda o novo nome da plantação e emite evento de atualização.
+   */
   saveEdit(): void {
     if (this.newPlantationName.trim() === '') return;
 
@@ -43,10 +59,17 @@ export class PlantationCardComponent {
       });
   }
 
+  /**
+   * Cancela a edição e volta ao estado original.
+   */
   cancelEdit(): void {
     this.isEditing = false;
   }
 
+  /**
+   * Abre diálogo de confirmação para remover a plantação.
+   * Se confirmado, apaga a plantação e remove da lista de atividade recente.
+   */
   remove(): void {
     const dialogRef = this.dialog.open(RemovePlantationPopupComponent, {
       width: '360px',
@@ -62,6 +85,9 @@ export class PlantationCardComponent {
     });
   }
 
+  /**
+   * Regista a plantação como recentemente acedida no serviço de atividade.
+   */
   onPlantationSelected(): void {
     this.recentActivity.savePlantation(this.plantation.plantationId);
     console.log(this.recentActivity.getRecentPlantations());

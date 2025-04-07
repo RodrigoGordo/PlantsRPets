@@ -1,10 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 
-/**
- * Componente responsável pela página inicial (landing page) da aplicação.
- * Permite a navegação para outras páginas, como a página de recuperação de palavra-passe.
- */
+
 @Component({
   selector: 'app-home',
   standalone: false,
@@ -12,6 +9,10 @@ import { Router } from '@angular/router';
   styleUrl: './landing-page.component.css'
 })
 
+/**
+ * Componente responsável pela página inicial (landing page) da aplicação.
+ * Permite a navegação para outras páginas, como a página de recuperação de palavra-passe.
+ */
 export class LandingPageComponent {
 
   /**

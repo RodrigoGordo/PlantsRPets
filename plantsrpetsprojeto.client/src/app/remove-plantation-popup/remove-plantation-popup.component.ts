@@ -8,7 +8,13 @@ import { MatDialogRef } from '@angular/material/dialog';
   templateUrl: './remove-plantation-popup.component.html',
   styleUrl: './remove-plantation-popup.component.css'
 })
+
+/**
+ * Componente responsável por apresentar um popup de confirmação para remover uma plantação.
+ * Permite ao utilizador confirmar ou cancelar a ação, retornando o resultado para o componente pai.
+ */
 export class RemovePlantationPopupComponent {
+
   /**
    * Construtor do componente que gere a referência da caixa de diálogo.
    * 

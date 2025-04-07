@@ -3,10 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 
-/**
- * Componente responsável pela redefinição da palavra-passe dos utilizadores.
- * Permite ao utilizador definir uma nova palavra-passe após receber um link de recuperação por e-mail.
- */
+
 @Component({
   selector: 'app-reset-password',
   standalone: false,
@@ -14,6 +11,11 @@ import { HttpClient } from '@angular/common/http';
   templateUrl: './reset-password.component.html',
   styleUrl: './reset-password.component.css'
 })
+
+/**
+ * Componente responsável pela redefinição da palavra-passe dos utilizadores.
+ * Permite ao utilizador definir uma nova palavra-passe após receber um link de recuperação por e-mail.
+ */
 export class ResetPasswordComponent implements OnInit {
   resetForm: FormGroup;
   token: string = '';

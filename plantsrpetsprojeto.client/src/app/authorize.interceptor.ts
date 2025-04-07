@@ -4,13 +4,18 @@ import { Router } from "@angular/router";
 import { Observable, tap } from "rxjs";
 import { AuthorizeService } from "./authorize.service";
 
-// this will intercept all http requests and redirect to signin if the user is not authenticated and
-// is trying to access a protected route
-
 @Injectable()
+  /**
+   * Interceptor responsável por adicionar o token JWT às requisições HTTP protegidas.
+   * Também trata erros 401 (Unauthorized) removendo o token e acionando a lógica de logout.
+   */
 export class AuthInterceptor implements HttpInterceptor {
   constructor(private authService: AuthorizeService, private router: Router) { }
 
+  /**
+   * Intercepta requisições HTTP e adiciona o cabeçalho Authorization com o token JWT, se disponível.
+   * Se a resposta for 401, efetua logout e redireciona para a homepage com um pedido de login.
+   */
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     const token = localStorage.getItem('authToken');
     let authReq = req;

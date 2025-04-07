@@ -3,27 +3,43 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Pet } from '../models/pet';
 
-/**
- * Componente responsável pela gestão e visualização da coleção de pets do utilizador.
- * Este componente exibe as coleções de pets colecionáveis da aplicação, mostrando quais o utilizador possui.
- */
 @Component({
   selector: 'app-collection',
   standalone: false,
   templateUrl: './collection.component.html',
   styleUrl: './collection.component.css'
 })
+
+/**
+ * Componente responsável pela gestão e visualização da coleção de pets do utilizador.
+ * Este componente exibe as coleções de pets colecionáveis da aplicação, mostrando quais o utilizador possui.
+ */
 export class CollectionComponent implements OnInit {
   pets: Pet[] = [];
   loading: boolean = true;
   error: string | null = null;
 
+  /**
+  * Construtor que injeta serviços essenciais:
+  * 
+  * @param http Serviço HTTP para comunicação com a API backend
+  * @param router Serviço de navegação para redirecionamentos se necessário
+  */
   constructor(private http: HttpClient, private router: Router) { }
 
+  /**
+   * Método do ciclo de vida Angular chamado após a inicialização do componente.
+   * Inicia o carregamento da coleção do utilizador.
+   */
   ngOnInit(): void {
     this.loadUserCollection();
   }
 
+  /**
+   * Obtém a coleção do utilizador a partir da API e organiza os pets:
+   * - Primeiro exibe os que são owned
+   * - Dentro dos owned, exibe primeiro os favoritos
+   */
   loadUserCollection(): void {
     this.loading = true;
     this.http.get<Pet[]>('/api/collections').subscribe({

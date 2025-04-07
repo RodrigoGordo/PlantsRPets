@@ -1,3 +1,6 @@
+/**
+ * Representa uma notificação recebida por um utilizador.
+ */
 export interface Notification {
   isRead: boolean;
   notification: {

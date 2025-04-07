@@ -2,11 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { MetricsService } from '../metrics.service';
 import { Color, ScaleType } from '@swimlane/ngx-charts';
 
-/**
- * Componente responsável pela exibição do painel de controlo (dashboard) da aplicação.
- * O dashboard serve para apresentar informações resumidas, métricas, estatísticas e 
- * atalhos para funcionalidades importantes da aplicação de forma visual e interativa.
- */
 
 @Component({
   selector: 'app-dashboard',
@@ -14,11 +9,16 @@ import { Color, ScaleType } from '@swimlane/ngx-charts';
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
 })
+
+
+/**
+ * Componente responsável por apresentar métricas de atividades do utilizador no formato de gráficos.
+ * Inclui contagem de eventos (rega, colheita, plantação) ao longo do tempo e distribuição por tipo de planta.
+ */
 export class DashboardComponent implements OnInit {
   timeFrame: string = 'week';
   activityCounts: any = {};
 
-  // ngx-charts properties
   wateringData: any[] = [];
   harvestData: any[] = [];
   plantingData: any[] = [];
@@ -44,12 +44,26 @@ export class DashboardComponent implements OnInit {
 
   isLoading = true;
 
+  /**
+   * Injeta o serviço de métricas responsável por obter os dados das atividades do utilizador.
+   * 
+   * @param metricsService Serviço que faz chamadas à API para buscar métricas e dados estatísticos
+   */
   constructor(private metricsService: MetricsService) { }
 
+  /**
+   * Ciclo de vida do componente - inicializa carregando todas as métricas.
+   */
   ngOnInit(): void {
     this.loadAllMetrics();
   }
 
+  /**
+   * Carrega todos os dados de métricas relevantes para os gráficos:
+   * - Contagem de atividades por tipo
+   * - Evolução temporal das atividades
+   * - Distribuição por tipo de planta
+   */
   loadAllMetrics(): void {
     this.isLoading = true;
 
@@ -80,6 +94,12 @@ export class DashboardComponent implements OnInit {
     });
   }
 
+  /**
+   * Converte os dados brutos da API em formato esperado pelo componente de gráfico.
+   * @param data Lista de objetos com { date, count }
+   * @param name Nome da série (usado como legenda)
+   * @returns Array formatada para o gráfico
+   */
   formatChartData(data: any[], name: string): any[] {
     const seriesData = data.map(item => {
       return {

@@ -6,37 +6,64 @@ import { Notification } from '../app/models/notification.model';
 @Injectable({
   providedIn: 'root'
 })
+
+/**
+ * Serviço responsável pela gestão de notificações do utilizador.
+ * Permite ler, marcar como lida, eliminar e configurar frequência de emails.
+ */
 export class NotificationService {
   private apiUrl = 'api/notification';
 
   constructor(private http: HttpClient) { }
 
-  // Get all notifications for the current user
+  /**
+   * Obtém todas as notificações associadas ao utilizador atual.
+   * @returns Observable com array de notificações
+   */
   getUserNotifications(): Observable<Notification[]> {
     return this.http.get<Notification[]>(`${this.apiUrl}`);
   }
 
-  // Get unread notifications
+  /**
+   * Obtém apenas as notificações ainda não lidas.
+   * @returns Observable com array de notificações por ler
+   */
   getUnreadNotifications(): Observable<Notification[]> {
     return this.http.get<Notification[]>(`${this.apiUrl}/unread`);
   }
 
-  // Send a specific notification to the user
+  /**
+   * Envia uma notificação manualmente para o utilizador.
+   * @param notificationId ID da notificação a enviar
+   * @returns Observable com o resultado da operação
+   */
   sendNotification(notificationId: number): Observable<any> {
     return this.http.post(`${this.apiUrl}/send/${notificationId}`, {});
   }
 
-  // Mark a notification as read
+  /**
+   * Marca uma notificação como lida.
+   * @param notificationId ID da notificação
+   * @returns Observable com o resultado da operação
+   */
   markAsRead(notificationId: number): Observable<any> {
     return this.http.put(`${this.apiUrl}/read/${notificationId}`, {});
   }
 
-  // Delete a specific notification
+  /**
+   * Remove uma notificação específica da base de dados do utilizador.
+   * @param notificationId ID da notificação a eliminar
+   * @returns Observable com o resultado da operação
+   */
   deleteNotification(notificationId: number): Observable<any> {
     return this.http.delete(`${this.apiUrl}/${notificationId}`);
   }
 
-  // Update email frequency (Never, Daily, Weekly, Monthly)
+  /**
+   * Atualiza a frequência com que o utilizador recebe notificações por e-mail.
+   * @param frequencyId Valor numérico correspondente à enumeração (0: Nunca, 1: Diário, etc.)
+   * @returns Observable com o resultado da atualização
+   */
   updateEmailFrequency(frequencyId: number): Observable<any> {
     return this.http.put(`${this.apiUrl}/email-frequency/${frequencyId}`, {});
   }

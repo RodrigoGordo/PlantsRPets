@@ -12,21 +12,41 @@ import { Location } from '@angular/common';
   templateUrl: './plant-info-page.component.html',
   styleUrls: ['./plant-info-page.component.css']
 })
+
+/**
+ * Componente responsável por apresentar os detalhes de uma planta específica,
+ * incluindo informações como nome, tipo, características e dicas de sustentabilidade associadas.
+ * É carregado com base no `id` fornecido na rota.
+ */
 export class PlantInfoPageComponent implements OnInit {
 
-  id!: string; // Plant ID to fetch tips for
-  tips: Tip[] = []; // List of tips
+  id!: string;
+  tips: Tip[] = [];
   plant: PlantInfo | null = null;
   isLoading = true;
-  errorMessage: string | null = null; // Error message
+  errorMessage: string | null = null;
 
+  /**
+   * Injeta os serviços necessários:
+   * @param route Serviço de rota para aceder aos parâmetros da URL
+   * @param tipService Serviço para obter dicas de sustentabilidade
+   * @param plantsService Serviço para obter informações da planta
+   * @param location Serviço para navegar de volta (equivalente ao botão "voltar")
+   */
   constructor(
     private route: ActivatedRoute,
-    private tipService: TipService, // Service to fetch tips
+    private tipService: TipService,
     private plantsService: PlantsService,
     private location: Location
   ) { }
 
+  /**
+   * Lifecycle hook chamado ao iniciar o componente.
+   * Responsável por:
+   *  - obter o ID da planta da rota;
+   *  - carregar os dados da planta;
+   *  - carregar as dicas associadas.
+   */
   ngOnInit(): void {
     this.id = this.route.snapshot.paramMap.get('id')!;
 
@@ -51,6 +71,9 @@ export class PlantInfoPageComponent implements OnInit {
     this.fetchTips();
   }
 
+  /**
+   * Recolhe as dicas de sustentabilidade relacionadas com a planta atual.
+   */
   private fetchTips(): void {
     this.tipService.getTipsByPlantId(+this.id).subscribe({
       next: (data) => {
@@ -64,10 +87,17 @@ export class PlantInfoPageComponent implements OnInit {
     });
   }
 
+  /**
+   * Retorna o nome científico da planta como uma única string.
+   * @returns Nome científico formatado ou string vazia se não existir
+   */
   getScientificName(): string {
     return this.plant?.scientificName?.join(' ') || '';
   }
 
+  /**
+   * Ação de retroceder à página anterior no histórico de navegação.
+   */
   goBack() {
     this.location.back();
   }

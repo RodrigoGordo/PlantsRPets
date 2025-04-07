@@ -14,6 +14,12 @@ import { SigninComponent } from './signin/signin.component';
 export class AppComponent implements OnInit {
   constructor(private authService: AuthorizeService, private dialog: MatDialog) { }
 
+  /**
+   * Executa lógica de verificação de token no início da aplicação.
+   * - Valida se o token JWT expirou e faz logout se necessário.
+   * - Controla a abertura automática da janela de login com base na flag 'showLoginPopup' armazenada no localStorage.
+   * - Subscreve a eventos de login solicitados através do serviço AuthorizeService.
+   */
   ngOnInit(): void {
     const token = localStorage.getItem('authToken');
     const popupFlag = localStorage.getItem('showLoginPopup');
