@@ -18,7 +18,7 @@
     </div>
 
     <div class="weather-info">
-      <h3>{{ weather.location.region }}</h3>
+      <h3>{{ weather.location.name }}, {{ weather.location.region }}, {{ weather.location.country }}</h3>
       <p>{{ weather.location.localtime | date:'HH:mm' }}</p>
       <p>{{ weather.current.condition.text }}</p>
     </div>

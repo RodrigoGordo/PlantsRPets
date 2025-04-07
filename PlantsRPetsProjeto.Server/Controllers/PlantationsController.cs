@@ -66,7 +66,10 @@ namespace PlantsRPetsProjeto.Server.Controllers
                         plantType.PlantTypeName,
                         plantation.PlantingDate,
                         plantation.ExperiencePoints,
-                        plantation.Level
+                        plantation.Level,
+                        plantation.BankedLevelUps,
+                        plantation.Location,
+                        plantation.PlantationPlants
                     }
                 )
                 .ToListAsync();
@@ -98,7 +101,8 @@ namespace PlantsRPetsProjeto.Server.Controllers
                         plantation.PlantingDate,
                         plantation.ExperiencePoints,
                         plantation.Level,
-                        plantation.BankedLevelUps
+                        plantation.BankedLevelUps,
+                        plantation.Location
                     }
                 )
                 .FirstOrDefaultAsync();
@@ -136,6 +140,8 @@ namespace PlantsRPetsProjeto.Server.Controllers
                 PlantingDate = DateTime.UtcNow,
                 ExperiencePoints = 0,
                 Level = 1,
+                BankedLevelUps = 0,
+                Location = null,
                 PlantationPlants = []
             };
 
@@ -186,6 +192,29 @@ namespace PlantsRPetsProjeto.Server.Controllers
 
             if (model.BankedLevelUps.HasValue)
                 existingPlantation.BankedLevelUps = model.BankedLevelUps.Value;
+
+            if (model.Location != null)
+            {
+                if (existingPlantation.Location == null)
+                {
+                    existingPlantation.Location = new Location
+                    {
+                        City = model.Location.City,
+                        Region = model.Location.Region,
+                        Country = model.Location.Country,
+                        Latitude = model.Location.Latitude,
+                        Longitude = model.Location.Longitude
+                    };
+                }
+                else
+                {
+                    existingPlantation.Location.City = model.Location.City;
+                    existingPlantation.Location.Region = model.Location.Region;
+                    existingPlantation.Location.Country = model.Location.Country;
+                    existingPlantation.Location.Latitude = model.Location.Latitude;
+                    existingPlantation.Location.Longitude = model.Location.Longitude;
+                }
+            }
 
             _context.Entry(existingPlantation).State = EntityState.Modified;
 
@@ -673,6 +702,7 @@ namespace PlantsRPetsProjeto.Server.Controllers
         public int? ExperiencePoints { get; set; }
         public int? Level { get; set; }
         public int? BankedLevelUps {  get; set; }
+        public Location? Location { get; set; }
     }
 
     /// <summary>

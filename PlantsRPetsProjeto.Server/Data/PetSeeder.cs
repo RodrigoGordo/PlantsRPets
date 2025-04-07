@@ -32,6 +32,7 @@ namespace PlantsRPetsProjeto.Server.Data
 
                     if (pet != null)
                     {
+                        await Task.Delay(500);
                         if (allPets.Contains(pet))
                         {
                             i--;

@@ -3,7 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { PlantInfo } from './models/plant-info';
 import { PlantationPlant } from './models/plantation-plant';
-import { Plantation } from './models/plantation.model'; 
+import { Plantation } from './models/plantation.model';
+import { Location } from './models/location.model';
 
 @Injectable({
   providedIn: 'root'
@@ -48,6 +49,10 @@ export class PlantationsService {
     return this.http.delete(`${this.apiUrl}/${plantationId}/remove-plant/${plantInfoId}`, {
       body: { quantity }
     });
+  }
+
+  updateLocation(id: number, newLocation: Location): Observable<any> {
+    return this.http.put(`${this.apiUrl}/${id}`, { location: newLocation });
   }
 
   usePlantationBankedLevelUp(id: number): Observable<any> {

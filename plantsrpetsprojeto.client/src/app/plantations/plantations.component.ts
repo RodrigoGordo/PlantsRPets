@@ -23,13 +23,20 @@ export class PlantationsComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadPlantations();
+    console.log(this.plantations);
   }
 
   loadPlantations(): void {
-    this.plantationsService.getUserPlantations().subscribe(
-      (data: Plantation[]) => this.plantations = data,
-      (error: any) => console.error('Error fetching plantations:', error)
-    );
+    this.plantationsService.getUserPlantations().subscribe({
+      next: (data) => {
+        this.plantations = data;
+        console.log("Plantações");
+        console.log(this.plantations);
+      },
+      error: (error) => {
+        console.error('Error fetching plantations:', error);
+      }
+    });
   }
 
   openCreateDialog(): void {

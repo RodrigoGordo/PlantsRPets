@@ -12,11 +12,14 @@
     </p>
 
     <div class="plantations-list" *ngIf="plantations.length > 0">
-      <app-plantation-card *ngFor="let plantation of plantations"
-                           [plantation]="plantation"
-                           (updated)="loadPlantations()"
-                           (deleted)="loadPlantations()">
-      </app-plantation-card>
+      <section class="plantation-and-weather" *ngFor="let plantation of plantations">
+        <app-plantation-card [plantation]="plantation"
+                             (updated)="loadPlantations()"
+                             (deleted)="loadPlantations()">
+        </app-plantation-card>
+        <app-weather [location]="plantation.location">
+        </app-weather>
+      </section>
     </div>
   </div>
 </body>
