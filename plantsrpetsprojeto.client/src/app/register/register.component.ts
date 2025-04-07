@@ -7,16 +7,17 @@ import { Router } from '@angular/router';
 import { HttpClient } from "@angular/common/http";
 
 
-/**
- * Componente responsável pelo registo de novos utilizadores.
- * Permite que os utilizadores criem uma nova conta, validando o formulário e enviando os dados para o backend.
- */
 @Component({
   selector: 'app-register-component',
   styleUrls: ['./register.component.css'],
   templateUrl: './register.component.html',
   standalone: false,
 })
+
+/**
+ * Componente responsável pelo registo de novos utilizadores.
+ * Permite que os utilizadores criem uma nova conta, validando o formulário e enviando os dados para o backend.
+ */
 export class RegisterComponent implements OnInit {
   registerForm!: FormGroup;
   registerSucceeded: boolean = false;

@@ -11,12 +11,24 @@ import { Router } from '@angular/router';
   styleUrl: './remove-plant-popup.component.css'
 })
 
+/**
+ * Componente responsável por gerir a lógica do popup de remoção de uma planta de uma plantação.
+ * Permite ao utilizador definir a quantidade a remover, valida o input e confirma a remoção com um segundo passo caso a quantidade seja total.
+ */
 export class RemovePlantPopupComponent {
   _quantityToRemove: number = 1;
   inputValue: string = '1';
   confirming: boolean = false;
   isSecondConfirmStep = false;
 
+  /**
+   * Construtor do componente.
+   * 
+   * @param plantationsService Serviço responsável por interagir com a API de plantações.
+   * @param dialogRef Referência ao diálogo atual (para o poder fechar após ações).
+   * @param router Serviço de navegação do Angular.
+   * @param data Dados recebidos do componente pai, incluindo nome da planta, quantidade máxima e IDs.
+   */
   constructor(
     private plantationsService: PlantationsService,
     private dialogRef: MatDialogRef<RemovePlantPopupComponent>,
@@ -29,11 +41,17 @@ export class RemovePlantPopupComponent {
     }
   ) { }
 
+  /**
+   * Getter da quantidade a remover com base no input do utilizador, assegurando que é válido e dentro dos limites permitidos.
+   */
   get quantityToRemove(): number {
     const value = parseInt(this.inputValue, 10);
     return isNaN(value) ? 0 : Math.min(value, this.data.maxQuantity);
   }
 
+  /**
+   * Setter da quantidade a remover, garantindo que o valor está dentro dos limites válidos.
+   */
   set quantityToRemove(value: number) {
     if (!value || value < 1) {
       this._quantityToRemove = 1;
@@ -44,11 +62,17 @@ export class RemovePlantPopupComponent {
     }
   }
 
+  /**
+   * Atualiza o valor do input com o valor introduzido pelo utilizador.
+   */
   onInputChange(event: Event): void {
     const input = event.target as HTMLInputElement;
     this.inputValue = input.value;
   }
 
+  /**
+   * Valida o valor introduzido ao perder o foco do input. Corrige automaticamente se necessário.
+   */
   onInputBlur(): void {
     const value = parseInt(this.inputValue, 10);
 
@@ -59,6 +83,10 @@ export class RemovePlantPopupComponent {
     }
   }
 
+  /**
+   * Confirma a remoção da planta. Se for uma remoção total, exige confirmação extra.
+   * Após remoção com sucesso, fecha o diálogo e redireciona, se necessário.
+   */
   confirmRemoval(): void {
     if (this.quantityToRemove === this.data.maxQuantity && !this.isSecondConfirmStep) {
       this.isSecondConfirmStep = true;
@@ -86,10 +114,16 @@ export class RemovePlantPopupComponent {
       });
   }
 
+  /**
+   * Cancela o segundo passo de confirmação (caso o utilizador mude de ideias).
+   */
   cancelConfirmation(): void {
     this.isSecondConfirmStep = true;
   }
 
+  /**
+   * Fecha o diálogo sem realizar qualquer remoção.
+   */
   cancel(): void {
     this.dialogRef.close(false);
   }

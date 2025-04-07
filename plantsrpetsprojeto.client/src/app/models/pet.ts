@@ -1,4 +1,6 @@
-
+/**
+ * Representa um pet colecionável, gerado e atribuído ao utilizador.
+ */
 export interface Pet {
   petId: number;
   name: string;

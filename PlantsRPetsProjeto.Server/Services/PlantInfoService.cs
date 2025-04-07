@@ -8,17 +8,31 @@ using Microsoft.EntityFrameworkCore;
 
 namespace PlantsRPetsProjeto.Server.Services
 {
+    /// <summary>
+    /// Serviço responsável por obter e transformar dados sobre plantas a partir da API externa da Perenual.
+    /// Também trata da normalização e preenchimento da tabela de tipos de planta na base de dados.
+    /// </summary>
     public class PlantInfoService
     {
         private readonly PlantsRPetsProjetoServerContext _context;
         private readonly HttpClient _httpClient;
         private readonly string _apiKey = "sk-uyOs67c9be8fd5f0c8989";
+
+        /// <summary>
+        /// Inicializa uma nova instância do <see cref="PlantInfoService"/>.
+        /// </summary>
+        /// <param name="httpClient">Cliente HTTP utilizado para comunicar com a API externa.</param>
+        /// <param name="context">Contexto da base de dados da aplicação.</param>
         public PlantInfoService(HttpClient httpClient, PlantsRPetsProjetoServerContext context)
         {
             _httpClient = httpClient;
             _context = context;
         }
 
+        /// <summary>
+        /// Preenche a tabela de tipos de planta com base nos dados distintos existentes na tabela de plantas.
+        /// Verifica também se o tipo de planta tem colheita recorrente.
+        /// </summary>
         public async Task PopulatePlantTypesAsync()
         {
             var distinctPlantTypes = await _context.PlantInfo
@@ -53,6 +67,13 @@ namespace PlantsRPetsProjeto.Server.Services
             }
         }
 
+        /// <summary>
+        /// Obtém os dados de múltiplas plantas de forma sequencial através da API Perenual,
+        /// a partir de um intervalo de IDs.
+        /// </summary>
+        /// <param name="startId">ID inicial da planta.</param>
+        /// <param name="maxId">ID final da planta.</param>
+        /// <returns>Lista de objetos <see cref="PlantInfo"/> transformados.</returns>
         public async Task<List<PlantInfo>> GetPlantsAsync(int startId, int maxId)
         {
             var plants = new List<PlantInfo>();
@@ -82,6 +103,11 @@ namespace PlantsRPetsProjeto.Server.Services
             return plants;
         }
 
+        /// <summary>
+        /// Mapeia os dados JSON devolvidos pela API da Perenual para o modelo <see cref="PlantInfo"/>.
+        /// </summary>
+        /// <param name="jsonData">Elemento JSON com os dados da planta.</param>
+        /// <returns>Objeto <see cref="PlantInfo"/> preenchido.</returns>
         private PlantInfo MapToPlantInfo(JsonElement jsonData)
         {
             return new PlantInfo

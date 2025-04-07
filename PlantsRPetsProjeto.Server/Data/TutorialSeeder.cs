@@ -3,8 +3,16 @@ using PlantsRPetsProjeto.Server.Models;
 
 namespace PlantsRPetsProjeto.Server.Data
 {
+    /// <summary>
+    /// Seeder responsável por adicionar tutoriais educativos predefinidos à base de dados.
+    /// Garante que os utilizadores têm acesso a conteúdos iniciais relacionados com jardinagem, compostagem e cuidados com plantas.
+    /// </summary>
     public class TutorialSeeder
     {
+        /// <summary>
+        /// Insere tutoriais predefinidos na base de dados, caso ainda não existam.
+        /// </summary>
+        /// <param name="context">Contexto da base de dados da aplicação.</param>
         public static async Task SeedTutorials(PlantsRPetsProjetoServerContext context)
         {
             if (!await context.Tutorial.AnyAsync())

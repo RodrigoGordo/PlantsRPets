@@ -8,12 +8,22 @@ using PlantsRPetsProjeto.Server.Services;
 
 namespace PlantsRPetsProjeto.Server.Data
 {
+    /// <summary>
+    /// Seeder responsável por gerar e inserir pets aleatórios na base de dados.
+    /// Também assegura que os utilizadores com o papel de administrador possuem todos os pets disponíveis na sua coleção.
+    /// </summary>
     public class PetSeeder
     {
         private readonly PlantsRPetsProjetoServerContext _context;
         private readonly PetGeneratorService _petGeneratorService;
         private readonly UserManager<User> _userManager;
 
+        /// <summary>
+        /// Construtor do <see cref="PetSeeder"/>.
+        /// </summary>
+        /// <param name="context">Contexto da base de dados.</param>
+        /// <param name="petGeneratorService">Serviço responsável por gerar pets aleatórios.</param>
+        /// <param name="userManager">Gestor de utilizadores da aplicação.</param>
         public PetSeeder(PlantsRPetsProjetoServerContext context, PetGeneratorService petGeneratorService, UserManager<User> userManager)
         {
             _context = context;
@@ -21,6 +31,10 @@ namespace PlantsRPetsProjeto.Server.Data
             _userManager = userManager;
         }
 
+        /// <summary>
+        /// Executa o processo de seed dos pets e associa-os aos administradores.
+        /// </summary>
+        /// <param name="numberOfPets">Número de pets a gerar (valor por omissão: 40).</param>
         public async Task SeedAsync(int numberOfPets = 40)
         {
             if (!await _context.Pet.AnyAsync())
@@ -53,6 +67,10 @@ namespace PlantsRPetsProjeto.Server.Data
         }
 
 
+        /// <summary>
+        /// Associa todos os pets existentes à coleção dos administradores.
+        /// Se a coleção ainda não existir, é criada.
+        /// </summary>
         private async Task SetupAdminCollectionsAsync()
         {
             var adminUsers = await _userManager.GetUsersInRoleAsync("Admin");
@@ -62,7 +80,6 @@ namespace PlantsRPetsProjeto.Server.Data
                 return;
             }
 
-            // Get all available pets
             var allPets = await _context.Pet.ToListAsync();
 
             foreach (var admin in adminUsers)
@@ -73,7 +90,6 @@ namespace PlantsRPetsProjeto.Server.Data
 
                 if (adminCollection == null)
                 {
-                    // Create new collection for admin
                     adminCollection = new Collection
                     {
                         UserId = admin.Id,
@@ -82,7 +98,6 @@ namespace PlantsRPetsProjeto.Server.Data
                     _context.Collection.Add(adminCollection);
                 }
 
-                // Add all pets to admin's collection
                 foreach (var pet in allPets)
                 {
                     if (!adminCollection.CollectionPets.Any(cp => cp.PetId == pet.PetId))
