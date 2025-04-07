@@ -64,10 +64,11 @@ builder.Services.AddHttpClient<SustainabilityTipService>();
 builder.Services.AddHttpClient<EmojiKitchenService>();
 builder.Services.AddScoped<PetGeneratorService>();
 builder.Services.AddScoped<PetSeeder>();
-//builder.Services.AddScoped<IEmailService, SendGridEmailService>();
+builder.Services.AddScoped<IEmailService, SendGridEmailService>();
 builder.Services.AddScoped<SendNotificationEmail>();
 builder.Services.AddScoped<MetricsService>();
 builder.Services.AddScoped<CityService>();
+builder.Services.AddScoped<PlantNotificationService>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -127,8 +128,6 @@ builder.Services.AddCors(options =>
         });
 });
 
-
-//Quartz Service for Notification Email
 builder.Services.AddQuartz(q =>
 {
     var jobKey = new JobKey("SendNotificationEmail");
@@ -136,10 +135,31 @@ builder.Services.AddQuartz(q =>
     q.AddTrigger(opts => opts
         .ForJob(jobKey)
         .WithIdentity("SendNotificationEmailTrigger")
-        .WithSchedule(CronScheduleBuilder.DailyAtHourAndMinute(8, 0)));
+        .WithSimpleSchedule(x => x
+            .WithIntervalInMinutes(1)
+            .RepeatForever()));
 });
 
+// Quartz Service for Plant Notification
+builder.Services.AddQuartz(q =>
+{
+    var jobKey = new JobKey("PlantNotificationJob");
+    q.AddJob<DailyNotificationJob>(opts => opts.WithIdentity(jobKey));
+    q.AddTrigger(opts => opts
+        .ForJob(jobKey)
+        .WithIdentity("PlantNotificationJobTrigger")
+        .WithSimpleSchedule(x => x
+            .WithIntervalInMinutes(1)
+            .RepeatForever()));
+});
+
+
+
+
+// Hosted Service to handle Quartz jobs
 builder.Services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);
+
+
 
 
 var app = builder.Build();

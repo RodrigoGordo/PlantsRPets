@@ -30,8 +30,8 @@ namespace PlantsRPetsProjeto.Server.Services
 
                 foreach (var user in users)
                 {
-                    //if (!ShouldSendEmail(user.NotificationFrequency, user.Id, today))
-                    //    continue;
+                    if (!ShouldSendEmail(user.NotificationFrequency, user.Id, today))
+                        continue;
 
                     var unreadNotifications = await _dbContext.UserNotifications
                         .Where(n => n.UserId == user.Id && !n.isRead)
