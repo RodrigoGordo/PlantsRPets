@@ -10,7 +10,8 @@
              (click)="$event.stopPropagation()" />
     </div>
     <div class="location">
-      <p *ngIf="!isEditing">Location: {{ plantation.location.city || "Unknown"}}, {{ plantation.location.region}}, {{ plantation.location.country}} </p>
+      <p *ngIf="!isEditing && this.plantation?.location">Location: {{ plantation.location.city}}, {{ plantation.location.region}}, {{ plantation.location.country}} </p>
+      <p *ngIf="!isEditing && !this.plantation?.location">Location: Unknown</p>
       <p *ngIf="isEditing">Location: </p>
       <div *ngIf="isEditing" class="location-search">
         <input type="text"

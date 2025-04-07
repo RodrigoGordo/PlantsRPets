@@ -34,8 +34,10 @@ export class PlantationCardComponent {
   enableEdit(): void {
     this.isEditing = true;
     this.newPlantationName = this.plantation.plantationName;
-    //this.newLocation = this.plantation.location;
-    //this.citySearchTerm = `${this.plantation.location.city}, ${this.plantation.location.region}, ${this.plantation.location.country}`;
+    if (this.plantation.location) {
+      this.newLocation = this.plantation.location;
+      this.citySearchTerm = `${this.plantation.location.city}, ${this.plantation.location.region}, ${this.plantation.location.country}`;
+    }
   }
 
   saveEdit(): void {
@@ -83,7 +85,6 @@ export class PlantationCardComponent {
   }
 
   getTotalPlants(): number {
-    console.log(this.plantation.plantationPlants);
     return this.plantation.plantationPlants.reduce((sum: number, plant: PlantationPlant) =>
       sum + (plant.quantity || 0), 0) || 0;
   }
