@@ -303,13 +303,14 @@ namespace PlantsRPetsProjeto.Server.Controllers
 
             return Ok(favoritePets);
         }
+        
+    }
 
-        /// <summary>
-        /// Modelo utilizado para atualizar o estado de posse de um pet.
-        /// </summary>
-        public class UpdateOwnedStatusModel
-        {
-            public bool IsOwned { get; set; }
-        }
+    /// <summary>
+    /// Modelo utilizado para atualizar o estado de posse de um pet.
+    /// </summary>
+    public class UpdateOwnedStatusModel
+    {
+        public bool IsOwned { get; set; }
     }
 }

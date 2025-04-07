@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Quartz;
-using PlantsRPetsProjeto.Server.Services; // Import your email service interface
+using PlantsRPetsProjeto.Server.Services;
 
 namespace PlantsRPetsProjeto.Server.Controllers
 {

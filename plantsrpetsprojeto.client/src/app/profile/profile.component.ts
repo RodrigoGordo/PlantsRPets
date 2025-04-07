@@ -143,22 +143,6 @@ export class ProfileComponent implements OnInit {
     }
   }
 
-  //getFavoritePets(): void {
-  //  this.loading = true;
-  //  this.collectionService.getFavoritePetsInCollection().subscribe({
-  //    next: (data) => {
-  //      // Ordenar: owned primeiro, depois favoritos
-  //      this.favoritePets = data.sort((a, b) => a.name.localeCompare(b.name));
-  //      this.loading = false;
-  //    },
-  //    error: (err) => {
-  //      this.error = 'Failed to load your collection. Please try again later.';
-  //      this.loading = false;
-  //      console.error('Error loading collection:', err);
-  //    }
-  //  });
-  //}
-
   /**
    * Carrega os pets favoritos do utilizador da coleção, ordenados por nome e se são owned.
    * Limita a 5 entradas.
