@@ -2,7 +2,7 @@ nav.menu {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #4CAF50; /* Rich green */
+  background-color: #4CAF50;
   padding: 10px 40px;
   box-shadow: 0 8px 10px rgba(0, 0, 0, 0.1);
   position: sticky;
@@ -60,7 +60,6 @@ nav ul {
   color: inherit;
 }
 
-/* Sign-in Button */
 .sign-in {
   background: white;
   color: #4caf50;

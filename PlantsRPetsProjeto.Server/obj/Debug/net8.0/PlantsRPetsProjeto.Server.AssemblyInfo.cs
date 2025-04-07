@@ -12,10 +12,11 @@ using System;
 using System.Reflection;
 
 [assembly: Microsoft.AspNetCore.Identity.UI.UIFrameworkAttribute("Bootstrap5")]
+[assembly: Microsoft.Extensions.Configuration.UserSecrets.UserSecretsIdAttribute("02447624-71b7-41ce-a8b6-ba580f5d2bc3")]
 [assembly: System.Reflection.AssemblyCompanyAttribute("PlantsRPetsProjeto.Server")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+905cf0e438131adc0f5aadb9dba5739ea4f60331")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+2fb668fc991e7b451d20afc816a7d03441b8d764")]
 [assembly: System.Reflection.AssemblyProductAttribute("PlantsRPetsProjeto.Server")]
 [assembly: System.Reflection.AssemblyTitleAttribute("PlantsRPetsProjeto.Server")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

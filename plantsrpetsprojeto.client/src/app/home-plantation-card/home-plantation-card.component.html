@@ -1,0 +1,30 @@
+<div class="card plantation-card">
+  <div class="card-header">
+    <h3>
+      <i class="icon-plant"></i>
+      Get back to your plantations
+    </h3>
+  </div>
+
+  <div *ngIf="plantations.length; else noPlantations">
+    <ul class="plantation-list">
+      <li class="plantation-item" *ngFor="let plantationId of plantations">
+        <a class="plantation-link" [routerLink]="['/plantation', plantationId]">
+          <span class="plantation-icon">🌱</span>
+          Plantation {{ plantationId }}
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <ng-template #noPlantations>
+    <div class="no-plantations">
+      <i class="icon-no-plants">🌵</i>
+      <p>No recent plantations</p>
+    </div>
+  </ng-template>
+
+  <div class="card-footer">
+    <a routerLink="/plantations" class="view-all">View all plantations</a>
+  </div>
+</div>

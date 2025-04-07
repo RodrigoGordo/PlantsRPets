@@ -12,7 +12,11 @@ using PlantsRPetsProjeto.Server.Data;
 namespace PlantsRPetsProjeto.Server.Migrations
 {
     [DbContext(typeof(PlantsRPetsProjetoServerContext))]
+<<<<<<<< HEAD:PlantsRPetsProjeto.Server/Migrations/20250321170706_Initial.Designer.cs
     [Migration("20250321170706_Initial")]
+========
+    [Migration("20250407143212_Initial")]
+>>>>>>>> development:PlantsRPetsProjeto.Server/Migrations/20250407143212_Initial.Designer.cs
     partial class Initial
     {
         /// <inheritdoc />
@@ -282,6 +286,37 @@ namespace PlantsRPetsProjeto.Server.Migrations
                     b.ToTable("Dashboard");
                 });
 
+            modelBuilder.Entity("PlantsRPetsProjeto.Server.Models.Location", b =>
+                {
+                    b.Property<int>("LocationId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("LocationId"));
+
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Country")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double>("Latitude")
+                        .HasColumnType("float");
+
+                    b.Property<double>("Longitude")
+                        .HasColumnType("float");
+
+                    b.Property<string>("Region")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("LocationId");
+
+                    b.ToTable("Location");
+                });
+
             modelBuilder.Entity("PlantsRPetsProjeto.Server.Models.Message", b =>
                 {
                     b.Property<int>("MessageId")
@@ -319,21 +354,25 @@ namespace PlantsRPetsProjeto.Server.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MetricId"));
 
-                    b.Property<double>("CarbonFootprintReduction")
-                        .HasColumnType("float");
-
                     b.Property<int?>("DashboardId")
                         .HasColumnType("int");
 
-                    b.Property<int>("TotalPlants")
+                    b.Property<string>("EventType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("PlantInfoId")
                         .HasColumnType("int");
+
+                    b.Property<int>("PlantationId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Timestamp")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("UserId")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<double>("WaterSaved")
-                        .HasColumnType("float");
 
                     b.HasKey("MetricId");
 
@@ -532,15 +571,21 @@ namespace PlantsRPetsProjeto.Server.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PlantationId"));
 
+                    b.Property<int>("BankedLevelUps")
+                        .HasColumnType("int");
+
                     b.Property<int>("ExperiencePoints")
                         .HasColumnType("int");
 
                     b.Property<int>("Level")
                         .HasColumnType("int");
 
+                    b.Property<int?>("LocationId")
+                        .HasColumnType("int");
+
                     b.Property<string>("OwnerId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("PlantTypeId")
                         .HasColumnType("int");
@@ -552,14 +597,13 @@ namespace PlantsRPetsProjeto.Server.Migrations
                     b.Property<DateTime>("PlantingDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.HasKey("PlantationId");
 
-                    b.HasIndex("PlantTypeId");
+                    b.HasIndex("LocationId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("OwnerId");
+
+                    b.HasIndex("PlantTypeId");
 
                     b.ToTable("Plantation");
                 });
@@ -803,6 +847,9 @@ namespace PlantsRPetsProjeto.Server.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
+                    b.Property<int>("NotificationFrequency")
+                        .HasColumnType("int");
+
                     b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");
 
@@ -836,6 +883,36 @@ namespace PlantsRPetsProjeto.Server.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+                });
+
+            modelBuilder.Entity("PlantsRPetsProjeto.Server.Models.UserNotification", b =>
+                {
+                    b.Property<int>("UserNotificationId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserNotificationId"));
+
+                    b.Property<int>("NotificationId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("ReceivedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<bool>("isRead")
+                        .HasColumnType("bit");
+
+                    b.HasKey("UserNotificationId");
+
+                    b.HasIndex("NotificationId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserNotifications");
                 });
 
             modelBuilder.Entity("CommunityUser", b =>
@@ -977,17 +1054,27 @@ namespace PlantsRPetsProjeto.Server.Migrations
 
             modelBuilder.Entity("PlantsRPetsProjeto.Server.Models.Plantation", b =>
                 {
+                    b.HasOne("PlantsRPetsProjeto.Server.Models.Location", "Location")
+                        .WithMany()
+                        .HasForeignKey("LocationId");
+
+                    b.HasOne("PlantsRPetsProjeto.Server.Models.User", "User")
+                        .WithMany("Plantations")
+                        .HasForeignKey("OwnerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("PlantsRPetsProjeto.Server.Models.PlantType", "PlantType")
                         .WithMany()
                         .HasForeignKey("PlantTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("PlantsRPetsProjeto.Server.Models.User", null)
-                        .WithMany("Plantations")
-                        .HasForeignKey("UserId");
+                    b.Navigation("Location");
 
                     b.Navigation("PlantType");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("PlantsRPetsProjeto.Server.Models.PlantationPlants", b =>
@@ -1027,6 +1114,25 @@ namespace PlantsRPetsProjeto.Server.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("PlantsRPetsProjeto.Server.Models.UserNotification", b =>
+                {
+                    b.HasOne("PlantsRPetsProjeto.Server.Models.Notification", "Notification")
+                        .WithMany()
+                        .HasForeignKey("NotificationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PlantsRPetsProjeto.Server.Models.User", "User")
+                        .WithMany("Notifications")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Notification");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("PlantsRPetsProjeto.Server.Models.Chat", b =>
                 {
                     b.Navigation("Messages");
@@ -1055,6 +1161,8 @@ namespace PlantsRPetsProjeto.Server.Migrations
             modelBuilder.Entity("PlantsRPetsProjeto.Server.Models.User", b =>
                 {
                     b.Navigation("Dashboard");
+
+                    b.Navigation("Notifications");
 
                     b.Navigation("Pets");
 

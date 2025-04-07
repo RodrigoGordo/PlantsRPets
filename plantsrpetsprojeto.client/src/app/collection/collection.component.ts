@@ -1,44 +1,55 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { Pet } from '../models/pet';
 
-interface PetItem {
-  petId: number;
-  name: string;
-  type: string;
-  details: string;
-  battleStats: string;
-  imageUrl: string;
-  isOwned: boolean;
-  isFavorite: boolean;
-}
-
-/**
- * Componente responsável pela gestão e visualização da coleção de pets do utilizador.
- * Este componente exibe as coleções de pets colecionáveis da aplicação, mostrando quais o utilizador possui.
- */
 @Component({
   selector: 'app-collection',
   standalone: false,
   templateUrl: './collection.component.html',
   styleUrl: './collection.component.css'
 })
+
+/**
+ * Componente responsável pela gestão e visualização da coleção de pets do utilizador.
+ * Este componente exibe as coleções de pets colecionáveis da aplicação, mostrando quais o utilizador possui.
+ */
 export class CollectionComponent implements OnInit {
-  pets: PetItem[] = [];
+  pets: Pet[] = [];
   loading: boolean = true;
   error: string | null = null;
 
+  /**
+  * Construtor que injeta serviços essenciais:
+  * 
+  * @param http Serviço HTTP para comunicação com a API backend
+  * @param router Serviço de navegação para redirecionamentos se necessário
+  */
   constructor(private http: HttpClient, private router: Router) { }
 
+  /**
+   * Método do ciclo de vida Angular chamado após a inicialização do componente.
+   * Inicia o carregamento da coleção do utilizador.
+   */
   ngOnInit(): void {
     this.loadUserCollection();
   }
 
+  /**
+   * Obtém a coleção do utilizador a partir da API e organiza os pets:
+   * - Primeiro exibe os que são owned
+   * - Dentro dos owned, exibe primeiro os favoritos
+   */
   loadUserCollection(): void {
     this.loading = true;
-    this.http.get<PetItem[]>('/api/collections').subscribe({
+    this.http.get<Pet[]>('/api/collections').subscribe({
       next: (data) => {
-        this.pets = data;
+        this.pets = data.sort((a, b) => {
+          if (b.isOwned !== a.isOwned) {
+            return Number(b.isOwned) - Number(a.isOwned); // Owned vem primeiro
+          }
+          return Number(b.isFavorite) - Number(a.isFavorite); // Dentro de owned, favoritos primeiro
+        });
         this.loading = false;
       },
       error: (err) => {
@@ -49,25 +60,4 @@ export class CollectionComponent implements OnInit {
     });
   }
 
-  viewPet(pet: PetItem): void {
-    if (pet.isOwned) {
-      this.router.navigate(['/pet', pet.petId]);
-    }
-  }
-
-  toggleFavorite(event: Event, petId: number): void {
-    event.stopPropagation();
-
-    this.http.put<{ isFavorite: boolean }>(`/api/collections/favorite/${petId}`, {}).subscribe({
-      next: (response) => {
-        const petIndex = this.pets.findIndex(p => p.petId === petId);
-        if (petIndex !== -1) {
-          this.pets[petIndex].isFavorite = response.isFavorite;
-        }
-      },
-      error: (err) => {
-        console.error('Error toggling favorite status:', err);
-      }
-    });
-  }
 }

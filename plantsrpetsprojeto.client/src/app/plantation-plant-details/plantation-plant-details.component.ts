@@ -5,6 +5,8 @@ import { PlantationPlant } from '../models/plantation-plant';
 import { Location } from '@angular/common';
 import { Plantation } from '../models/plantation.model';
 import { tap } from 'rxjs';
+import { MatDialog } from '@angular/material/dialog';
+import { RemovePlantPopupComponent } from '../remove-plant-popup/remove-plant-popup.component';
 
 type PlantType = 'Tree' | 'Shrub' | 'Vegetable';
 type WaterFrequency = 'Minimal' | 'Average' | 'Frequent';
@@ -17,6 +19,11 @@ type WaterFrequency = 'Minimal' | 'Average' | 'Frequent';
 
 })
 
+  /**
+   * Componente responsável por exibir os detalhes de uma planta específica numa plantação.
+   * Permite ao utilizador visualizar o estado da planta, regá-la ou realizar a colheita,
+   * além de controlar os intervalos de cooldown entre essas ações.
+   */
 export class PlantationPlantDetailsComponent implements OnInit {
   plantInfoId!: number;
   plantationId!: number;
@@ -32,21 +39,39 @@ export class PlantationPlantDetailsComponent implements OnInit {
   isLoading: boolean = false;
   errorMessage: string = '';
 
+  remainingCooldown: string = '';
+  private cooldownCheckInterval!: any;
+
+  /**
+   * Configuração dos tempos de cooldown entre regas, dependendo do tipo e frequência.
+   */
   private cooldownConfig: Record<PlantType, Record<WaterFrequency, number>> = {
     'Tree': { Minimal: 156, Average: 84, Frequent: 60 },
     'Shrub': { Minimal: 144, Average: 84, Frequent: 36 },
     'Vegetable': { Minimal: 48, Average: 36, Frequent: 24 }
   };
 
-  remainingCooldown: string = '';
-  private cooldownCheckInterval!: any;
-
+  /**
+   * Injeta os serviços necessários para navegação, gestão de plantações,
+   * rotas ativas e diálogos modais.
+   *
+   * @param dialog Serviço de abertura de diálogos (modais).
+   * @param route Serviço de acesso aos parâmetros da rota.
+   * @param plantationsService Serviço para manipulação de dados de plantações.
+   * @param location Serviço que permite voltar à página anterior.
+   */
   constructor(
+    private dialog: MatDialog,
     private route: ActivatedRoute,
     private plantationsService: PlantationsService,
     private location: Location
   ) { }
 
+  /**
+   * Lifecycle hook que é executado quando o componente é inicializado.
+   * Lê os parâmetros da rota para obter o ID da plantação e da planta,
+   * e inicia o carregamento dos dados correspondentes.
+   */
   ngOnInit() {
     this.route.paramMap.subscribe(params => {
       this.plantationId = Number(this.route.snapshot.paramMap.get('plantationId'));
@@ -72,6 +97,18 @@ export class PlantationPlantDetailsComponent implements OnInit {
     }, 60000);
   }
 
+  /**
+   * Lifecycle hook que é chamado ao destruir o componente.
+   * Limpa o intervalo de atualização do cooldown para evitar memory leaks.
+   */
+  ngOnDestroy() {
+    clearInterval(this.cooldownCheckInterval);
+  }
+
+  /**
+   * Carrega os dados de uma planta específica associada a uma plantação.
+   * Atualiza também os estados de cooldown e colheita.
+   */
   loadPlantationPlantDetails() {
     if (!this.plantationId) return;
     if (!this.plantInfoId) return;
@@ -94,14 +131,39 @@ export class PlantationPlantDetailsComponent implements OnInit {
     });
   }
 
-  ngOnDestroy() {
-    clearInterval(this.cooldownCheckInterval);
+  /**
+   * Abre a caixa de diálogo para confirmar a remoção da planta da plantação.
+   * Se a remoção for confirmada, recarrega os dados da planta.
+   */
+  openRemoveDialog(): void {
+    const dialogRef = this.dialog.open(RemovePlantPopupComponent, {
+      width: '420px',
+      panelClass: 'custom-dialog-container',
+      data: {
+        plantName: this.plantationPlant.referencePlant.plantName,
+        maxQuantity: this.plantationPlant.quantity,
+        plantationId: this.plantationId,
+        plantInfoId: this.plantInfoId
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === true) {
+        this.loadPlantationPlantDetails();
+      }
+    });
   }
 
+  /**
+   * Retorna a frequência de rega definida para a planta.
+   */
   get waterFrequency(): string {
     return this.plantationPlant?.referencePlant?.watering;
   }
 
+  /**
+   * Obtém o número de horas de cooldown com base no tipo de planta e frequência de rega.
+   */
   get cooldownHours(): number {
     const plantType = this.plantationPlant?.referencePlant?.plantType?.charAt(0).toUpperCase() +
       this.plantationPlant?.referencePlant?.plantType?.slice(1).toLowerCase() as PlantType;
@@ -125,6 +187,10 @@ export class PlantationPlantDetailsComponent implements OnInit {
     return this.cooldownConfig[plantType][wateringFrequency];
   }
 
+  /**
+   * Atualiza a mensagem de cooldown da próxima colheita com base numa data.
+   * @param nextHarvestDateStr Data da próxima colheita.
+   */
   private updateHarvestCooldownMsgFromDate(nextHarvestDateStr: string) {
     const now = new Date();
     const nextHarvestDate = new Date(nextHarvestDateStr);
@@ -148,6 +214,9 @@ export class PlantationPlantDetailsComponent implements OnInit {
     this.harvestCooldownMsg = `⏳ Next harvest available in ${msgParts.join(' ')}`;
   }
 
+  /**
+   * Apenas para debug: imprime no console informações sobre a planta selecionada.
+   */
   logPlantData() {
     console.log('Plant Type:', this.plantationPlant?.referencePlant?.plantType);
     console.log('Watering Frequency:', this.plantationPlant?.referencePlant?.watering);
@@ -155,6 +224,9 @@ export class PlantationPlantDetailsComponent implements OnInit {
   }
 
 
+  /**
+   * Verifica se a planta pode ser regada com base no cooldown desde a última rega.
+   */
   canWater(): boolean {
     if (!this.plantationPlant?.lastWatered) return true;
     const lastWatered = new Date(this.plantationPlant.lastWatered);
@@ -162,6 +234,9 @@ export class PlantationPlantDetailsComponent implements OnInit {
     return elapsedHours >= this.cooldownHours;
   }
 
+  /**
+   * Atualiza o estado visual do cooldown, mostrando tempo restante.
+   */
   private updateCooldownStatus() {
     if (!this.plantationPlant?.lastWatered) {
       this.remainingCooldown = '';
@@ -192,6 +267,10 @@ export class PlantationPlantDetailsComponent implements OnInit {
   }
 
 
+  /**
+    * Rega a planta, atualizando a data da última rega e cooldown.
+    * Também adiciona experiência à plantação associada.
+    */
   waterPlants() {
     if (!this.plantationId) return;
     if (!this.plantInfoId) return;
@@ -217,6 +296,9 @@ export class PlantationPlantDetailsComponent implements OnInit {
       })
   }
 
+  /**
+   * Realiza a colheita da planta se estiver pronta, atualiza os dados e XP.
+   */
   harvestPlant() {
     if (!this.canHarvest) {
       alert('Plant is not ready for harvest yet!');
@@ -227,6 +309,7 @@ export class PlantationPlantDetailsComponent implements OnInit {
       .subscribe({
         next: (res) => {
           this.loadPlantationPlantDetails();
+          this.increaseExperience(true);
         },
         error: (err) => {
           console.error('Harvest failed:', err);
@@ -235,6 +318,9 @@ export class PlantationPlantDetailsComponent implements OnInit {
       });
   }
 
+  /**
+   * Verifica com o backend se a planta já pode ser colhida com base na data de plantação e recorrência.
+   */
   checkHarvestStatus() {
     this.plantationsService.checkHarvest(this.plantationId, this.plantInfoId)
       .subscribe({
@@ -255,6 +341,10 @@ export class PlantationPlantDetailsComponent implements OnInit {
       });
     }
 
+  /**
+   * Envia uma requisição ao backend para adicionar experiência à plantação.
+   * @param isHarvesting Indica se a ação foi colheita (true) ou rega (false).
+   */
   increaseExperience(isHarvesting: boolean) {
     if (!this.plantation) {
       console.error(`No plantation${this.plantation}`);
@@ -265,10 +355,7 @@ export class PlantationPlantDetailsComponent implements OnInit {
 
     this.plantationsService.gainExperience(this.plantationId, this.plantInfoId, isHarvesting)
       .subscribe({
-        next: (updatedPlantation) => {
-          if (this.plantation) {
-            this.plantation.experiencePoints = updatedPlantation.experiencePoints;
-          }
+        next: () => {
         },
         error: (error) => {
           console.error("Experience Increase Failed", error);
@@ -276,6 +363,9 @@ export class PlantationPlantDetailsComponent implements OnInit {
       })
   }
 
+  /**
+   * Retorna à página anterior no histórico do navegador.
+   */
   goBack() {
     this.location.back();
   }

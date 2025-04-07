@@ -1,3 +1,6 @@
+/**
+ * Representa uma dica de sustentabilidade associada a uma planta específica.
+ */
 export interface Tip {
   tipId: number;
   plantInfoId: number;

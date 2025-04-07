@@ -14,6 +14,10 @@ using PlantsRPetsProjeto.Server.Services;
 
 namespace PlantsRPetsProjeto.Server.Controllers
 {
+    /// <summary>
+    /// Controlador responsável pela gestão da informação sobre plantas.
+    /// Permite listar, consultar, remover e sincronizar dados de plantas a partir de uma API externa.
+    /// </summary>
     [Authorize]
     [ApiController]
     [Route("api/plants")]
@@ -22,12 +26,21 @@ namespace PlantsRPetsProjeto.Server.Controllers
         private readonly PlantsRPetsProjetoServerContext _context;
         private readonly PlantInfoService _plantInfoService;
 
+        /// <summary>
+        /// Construtor do controlador de plantas.
+        /// </summary>
+        /// <param name="context">Contexto da base de dados da aplicação.</param>
+        /// <param name="plantInfoService">Serviço de apoio para obtenção e manipulação de dados de plantas.</param>
         public PlantsController(PlantsRPetsProjetoServerContext context, PlantInfoService plantInfoService)
         {
             _context = context;
             _plantInfoService = plantInfoService;
         }
 
+        /// <summary>
+        /// Devolve a lista completa de plantas registadas na base de dados.
+        /// </summary>
+        /// <returns>Lista de objetos do tipo <see cref="PlantInfo"/>.</returns>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<PlantInfo>>> GetPlants()
         {
@@ -35,7 +48,11 @@ namespace PlantsRPetsProjeto.Server.Controllers
             return Ok(plants);
         }
 
-
+        /// <summary>
+        /// Devolve os dados de uma planta específica.
+        /// </summary>
+        /// <param name="id">Identificador da planta.</param>
+        /// <returns>Objeto com os dados da planta ou erro caso não seja encontrada.</returns>
         [HttpGet("{id}")]
         public async Task<ActionResult<PlantInfo>> GetPlant(int id)
         {
@@ -46,6 +63,12 @@ namespace PlantsRPetsProjeto.Server.Controllers
             return Ok(plant);
         }
 
+        /// <summary>
+        /// Remove uma planta da base de dados.
+        /// Apenas acessível a utilizadores com o perfil de administrador.
+        /// </summary>
+        /// <param name="id">Identificador da planta a remover.</param>
+        /// <returns>Mensagem de sucesso ou erro.</returns>
         [HttpDelete("{id}")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeletePlant(int id)
@@ -60,6 +83,11 @@ namespace PlantsRPetsProjeto.Server.Controllers
             return Ok(new { message = "Plant deleted successfully." });
         }
 
+        /// <summary>
+        /// Verifica se a altura atual do ano é adequada para plantar determinada espécie.
+        /// </summary>
+        /// <param name="id">Identificador da planta.</param>
+        /// <returns>Resultado com mês atual, meses ideais e se é ou não um bom período para plantar.</returns>
         [HttpGet("check-planting-period/{id}")]
         public async Task<IActionResult> CheckPlantingPeriod(int id)
         {
@@ -84,6 +112,12 @@ namespace PlantsRPetsProjeto.Server.Controllers
             });
         }
 
+        /// <summary>
+        /// Obtém dados de plantas a partir de uma API externa e armazena-os localmente.
+        /// </summary>
+        /// <param name="startId">ID inicial do intervalo.</param>
+        /// <param name="maxId">ID final do intervalo.</param>
+        /// <returns>Lista de plantas obtidas ou mensagem de erro.</returns>
         [HttpGet("fetch-range/{startId}/{maxId}")]
         public async Task<IActionResult> FetchAndStorePlants(int startId, int maxId)
         {
@@ -119,6 +153,11 @@ namespace PlantsRPetsProjeto.Server.Controllers
             }
         }
 
+        /// <summary>
+        /// Guarda ou atualiza a informação de várias plantas na base de dados.
+        /// Caso uma planta já exista (com o mesmo nome), os seus dados são substituídos.
+        /// </summary>
+        /// <param name="plants">Lista de objetos <see cref="PlantInfo"/> a guardar.</param>
         [HttpPost("/saveInfo")]
         public async Task SavePlantInfo(List<PlantInfo> plants)
         {
@@ -187,6 +226,9 @@ namespace PlantsRPetsProjeto.Server.Controllers
         }
     }
 
+    /// <summary>
+    /// Modelo utilizado para criar uma nova planta manualmente.
+    /// </summary>
     public class CreatePlantModel
     {
         public required string PlantName { get; set; }
@@ -197,6 +239,10 @@ namespace PlantsRPetsProjeto.Server.Controllers
         public required int WaterFrequency { get; set; }
     }
 
+    /// <summary>
+    /// Modelo utilizado para atualizar parcialmente os dados de uma planta.
+    /// Todos os campos são opcionais.
+    /// </summary>
     public class UpdatePlantModel
     {
         [Required]

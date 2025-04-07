@@ -1,157 +1,154 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using PlantsRPetsProjeto.Server.Data;
 using PlantsRPetsProjeto.Server.Models;
 
 namespace PlantsRPetsProjeto.Server.Controllers
 {
-    public class NotificationsController : Controller
+    [Route("api/[controller]")]
+    [ApiController]
+    [Authorize]
+    public class NotificationController : Controller
     {
         private readonly PlantsRPetsProjetoServerContext _context;
 
-        public NotificationsController(PlantsRPetsProjetoServerContext context)
+        public NotificationController(PlantsRPetsProjetoServerContext context)
         {
             _context = context;
         }
 
-        // GET: Notifications
-        public async Task<IActionResult> Index()
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<UserNotification>>> GetUserNotifications()
         {
-            return View(await _context.Notification.ToListAsync());
-        }
-
-        // GET: Notifications/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
+            var userId = User.FindFirstValue("UserId");
+            if (string.IsNullOrEmpty(userId))
             {
-                return NotFound();
+                return Unauthorized();
             }
 
-            var notification = await _context.Notification
-                .FirstOrDefaultAsync(m => m.NotificationId == id);
+            var notifications = await _context.UserNotifications
+                .Include(un => un.Notification)
+                .Where(un => un.UserId == userId)
+                .ToListAsync();
+
+            return Ok(notifications);
+        }
+
+        [HttpPost("send/{notificationId}")]
+        public async Task<IActionResult> SendNotification(int notificationId)
+        {
+            var userId = User.FindFirstValue("UserId");
+            if (string.IsNullOrEmpty(userId))
+            {
+                return Unauthorized();
+            }
+
+            var notification = await _context.Notification.FindAsync(notificationId);
             if (notification == null)
             {
-                return NotFound();
+                return NotFound("Notification not found.");
             }
 
-            return View(notification);
-        }
-
-        // GET: Notifications/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: Notifications/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("NotificationId,Type,Message")] Notification notification)
-        {
-            if (ModelState.IsValid)
+            var userNotification = new UserNotification
             {
-                _context.Add(notification);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(notification);
-        }
+                UserId = userId,
+                NotificationId = notificationId,
+                ReceivedDate = DateTime.UtcNow,
+                isRead = false
+            };
 
-        // GET: Notifications/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var notification = await _context.Notification.FindAsync(id);
-            if (notification == null)
-            {
-                return NotFound();
-            }
-            return View(notification);
-        }
-
-        // POST: Notifications/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("NotificationId,Type,Message")] Notification notification)
-        {
-            if (id != notification.NotificationId)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(notification);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!NotificationExists(notification.NotificationId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(notification);
-        }
-
-        // GET: Notifications/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var notification = await _context.Notification
-                .FirstOrDefaultAsync(m => m.NotificationId == id);
-            if (notification == null)
-            {
-                return NotFound();
-            }
-
-            return View(notification);
-        }
-
-        // POST: Notifications/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var notification = await _context.Notification.FindAsync(id);
-            if (notification != null)
-            {
-                _context.Notification.Remove(notification);
-            }
-
+            _context.UserNotifications.Add(userNotification);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+
+            return Ok("Notification sent to user.");
         }
 
-        private bool NotificationExists(int id)
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteNotification(int id)
         {
-            return _context.Notification.Any(e => e.NotificationId == id);
+            var notification = await _context.UserNotifications.FindAsync(id);
+            if (notification == null)
+            {
+                return NotFound();
+            }
+
+            _context.UserNotifications.Remove(notification);
+            await _context.SaveChangesAsync();
+            return Ok();
         }
+
+        [HttpPut("read/{id}")]
+        public async Task<IActionResult> MarkAsRead(int id)
+        {
+            var userId = User.FindFirstValue("UserId");
+            if (string.IsNullOrEmpty(userId))
+            {
+                return Unauthorized();
+            }
+
+            var userNotification = await _context.UserNotifications
+                .FirstOrDefaultAsync(un => un.UserNotificationId == id && un.UserId == userId);
+
+            if (userNotification == null)
+            {
+                return NotFound();
+            }
+
+            userNotification.isRead = true;
+            await _context.SaveChangesAsync();
+            return Ok();
+        }
+
+        [HttpGet("unread")]
+        public async Task<ActionResult<IEnumerable<UserNotification>>> GetUnreadNotifications()
+        {
+            var userId = User.FindFirstValue("UserId");
+            if (string.IsNullOrEmpty(userId))
+            {
+                return Unauthorized();
+            }
+
+            var unreadNotifications = await _context.UserNotifications
+                .Include(un => un.Notification)
+                .Where(un => un.UserId == userId && !un.isRead)
+                .ToListAsync();
+
+            return Ok(unreadNotifications);
+        }
+
+        [HttpPut("email-frequency/{frequencyId}")]
+        public async Task<IActionResult> UpdateEmailFrequency(int frequencyId)
+        {
+            var userId = User.FindFirstValue("UserId");
+            if (string.IsNullOrEmpty(userId))
+            {
+                return Unauthorized();
+            }
+
+            var user = await _context.Users.FindAsync(userId);
+            if (user == null)
+            {
+                return NotFound("User not found.");
+            }
+
+            if (!Enum.IsDefined(typeof(User.EmailFrequency), frequencyId))
+            {
+                return BadRequest("Invalid email frequency. Valid values: 0 (Never), 1 (Daily), 2 (Weekly), 3 (Monthly).");
+            }
+
+            user.NotificationFrequency = (User.EmailFrequency)frequencyId;
+            await _context.SaveChangesAsync();
+
+            return Ok($"Email frequency updated to {user.NotificationFrequency}.");
+        }
+
+
     }
 }

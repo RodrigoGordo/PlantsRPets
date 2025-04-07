@@ -7,9 +7,15 @@
     <SpaRoot>..\plantsrpetsprojeto.client</SpaRoot>
     <SpaProxyLaunchCommand>npm start</SpaProxyLaunchCommand>
     <SpaProxyServerUrl>https://localhost:4200</SpaProxyServerUrl>
+    <UserSecretsId>02447624-71b7-41ce-a8b6-ba580f5d2bc3</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot\images\reference.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MailKit" Version="4.11.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.0.0" />
@@ -23,7 +29,10 @@
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Http" Version="9.0.2" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.7" />
+    <PackageReference Include="Quartz" Version="3.14.0" />
+    <PackageReference Include="Quartz.Extensions.Hosting" Version="3.14.0" />
     <PackageReference Include="SendGrid" Version="9.29.3" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="3.1.7" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.5.3">
       <PrivateAssets>all</PrivateAssets>
@@ -35,6 +44,10 @@
     <ProjectReference Include="..\plantsrpetsprojeto.client\plantsrpetsprojeto.client.esproj">
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\images\reference.png" />
   </ItemGroup>
 
 </Project>

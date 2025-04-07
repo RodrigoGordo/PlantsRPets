@@ -21,6 +21,8 @@ import { PlantInfoPageComponent } from './plant-info-page/plant-info-page.compon
 import { PlantationDetailsComponent } from './plantation-details/plantation-details.component';
 import { PetDetailsComponent } from './pet-details/pet-details.component';
 import { PlantationPlantDetailsComponent } from './plantation-plant-details/plantation-plant-details.component';
+import { ConfirmEmailComponent } from './confirm-email/confirm-email.component';
+import { EmailVerificationSentComponent } from './email-verification-sent/email-verification-sent.component';
 
 
 const routes: Routes = [
@@ -33,6 +35,8 @@ const routes: Routes = [
   { path: 'reset-password', component: ResetPasswordComponent },
   { path: 'signin', component: SigninComponent },
   { path: 'register', component: RegisterComponent },
+  { path: 'confirm-email', component: ConfirmEmailComponent },
+  { path: 'email-verification-sent', component: EmailVerificationSentComponent },
   { path: 'plantations', component: PlantationsComponent },
   { path: 'collections', component: CollectionComponent },
   { path: 'plantation/:id', component: PlantationDetailsComponent },

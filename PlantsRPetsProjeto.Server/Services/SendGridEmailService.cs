@@ -30,7 +30,9 @@ namespace PlantsRPetsProjeto.Server.Services
         /// <param name="toEmail">Endereço de e-mail do destinatário.</param>
         /// <param name="subject">Assunto do e-mail.</param>
         /// <param name="body">Conteúdo do e-mail, podendo ser texto simples ou HTML.</param>
-        /// <exception cref="Exception">Lançada quando a chave de API está em falta ou o envio falha.</exception>
+        /// <exception cref="Exception">
+        /// Lançada quando a chave de API está ausente ou quando ocorre uma falha no envio do e-mail.
+        /// </exception>
         public async Task SendEmailAsync(string toEmail, string subject, string body)
         {
             if (string.IsNullOrEmpty(_sendGridApiKey))

@@ -1,5 +1,8 @@
 import { PruningCountInfo } from "./pruning-count-info";
 
+/**
+ * Representa os dados detalhados de uma planta disponível na base de dados.
+ */
 export interface PlantInfo {
   plantInfoId: number;
   plantName: string;

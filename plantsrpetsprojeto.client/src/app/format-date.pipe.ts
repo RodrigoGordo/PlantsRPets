@@ -4,6 +4,16 @@ import { Pipe, PipeTransform } from '@angular/core';
   name: 'formatDate',
   standalone: false
 })
+
+/**
+ * Pipe responsável por formatar uma data para o formato "DD-MM-YY HH:mm".
+ *
+ * Aceita valores do tipo string ou Date. Caso a data seja inválida ou nula,
+ * devolve "N/A" ou "Invalid date".
+ *
+ * Exemplo de entrada: "2025-04-03T15:30:00Z"
+ * Exemplo de saída: "03-04-25 15:30"
+ */
 export class FormatDatePipe implements PipeTransform {
   transform(value: string | Date | null | undefined): string {
     if (!value) return 'N/A';

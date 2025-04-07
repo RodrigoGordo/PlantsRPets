@@ -7,16 +7,17 @@ import { Router } from '@angular/router';
 import { HttpClient } from "@angular/common/http";
 
 
-/**
- * Componente responsável pelo registo de novos utilizadores.
- * Permite que os utilizadores criem uma nova conta, validando o formulário e enviando os dados para o backend.
- */
 @Component({
   selector: 'app-register-component',
   styleUrls: ['./register.component.css'],
   templateUrl: './register.component.html',
   standalone: false,
 })
+
+/**
+ * Componente responsável pelo registo de novos utilizadores.
+ * Permite que os utilizadores criem uma nova conta, validando o formulário e enviando os dados para o backend.
+ */
 export class RegisterComponent implements OnInit {
   registerForm!: FormGroup;
   registerSucceeded: boolean = false;
@@ -97,14 +98,14 @@ export class RegisterComponent implements OnInit {
       password
     }).subscribe({
       next: (response) => {
-        this.isLoading = false;
         if (response) {
           this.registerSucceeded = true;
           this.registerForm.reset();
           this.errorMessage = "";
           setTimeout(() => {
-            this.router.navigateByUrl("/");
+            this.router.navigateByUrl("/email-verification-sent");
           }, 1300);
+          this.isLoading = false;
         }
       },
       error: err => {
@@ -119,9 +120,11 @@ export class RegisterComponent implements OnInit {
    * Abre o diálogo modal para o formulário de login, permitindo que o utilizador faça login rapidamente após o registo.
    */
   openLogin(): void {
+    this.isLoading = true;
     this.dialog.open(SigninComponent, {
       width: '520px',
       panelClass: 'auth-dialog'
     });
+    this.isLoading = false;
   }
 }

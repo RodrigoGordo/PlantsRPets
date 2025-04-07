@@ -10,10 +10,16 @@
   width: 90%;
   max-width: 90%;
   transition: transform 0.2s ease-in-out;
+  cursor: pointer;
 }
 
   .plantation-card:hover {
     transform: scale(1.02);
+  }
+
+  .plantation-card.editing {
+    cursor: default;
+    background-color: #f3f3f3;
   }
 
 .plantation-info {
@@ -135,6 +141,38 @@ button {
     font-size: 1rem;
   }
 }
+
+.search-results {
+  position: absolute;
+  background: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  width: 400px;
+  max-height: 200px;
+  margin-top: 5px;
+}
+
+.search-result-item {
+  padding: 8px 12px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #333;
+  border-bottom: 1px solid #eee;
+}
+
+  .search-result-item:last-child {
+    border-bottom: none;
+  }
+
+  .search-result-item:hover {
+    background-color: #f8f9fa;
+    transform: translateX(2px);
+  }
+
+  .search-result-item.active {
+    background-color: #e9ecef;
+  }
 
 @media (max-width: 480px) {
   .plantation-card {

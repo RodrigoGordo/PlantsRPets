@@ -21,6 +21,11 @@ import { PlantInfo } from '../models/plant-info';
   ]
 })
 
+/**
+ * Componente responsável por apresentar um formulário de filtros para plantas.
+ * Permite ao utilizador filtrar uma lista de plantas com base em diferentes critérios como tipo de rega, exposição solar,
+ * estação de colheita, comestibilidade, entre outros.
+ */
 export class PlantFilterComponent implements OnInit {
   @Input() plants!: PlantInfo[]; // Add this line
   @Input() isOpen = false;
@@ -38,12 +43,21 @@ export class PlantFilterComponent implements OnInit {
   floweringSeasonOptions = ['Spring', 'Summer', 'Fall', 'Winter'];
   harvestSeasonOptions = ['Spring', 'Summer', 'Fall', 'Winter'];
 
+  /**
+   * Construtor com injeção de dependência do FormBuilder para criação de formulários reativos.
+   */
   constructor(private fb: FormBuilder) { }
 
+  /**
+   * Inicializa o componente ao ser carregado, incluindo a criação do formulário de filtros.
+   */
   ngOnInit(): void {
     this.initializeForm();
   }
 
+  /**
+   * Inicializa o formulário reativo com os campos e valores padrão (vazios).
+   */
   private initializeForm(): void {
     this.filterForm = this.fb.group({
       edible: [''],
@@ -64,16 +78,26 @@ export class PlantFilterComponent implements OnInit {
     });
   }
 
+  /**
+   * Fecha o modal de filtros e emite o evento `closed`.
+   */
   closeModal(): void {
     this.isOpen = false;
     this.closed.emit();
   }
 
+  /**
+   * Aplica os filtros preenchidos e emite os valores do formulário através do evento `filtersChange`.
+   * Também fecha o modal após aplicar os filtros.
+   */
   applyFilters(): void {
     this.filtersChange.emit(this.filterForm.value);
     this.closeModal();
   }
 
+  /**
+   * Reinicia todos os filtros para os valores padrão (vazios) e emite um objeto vazio como filtro aplicado.
+   */
   resetFilters(): void {
     this.filterForm.reset({
       edible: '',

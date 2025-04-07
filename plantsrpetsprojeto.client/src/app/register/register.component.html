@@ -12,6 +12,7 @@
       <form [formGroup]="registerForm" (ngSubmit)="register()" class="auth-form">
         <div class="form-group">
           <input type="text"
+                 autocomplete="username"
                  formControlName="nickName"
                  placeholder="Nickname"
                  class="form-input"
@@ -24,6 +25,7 @@
 
         <div class="form-group">
           <input type="email"
+                 autocomplete="email"
                  formControlName="email"
                  placeholder="Email"
                  class="form-input"
@@ -37,6 +39,7 @@
 
         <div class="form-group">
           <input type="password"
+                 autocomplete="new-password"
                  formControlName="password"
                  placeholder="Password"
                  class="form-input"
@@ -51,6 +54,7 @@
 
         <div class="form-group">
           <input type="password"
+                 autocomplete="new-password-confirmation"
                  formControlName="confirmPassword"
                  placeholder="Confirm Password"
                  class="form-input"
@@ -65,9 +69,6 @@
         <button type="submit" class="auth-button" [disabled]="!registerForm.valid">
           Register Now
         </button>
-        <div class="success-message" *ngIf="registerSucceeded">
-          Registration Sucessful!
-        </div>
         <div class="register-error-message" *ngIf="errorMessage">
           {{ errorMessage }}
         </div>

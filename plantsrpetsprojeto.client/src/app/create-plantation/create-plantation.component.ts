@@ -12,10 +12,23 @@ import { PlantType } from '../models/plant-type.model';
   templateUrl: './create-plantation.component.html',
   styleUrl: './create-plantation.component.css'
 })
+
+/**
+ * Componente responsável por exibir o formulário de criação de uma nova plantação.
+ * Permite ao utilizador selecionar o tipo de planta e atribuir um nome à plantação.
+ */
 export class CreatePlantationComponent {
   plantationForm: FormGroup;
   plantTypes: PlantType[] = [];
 
+  /**
+   * Construtor do componente que injeta serviços necessários:
+   * 
+   * @param fb FormBuilder para configurar o formulário reativo
+   * @param dialogRef Referência ao diálogo modal
+   * @param plantationsService Serviço que envia dados da plantação ao backend
+   * @param plantTypesService Serviço que obtém os tipos de plantas disponíveis
+   */
   constructor(
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<CreatePlantationComponent>,
@@ -28,10 +41,18 @@ export class CreatePlantationComponent {
     });
   }
 
+  /**
+   * Método do ciclo de vida do componente. É executado após a renderização inicial.
+   * Responsável por carregar os tipos de planta do backend.
+   */
   ngOnInit(): void {
     this.loadPlantTypes();
   }
 
+  /**
+   * Recolhe os tipos de plantas disponíveis através da API.
+   * Filtra resultados duplicados com base no `plantTypeId`.
+   */
   loadPlantTypes(): void {
     this.plantTypesService.getPlantTypes().subscribe({
       next: (data) => {
@@ -45,6 +66,10 @@ export class CreatePlantationComponent {
     });
   }
 
+  /**
+   * Submete o formulário para criar uma nova plantação.
+   * Envia os dados para a API e fecha o diálogo após sucesso.
+   */
   createPlantation(): void {
     if (this.plantationForm.valid) {
       const requestData = {
@@ -59,6 +84,9 @@ export class CreatePlantationComponent {
     }
   }
 
+  /**
+   * Fecha a janela modal sem realizar nenhuma ação.
+   */
   closeDialog(): void {
     this.dialogRef.close();
   }

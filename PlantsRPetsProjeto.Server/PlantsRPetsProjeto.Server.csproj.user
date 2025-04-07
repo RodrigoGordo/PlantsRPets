@@ -13,6 +13,6 @@
     <WebStackScaffolding_DbContextTypeFullName>PlantsRPetsProjeto.Server.Data.PlantsRPetsProjetoServerContext</WebStackScaffolding_DbContextTypeFullName>
     <WebStackScaffolding_IsAsyncSelected>False</WebStackScaffolding_IsAsyncSelected>
     <WebStackScaffolding_IsViewGenerationSelected>True</WebStackScaffolding_IsViewGenerationSelected>
-    <NameOfLastUsedPublishProfile>C:\Users\Rodrigo\source\repos\PlantsRPets\PlantsRPetsProjeto.Server\Properties\PublishProfiles\plants-r-pets - Web Deploy.pubxml</NameOfLastUsedPublishProfile>
+    <NameOfLastUsedPublishProfile>C:\Users\Rodrigo\source\repos\PlantsRPets\PlantsRPetsProjeto.Server\Properties\PublishProfiles\plantsarepets - Web Deploy.pubxml</NameOfLastUsedPublishProfile>
   </PropertyGroup>
 </Project>

@@ -52,6 +52,16 @@ import { PlantationPlantCardComponent } from './plantation-plant-card/plantation
 import { PlantationPlantDetailsComponent } from './plantation-plant-details/plantation-plant-details.component';
 import { FormatDatePipe } from './format-date.pipe';
 import { PlantPeriodWarningComponent } from './plant-period-warning/plant-period-warning.component';
+import { PetRewardPopupComponent } from './pet-reward-popup/pet-reward-popup.component';
+import { HomePlantationCardComponent } from './home-plantation-card/home-plantation-card.component';
+import { HomePetCardComponent } from './home-pet-card/home-pet-card.component';
+import { EmailVerificationSentComponent } from './email-verification-sent/email-verification-sent.component';
+import { ConfirmEmailComponent } from './confirm-email/confirm-email.component';
+import { RemovePlantPopupComponent } from './remove-plant-popup/remove-plant-popup.component';
+import { RemovePlantationPopupComponent } from './remove-plantation-popup/remove-plantation-popup.component';
+import { PetCardComponent } from './pet-card/pet-card.component';
+import { NotificationCardComponent } from './notification-card/notification-card.component';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
 
 @NgModule({
   declarations: [
@@ -93,6 +103,15 @@ import { PlantPeriodWarningComponent } from './plant-period-warning/plant-period
     PlantationPlantDetailsComponent,
     FormatDatePipe,
     PlantPeriodWarningComponent,
+    PetRewardPopupComponent,
+    HomePlantationCardComponent,
+    HomePetCardComponent,
+    EmailVerificationSentComponent,
+    ConfirmEmailComponent,
+    RemovePlantPopupComponent,
+    RemovePlantationPopupComponent,
+    PetCardComponent,
+    NotificationCardComponent
   ],
   imports: [
     BrowserModule,
@@ -107,7 +126,8 @@ import { PlantPeriodWarningComponent } from './plant-period-warning/plant-period
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
-    MatAutocompleteModule
+    MatAutocompleteModule,
+    NgxChartsModule
   ],
   providers: [
     provideAnimationsAsync(),

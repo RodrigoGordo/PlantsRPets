@@ -1,0 +1,30 @@
+<div class="card pet-card">
+  <div class="card-header">
+    <h3>
+      <i class="icon-pet"></i>
+      Get back to your pets
+    </h3>
+  </div>
+
+  <div *ngIf="pets.length; else noPets">
+    <ul class="pet-list">
+      <li class="pet-item" *ngFor="let petId of pets">
+        <a class="pet-link" [routerLink]="['/pet', petId]">
+          <span class="pet-icon">🐾</span>
+          Pet {{ petId }}
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <ng-template #noPets>
+    <div class="no-pets">
+      <i class="icon-no-pets">🐶</i>
+      <p>No recent pets</p>
+    </div>
+  </ng-template>
+
+  <div class="card-footer">
+    <a routerLink="/collections" class="view-all">View all pets</a>
+  </div>
+</div>

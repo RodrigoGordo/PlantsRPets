@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 
+/**
+ * Interface que define os detalhes de um Pet.
+ */
 interface PetDetails {
   petId: number;
   name: string;
@@ -19,17 +22,34 @@ interface PetDetails {
   templateUrl: './pet-details.component.html',
   styleUrl: './pet-details.component.css'
 })
+
+/**
+ * Componente responsável por exibir os detalhes de um pet pertencente à coleção do utilizador.
+ * Verifica se o pet é realmente "owned" antes de carregar os dados e permite marcar como favorito.
+ */
+
 export class PetDetailsComponent implements OnInit {
   pet: PetDetails | null = null;
   loading: boolean = true;
   error: string | null = null;
 
+  /**
+   * Construtor do componente.
+   * 
+   * @param route - Serviço de rota usado para obter o ID do pet a partir da URL.
+   * @param http - Serviço HTTP usado para fazer pedidos à API.
+   * @param router - Serviço de navegação para redirecionar o utilizador caso necessário.
+   */
   constructor(
     private route: ActivatedRoute,
     private http: HttpClient,
     private router: Router
   ) { }
 
+  /**
+   * Lifecycle hook do Angular executado quando o componente é inicializado.
+   * Verifica se o utilizador possui o pet e carrega os detalhes.
+   */
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
     if (!id) {
@@ -71,6 +91,9 @@ export class PetDetailsComponent implements OnInit {
     });
   }
 
+  /**
+   * Alterna o estado de favorito de um pet e atualiza a coleção do utilizador.
+   */
   toggleFavorite(): void {
     if (!this.pet) return;
 
@@ -86,6 +109,9 @@ export class PetDetailsComponent implements OnInit {
     });
   }
 
+  /**
+   * Navega de volta para a página da coleção.
+   */
   goBack(): void {
     this.router.navigate(['/collection']);
   }

@@ -32,6 +32,7 @@ namespace PlantsRPetsProjeto.Server.Migrations
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Nickname = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     RegistrationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    NotificationFrequency = table.Column<int>(type: "int", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -78,6 +79,23 @@ namespace PlantsRPetsProjeto.Server.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Community", x => x.CommunityId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Location",
+                columns: table => new
+                {
+                    LocationId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    City = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Region = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Country = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Latitude = table.Column<double>(type: "float", nullable: false),
+                    Longitude = table.Column<double>(type: "float", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Location", x => x.LocationId);
                 });
 
             migrationBuilder.CreateTable(
@@ -406,27 +424,62 @@ namespace PlantsRPetsProjeto.Server.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "UserNotifications",
+                columns: table => new
+                {
+                    UserNotificationId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    NotificationId = table.Column<int>(type: "int", nullable: false),
+                    ReceivedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    isRead = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserNotifications", x => x.UserNotificationId);
+                    table.ForeignKey(
+                        name: "FK_UserNotifications_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_UserNotifications_Notification_NotificationId",
+                        column: x => x.NotificationId,
+                        principalTable: "Notification",
+                        principalColumn: "NotificationId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Plantation",
                 columns: table => new
                 {
                     PlantationId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    OwnerId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    OwnerId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     PlantationName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PlantTypeId = table.Column<int>(type: "int", nullable: false),
                     PlantingDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ExperiencePoints = table.Column<int>(type: "int", nullable: false),
                     Level = table.Column<int>(type: "int", nullable: false),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    BankedLevelUps = table.Column<int>(type: "int", nullable: false),
+                    LocationId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Plantation", x => x.PlantationId);
                     table.ForeignKey(
-                        name: "FK_Plantation_AspNetUsers_UserId",
-                        column: x => x.UserId,
+                        name: "FK_Plantation_AspNetUsers_OwnerId",
+                        column: x => x.OwnerId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Plantation_Location_LocationId",
+                        column: x => x.LocationId,
+                        principalTable: "Location",
+                        principalColumn: "LocationId");
                     table.ForeignKey(
                         name: "FK_Plantation_PlantType_PlantTypeId",
                         column: x => x.PlantTypeId,
@@ -504,9 +557,10 @@ namespace PlantsRPetsProjeto.Server.Migrations
                     MetricId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    TotalPlants = table.Column<int>(type: "int", nullable: false),
-                    WaterSaved = table.Column<double>(type: "float", nullable: false),
-                    CarbonFootprintReduction = table.Column<double>(type: "float", nullable: false),
+                    PlantationId = table.Column<int>(type: "int", nullable: false),
+                    PlantInfoId = table.Column<int>(type: "int", nullable: true),
+                    EventType = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Timestamp = table.Column<DateTime>(type: "datetime2", nullable: false),
                     DashboardId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -660,14 +714,19 @@ namespace PlantsRPetsProjeto.Server.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Plantation_LocationId",
+                table: "Plantation",
+                column: "LocationId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Plantation_OwnerId",
+                table: "Plantation",
+                column: "OwnerId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Plantation_PlantTypeId",
                 table: "Plantation",
                 column: "PlantTypeId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Plantation_UserId",
-                table: "Plantation",
-                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PlantationPlants_PlantationId",
@@ -694,6 +753,16 @@ namespace PlantsRPetsProjeto.Server.Migrations
                 name: "IX_SustainabilityTip_SustainabilityTipsListId",
                 table: "SustainabilityTip",
                 column: "SustainabilityTipsListId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserNotifications_NotificationId",
+                table: "UserNotifications",
+                column: "NotificationId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserNotifications_UserId",
+                table: "UserNotifications",
+                column: "UserId");
         }
 
         /// <inheritdoc />
@@ -727,9 +796,6 @@ namespace PlantsRPetsProjeto.Server.Migrations
                 name: "Metric");
 
             migrationBuilder.DropTable(
-                name: "Notification");
-
-            migrationBuilder.DropTable(
                 name: "PlantationPlants");
 
             migrationBuilder.DropTable(
@@ -743,6 +809,9 @@ namespace PlantsRPetsProjeto.Server.Migrations
 
             migrationBuilder.DropTable(
                 name: "Tutorial");
+
+            migrationBuilder.DropTable(
+                name: "UserNotifications");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
@@ -772,10 +841,16 @@ namespace PlantsRPetsProjeto.Server.Migrations
                 name: "SustainabilityTipsList");
 
             migrationBuilder.DropTable(
+                name: "Notification");
+
+            migrationBuilder.DropTable(
                 name: "PruningCountInfo");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "Location");
 
             migrationBuilder.DropTable(
                 name: "PlantType");

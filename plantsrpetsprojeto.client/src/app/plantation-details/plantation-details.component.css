@@ -150,3 +150,68 @@ app-plant-card {
     width: 100%;
   }
 }
+
+  .xp-container {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 12px 0;
+    margin-top: 0px;
+  }
+
+  .xp-value {
+    color: #388e3c;
+    font-weight: bold;
+  }
+
+  .xp-bar {
+    width: 30%;
+    height: 20px;
+    background: #e0e0e0;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  .xp-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #4CAF50, #81C784);
+    transition: width 0.5s ease;
+  }
+
+  .pet-choice-button {
+    background: #4CAF50 !important;
+    color: white !important;
+    padding: 16px 32px !important;
+    font-size: 18px !important;
+    border-radius: 25px !important;
+    transition: all 0.3s ease !important;
+    margin: 15px 0 !important;
+    border: none !important;
+    cursor: pointer !important;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important;
+  }
+
+    .pet-choice-button:hover {
+      background: #45a049 !important;
+      transform: scale(1.05) !important;
+      box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2) !important;
+    }
+
+.pet-choice-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.choices-remaining {
+  font-size: 16px;
+  color: #555;
+  font-weight: bold;
+}
+
+.celebration-message {
+  color: #28a745 !important;
+  font-weight: bold;
+}
+

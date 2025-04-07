@@ -8,14 +8,18 @@ using PlantsRPetsProjeto.Server.Models;
 using PlantsRPetsProjeto.Server.Data;
 using Microsoft.IdentityModel.Tokens;
 using PlantsRPetsProjeto.Server.Services;
+using Quartz;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Configuration.AddUserSecrets<Program>();
 
 //Add services to the container
 builder.Services.AddControllers();
 
 builder.Services.AddDbContext<PlantsRPetsProjetoServerContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("PlantsRPetsProjetoServerContext") ?? throw new InvalidOperationException("Connection string 'PlantsRPetsProjetoServerContext' not found.")));
+
 
 //Add Identity
 builder.Services
@@ -53,13 +57,18 @@ builder.Services.AddAuthorization();
 
 builder.Services.AddTransient<IEmailService, SendGridEmailService>();
 builder.Services.AddHttpClient<WeatherService>();
+builder.Services.AddHttpClient<CityService>();
 builder.Services.AddHttpClient<PlantInfoService>();
 builder.Services.AddHttpClient<PlantingAdvisor>();
 builder.Services.AddHttpClient<SustainabilityTipService>();
 builder.Services.AddHttpClient<EmojiKitchenService>();
 builder.Services.AddScoped<PetGeneratorService>();
 builder.Services.AddScoped<PetSeeder>();
-
+builder.Services.AddScoped<IEmailService, SendGridEmailService>();
+builder.Services.AddScoped<SendNotificationEmail>();
+builder.Services.AddScoped<MetricsService>();
+builder.Services.AddScoped<CityService>();
+builder.Services.AddScoped<PlantNotificationService>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -119,6 +128,39 @@ builder.Services.AddCors(options =>
         });
 });
 
+builder.Services.AddQuartz(q =>
+{
+    var jobKey = new JobKey("SendNotificationEmail");
+    q.AddJob<SendNotificationEmail>(opts => opts.WithIdentity(jobKey));
+    q.AddTrigger(opts => opts
+        .ForJob(jobKey)
+        .WithIdentity("SendNotificationEmailTrigger")
+        .WithSimpleSchedule(x => x
+            .WithIntervalInMinutes(1)
+            .RepeatForever()));
+});
+
+// Quartz Service for Plant Notification
+builder.Services.AddQuartz(q =>
+{
+    var jobKey = new JobKey("PlantNotificationJob");
+    q.AddJob<DailyNotificationJob>(opts => opts.WithIdentity(jobKey));
+    q.AddTrigger(opts => opts
+        .ForJob(jobKey)
+        .WithIdentity("PlantNotificationJobTrigger")
+        .WithSimpleSchedule(x => x
+            .WithIntervalInMinutes(1)
+            .RepeatForever()));
+});
+
+
+
+
+// Hosted Service to handle Quartz jobs
+builder.Services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);
+
+
+
 
 var app = builder.Build();
 
@@ -130,7 +172,7 @@ using (var scope = app.Services.CreateScope())
     var userManager = services.GetRequiredService<UserManager<User>>();
     var context = services.GetRequiredService<PlantsRPetsProjetoServerContext>();
     var petSeeder = services.GetRequiredService<PetSeeder>();
-    
+
     await context.Database.MigrateAsync();
 
     // Chamar os seeders
@@ -139,6 +181,7 @@ using (var scope = app.Services.CreateScope())
     //await PlantSeeder.SeedPlants(context);
     //await TipSeeder.SeedSustainabilityTips(context);
     await petSeeder.SeedAsync();
+    await NotificationSeeder.SeedAsync(context);
 
 }
 

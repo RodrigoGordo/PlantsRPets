@@ -10,6 +10,12 @@ using PlantsRPetsProjeto.Server.Services;
 
 namespace PlantsRPetsProjeto.Server.Controllers
 {
+
+    /// <summary>
+    /// Controlador responsável pela gestão das plantações dos utilizadores.
+    /// Inclui funcionalidades como criação, visualização, edição e remoção de plantações,
+    /// bem como adição e gestão das plantas em cada plantação.
+    /// </summary>
     [Authorize]
     [ApiController]
     [Route("api/plantations")]
@@ -17,13 +23,25 @@ namespace PlantsRPetsProjeto.Server.Controllers
     {
         private readonly PlantsRPetsProjetoServerContext _context;
         private readonly PlantInfoService _plantInfoService;
+        private readonly MetricsService _metricsService;
 
-        public PlantationsController(PlantsRPetsProjetoServerContext context, PlantInfoService plantInfoService)
+        /// <summary>
+        /// Construtor do controlador de plantações.
+        /// </summary>
+        /// <param name="context">Contexto da base de dados da aplicação.</param>
+        /// <param name="plantInfoService">Serviço responsável por popular informações sobre tipos de plantas.</param>
+
+        public PlantationsController(PlantsRPetsProjetoServerContext context, PlantInfoService plantInfoService, MetricsService metricsService)
         {
             _context = context;
             _plantInfoService = plantInfoService;
+            _metricsService = metricsService;
         }
 
+        /// <summary>
+        /// Obtém todas as plantações associadas ao utilizador autenticado.
+        /// </summary>
+        /// <returns>Lista de plantações com informações básicas do tipo de planta e progresso.</returns>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<object>>> GetUserPlantations()
         {
@@ -48,7 +66,10 @@ namespace PlantsRPetsProjeto.Server.Controllers
                         plantType.PlantTypeName,
                         plantation.PlantingDate,
                         plantation.ExperiencePoints,
-                        plantation.Level
+                        plantation.Level,
+                        plantation.BankedLevelUps,
+                        plantation.Location,
+                        plantation.PlantationPlants
                     }
                 )
                 .ToListAsync();
@@ -56,6 +77,11 @@ namespace PlantsRPetsProjeto.Server.Controllers
             return Ok(plantations);
         }
 
+        /// <summary>
+        /// Obtém os detalhes de uma plantação específica pelo seu ID.
+        /// </summary>
+        /// <param name="id">Identificador da plantação.</param>
+        /// <returns>Dados detalhados da plantação, incluindo tipo de planta e experiência.</returns>
         [HttpGet("{id}")]
         public async Task<ActionResult<Plantation>> GetPlantation(int id)
         {
@@ -74,7 +100,9 @@ namespace PlantsRPetsProjeto.Server.Controllers
                         plantType.PlantTypeName,
                         plantation.PlantingDate,
                         plantation.ExperiencePoints,
-                        plantation.Level
+                        plantation.Level,
+                        plantation.BankedLevelUps,
+                        plantation.Location
                     }
                 )
                 .FirstOrDefaultAsync();
@@ -85,6 +113,11 @@ namespace PlantsRPetsProjeto.Server.Controllers
             return Ok(plantation);
         }
 
+        /// <summary>
+        /// Cria uma nova plantação para o utilizador autenticado.
+        /// </summary>
+        /// <param name="model">Modelo com o nome da plantação e o tipo de planta a cultivar.</param>
+        /// <returns>Retorna a plantação criada com o respetivo identificador.</returns>
         [HttpPost]
         public async Task<ActionResult<Plantation>> CreatePlantation([FromBody] CreatePlantationModel model)
         {
@@ -107,6 +140,8 @@ namespace PlantsRPetsProjeto.Server.Controllers
                 PlantingDate = DateTime.UtcNow,
                 ExperiencePoints = 0,
                 Level = 1,
+                BankedLevelUps = 0,
+                Location = null,
                 PlantationPlants = []
             };
 
@@ -116,6 +151,13 @@ namespace PlantsRPetsProjeto.Server.Controllers
             return CreatedAtAction(nameof(GetPlantation), new { id = plantation.PlantationId }, plantation);
         }
 
+        /// <summary>
+        /// Atualiza os dados de uma plantação existente pertencente ao utilizador autenticado.
+        /// Permite alterar o nome, tipo de planta, experiência, nível e melhorias guardadas.
+        /// </summary>
+        /// <param name="id">Identificador da plantação a atualizar.</param>
+        /// <param name="model">Modelo com os campos editáveis da plantação.</param>
+        /// <returns>Retorna 204 (sem conteúdo) em caso de sucesso, ou mensagem de erro adequada.</returns>
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdatePlantation(int id, [FromBody] UpdatePlantationModel model)
         {
@@ -148,6 +190,32 @@ namespace PlantsRPetsProjeto.Server.Controllers
             if (model.Level.HasValue)
                 existingPlantation.Level = model.Level.Value;
 
+            if (model.BankedLevelUps.HasValue)
+                existingPlantation.BankedLevelUps = model.BankedLevelUps.Value;
+
+            if (model.Location != null)
+            {
+                if (existingPlantation.Location == null)
+                {
+                    existingPlantation.Location = new Location
+                    {
+                        City = model.Location.City,
+                        Region = model.Location.Region,
+                        Country = model.Location.Country,
+                        Latitude = model.Location.Latitude,
+                        Longitude = model.Location.Longitude
+                    };
+                }
+                else
+                {
+                    existingPlantation.Location.City = model.Location.City;
+                    existingPlantation.Location.Region = model.Location.Region;
+                    existingPlantation.Location.Country = model.Location.Country;
+                    existingPlantation.Location.Latitude = model.Location.Latitude;
+                    existingPlantation.Location.Longitude = model.Location.Longitude;
+                }
+            }
+
             _context.Entry(existingPlantation).State = EntityState.Modified;
 
             try
@@ -163,6 +231,11 @@ namespace PlantsRPetsProjeto.Server.Controllers
         }
 
 
+        /// <summary>
+        /// Remove uma plantação pertencente ao utilizador autenticado.
+        /// </summary>
+        /// <param name="id">Identificador da plantação a eliminar.</param>
+        /// <returns>Mensagem de sucesso ou erro consoante o resultado da operação.</returns>
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePlantation(int id)
         {
@@ -189,9 +262,20 @@ namespace PlantsRPetsProjeto.Server.Controllers
             }
         }
 
+        /// <summary>
+        /// Adiciona uma planta a uma plantação específica.
+        /// Valida o tipo da planta e acumula a quantidade caso a planta já exista na plantação.
+        /// </summary>
+        /// <param name="plantationId">Identificador da plantação.</param>
+        /// <param name="model">Modelo com o ID da planta e quantidade a adicionar.</param>
+        /// <returns>Mensagem de sucesso ou erro consoante a validação da operação.</returns>
         [HttpPost("{plantationId}/add-plant")]
         public async Task<IActionResult> AddPlantToPlantation(int plantationId, [FromBody] AddPlantToPlantationModel model)
         {
+            var userId = User.FindFirst("UserId")?.Value;
+            if (string.IsNullOrEmpty(userId))
+                return NotFound(new { message = "User not found." });
+
             var plantation = await _context.Plantation.FindAsync(plantationId);
             if (plantation == null)
                 return NotFound(new { message = "Plantation not found." });
@@ -246,9 +330,19 @@ namespace PlantsRPetsProjeto.Server.Controllers
             }
 
             await _context.SaveChangesAsync();
+
+            await _metricsService.RecordPlantingEventAsync(userId, plantationId, model.PlantInfoId, DateTime.UtcNow);
+
             return Ok(new { message = "Plant added to plantation successfully." });
         }
 
+        /// <summary>
+        /// Remove uma planta específica de uma plantação, parcial ou totalmente.
+        /// </summary>
+        /// <param name="plantationId">ID da plantação de onde remover a planta.</param>
+        /// <param name="plantId">ID da planta a remover.</param>
+        /// <param name="model">Modelo com a quantidade a remover (ou null para remover tudo).</param>
+        /// <returns>Mensagem de sucesso ou erro dependendo da ação realizada.</returns>
         [HttpDelete("{plantationId}/remove-plant/{plantId}")]
         public async Task<IActionResult> RemovePlantFromPlantation(int plantationId, int plantId, [FromBody] RemovePlantFromPlantationModel model)
         {
@@ -287,6 +381,11 @@ namespace PlantsRPetsProjeto.Server.Controllers
             return Ok(new { message = "Plant removed from plantation successfully." });
         }
 
+        /// <summary>
+        /// Obtém todas as plantas associadas a uma plantação.
+        /// </summary>
+        /// <param name="plantationId">Identificador da plantação.</param>
+        /// <returns>Lista de objetos com informação das plantas cultivadas.</returns>
         [HttpGet("{plantationId}/plants")]
         public async Task<ActionResult<IEnumerable<PlantationPlants>>> GetPlantsInPlantation(int plantationId)
         {
@@ -298,6 +397,12 @@ namespace PlantsRPetsProjeto.Server.Controllers
             return Ok(plants);
         }
 
+        /// <summary>
+        /// Obtém os detalhes de uma planta específica dentro de uma plantação.
+        /// </summary>
+        /// <param name="plantationId">ID da plantação.</param>
+        /// <param name="plantInfoId">ID da planta.</param>
+        /// <returns>Informações da planta ou erro caso não exista.</returns>
         [HttpGet("{plantationId}/plant/{plantInfoId}")]
         public async Task<ActionResult<PlantationPlants>> GetPlantInPlantation(int plantationId, int plantInfoId)
         {
@@ -312,9 +417,19 @@ namespace PlantsRPetsProjeto.Server.Controllers
             return Ok(plant);
         }
 
+        /// <summary>
+        /// Atualiza a data da última rega de uma planta específica numa plantação.
+        /// </summary>
+        /// <param name="plantationId">ID da plantação.</param>
+        /// <param name="plantInfoId">ID da planta a ser regada.</param>
+        /// <returns>Objeto atualizado com a data da última rega ou mensagem de erro.</returns>
         [HttpPost("{plantationId}/water-plant/{plantInfoId}")]
         public async Task<IActionResult> WaterPlant(int plantationId, int plantInfoId)
         {
+            var userId = User.FindFirst("UserId")?.Value;
+            if (string.IsNullOrEmpty(userId))
+                return NotFound(new { message = "User not found." });
+
             var plantationPlant = await _context.PlantationPlants
                 .FirstOrDefaultAsync(pp => pp.PlantationId == plantationId && pp.PlantInfoId == plantInfoId);
 
@@ -326,6 +441,9 @@ namespace PlantsRPetsProjeto.Server.Controllers
             try
             {
                 await _context.SaveChangesAsync();
+
+                await _metricsService.RecordWateringEventAsync(userId, plantationId, plantInfoId, DateTime.UtcNow);
+
                 return Ok(plantationPlant);
             }
             catch (DbUpdateException)
@@ -334,9 +452,19 @@ namespace PlantsRPetsProjeto.Server.Controllers
             }
         }
 
+        /// <summary>
+        /// Realiza a colheita de uma planta, com suporte para colheitas recorrentes ou únicas.
+        /// </summary>
+        /// <param name="plantationId">ID da plantação.</param>
+        /// <param name="plantInfoId">ID da planta a ser colhida.</param>
+        /// <returns>Mensagem de sucesso ou erro, incluindo próxima data de colheita, se aplicável.</returns>
         [HttpPost("{plantationId}/harvest-plant/{plantInfoId}")]
         public async Task<IActionResult> HarvestPlant(int plantationId, int plantInfoId)
         {
+            var userId = User.FindFirst("UserId")?.Value;
+            if (string.IsNullOrEmpty(userId))
+                return NotFound(new { message = "User not found." });
+
             var plantationPlant = await _context.PlantationPlants
                 .Include(pp => pp.ReferencePlant)
                 .FirstOrDefaultAsync(pp => pp.PlantationId == plantationId && pp.PlantInfoId == plantInfoId);
@@ -377,6 +505,8 @@ namespace PlantsRPetsProjeto.Server.Controllers
                 plantationPlant.GrowthStatus = "Growing";
                 await _context.SaveChangesAsync();
 
+                await _metricsService.RecordHarvestEventAsync(userId, plantationId, plantInfoId, DateTime.UtcNow);
+
                 return Ok(new
                 {
                     message = "Plant harvested successfully. Next harvest in progress.",
@@ -393,6 +523,12 @@ namespace PlantsRPetsProjeto.Server.Controllers
             }
         }
 
+        /// <summary>
+        /// Verifica se uma planta está pronta para ser colhida.
+        /// </summary>
+        /// <param name="plantationId">ID da plantação.</param>
+        /// <param name="plantInfoId">ID da planta a verificar.</param>
+        /// <returns>Estado da colheita, dias restantes e data prevista da próxima colheita.</returns>
         [HttpGet("{plantationId}/plant/{plantInfoId}/check-harvest")]
         public async Task<IActionResult> CheckHarvest(int plantationId, int plantInfoId)
         {
@@ -426,6 +562,33 @@ namespace PlantsRPetsProjeto.Server.Controllers
             });
         }
 
+        /// <summary>
+        /// Utiliza uma melhoria (level-up) acumulada da plantação.
+        /// Reduz o número de melhorias disponíveis e atualiza a plantação.
+        /// </summary>
+        /// <param name="id">ID da plantação.</param>
+        /// <returns>Estado atualizado da plantação ou mensagem de erro.</returns>
+        [HttpPost("{id}/use-banked-levelup")]
+        public async Task<IActionResult> UseBankedLevelUp(int id)
+        {
+            var plantation = await _context.Plantation.FindAsync(id);
+            if (plantation == null)
+                return NotFound(new { message = "Plantation not found." });
+
+            plantation.BankedLevelUps -= 1;
+            await _context.SaveChangesAsync();
+
+            return Ok(plantation);
+        }
+
+        /// <summary>
+        /// Atualiza manualmente a data de colheita de uma planta específica numa plantação.
+        /// Pode ser usado para ajustes administrativos ou eventos especiais.
+        /// </summary>
+        /// <param name="plantationId">ID da plantação.</param>
+        /// <param name="plantInfoId">ID da planta a atualizar.</param>
+        /// <param name="newHarvestDate">Nova data de colheita a definir.</param>
+        /// <returns>Mensagem de confirmação com a nova data de colheita.</returns>
         [HttpPost("{plantationId}/plant/{plantInfoId}/set-harvest-date")]
         public async Task<IActionResult> SetHarvestDate(int plantationId, int plantInfoId, [FromBody] DateTime newHarvestDate)
         {
@@ -441,6 +604,14 @@ namespace PlantsRPetsProjeto.Server.Controllers
             return Ok(new { message = "HarvestDate updated", newHarvestDate });
         }
 
+        /// <summary>
+        /// Atribui pontos de experiência à plantação com base em ações realizadas (rega ou colheita).
+        /// Se a experiência acumulada ultrapassar o limiar, são atribuídos níveis automaticamente.
+        /// </summary>
+        /// <param name="id">ID da plantação.</param>
+        /// <param name="plantInfoId">ID da planta relacionada à ação.</param>
+        /// <param name="isHarvesting">Define se a ação é colheita (true) ou rega (false).</param>
+        /// <returns>204 se a atualização for bem-sucedida, ou erro correspondente.</returns>
         [HttpPut("{id}/gain-xp/{plantInfoId}")]
         public async Task<IActionResult> GainExperience(int id, int plantInfoId, bool isHarvesting)
         {
@@ -464,10 +635,6 @@ namespace PlantsRPetsProjeto.Server.Controllers
             int plantationPlantQuantity = plantationPlant!.Quantity;
 
             DateTime? plantationPlantLastHarvest = plantationPlant!.LastHarvested;
-
-            //Console.WriteLine(existingPlantation.PlantType.HasRecurringHarvest);
-            //bool plantationTypeRecurringHarvest = existingPlantation.PlantType.HasRecurringHarvest;
-
 
             if (isHarvesting)
             {
@@ -494,6 +661,7 @@ namespace PlantsRPetsProjeto.Server.Controllers
 
                 existingPlantation.Level += numberOfLevels;
                 existingPlantation.ExperiencePoints = leftoverExperience;
+                existingPlantation.BankedLevelUps = numberOfLevels;
             }
 
             _context.Entry(existingPlantation).State = EntityState.Modified;
@@ -501,24 +669,29 @@ namespace PlantsRPetsProjeto.Server.Controllers
             try
             {
                 await _context.SaveChangesAsync();
+                return Ok(existingPlantation);
             }
             catch (DbUpdateConcurrencyException)
             {
                 return Conflict(new { message = "Conflict updating plantation when increasing experience, please try again." });
             }
 
-            return NoContent();
         }
     }
 
-
-
+    /// <summary>
+    /// Modelo utilizado na criação de uma nova plantação.
+    /// </summary>
     public class CreatePlantationModel
     {
         public required string PlantationName { get; set; }
         public required int PlantTypeId { get; set; }
     }
 
+    /// <summary>
+    /// Modelo utilizado para atualizar os dados de uma plantação existente.
+    /// Todos os campos são opcionais e aplicados apenas se fornecidos.
+    /// </summary>
     public class UpdatePlantationModel
     {
         public string? PlantationName { get; set; }
@@ -528,8 +701,13 @@ namespace PlantsRPetsProjeto.Server.Controllers
         public string? GrowthStatus { get; set; }
         public int? ExperiencePoints { get; set; }
         public int? Level { get; set; }
+        public int? BankedLevelUps {  get; set; }
+        public Location? Location { get; set; }
     }
 
+    /// <summary>
+    /// Modelo utilizado para adicionar uma planta a uma plantação.
+    /// </summary>
     public class AddPlantToPlantationModel
     {
         public int PlantInfoId { get; set; }
@@ -537,6 +715,10 @@ namespace PlantsRPetsProjeto.Server.Controllers
         public int Quantity { get; set; }
     }
 
+    /// <summary>
+    /// Modelo utilizado para remover uma quantidade de uma planta de uma plantação.
+    /// Se a quantidade não for fornecida, a planta é totalmente removida.
+    /// </summary>
     public class RemovePlantFromPlantationModel
     {
         [Range(1, int.MaxValue, ErrorMessage = "Quantity must be at least 1.")]

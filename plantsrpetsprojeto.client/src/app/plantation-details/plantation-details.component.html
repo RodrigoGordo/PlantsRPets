@@ -6,11 +6,24 @@
 
     <div class="plantation-details">
       <p><strong>Plant Type:</strong> {{ plantation.plantTypeName }}</p>
-      <p><strong>Planted On:</strong> {{ plantation.plantingDate | date }}</p>
-      <p><strong>Last Watered:</strong> {{ plantation.lastWatered | date }}</p>
-      <p><strong>Growth Status:</strong> {{ plantation.growthStatus }}</p>
-      <p><strong>Experience Points:</strong> {{ plantation.experiencePoints }}</p>
+      <p><strong>Created On:</strong> {{ plantation.plantingDate | date }}</p>
       <p><strong>Level:</strong> {{ plantation.level }}</p>
+      <div class="xp-container">
+        <strong>Experience Points:</strong>
+        <span class="xp-value">{{ plantation.experiencePoints }}/500</span>
+        <div class="xp-bar">
+          <div class="xp-fill" [style.width.%]="(plantation.experiencePoints / 500) * 100"></div>
+        </div>
+      </div>
+      <div class="pet-choice-container" *ngIf="plantation.bankedLevelUps > 0 && !isCollectionFull">
+        <button class="pet-choice-button" (click)="openRewardPopup()">
+          🐾 Choose a Pet
+        </button>
+        <span class="choices-remaining">{{ plantation.bankedLevelUps }} choices remaining</span>
+      </div>
+      <p *ngIf="isCollectionFull" class="celebration-message">
+        🎉🍀 <strong>You have already unlocked all pets, check back soon!</strong> 🎉🍀
+      </p>
     </div>
 
     <h2 class="plantation-subtitle">Plants in this Plantation</h2>

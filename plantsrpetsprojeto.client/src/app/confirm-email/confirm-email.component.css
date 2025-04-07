@@ -1,0 +1,59 @@
+.wrapper {
+  min-height: 100vh;
+  background-color: #f5faf6;
+  display: flex;
+  flex-direction: column;
+  padding: 40px 24px;
+  box-sizing: border-box;
+}
+
+.logo-container {
+  text-align: center;
+  margin-bottom: 40px;
+  flex-shrink: 0;
+}
+
+.logo {
+  height: 100px;
+  width: auto;
+  margin: 0 auto;
+}
+
+.confirmation-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 80vh;
+}
+
+.confirmation-card {
+  max-width: 500px;
+  background-color: #fff;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 0 16px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+.actions {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.action-btn {
+  padding: 0.5rem 1.2rem;
+  border: none;
+  background-color: #4CAF50;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+  .action-btn.outline {
+    background-color: transparent;
+    border: 1px solid #4CAF50;
+    color: #4CAF50;
+  }

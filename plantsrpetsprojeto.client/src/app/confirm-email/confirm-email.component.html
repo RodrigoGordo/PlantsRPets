@@ -1,0 +1,19 @@
+<div class="wrapper">
+  <div class="logo-container">
+    <a routerLink="/" class="logo-link">
+      <img src="assets/logo.png" alt="App Logo" class="logo">
+    </a>
+  </div>
+
+  <div class="confirmation-wrapper">
+    <div class="confirmation-card">
+      <h2>Email Verification</h2>
+      <p>{{ message }}</p>
+
+      <div *ngIf="success" class="actions">
+        <button class="action-btn outline" (click)="goHome()">Go to Homepage</button>
+      </div>
+    </div>
+  </div>
+
+</div>
