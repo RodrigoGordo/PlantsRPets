@@ -118,19 +118,16 @@ namespace PlantsRPetsProjeto.Server.Controllers
 
             return Path.Combine("uploads", uniqueFileName);
         }
-        
+
+        public class UpdateProfileModel
+        {
+            public string? Nickname { get; set; }
+            public string? Bio { get; set; }
+            public IFormFile? ProfilePicture { get; set; }
+            public ICollection<int>? FavoritePets { get; set; }
+            public ICollection<int>? HighlightedPlantations { get; set; }
+        }
+
     }
 
-    /// <summary>
-    /// Modelo utilizado para atualizar os dados do perfil de um utilizador.
-    /// Todos os campos são opcionais e atualizados apenas se forem fornecidos.
-    /// </summary>
-    public class UpdateProfileModel
-    {
-        public string? Nickname { get; set; }
-        public string? Bio { get; set; }
-        public IFormFile? ProfilePicture { get; set; }
-        public ICollection<int>? FavoritePets { get; set; }
-        public ICollection<int>? HighlightedPlantations { get; set; }
-    }
 }
