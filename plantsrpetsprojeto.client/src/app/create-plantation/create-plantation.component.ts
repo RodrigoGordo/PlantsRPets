@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PlantationsService } from '../plantations.service';
 import { PlantTypesService } from '../plant-type.service';
 import { PlantType } from '../models/plant-type.model';
+import { Location } from '../models/location.model';
 
 @Component({
   selector: 'app-create-plantation',
@@ -20,6 +21,7 @@ import { PlantType } from '../models/plant-type.model';
 export class CreatePlantationComponent {
   plantationForm: FormGroup;
   plantTypes: PlantType[] = [];
+  newLocation!: Location;
 
   /**
    * Construtor do componente que injeta serviços necessários:
@@ -74,7 +76,8 @@ export class CreatePlantationComponent {
     if (this.plantationForm.valid) {
       const requestData = {
         plantationName: this.plantationForm.value.plantationName,
-        plantTypeId: this.plantationForm.value.plantTypeId
+        plantTypeId: this.plantationForm.value.plantTypeId,
+        location: this.newLocation
       };
 
       this.plantationsService.createPlantation(requestData).subscribe({
@@ -85,6 +88,15 @@ export class CreatePlantationComponent {
   }
 
   /**
+ * Atualiza a localização selecionada pelo utilizador para a nova plantação.
+ * 
+ * @param location - Objeto de localização selecionado (cidade, região, país, coordenadas).
+ */
+  onLocationSelected(location: Location): void {
+    this.newLocation = location;
+  }
+
+   /**
    * Fecha a janela modal sem realizar nenhuma ação.
    */
   closeDialog(): void {

@@ -11,6 +11,10 @@ using PlantsRPetsProjeto.Server.Models;
 
 namespace PlantsRPetsProjeto.Server.Controllers
 {
+    /// <summary>
+    /// Controlador responsável pela gestão de notificações dos utilizadores, incluindo envio, leitura, remoção e frequência de email.
+    /// Requer autenticação do utilizador para acesso aos endpoints.
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
@@ -18,11 +22,18 @@ namespace PlantsRPetsProjeto.Server.Controllers
     {
         private readonly PlantsRPetsProjetoServerContext _context;
 
+        /// <summary>
+        /// Construtor que injeta o contexto da base de dados.
+        /// </summary>
+        /// <param name="context">Contexto da base de dados da aplicação.</param>
         public NotificationController(PlantsRPetsProjetoServerContext context)
         {
             _context = context;
         }
 
+        /// <summary>
+        /// Obtém todas as notificações de um utilizador autenticado.
+        /// </summary>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<UserNotification>>> GetUserNotifications()
         {
@@ -40,6 +51,10 @@ namespace PlantsRPetsProjeto.Server.Controllers
             return Ok(notifications);
         }
 
+        /// <summary>
+        /// Envia uma notificação específica para o utilizador autenticado.
+        /// </summary>
+        /// <param name="notificationId">ID da notificação a enviar.</param>
         [HttpPost("send/{notificationId}")]
         public async Task<IActionResult> SendNotification(int notificationId)
         {
@@ -70,6 +85,10 @@ namespace PlantsRPetsProjeto.Server.Controllers
         }
 
 
+        /// <summary>
+        /// Elimina uma notificação do utilizador.
+        /// </summary>
+        /// <param name="id">ID da notificação do utilizador.</param>
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteNotification(int id)
         {
@@ -84,6 +103,10 @@ namespace PlantsRPetsProjeto.Server.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// Marca uma notificação como lida.
+        /// </summary>
+        /// <param name="id">ID da notificação do utilizador.</param>
         [HttpPut("read/{id}")]
         public async Task<IActionResult> MarkAsRead(int id)
         {
@@ -106,6 +129,9 @@ namespace PlantsRPetsProjeto.Server.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// Obtém todas as notificações não lidas do utilizador autenticado.
+        /// </summary>
         [HttpGet("unread")]
         public async Task<ActionResult<IEnumerable<UserNotification>>> GetUnreadNotifications()
         {
@@ -123,6 +149,10 @@ namespace PlantsRPetsProjeto.Server.Controllers
             return Ok(unreadNotifications);
         }
 
+        /// <summary>
+        /// Atualiza a frequência com que o utilizador deseja receber emails com notificações.
+        /// </summary>
+        /// <param name="frequencyId">Valor da frequência (0: Never, 1: Daily, 2: Weekly, 3: Monthly).</param>
         [HttpPut("email-frequency/{frequencyId}")]
         public async Task<IActionResult> UpdateEmailFrequency(int frequencyId)
         {
@@ -147,6 +177,24 @@ namespace PlantsRPetsProjeto.Server.Controllers
             await _context.SaveChangesAsync();
 
             return Ok($"Email frequency updated to {user.NotificationFrequency}.");
+        }
+
+        /// <summary>
+        /// Obtém a frequência de envio de emails configurada pelo utilizador.
+        /// </summary>
+        [HttpGet("email-frequency")]
+        public async Task<ActionResult<int>> GetUserEmailFrequency()
+        {
+            var userId = User.FindFirstValue("UserId");
+            if (string.IsNullOrEmpty(userId))
+                return Unauthorized();
+
+            var frequency = await _context.Users
+                .Where(u => u.Id == userId)
+                .Select(u => u.NotificationFrequency)
+                .SingleOrDefaultAsync();
+
+            return Ok(frequency);
         }
 
 

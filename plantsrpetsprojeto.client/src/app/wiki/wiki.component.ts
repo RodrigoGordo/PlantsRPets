@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { PlantsService } from '../plants.service';
 import { PlantInfo } from '../models/plant-info';
 
@@ -18,6 +18,9 @@ import { PlantInfo } from '../models/plant-info';
   activeFilters: { [key: string]: any } = {};
   showFilters = false;
 
+  displayCount = 16;
+  hasMore = true;
+
   /**
    * Injeta o serviço responsável por buscar os dados das plantas.
    * @param plantService Serviço que fornece os dados de plantas via API
@@ -28,8 +31,16 @@ import { PlantInfo } from '../models/plant-info';
    * No carregamento do componente, obtém a lista de plantas da API.
    */
   ngOnInit(): void {
+    this.loadInitialPlants();
+  }
+
+  /**
+   * Carrega a lista inicial de plantas da API.
+   */
+  private loadInitialPlants(): void {
     this.plantService.getPlants().subscribe(plants => {
       this.plants = plants;
+      this.updateDisplayedPlants();
     });
   }
 
@@ -47,6 +58,53 @@ import { PlantInfo } from '../models/plant-info';
    * Verifica se uma planta cumpre todos os filtros ativos.
    * @param plant A planta a verificar
    */
+  get displayedPlants(): PlantInfo[] {
+    return this.filteredPlants.slice(0, this.displayCount);
+  }
+
+  /**
+   * Deteta scroll na janela para ativar carregamento adicional de plantas.
+   */
+  @HostListener('window:scroll', ['$event'])
+  onScroll(): void {
+    if (this.hasMore && this.isNearBottom()) {
+      this.loadMorePlants();
+    }
+  }
+
+  /**
+   * Verifica se o utilizador está perto do final da página.
+   */
+  private isNearBottom(): boolean {
+    const threshold = 100;
+    const position = window.scrollY + window.innerHeight;
+    const height = document.body.scrollHeight;
+    return position > height - threshold;
+  }
+
+  /**
+   * Aumenta o número de plantas visíveis caso existam mais disponíveis.
+   */
+  private loadMorePlants(): void {
+    if (this.displayCount < this.filteredPlants.length) {
+      this.displayCount += 16;
+      this.hasMore = this.displayCount < this.filteredPlants.length;
+    }
+  }
+
+  /**
+   * Atualiza o número de plantas visíveis após pesquisa ou alteração de filtros.
+   */
+  private updateDisplayedPlants(): void {
+    this.displayCount = 16;
+    this.hasMore = this.filteredPlants.length > this.displayCount;
+  }
+
+  /**
+   * Verifica se uma planta cumpre todos os filtros ativos.
+   * @param plant Planta a verificar
+   * @returns true se todos os filtros forem satisfeitos
+   */
   private matchesFilters(plant: PlantInfo): boolean {
     return Object.keys(this.activeFilters).every(key => {
       const filterValue = this.activeFilters[key];
@@ -54,6 +112,16 @@ import { PlantInfo } from '../models/plant-info';
 
       const plantKey = key as keyof PlantInfo;
       const plantValue = plant[plantKey];
+
+      if (['edible', 'fruits'].includes(plantKey)) {
+        const plantBool = this.convertYesNoToBoolean(plantValue);
+        const filterBool = filterValue === 'true';
+        return plantBool === filterBool;
+      }
+
+      if (typeof plantValue === 'boolean') {
+        return plantValue === (filterValue === 'true');
+      }
 
       if (plantKey === 'sunlight') {
         const normalizedFilter = filterValue.toLowerCase()
@@ -73,10 +141,6 @@ import { PlantInfo } from '../models/plant-info';
         });
       }
 
-      if (typeof plantValue === 'boolean') {
-        return plantValue === (filterValue === 'true');
-      }
-
       if (plantValue == null) return false;
 
       return plantValue.toString().toLowerCase().trim() ===
@@ -85,11 +149,25 @@ import { PlantInfo } from '../models/plant-info';
   }
 
   /**
+   * Converte valores "yes"/"no" em booleanos.
+   * @param value Valor textual ou booleano
+   * @returns true se for "yes" ou boolean true
+   */
+  private convertYesNoToBoolean(value: any): boolean {
+    if (typeof value === 'boolean') return value;
+    if (typeof value === 'string') {
+      return value.toLowerCase() === 'yes';
+    }
+    return false;
+  }
+
+  /**
    * Atualiza os filtros ativos quando o utilizador altera os filtros no painel.
    * @param filters Objeto com os filtros atualizados
    */
   onFiltersChanged(filters: any): void {
     this.activeFilters = filters;
+    this.updateDisplayedPlants();
   }
 
   /**

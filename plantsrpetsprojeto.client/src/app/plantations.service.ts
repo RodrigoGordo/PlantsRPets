@@ -39,12 +39,18 @@ export class PlantationsService {
     return this.http.get<any>(`${this.apiUrl}/${id}`);
   }
 
+
   /**
-   * Cria uma nova plantação com nome e tipo de planta especificados.
-   * @param plantationData Dados da nova plantação (nome e tipo)
-   * @returns Observable com a resposta da API
+   * Envia uma requisição à API para criar uma nova plantação com o nome, tipo e localização especificados.
+   *
+   * @param plantationData - Objeto que contém:
+   *   - plantationName: Nome escolhido para a nova plantação.
+   *   - plantTypeId: Identificador do tipo de planta a ser associada à plantação.
+   *   - location: Objeto com os dados de localização geográfica (cidade, região, país, latitude e longitude).
+   * 
+   * @returns Observable com a resposta da API após tentar criar a plantação.
    */
-  createPlantation(plantationData: { plantationName: string; plantTypeId: number }): Observable<any> {
+  createPlantation(plantationData: { plantationName: string; plantTypeId: number; location: Location }): Observable<any> {
     return this.http.post<any>(this.apiUrl, plantationData);
   }
 

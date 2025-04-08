@@ -27,7 +27,7 @@ import { PlantInfo } from '../models/plant-info';
  * estação de colheita, comestibilidade, entre outros.
  */
 export class PlantFilterComponent implements OnInit {
-  @Input() plants!: PlantInfo[]; // Add this line
+  @Input() plants!: PlantInfo[];
   @Input() isOpen = false;
   @Output() closed = new EventEmitter<void>();
   @Output() filtersChange = new EventEmitter<any>();

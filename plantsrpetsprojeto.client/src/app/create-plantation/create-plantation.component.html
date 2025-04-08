@@ -13,18 +13,24 @@
     <div class="form-group">
       <label for="type">Plant Type</label>
       <select id="type" formControlName="plantTypeId" aria-label="Select plant type">
-        <option *ngFor="let type of plantTypes" [value]="type.plantTypeId">
+        <option *ngFor="let type of plantTypes" [value]="type.plantTypeId" class="option">
           {{ type.plantTypeName }}
         </option>
       </select>
       <div class="error" *ngIf="plantationForm.get('plantTypeId')?.invalid && plantationForm.get('plantTypeId')?.touched">
         Please select a plant type.
       </div>
+      <label for="location">Location</label>
+      <app-location-input (locationSelected)="onLocationSelected($event)">
+      </app-location-input>
+      <div class="error" *ngIf="!this.newLocation">
+        Please select a location.
+      </div>
     </div>
 
     <div class="buttons">
       <button type="button" class="cancel-btn" (click)="closeDialog()">Cancel</button>
-      <button type="submit" class="confirm-btn" [disabled]="plantationForm.invalid">Create</button>
+      <button type="submit" class="confirm-btn" [disabled]="plantationForm.invalid || !this.newLocation">Create</button>
     </div>
   </form>
 </div>

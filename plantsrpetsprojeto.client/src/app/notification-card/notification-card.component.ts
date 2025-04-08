@@ -17,6 +17,9 @@ export class NotificationCardComponent implements OnInit {
   notifications: Notification[] = [];
   unreadNotifications: Notification[] = [];
   showNotifications = false;
+  showNotificationsSettings = false;
+  selectedFrequency!: number;
+  frequencyOptions = ['Never', 'Daily', 'Weekly', 'Monthly'];
 
   /**
    * Construtor do componente. Injeta o serviço de notificações.
@@ -31,6 +34,7 @@ export class NotificationCardComponent implements OnInit {
   ngOnInit(): void {
     this.loadNotifications();
     this.loadUnreadNotifications();
+    this.getEmailFrequency();
   }
 
   /**
@@ -83,5 +87,48 @@ export class NotificationCardComponent implements OnInit {
    */
   toggleNotifications() {
     this.showNotifications = !this.showNotifications;
+    this.showNotificationsSettings = false;
+  }
+
+  /**
+   * Alterna a visibilidade das configurações de notificações por e-mail.
+   * Mostra ou esconde o painel de preferências de frequência de notificações.
+   */
+  toggleNotificationsSettings() {
+    this.showNotificationsSettings = !this.showNotificationsSettings;
+  }
+
+  /**
+   * Atualiza a frequência de notificações por e-mail do utilizador.
+   * Envia o valor selecionado para o backend e atualiza o estado local em caso de sucesso.
+   * 
+   * @param frequency - Valor numérico da frequência (0 = Nunca, 1 = Diariamente, 2 = Semanalmente, 3 = Mensalmente)
+   */
+  setEmailFrequency(frequency: number) {
+    this.notificationService.updateEmailFrequency(frequency).subscribe({
+      next: () => {
+        this.selectedFrequency = frequency;
+        console.log('Frequency updated to:', frequency);
+      },
+      error: (err) => {
+        console.error('Update failed:', err);
+        this.selectedFrequency = frequency;
+      }
+    });
+  }
+
+  /**
+   * Obtém a frequência atual de notificações por e-mail do utilizador.
+   * Utiliza o serviço de notificações para buscar o valor armazenado no backend.
+   */
+  getEmailFrequency() {
+    this.notificationService.getEmailFrequency().subscribe(
+      (data) => {
+        this.selectedFrequency = data;
+        console.log(this.selectedFrequency);
+      }, (error) => {
+        console.log('Get Email Failed:', error);
+      }
+    );
   }
 }

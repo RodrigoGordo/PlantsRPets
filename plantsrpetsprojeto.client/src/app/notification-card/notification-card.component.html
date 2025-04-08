@@ -2,7 +2,10 @@
   <i class="fa fa-bell notification-icon" (click)="toggleNotifications()"></i>
 
   <div class="notification-card" *ngIf="showNotifications">
-    <h3>Notifications</h3>
+    <div class="notification-title">
+      <h3>Notifications</h3>
+      <i class="fa fa-cog settings-icon" (click)="toggleNotificationsSettings()"></i>
+    </div>
 
     <div *ngIf="notifications.length === 0">
       <p class="no-notifications">No new notifications</p>
@@ -15,6 +18,22 @@
       </div>
       <button (click)="markAsRead(notification)">✔</button>
       <button (click)="deleteNotification(notification)">❌</button>
+    </div>
+  </div>
+
+  <div class="notification-settings-card" *ngIf="showNotificationsSettings">
+    <h3>Notification Settings</h3>
+    <div class="settings-group">
+      <p class="setting-label">Email Frequency</p>
+      <div class="frequency-buttons">
+        <button *ngFor="let option of frequencyOptions; let i = index"
+                (click)="setEmailFrequency(i)"
+                [class.active]="selectedFrequency === i"
+                class="frequency-btn">
+          {{ option }}
+          <span *ngIf="selectedFrequency === i" class="selected-indicator">•</span>
+        </button>
+      </div>
     </div>
   </div>
 </div>

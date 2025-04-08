@@ -26,8 +26,13 @@ namespace PlantsRPetsProjeto.Server.Services
         }
 
         /// <summary>
-        /// Regista um evento de rega para uma planta de uma plantação do utilizador.
+        /// Regista um evento de rega no histórico de métricas para uma planta específica numa plantação.
         /// </summary>
+        /// <param name="userId">ID do utilizador que realizou a ação.</param>
+        /// <param name="plantationId">ID da plantação onde a planta está localizada.</param>
+        /// <param name="plantInfoId">ID da planta que foi regada.</param>
+        /// <param name="timestamp">Data e hora em que o evento ocorreu.</param>
+
         public async Task RecordWateringEventAsync(string userId, int plantationId, int plantInfoId, DateTime timestamp)
         {
             var metric = new Metric
@@ -44,8 +49,13 @@ namespace PlantsRPetsProjeto.Server.Services
         }
 
         /// <summary>
-        /// Regista um evento de colheita para uma planta de uma plantação do utilizador.
+        /// Regista um evento de colheita no histórico de métricas para uma planta específica numa plantação.
         /// </summary>
+        /// <param name="userId">ID do utilizador que realizou a colheita.</param>
+        /// <param name="plantationId">ID da plantação onde a planta está localizada.</param>
+        /// <param name="plantInfoId">ID da planta que foi colhida.</param>
+        /// <param name="timestamp">Data e hora da colheita.</param>
+
         public async Task RecordHarvestEventAsync(string userId, int plantationId, int plantInfoId, DateTime timestamp)
         {
             var metric = new Metric
@@ -61,21 +71,30 @@ namespace PlantsRPetsProjeto.Server.Services
             await _context.SaveChangesAsync();
         }
 
-        /// <summary>
-        /// Regista um evento de plantação para uma nova planta numa plantação do utilizador.
-        /// </summary>
-        public async Task RecordPlantingEventAsync(string userId, int plantationId, int plantInfoId, DateTime timestamp)
-        {
-            var metric = new Metric
-            {
-                UserId = userId,
-                PlantationId = plantationId,
-                PlantInfoId = plantInfoId,
-                EventType = "Planting",
-                Timestamp = timestamp
-            };
 
-            _context.Metric.Add(metric);
+        /// <summary>
+        /// Regista um ou mais eventos de plantação no histórico de métricas para uma planta específica.
+        /// </summary>
+        /// <param name="userId">ID do utilizador que realizou a plantação.</param>
+        /// <param name="plantationId">ID da plantação onde as plantas foram adicionadas.</param>
+        /// <param name="plantInfoId">ID da planta adicionada.</param>
+        /// <param name="timestamp">Data e hora da plantação.</param>
+        /// <param name="quantity">Número de unidades da planta adicionadas. Cada unidade será registada individualmente como evento.</param>
+        public async Task RecordPlantingEventAsync(string userId, int plantationId, int plantInfoId, DateTime timestamp, int quantity)
+        {
+            for(int i = 0; i < quantity; i++)
+            {
+                var metric = new Metric
+                {
+                    UserId = userId,
+                    PlantationId = plantationId,
+                    PlantInfoId = plantInfoId,
+                    EventType = "Planting",
+                    Timestamp = timestamp
+                };
+                _context.Metric.Add(metric);
+            }
+
             await _context.SaveChangesAsync();
         }
 

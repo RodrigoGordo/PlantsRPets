@@ -16,6 +16,7 @@
         /// </summary>
         public string UserId { get; set; }
 
+
         /// <summary>
         /// Biografia ou descrição pessoal do utilizador.
         /// </summary>

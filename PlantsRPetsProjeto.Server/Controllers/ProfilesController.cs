@@ -45,7 +45,6 @@ namespace PlantsRPetsProjeto.Server.Controllers
             {
                 return Unauthorized(new { message = "User not authenticated." });
             }
-
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
             if (user == null)
             {
@@ -101,7 +100,7 @@ namespace PlantsRPetsProjeto.Server.Controllers
         /// </summary>
         /// <param name="file">Ficheiro da imagem de perfil enviada pelo utilizador.</param>
         /// <returns>Caminho relativo para a imagem guardada.</returns>
-        private async Task<string> SaveProfilePicture(IFormFile file)
+        public async Task<string> SaveProfilePicture(IFormFile file)
         {
             var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads");
             if (!Directory.Exists(uploadsFolder))
@@ -120,10 +119,6 @@ namespace PlantsRPetsProjeto.Server.Controllers
             return Path.Combine("uploads", uniqueFileName);
         }
 
-        /// <summary>
-        /// Modelo utilizado para atualizar os dados do perfil de um utilizador.
-        /// Todos os campos são opcionais e atualizados apenas se forem fornecidos.
-        /// </summary>
         public class UpdateProfileModel
         {
             public string? Nickname { get; set; }
@@ -132,5 +127,7 @@ namespace PlantsRPetsProjeto.Server.Controllers
             public ICollection<int>? FavoritePets { get; set; }
             public ICollection<int>? HighlightedPlantations { get; set; }
         }
+
     }
+
 }
