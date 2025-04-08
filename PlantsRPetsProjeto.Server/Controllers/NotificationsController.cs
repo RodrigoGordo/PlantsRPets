@@ -149,6 +149,21 @@ namespace PlantsRPetsProjeto.Server.Controllers
             return Ok($"Email frequency updated to {user.NotificationFrequency}.");
         }
 
+        [HttpGet("email-frequency")]
+        public async Task<ActionResult<int>> GetUserEmailFrequency()
+        {
+            var userId = User.FindFirstValue("UserId");
+            if (string.IsNullOrEmpty(userId))
+                return Unauthorized();
+
+            var frequency = await _context.Users
+                .Where(u => u.Id == userId)
+                .Select(u => u.NotificationFrequency)
+                .SingleOrDefaultAsync();
+
+            return Ok(frequency);
+        }
+
 
     }
 }
