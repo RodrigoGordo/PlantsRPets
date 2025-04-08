@@ -40,4 +40,8 @@ export class NotificationService {
   updateEmailFrequency(frequencyId: number): Observable<any> {
     return this.http.put(`${this.apiUrl}/email-frequency/${frequencyId}`, {});
   }
+
+  getEmailFrequency(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/email-frequency`);
+  }
 }
