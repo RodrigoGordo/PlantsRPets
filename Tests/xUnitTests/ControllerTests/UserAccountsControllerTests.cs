@@ -52,13 +52,30 @@ namespace PlantsRPetsProjeto.Tests.xUnitTests.ControllerTests
         [Fact]
         public async Task Register_UserAlreadyExists_ReturnsBadRequest()
         {
-            var model = new UserRegistrationModel { Email = "existinguser@test.com", Nickname = "Nick", Password = "Password123" };
-            _mockUserManager.Setup(um => um.FindByEmailAsync(model.Email)).ReturnsAsync(new User());
+            var model = new UserRegistrationModel
+            {
+                Email = "existinguser@test.com",
+                Nickname = "Nick",
+                Password = "Password123",
+            };
+
+            var existingUser = new User
+            {
+                Email = model.Email,
+                EmailConfirmed = true
+            };
+
+            _mockUserManager.Setup(um => um.FindByEmailAsync(model.Email))
+                            .ReturnsAsync(existingUser);
+
+            _mockUserManager.Setup(um => um.IsEmailConfirmedAsync(existingUser))
+                            .ReturnsAsync(true);
 
             var result = await _controller.Register(model);
 
             Assert.IsType<BadRequestObjectResult>(result);
         }
+
 
         [Fact]
         public async Task Register_NewUser_ReturnsOk()
@@ -165,7 +182,7 @@ namespace PlantsRPetsProjeto.Tests.xUnitTests.ControllerTests
         [Fact]
         public async Task Login_ValidCredentials_ReturnsToken()
         {
-            var user = new User { Id = "test-user-id", Email = "validuser@test.com", Nickname = "ValidUser" };
+            var user = new User { Id = "test-user-id", Email = "validuser@test.com", Nickname = "ValidUser", EmailConfirmed = true };
             var model = new UserLoginModel { Email = user.Email, Password = "CorrectPassword" };
 
             _mockUserManager.Setup(um => um.FindByEmailAsync(model.Email))
