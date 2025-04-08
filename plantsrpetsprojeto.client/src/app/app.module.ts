@@ -62,6 +62,7 @@ import { RemovePlantationPopupComponent } from './remove-plantation-popup/remove
 import { PetCardComponent } from './pet-card/pet-card.component';
 import { NotificationCardComponent } from './notification-card/notification-card.component';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { LocationInputComponent } from './location-input/location-input.component';
 
 @NgModule({
   declarations: [
@@ -111,7 +112,8 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
     RemovePlantPopupComponent,
     RemovePlantationPopupComponent,
     PetCardComponent,
-    NotificationCardComponent
+    NotificationCardComponent,
+    LocationInputComponent
   ],
   imports: [
     BrowserModule,
