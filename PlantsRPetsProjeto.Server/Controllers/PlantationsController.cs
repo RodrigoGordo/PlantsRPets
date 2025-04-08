@@ -121,8 +121,13 @@ namespace PlantsRPetsProjeto.Server.Controllers
         [HttpPost]
         public async Task<ActionResult<Plantation>> CreatePlantation([FromBody] CreatePlantationModel model)
         {
+            Console.WriteLine("AAAAAAAAAAAAAAAAAAAAA MODELO DO CREAAAAAAATE");
+            Console.WriteLine(model);
+
             if (!ModelState.IsValid)
+            {
                 return BadRequest(ModelState);
+            }
 
             var userId = User.FindFirst("UserId")?.Value;
             if (string.IsNullOrEmpty(userId))
@@ -141,7 +146,7 @@ namespace PlantsRPetsProjeto.Server.Controllers
                 ExperiencePoints = 0,
                 Level = 1,
                 BankedLevelUps = 0,
-                Location = null,
+                Location = model.Location,
                 PlantationPlants = []
             };
 
@@ -686,6 +691,7 @@ namespace PlantsRPetsProjeto.Server.Controllers
     {
         public required string PlantationName { get; set; }
         public required int PlantTypeId { get; set; }
+        public required Location Location { get; set; }
     }
 
     /// <summary>

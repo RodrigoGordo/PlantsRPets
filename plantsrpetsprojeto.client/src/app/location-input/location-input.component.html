@@ -1,0 +1,15 @@
+<div class="location-input">
+  <input type="text"
+         [(ngModel)]="citySearchTerm"
+         (input)="onCitySearchInput()"
+         placeholder="Search city..."
+         class="edit-input"
+         (click)="$event.stopPropagation()" />
+  <div *ngIf="citySearchResults.length > 0" class="search-results">
+    <div *ngFor="let city of citySearchResults"
+         class="search-result-item"
+         (click)="selectCity(city)">
+      {{ city.name }}, {{ city.region }}, {{ city.country }}
+    </div>
+  </div>
+</div>
