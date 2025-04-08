@@ -118,11 +118,23 @@ export class PlantationCardComponent {
     console.log(this.recentActivity.getRecentPlantations());
   }
 
+  /**
+   * Calcula o número total de plantas presentes na plantação.
+   * Soma a quantidade de todas as instâncias de `PlantationPlant` associadas.
+   * 
+   * @returns O número total de plantas da plantação.
+   */
   getTotalPlants(): number {
     return this.plantation.plantationPlants.reduce((sum: number, plant: PlantationPlant) =>
       sum + (plant.quantity || 0), 0) || 0;
   }
 
+  /**
+   * Define a localização selecionada para a nova plantação.
+   * Este método é chamado quando o utilizador escolhe uma cidade no componente de localização.
+   * 
+   * @param location - Objeto `Location` com as coordenadas e informações geográficas da cidade selecionada.
+   */
   onLocationSelected(location: Location): void {
     this.newLocation = location;
   }

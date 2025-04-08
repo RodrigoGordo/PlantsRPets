@@ -34,6 +34,9 @@ import { PlantInfo } from '../models/plant-info';
     this.loadInitialPlants();
   }
 
+  /**
+   * Carrega a lista inicial de plantas da API.
+   */
   private loadInitialPlants(): void {
     this.plantService.getPlants().subscribe(plants => {
       this.plants = plants;
@@ -59,6 +62,9 @@ import { PlantInfo } from '../models/plant-info';
     return this.filteredPlants.slice(0, this.displayCount);
   }
 
+  /**
+   * Deteta scroll na janela para ativar carregamento adicional de plantas.
+   */
   @HostListener('window:scroll', ['$event'])
   onScroll(): void {
     if (this.hasMore && this.isNearBottom()) {
@@ -66,6 +72,9 @@ import { PlantInfo } from '../models/plant-info';
     }
   }
 
+  /**
+   * Verifica se o utilizador está perto do final da página.
+   */
   private isNearBottom(): boolean {
     const threshold = 100;
     const position = window.scrollY + window.innerHeight;
@@ -73,6 +82,9 @@ import { PlantInfo } from '../models/plant-info';
     return position > height - threshold;
   }
 
+  /**
+   * Aumenta o número de plantas visíveis caso existam mais disponíveis.
+   */
   private loadMorePlants(): void {
     if (this.displayCount < this.filteredPlants.length) {
       this.displayCount += 16;
@@ -80,11 +92,19 @@ import { PlantInfo } from '../models/plant-info';
     }
   }
 
+  /**
+   * Atualiza o número de plantas visíveis após pesquisa ou alteração de filtros.
+   */
   private updateDisplayedPlants(): void {
     this.displayCount = 16;
     this.hasMore = this.filteredPlants.length > this.displayCount;
   }
 
+  /**
+   * Verifica se uma planta cumpre todos os filtros ativos.
+   * @param plant Planta a verificar
+   * @returns true se todos os filtros forem satisfeitos
+   */
   private matchesFilters(plant: PlantInfo): boolean {
     return Object.keys(this.activeFilters).every(key => {
       const filterValue = this.activeFilters[key];
@@ -128,6 +148,11 @@ import { PlantInfo } from '../models/plant-info';
     });
   }
 
+  /**
+   * Converte valores "yes"/"no" em booleanos.
+   * @param value Valor textual ou booleano
+   * @returns true se for "yes" ou boolean true
+   */
   private convertYesNoToBoolean(value: any): boolean {
     if (typeof value === 'boolean') return value;
     if (typeof value === 'string') {

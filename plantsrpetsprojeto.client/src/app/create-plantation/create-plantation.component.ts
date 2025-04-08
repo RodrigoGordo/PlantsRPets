@@ -87,6 +87,11 @@ export class CreatePlantationComponent {
     }
   }
 
+  /**
+ * Atualiza a localização selecionada pelo utilizador para a nova plantação.
+ * 
+ * @param location - Objeto de localização selecionado (cidade, região, país, coordenadas).
+ */
   onLocationSelected(location: Location): void {
     this.newLocation = location;
   }
