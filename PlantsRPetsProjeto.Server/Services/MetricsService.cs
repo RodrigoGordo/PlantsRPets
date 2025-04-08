@@ -61,21 +61,25 @@ namespace PlantsRPetsProjeto.Server.Services
             await _context.SaveChangesAsync();
         }
 
+
         /// <summary>
         /// Regista um evento de plantação para uma nova planta numa plantação do utilizador.
         /// </summary>
-        public async Task RecordPlantingEventAsync(string userId, int plantationId, int plantInfoId, DateTime timestamp)
+        public async Task RecordPlantingEventAsync(string userId, int plantationId, int plantInfoId, DateTime timestamp, int Quantity)
         {
-            var metric = new Metric
+            for(int i = 0; i < Quantity; i++)
             {
-                UserId = userId,
-                PlantationId = plantationId,
-                PlantInfoId = plantInfoId,
-                EventType = "Planting",
-                Timestamp = timestamp
-            };
+                var metric = new Metric
+                {
+                    UserId = userId,
+                    PlantationId = plantationId,
+                    PlantInfoId = plantInfoId,
+                    EventType = "Planting",
+                    Timestamp = timestamp
+                };
+                _context.Metric.Add(metric);
+            }
 
-            _context.Metric.Add(metric);
             await _context.SaveChangesAsync();
         }
 

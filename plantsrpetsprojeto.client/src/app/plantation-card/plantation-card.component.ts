@@ -7,6 +7,7 @@ import { PlantationPlant } from '../models/plantation-plant';
 import { Plantation } from '../models/plantation.model';
 import { CityService } from '../city.service';
 import { Location } from '../models/location.model';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-plantation-card',
@@ -30,8 +31,6 @@ export class PlantationCardComponent {
   newLocation!: Location;
 
   citySearchTerm: string = '';
-  citySearchResults: any[] = [];
-  private searchDebounceTimer: any;
 
   /**
    * Construtor do componente.
@@ -124,37 +123,9 @@ export class PlantationCardComponent {
       sum + (plant.quantity || 0), 0) || 0;
   }
 
-  onCitySearchInput(): void {
-    clearTimeout(this.searchDebounceTimer);
-    this.searchDebounceTimer = setTimeout(() => {
-      if (this.citySearchTerm.trim()) {
-        this.cityService.getCitiesByName(this.citySearchTerm).subscribe({
-          next: (cities) => this.citySearchResults = cities,
-          error: (err) => {
-            console.error('Error fetching cities:', err);
-            this.citySearchResults = [];
-          }
-        });
-      } else {
-        this.citySearchResults = [];
-      }
-    }, 1000);
+  onLocationSelected(location: Location): void {
+    this.newLocation = location;
   }
-
-  selectCity(cityData: any): void {
-    this.newLocation = {
-      locationId: cityData.id,
-      city: cityData.name,
-      region: cityData.region,
-      country: cityData.country,
-      latitude: cityData.lat,
-      longitude: cityData.lon
-    };
-
-    this.citySearchTerm = `${cityData.name}, ${cityData.region}, ${cityData.country}`;
-    this.citySearchResults = [];
-  }
-
 }
 
 

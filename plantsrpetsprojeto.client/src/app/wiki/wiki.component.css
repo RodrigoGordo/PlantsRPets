@@ -69,3 +69,9 @@
     padding: 1rem;
   }
 }
+
+.no-more-plants {
+  text-align: center;
+  padding: 20px;
+  color: #666;
+}

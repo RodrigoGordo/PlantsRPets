@@ -1,7 +1,7 @@
 const PROXY_CONFIG = [
   {
     context: [
-      "/api", // Match all API routes
+      "/api", 
       "/login",
       "/logout",
       "/register",
@@ -12,7 +12,7 @@ const PROXY_CONFIG = [
       "/resetPassword",
       "/manage/**"
     ],
-    target: "https://localhost:7024", // Match your backend port
+    target: "https://localhost:7024",
     secure: false,
     changeOrigin: true,
     logLevel: "debug",

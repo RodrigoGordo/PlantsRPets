@@ -14,19 +14,9 @@
       <p *ngIf="!isEditing && !this.plantation?.location">Location: Unknown</p>
       <p *ngIf="isEditing">Location: </p>
       <div *ngIf="isEditing" class="location-search">
-        <input type="text"
-               [(ngModel)]="citySearchTerm"
-               (input)="onCitySearchInput()"
-               placeholder="Search city..."
-               class="edit-input"
-               (click)="$event.stopPropagation()" />
-        <div *ngIf="citySearchResults.length > 0" class="search-results">
-          <div *ngFor="let city of citySearchResults"
-               class="search-result-item"
-               (click)="selectCity(city)">
-            {{ city.name }}, {{ city.region }}, {{ city.country }}
-          </div>
-        </div>
+        <app-location-input
+                            (locationSelected)="onLocationSelected($event)">
+        </app-location-input>
       </div>
     </div>
     <p class="plantation-type">Plantation of Type: {{ plantation.plantTypeName }}</p>
