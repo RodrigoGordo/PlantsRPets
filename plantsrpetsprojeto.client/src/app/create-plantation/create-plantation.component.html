@@ -13,7 +13,7 @@
     <div class="form-group">
       <label for="type">Plant Type</label>
       <select id="type" formControlName="plantTypeId" aria-label="Select plant type">
-        <option *ngFor="let type of plantTypes" [value]="type.plantTypeId">
+        <option *ngFor="let type of plantTypes" [value]="type.plantTypeId" class="option">
           {{ type.plantTypeName }}
         </option>
       </select>
