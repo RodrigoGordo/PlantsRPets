@@ -336,7 +336,7 @@ namespace PlantsRPetsProjeto.Server.Controllers
 
             await _context.SaveChangesAsync();
 
-            await _metricsService.RecordPlantingEventAsync(userId, plantationId, model.PlantInfoId, DateTime.UtcNow);
+            await _metricsService.RecordPlantingEventAsync(userId, plantationId, model.PlantInfoId, DateTime.UtcNow, model.Quantity);
 
             return Ok(new { message = "Plant added to plantation successfully." });
         }
