@@ -237,7 +237,9 @@ namespace PlantsRPetsProjeto.Server.Controllers
 
             if (collection == null)
             {
-                return NotFound("Collection not found.");
+                collection = new Collection { UserId = userId, CollectionPets = new List<CollectionPets>() };
+                _context.Collection.Add(collection);
+                await _context.SaveChangesAsync();
             }
 
             var allPets = await _context.Pet.ToListAsync();
