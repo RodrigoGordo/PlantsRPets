@@ -151,7 +151,7 @@ namespace PlantsRPetsProjeto.Tests.xUnitTests.ServiceTests
             var service = new MetricsService(context);
             var timestamp = DateTime.UtcNow;
 
-            await service.RecordWateringEventAsync(_testUserId, _testPlantationId, _testPlantInfoId, timestamp);
+            await service.RecordWateringEventAsync(_testUserId, _testPlantationId, _testPlantInfoId, timestamp, 5);
 
             var metric = await context.Metric.FirstOrDefaultAsync(m =>
                 m.UserId == _testUserId &&
@@ -171,7 +171,7 @@ namespace PlantsRPetsProjeto.Tests.xUnitTests.ServiceTests
             var service = new MetricsService(context);
             var timestamp = DateTime.UtcNow;
 
-            await service.RecordHarvestEventAsync(_testUserId, _testPlantationId, _testPlantInfoId, timestamp);
+            await service.RecordHarvestEventAsync(_testUserId, _testPlantationId, _testPlantInfoId, timestamp, 5);
 
             var metric = await context.Metric.FirstOrDefaultAsync(m =>
                 m.UserId == _testUserId &&

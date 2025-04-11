@@ -33,7 +33,7 @@ namespace PlantsRPetsProjeto.Server.Services
         /// <param name="plantInfoId">ID da planta que foi regada.</param>
         /// <param name="timestamp">Data e hora em que o evento ocorreu.</param>
 
-        public async Task RecordWateringEventAsync(string userId, int plantationId, int plantInfoId, DateTime timestamp)
+        public async Task RecordWateringEventAsync(string userId, int plantationId, int plantInfoId, DateTime timestamp, int quantity)
         {
             var metric = new Metric
             {
@@ -41,7 +41,8 @@ namespace PlantsRPetsProjeto.Server.Services
                 PlantationId = plantationId,
                 PlantInfoId = plantInfoId,
                 EventType = "Watering",
-                Timestamp = timestamp
+                Timestamp = timestamp,
+                Quantity = quantity
             };
 
             _context.Metric.Add(metric);
@@ -56,7 +57,7 @@ namespace PlantsRPetsProjeto.Server.Services
         /// <param name="plantInfoId">ID da planta que foi colhida.</param>
         /// <param name="timestamp">Data e hora da colheita.</param>
 
-        public async Task RecordHarvestEventAsync(string userId, int plantationId, int plantInfoId, DateTime timestamp)
+        public async Task RecordHarvestEventAsync(string userId, int plantationId, int plantInfoId, DateTime timestamp, int quantity)
         {
             var metric = new Metric
             {
@@ -64,7 +65,8 @@ namespace PlantsRPetsProjeto.Server.Services
                 PlantationId = plantationId,
                 PlantInfoId = plantInfoId,
                 EventType = "Harvest",
-                Timestamp = timestamp
+                Timestamp = timestamp,
+                Quantity = quantity
             };
 
             _context.Metric.Add(metric);
@@ -82,19 +84,17 @@ namespace PlantsRPetsProjeto.Server.Services
         /// <param name="quantity">Número de unidades da planta adicionadas. Cada unidade será registada individualmente como evento.</param>
         public async Task RecordPlantingEventAsync(string userId, int plantationId, int plantInfoId, DateTime timestamp, int quantity)
         {
-            for(int i = 0; i < quantity; i++)
+            var metric = new Metric
             {
-                var metric = new Metric
-                {
-                    UserId = userId,
-                    PlantationId = plantationId,
-                    PlantInfoId = plantInfoId,
-                    EventType = "Planting",
-                    Timestamp = timestamp
-                };
-                _context.Metric.Add(metric);
-            }
+                UserId = userId,
+                PlantationId = plantationId,
+                PlantInfoId = plantInfoId,
+                EventType = "Planting",
+                Timestamp = timestamp,
+                Quantity = quantity
+            };
 
+            _context.Metric.Add(metric);
             await _context.SaveChangesAsync();
         }
 
@@ -110,19 +110,22 @@ namespace PlantsRPetsProjeto.Server.Services
 
             var metrics = await _context.Metric
                 .Where(m => m.UserId == userId && m.Timestamp >= startDate)
-                .GroupBy(m => m.EventType)
-                .Select(g => new { EventType = g.Key, Count = g.Count() })
                 .ToListAsync();
 
-            var result = new Dictionary<string, int>
-            {
-                ["Watering"] = metrics.FirstOrDefault(m => m.EventType == "Watering")?.Count ?? 0,
-                ["Harvest"] = metrics.FirstOrDefault(m => m.EventType == "Harvest")?.Count ?? 0,
-                ["Planting"] = metrics.FirstOrDefault(m => m.EventType == "Planting")?.Count ?? 0
-            };
+            var wateringCount = metrics.Count(m => m.EventType == "Watering");
+            var harvestCount = metrics.Count(m => m.EventType == "Harvest");
+            var plantingCount = metrics
+                .Where(m => m.EventType == "Planting")
+                .Sum(m => m.Quantity ?? 0);
 
-            return result;
+            return new Dictionary<string, int>
+            {
+                ["Watering"] = wateringCount,
+                ["Harvest"] = harvestCount,
+                ["Planting"] = plantingCount
+            };
         }
+
 
         /// <summary>
         /// Devolve a contagem de eventos de um determinado tipo agrupados por data, consoante o intervalo de tempo escolhido.
@@ -150,12 +153,20 @@ namespace PlantsRPetsProjeto.Server.Services
 
             var groupedMetrics = metrics
                 .GroupBy(m => m.Timestamp.ToString(groupingFormat))
-                .Select(g => new { Date = g.Key, Count = g.Count() })
+                .Select(g => new
+                {
+                    Date = g.Key,
+                    Count = eventType == "Planting"
+                        ? g.Sum(m => m.Quantity ?? 0)
+                        : g.Count()
+                })
                 .OrderBy(x => x.Date)
+                .Cast<object>()
                 .ToList();
 
-            return groupedMetrics.Cast<object>().ToList();
+            return groupedMetrics;
         }
+
 
         /// <summary>
         /// Calcula a distribuição de tipos de planta nas plantações do utilizador,
@@ -200,7 +211,7 @@ namespace PlantsRPetsProjeto.Server.Services
                 "week" => now.AddDays(-7),
                 "month" => now.AddMonths(-1),
                 "year" => now.AddYears(-1),
-                _ => now.AddDays(-7) // Default to week
+                _ => now.AddDays(-7)
             };
         }
     }
