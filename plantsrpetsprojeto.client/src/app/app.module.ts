@@ -28,7 +28,6 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { PlantationsComponent } from './plantations/plantations.component';
 import { CollectionComponent } from './collection/collection.component';
-import { CommunitiesComponent } from './communities/communities.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { SettingsComponent } from './settings/settings.component';
 import { HomeComponent } from './home/home.component';
@@ -81,7 +80,6 @@ import { LocationInputComponent } from './location-input/location-input.componen
     ConfirmDialogueComponent,
     PlantationsComponent,
     CollectionComponent,
-    CommunitiesComponent,
     DashboardComponent,
     SettingsComponent,
     HomeComponent,

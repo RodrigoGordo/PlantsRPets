@@ -23,11 +23,8 @@ namespace PlantsRPetsProjeto.Server.Data
         {
         }
 
-        public DbSet<PlantsRPetsProjeto.Server.Models.Chat> Chat { get; set; } = default!;
         public DbSet<PlantsRPetsProjeto.Server.Models.Collection> Collection { get; set; } = default!;
-        public DbSet<PlantsRPetsProjeto.Server.Models.Community> Community { get; set; } = default!;
         public DbSet<PlantsRPetsProjeto.Server.Models.Dashboard> Dashboard { get; set; } = default!;
-        public DbSet<PlantsRPetsProjeto.Server.Models.Message> Message { get; set; } = default!;
         public DbSet<PlantsRPetsProjeto.Server.Models.Metric> Metric { get; set; } = default!;
         public DbSet<PlantsRPetsProjeto.Server.Models.Notification> Notification { get; set; } = default!;
         public DbSet<PlantsRPetsProjeto.Server.Models.Pet> Pet { get; set; } = default!;

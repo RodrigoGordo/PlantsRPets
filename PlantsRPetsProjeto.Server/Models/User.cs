@@ -43,11 +43,6 @@ namespace PlantsRPetsProjeto.Server.Models
         public Dashboard? Dashboard { get; set; }
 
         /// <summary>
-        /// Comunidades às quais o utilizador pertence.
-        /// </summary>
-        public ICollection<Community> Communities { get; set; }
-
-        /// <summary>
         /// Notificações recebidas pelo utilizador.
         /// </summary>
         public ICollection<UserNotification> Notifications { get; set; }

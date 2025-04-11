@@ -54,34 +54,6 @@ namespace PlantsRPetsProjeto.Server.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Chat",
-                columns: table => new
-                {
-                    ChatId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    CommunityId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Chat", x => x.ChatId);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Community",
-                columns: table => new
-                {
-                    CommunityId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    OwnerId = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Community", x => x.CommunityId);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Location",
                 columns: table => new
                 {
@@ -378,52 +350,6 @@ namespace PlantsRPetsProjeto.Server.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Message",
-                columns: table => new
-                {
-                    MessageId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    SenderId = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Timestamp = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ChatId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Message", x => x.MessageId);
-                    table.ForeignKey(
-                        name: "FK_Message_Chat_ChatId",
-                        column: x => x.ChatId,
-                        principalTable: "Chat",
-                        principalColumn: "ChatId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "CommunityUser",
-                columns: table => new
-                {
-                    CommunitiesCommunityId = table.Column<int>(type: "int", nullable: false),
-                    MembersId = table.Column<string>(type: "nvarchar(450)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_CommunityUser", x => new { x.CommunitiesCommunityId, x.MembersId });
-                    table.ForeignKey(
-                        name: "FK_CommunityUser_AspNetUsers_MembersId",
-                        column: x => x.MembersId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_CommunityUser_Community_CommunitiesCommunityId",
-                        column: x => x.CommunitiesCommunityId,
-                        principalTable: "Community",
-                        principalColumn: "CommunityId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "UserNotifications",
                 columns: table => new
                 {
@@ -688,20 +614,10 @@ namespace PlantsRPetsProjeto.Server.Migrations
                 column: "PetId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CommunityUser_MembersId",
-                table: "CommunityUser",
-                column: "MembersId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Dashboard_UserId",
                 table: "Dashboard",
                 column: "UserId",
                 unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Message_ChatId",
-                table: "Message",
-                column: "ChatId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Metric_DashboardId",
@@ -787,12 +703,6 @@ namespace PlantsRPetsProjeto.Server.Migrations
                 name: "CollectionPets");
 
             migrationBuilder.DropTable(
-                name: "CommunityUser");
-
-            migrationBuilder.DropTable(
-                name: "Message");
-
-            migrationBuilder.DropTable(
                 name: "Metric");
 
             migrationBuilder.DropTable(
@@ -821,12 +731,6 @@ namespace PlantsRPetsProjeto.Server.Migrations
 
             migrationBuilder.DropTable(
                 name: "Pet");
-
-            migrationBuilder.DropTable(
-                name: "Community");
-
-            migrationBuilder.DropTable(
-                name: "Chat");
 
             migrationBuilder.DropTable(
                 name: "Dashboard");

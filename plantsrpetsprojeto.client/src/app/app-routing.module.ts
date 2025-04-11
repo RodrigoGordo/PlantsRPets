@@ -11,7 +11,6 @@ import { SigninComponent } from './signin/signin.component'
 import { RegisterComponent } from './register/register.component';
 import { PlantationsComponent } from './plantations/plantations.component';
 import { CollectionComponent } from './collection/collection.component';
-import { CommunitiesComponent } from './communities/communities.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { SettingsComponent } from './settings/settings.component';
 import { ProfileComponent } from './profile/profile.component';
@@ -40,7 +39,6 @@ const routes: Routes = [
   { path: 'plantations', component: PlantationsComponent },
   { path: 'collections', component: CollectionComponent },
   { path: 'plantation/:id', component: PlantationDetailsComponent },
-  { path: 'communities', component: CommunitiesComponent },
   { path: 'dashboard', component: DashboardComponent },
   { path: 'settings', component: SettingsComponent },
   { path: 'profile', component: ProfileComponent },

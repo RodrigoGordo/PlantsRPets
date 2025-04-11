@@ -12,7 +12,7 @@ using PlantsRPetsProjeto.Server.Data;
 namespace PlantsRPetsProjeto.Server.Migrations
 {
     [DbContext(typeof(PlantsRPetsProjetoServerContext))]
-    [Migration("20250408004248_Initial")]
+    [Migration("20250411214402_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -24,21 +24,6 @@ namespace PlantsRPetsProjeto.Server.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("CommunityUser", b =>
-                {
-                    b.Property<int>("CommunitiesCommunityId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("MembersId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("CommunitiesCommunityId", "MembersId");
-
-                    b.HasIndex("MembersId");
-
-                    b.ToTable("CommunityUser");
-                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
@@ -173,22 +158,6 @@ namespace PlantsRPetsProjeto.Server.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("PlantsRPetsProjeto.Server.Models.Chat", b =>
-                {
-                    b.Property<int>("ChatId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ChatId"));
-
-                    b.Property<int>("CommunityId")
-                        .HasColumnType("int");
-
-                    b.HasKey("ChatId");
-
-                    b.ToTable("Chat");
-                });
-
             modelBuilder.Entity("PlantsRPetsProjeto.Server.Models.Collection", b =>
                 {
                     b.Property<int>("CollectionId")
@@ -235,31 +204,6 @@ namespace PlantsRPetsProjeto.Server.Migrations
                     b.HasIndex("PetId");
 
                     b.ToTable("CollectionPets");
-                });
-
-            modelBuilder.Entity("PlantsRPetsProjeto.Server.Models.Community", b =>
-                {
-                    b.Property<int>("CommunityId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CommunityId"));
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("OwnerId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("CommunityId");
-
-                    b.ToTable("Community");
                 });
 
             modelBuilder.Entity("PlantsRPetsProjeto.Server.Models.Dashboard", b =>
@@ -311,35 +255,6 @@ namespace PlantsRPetsProjeto.Server.Migrations
                     b.HasKey("LocationId");
 
                     b.ToTable("Location");
-                });
-
-            modelBuilder.Entity("PlantsRPetsProjeto.Server.Models.Message", b =>
-                {
-                    b.Property<int>("MessageId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MessageId"));
-
-                    b.Property<int>("ChatId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Content")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("SenderId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("Timestamp")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("MessageId");
-
-                    b.HasIndex("ChatId");
-
-                    b.ToTable("Message");
                 });
 
             modelBuilder.Entity("PlantsRPetsProjeto.Server.Models.Metric", b =>
@@ -911,21 +826,6 @@ namespace PlantsRPetsProjeto.Server.Migrations
                     b.ToTable("UserNotifications");
                 });
 
-            modelBuilder.Entity("CommunityUser", b =>
-                {
-                    b.HasOne("PlantsRPetsProjeto.Server.Models.Community", null)
-                        .WithMany()
-                        .HasForeignKey("CommunitiesCommunityId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("PlantsRPetsProjeto.Server.Models.User", null)
-                        .WithMany()
-                        .HasForeignKey("MembersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -1012,15 +912,6 @@ namespace PlantsRPetsProjeto.Server.Migrations
                     b.HasOne("PlantsRPetsProjeto.Server.Models.User", null)
                         .WithOne("Dashboard")
                         .HasForeignKey("PlantsRPetsProjeto.Server.Models.Dashboard", "UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("PlantsRPetsProjeto.Server.Models.Message", b =>
-                {
-                    b.HasOne("PlantsRPetsProjeto.Server.Models.Chat", null)
-                        .WithMany("Messages")
-                        .HasForeignKey("ChatId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -1127,11 +1018,6 @@ namespace PlantsRPetsProjeto.Server.Migrations
                     b.Navigation("Notification");
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("PlantsRPetsProjeto.Server.Models.Chat", b =>
-                {
-                    b.Navigation("Messages");
                 });
 
             modelBuilder.Entity("PlantsRPetsProjeto.Server.Models.Collection", b =>
