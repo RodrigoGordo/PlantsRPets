@@ -1,5 +1,9 @@
 <div class="notification-container">
-  <i class="fa fa-bell notification-icon" (click)="toggleNotifications()"></i>
+  <i class="fa fa-bell notification-icon" (click)="toggleNotifications()">
+    <span *ngIf="unreadNotifications.length > 0" class="notification-badge">
+      {{ unreadNotifications.length }}
+    </span>
+  </i>
 
   <div class="notification-card" *ngIf="showNotifications">
     <div class="notification-title">
@@ -11,13 +15,23 @@
       <p class="no-notifications">No new notifications</p>
     </div>
 
-    <div *ngFor="let notification of notifications" class="notification-item">
+    <div *ngFor="let notification of notifications"
+         class="notification-item"
+         [ngClass]="notification.isRead ? 'read' : 'unread'">
+
       <div class="notification-content">
         <strong>{{ notification.notification.type }}</strong>
         <p>{{ notification.notification.message }}</p>
       </div>
-      <button (click)="markAsRead(notification)">✔</button>
-      <button (click)="deleteNotification(notification)">❌</button>
+
+      <div class="notification-actions">
+        <button *ngIf="!notification.isRead" (click)="markAsRead(notification)" title="Mark as read">
+          <i class="fa fa-check"></i>
+        </button>
+        <button (click)="deleteNotification(notification)" title="Delete">
+          <i class="fa fa-trash"></i>
+        </button>
+      </div>
     </div>
   </div>
 

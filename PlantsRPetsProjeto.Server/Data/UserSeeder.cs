@@ -38,7 +38,8 @@ namespace PlantsRPetsProjeto.Server.Data
                     UserName = "gega@gmail.com",
                     Email = "gega@gmail.com",
                     Nickname = "gega",
-                    RegistrationDate = DateTime.UtcNow
+                    RegistrationDate = DateTime.UtcNow,
+                    EmailConfirmed = true        
                 };
                 var result = await userManager.CreateAsync(user, "gegassaurorex#");
             }
