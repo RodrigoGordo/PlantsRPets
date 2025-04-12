@@ -444,7 +444,7 @@ namespace PlantsRPetsProjeto.Server.Controllers
             {
                 await _context.SaveChangesAsync();
 
-                await _metricsService.RecordWateringEventAsync(userId, plantationId, plantInfoId, DateTime.UtcNow);
+                await _metricsService.RecordWateringEventAsync(userId, plantationId, plantInfoId, DateTime.UtcNow, plantationPlant.Quantity);
 
                 return Ok(plantationPlant);
             }
@@ -507,7 +507,7 @@ namespace PlantsRPetsProjeto.Server.Controllers
                 plantationPlant.GrowthStatus = "Growing";
                 await _context.SaveChangesAsync();
 
-                await _metricsService.RecordHarvestEventAsync(userId, plantationId, plantInfoId, DateTime.UtcNow);
+                await _metricsService.RecordHarvestEventAsync(userId, plantationId, plantInfoId, DateTime.UtcNow, plantationPlant.Quantity);
 
                 return Ok(new
                 {

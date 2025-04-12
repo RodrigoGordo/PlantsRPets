@@ -35,5 +35,10 @@
         /// Momento em que o evento ocorreu.
         /// </summary>
         public DateTime Timestamp { get; set; }
+
+        /// <summary>
+        /// Quantidade de vezes que foi chamada a métrica
+        /// </summary>
+        public int? Quantity { get; set; } = 1;
     }
 }

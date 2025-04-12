@@ -275,6 +275,9 @@ namespace PlantsRPetsProjeto.Server.Migrations
                     b.Property<int>("PlantationId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("Quantity")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("Timestamp")
                         .HasColumnType("datetime2");
 
