@@ -22,6 +22,7 @@ export class LoginMenuComponent implements OnInit {
   isSignedIn: boolean = false;
   dropdownOpen: boolean = false;
   isLoading: boolean = false;
+  profilePicture: string = "";
 
   /**
    * Construtor do componente que injeta serviços para controlo de diálogos, autenticação e navegação.
@@ -43,6 +44,11 @@ export class LoginMenuComponent implements OnInit {
   ngOnInit(): void {
     this.authService.onStateChanged().subscribe((state: boolean) => {
       this.isSignedIn = state;
+      if (this.isSignedIn) {
+        this.loadProfilePicture();
+      } else {
+        this.profilePicture = "assets /default -profile.png";
+      }
     });
 
     this.authService.loginRequested$.subscribe(() => {
@@ -101,4 +107,19 @@ export class LoginMenuComponent implements OnInit {
   toggleDropdown(): void {
     this.dropdownOpen = !this.dropdownOpen;
   }
+
+  /**
+   * Carrega a imagem de perfil do utilizador autenticado.
+   */
+  loadProfilePicture(): void {
+    this.authService.getUserProfile().subscribe(
+      (data) => {
+        this.profilePicture = data.profile.profilePicture!;
+      },
+      (error) => {
+        console.error('Error loading profile picture', error);
+      }
+    );
+  }
+
 }
