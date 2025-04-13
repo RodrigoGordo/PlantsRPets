@@ -25,23 +25,17 @@
           <button class="harvest-button" (click)="harvestPlant()" [disabled]="!canHarvest">
             Harvest
           </button>
-          <button class="water-button" (click)="waterPlants()" [disabled]="!canWater()">
+          <button class="water-button" (click)="waterPlants()" [disabled]="!canWater">
             Water Plant
           </button>
         </div>
 
-        <div *ngIf="!canHarvest && harvestCooldownMsg" class="cooldown-message">
+        <div *ngIf="harvestCooldownMsg" class="cooldown-message">
           {{ harvestCooldownMsg }}
         </div>
-        <div *ngIf="canHarvest" class="cooldown-message">
-          ✅ Ready to harvest!
-        </div>
 
-        <div *ngIf="remainingCooldown" class="cooldown-message">
-          ⏳ Next watering available in {{ remainingCooldown }}
-        </div>
-        <div *ngIf="canWater() && plantationPlant?.lastWatered" class="cooldown-message">
-          ✅ Ready to water!
+        <div *ngIf="waterCooldownMsg" class="cooldown-message">
+          {{ waterCooldownMsg }}
         </div>
       </div>
 
@@ -91,5 +85,3 @@
     </div>
   </main>
 </body>
-
-

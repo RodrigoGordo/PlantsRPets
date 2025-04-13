@@ -565,6 +565,36 @@ namespace PlantsRPetsProjeto.Server.Controllers
         }
 
         /// <summary>
+        /// Verifica se uma planta pode ser regada com base no seu tipo e frequência de rega.
+        /// </summary>
+        /// <param name="plantationId">ID da plantação.</param>
+        /// <param name="plantInfoId">ID da planta a verificar.</param>
+        /// <returns>Estado da rega, tempo restante e data prevista para a próxima rega.</returns>
+        [HttpGet("{plantationId}/plant/{plantInfoId}/check-water")]
+        public async Task<IActionResult> CheckWater(int plantationId, int plantInfoId)
+        {
+            var plantationPlant = await _context.PlantationPlants
+                .Include(pp => pp.ReferencePlant)
+                .FirstOrDefaultAsync(pp => pp.PlantationId == plantationId && pp.PlantInfoId == plantInfoId);
+
+            if (plantationPlant == null)
+                return NotFound("Plant not found in plantation");
+
+            // Use the PlantingAdvisor to determine watering status
+            var (canWater, timeUntilNextWater) = PlantingAdvisor.CanWater(plantationPlant);
+            var nextWaterTime = plantationPlant.LastWatered?.AddHours(timeUntilNextWater.TotalHours) ?? DateTime.UtcNow;
+
+            return Ok(new
+            {
+                canWater,
+                timeRemainingHours = canWater ? 0 : Math.Ceiling(timeUntilNextWater.TotalHours),
+                timeRemainingMinutes = canWater ? 0 : Math.Ceiling(timeUntilNextWater.TotalMinutes),
+                nextWaterTime,
+            });
+        }
+
+
+        /// <summary>
         /// Utiliza uma melhoria (level-up) acumulada da plantação.
         /// Reduz o número de melhorias disponíveis e atualiza a plantação.
         /// </summary>

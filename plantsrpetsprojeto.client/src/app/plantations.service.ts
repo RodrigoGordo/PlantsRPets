@@ -168,7 +168,18 @@ export class PlantationsService {
       `${this.apiUrl}/${plantationId}/plant/${plantInfoId}/check-harvest`
     );
   }
-
+  /**
+ * Verifica se uma planta está pronta para ser regada e o tempo restante
+ * @param plantationId ID of the plantation
+ * @param plantInfoId ID of the plant
+ * @returns Observable com dados sobre a rega
+ *
+ */
+  checkWater(plantationId: number, plantInfoId: number): Observable<any> {
+    return this.http.get<any>(
+      `${this.apiUrl}/${plantationId}/plant/${plantInfoId}/check-water`
+    );
+  }
   /**
    * Colhe uma planta (se estiver pronta).
    * A ação pode desencadear uma nova data de colheita (caso seja recorrente).
@@ -181,5 +192,4 @@ export class PlantationsService {
       `${this.apiUrl}/${plantationId}/harvest-plant/${plantInfoId}`, {}
     );
   }
-
 }
