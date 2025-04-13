@@ -1,10 +1,10 @@
 <div class="notification-container">
-  <i class="fa fa-bell notification-icon" (click)="toggleNotifications()"></i>
+  <i class="fa fa-bell notification-icon" (click)="toggleNotifications()" matTooltip="Click to view your notifications"></i>
 
   <div class="notification-card" *ngIf="showNotifications">
     <div class="notification-title">
       <h3>Notifications</h3>
-      <i class="fa fa-cog settings-icon" (click)="toggleNotificationsSettings()"></i>
+      <i class="fa fa-cog settings-icon" (click)="toggleNotificationsSettings()" matTooltip="Manage your notification settings"></i>
     </div>
 
     <div *ngIf="notifications.length === 0">
@@ -16,8 +16,8 @@
         <strong>{{ notification.notification.type }}</strong>
         <p>{{ notification.notification.message }}</p>
       </div>
-      <button (click)="markAsRead(notification)">✔</button>
-      <button (click)="deleteNotification(notification)">❌</button>
+      <button (click)="markAsRead(notification)" matTooltip="Mark as read">✔</button>
+      <button (click)="deleteNotification(notification)" matTooltip="Delete this notification">❌</button>
     </div>
   </div>
 
@@ -29,7 +29,8 @@
         <button *ngFor="let option of frequencyOptions; let i = index"
                 (click)="setEmailFrequency(i)"
                 [class.active]="selectedFrequency === i"
-                class="frequency-btn">
+                class="frequency-btn"
+                matTooltip="Set email frequency to '{{ option }}'">
           {{ option }}
           <span *ngIf="selectedFrequency === i" class="selected-indicator">•</span>
         </button>

@@ -7,15 +7,15 @@
 
   <div *ngIf="error" class="error-message">
     <p>{{ error }}</p>
-    <button class="btn-back" (click)="goBack()">Back to Collection</button>
+    <button class="btn-back" (click)="goBack()" matTooltip="Return to your pet collection">Back to Collection</button>
   </div>
 
   <div *ngIf="pet" class="pet-detail">
     <div class="pet-header">
-      <button class="btn-back" (click)="goBack()">
+      <button class="btn-back" (click)="goBack()" matTooltip="Go back to your collection">
         <i class="fa fa-arrow-left"></i> Back
       </button>
-      <button class="btn-favorite" [ngClass]="{'is-favorite': pet.isFavorite}" (click)="toggleFavorite()">
+      <button class="btn-favorite" [ngClass]="{'is-favorite': pet.isFavorite}" (click)="toggleFavorite()" matTooltip="{{ pet.isFavorite ? 'Remove from favorites' : 'Add to favorites' }}">
         <i class="fa" [ngClass]="pet.isFavorite ? 'fa-star' : 'fa-star-o'"></i>
       </button>
     </div>

@@ -1,4 +1,4 @@
-<div class="card plantation-card">
+<div class="card plantation-card" matTooltip="Check your most recent plantations">
   <div class="card-header">
     <h3>
       <i class="icon-plant"></i>
@@ -9,7 +9,7 @@
   <div *ngIf="plantations.length; else noPlantations">
     <ul class="plantation-list">
       <li class="plantation-item" *ngFor="let plantationId of plantations">
-        <a class="plantation-link" [routerLink]="['/plantation', plantationId]">
+        <a class="plantation-link" [routerLink]="['/plantation', plantationId]" matTooltip="View this plantation’s progress">
           <span class="plantation-icon">🌱</span>
           Plantation {{ plantationId }}
         </a>
@@ -25,6 +25,6 @@
   </ng-template>
 
   <div class="card-footer">
-    <a routerLink="/plantations" class="view-all">View all plantations</a>
+    <a routerLink="/plantations" class="view-all" matTooltip="Go to your full plantation list">View all plantations</a>
   </div>
 </div>

@@ -1,4 +1,4 @@
-<div class="plantation-card" [class.editing]="isEditing" [routerLink]="!isEditing ? ['/plantation', plantation.plantationId] : null" (click) ="onPlantationSelected()">
+<div class="plantation-card" [class.editing]="isEditing" [routerLink]="!isEditing ? ['/plantation', plantation.plantationId] : null" (click) ="onPlantationSelected()" [matTooltip]="!isEditing ? 'Click to view full plantation details' : null">
   <div class="plantation-info">
     <div class="plantation-name">
       <h3 *ngIf="!isEditing" class="plantation-name">{{ plantation.plantationName }}</h3>
@@ -7,13 +7,14 @@
              [(ngModel)]="newPlantationName"
              type="text"
              class="edit-input"
-             (click)="$event.stopPropagation()" />
+             (click)="$event.stopPropagation()"
+             matTooltip="Edit plantation name"/>
     </div>
     <div class="location">
       <p *ngIf="!isEditing && this.plantation?.location">Location: {{ plantation.location.city}}, {{ plantation.location.region}}, {{ plantation.location.country}} </p>
       <p *ngIf="!isEditing && !this.plantation?.location">Location: Unknown</p>
       <p *ngIf="isEditing">Location: </p>
-      <div *ngIf="isEditing" class="location-search">
+      <div *ngIf="isEditing" class="location-search" matTooltip="Search and select a location">
         <app-location-input
                             (locationSelected)="onLocationSelected($event)">
         </app-location-input>
@@ -27,9 +28,9 @@
   </div>
 
   <div class="plantation-actions">
-    <button *ngIf="!isEditing" class="edit-btn" (click)="enableEdit(); $event.stopPropagation()">✏️</button>
-    <button *ngIf="isEditing" class="save-btn" (click)="saveEdit(); $event.stopPropagation()">✔️</button>
-    <button *ngIf="isEditing" class="cancel-btn" (click)="cancelEdit(); $event.stopPropagation()">❌</button>
-    <button *ngIf="!isEditing" class="delete-btn" (click)="remove(); $event.stopPropagation()">🗑️</button>
+    <button *ngIf="!isEditing" class="edit-btn" (click)="enableEdit(); $event.stopPropagation()" matTooltip="Edit this plantation">✏️</button>
+    <button *ngIf="isEditing" class="save-btn" (click)="saveEdit(); $event.stopPropagation()" matTooltip="Save changes">✔️</button>
+    <button *ngIf="isEditing" class="cancel-btn" (click)="cancelEdit(); $event.stopPropagation()" matTooltip="Cancel editing">❌</button>
+    <button *ngIf="!isEditing" class="delete-btn" (click)="remove(); $event.stopPropagation()" matTooltip="Delete this plantation">🗑️</button>
   </div>
 </div>
