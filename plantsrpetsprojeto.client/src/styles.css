@@ -7,9 +7,6 @@ html {
 }
 
 body {
-  display: flex;
-  flex-direction: column;
-  justify-content:center;
   background: linear-gradient( 135deg, #3E8914 0%, #3DA35D 35%, #96E072 70%, #E8FCCF 100% );
 }
 

@@ -59,6 +59,8 @@
       </li>
     </ul>
   </nav>
-  <app-login-menu></app-login-menu>
-  <app-notification-card *ngIf="isSignedIn"></app-notification-card>
+  <div class="user-bubble">
+    <app-login-menu></app-login-menu>
+    <app-notification-card *ngIf="isSignedIn"></app-notification-card>
+  </div>
 </header>
