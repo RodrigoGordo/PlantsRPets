@@ -1,10 +1,10 @@
-<nav class="login-menu">
-  <div *ngIf="!isSignedIn">
+<ul class="login-menu">
+  <li *ngIf="!isSignedIn">
     <button class="login-button" (click)="openSignInDialog()" matTooltip="Login in to your account">Sign in</button>
-  </div>
+  </li>
 
-  <div *ngIf="isSignedIn" class="profile-menu">
-    <img [src]="profilePicture"
+  <li *ngIf="isSignedIn" class="profile-menu">
+    <img src="assets/default-profile.png"
          alt="Profile"
          class="profile-icon"
          (click)="toggleDropdown()"
@@ -13,8 +13,8 @@
       <a routerLink="/profile" class="dropdown-item" matTooltip="View and edit your profile">👤 Profile</a>
       <a routerLink="/settings" class="dropdown-item" matTooltip="Adjust your account settings">⚙️ Settings</a>
       <hr />
-      <button class="logout-button" (click)="confirmLogout()" matTooltip="Log out from your account">🚪Logout</button>
+      <button class="logout-button" (click)="confirmLogout()" matTooltip="Log out from your account">Logout</button>
     </div>
-  </div>
-</nav>
+  </li>
+</ul>
 

@@ -157,14 +157,6 @@ namespace PlantsRPetsProjeto.Server.Controllers
                 return BadRequest("You don't own this pet");
             }
 
-            int favoriteCount = collection.CollectionPets.Count(cp => cp.IsFavorite);
-
-            // Limit amount of favorite pets to 5
-            if (!collectionPet.IsFavorite && favoriteCount >= 5)
-            {
-                return BadRequest("You can only have up to 5 favorite pets.");
-            }
-
             collectionPet.IsFavorite = !collectionPet.IsFavorite;
             await _context.SaveChangesAsync();
 

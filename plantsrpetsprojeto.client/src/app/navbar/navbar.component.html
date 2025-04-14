@@ -1,66 +1,63 @@
-<header>
-  <div class="logo">
-    <a *ngIf="!isSignedIn" routerLink="/" class="logo-link">
-      <img src="assets/logo.png" alt="Plants R Pets Logo" matTooltip="Click to return to the homepage" />
-    </a>
-    <a *ngIf="isSignedIn" routerLink="/home" class="logo-link">
+<nav class="menu">
+  <div class="logo"  *ngIf="!isSignedIn">
+    <a routerLink="/" class="logo-link">
       <img src="assets/logo.png" alt="Plants R Pets Logo" matTooltip="Click to return to the homepage" />
     </a>
   </div>
-
-  <nav>
-    <ul *ngIf="!isSignedIn">
-      <li>
-        <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" class="mock-button" matTooltip="Go to the homepage">
-          Home
-        </a>
-      </li>
-      <li>
-        <a routerLink="/features" routerLinkActive="active" class="mock-button" matTooltip="Explore the features of our app">
-          Features
-        </a>
-      </li>
-      <li>
-        <a routerLink="/about-us" routerLinkActive="active" class="mock-button" matTooltip="Learn more about us">
-          About Us
-        </a>
-      </li>
-      <li>
-        <a routerLink="/faq" routerLinkActive="active" class="mock-button" matTooltip="Find answers to common questions">
-          FAQ
-        </a>
-      </li>
-      <li>
-        <a routerLink="/contact-us" routerLinkActive="active" class="mock-button" matTooltip="Get in touch with us">
-          Contact Us
-        </a>
-      </li>
-    </ul>
-    <ul *ngIf="isSignedIn">
-      <li>
-        <a routerLink="/dashboard" routerLinkActive="active" class="mock-button" matTooltip="Check your dashboard for quick insights">
-          Dashboard
-        </a>
-      </li>
-      <li>
-        <a routerLink="/plantations" routerLinkActive="active" class="mock-button" matTooltip="Manage your plant collections here.">
-          Plantations
-        </a>
-      </li>
-      <li>
-        <a routerLink="/collections" routerLinkActive="active" class="mock-button" matTooltip="View and organize your collections">
-          Collections
-        </a>
-      </li>
-      <li>
-        <a routerLink="/wiki" routerLinkActive="active" class="mock-button" matTooltip="Check meaningful information about all plants available">
-          Plant Wiki
-        </a>
-      </li>
-    </ul>
-  </nav>
-  <div class="user-bubble">
-    <app-login-menu></app-login-menu>
-    <app-notification-card *ngIf="isSignedIn"></app-notification-card>
+  <div class="logo" *ngIf="isSignedIn">
+    <a routerLink="/home" class="logo-link">
+      <img src="assets/logo.png" alt="Plants R Pets Logo" matTooltip="Click to return to the homepage" />
+    </a>
   </div>
-</header>
+  <ul *ngIf="!isSignedIn">
+    <li>
+      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" class="mock-button" matTooltip="Go to the homepage">
+        Home
+      </a>
+    </li>
+    <li>
+      <a routerLink="/features" routerLinkActive="active" class="mock-button" matTooltip="Explore the features of our app">
+        Features
+      </a>
+    </li>
+    <li>
+      <a routerLink="/about-us" routerLinkActive="active" class="mock-button" matTooltip="Learn more about us">
+        About Us
+      </a>
+    </li>
+    <li>
+      <a routerLink="/faq" routerLinkActive="active" class="mock-button" matTooltip="Find answers to common questions">
+        FAQ
+      </a>
+    </li>
+    <li>
+      <a routerLink="/contact-us" routerLinkActive="active" class="mock-button" matTooltip="Get in touch with us">
+        Contact Us
+      </a>
+    </li>
+  </ul>
+  <ul *ngIf="isSignedIn">
+    <li>
+      <a routerLink="/dashboard" routerLinkActive="active" class="mock-button" matTooltip="Check your dashboard for quick insights">
+        Dashboard
+      </a>
+    </li>
+    <li>
+      <a routerLink="/plantations" routerLinkActive="active" class="mock-button" matTooltip="Manage your plant collections here.">
+        Plantations
+      </a>
+    </li>
+    <li>
+      <a routerLink="/collections" routerLinkActive="active" class="mock-button" matTooltip="View and organize your collections">
+        Collections
+      </a>
+    </li>
+    <li>
+      <a routerLink="/wiki" routerLinkActive="active" class="mock-button" matTooltip="Check meaningful information about all plants available">
+        Plant Wiki
+      </a>
+    </li>
+  </ul>
+  <app-notification-card *ngIf="isSignedIn"></app-notification-card>
+  <app-login-menu></app-login-menu>
+</nav>

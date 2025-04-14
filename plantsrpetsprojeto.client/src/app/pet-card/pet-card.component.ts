@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { Pet } from '../models/pet';
@@ -18,7 +18,6 @@ import { RecentActivityService } from '../recent-activity.service';
  */
 export class PetCardComponent {
   @Input() pet!: Pet;
-  @Output() favorited = new EventEmitter<void>();
 
   /**
    * Construtor do componente que injeta os serviços necessários.
@@ -50,8 +49,7 @@ export class PetCardComponent {
 
     this.http.put<{ isFavorite: boolean }>(`/api/collections/favorite/${this.pet.petId}`, {}).subscribe({
       next: (response) => {
-        this.pet.isFavorite = response.isFavorite;
-        this.favorited.emit();
+          this.pet.isFavorite = response.isFavorite;
       },
       error: (err) => {
         console.error('Error toggling favorite status:', err);

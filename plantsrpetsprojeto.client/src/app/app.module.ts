@@ -127,7 +127,7 @@ import { LocationInputComponent } from './location-input/location-input.componen
     MatInputModule,
     MatButtonModule,
     MatAutocompleteModule,
-    NgxChartsModule,
+    NgxChartsModule
   ],
   providers: [
     provideAnimationsAsync(),
