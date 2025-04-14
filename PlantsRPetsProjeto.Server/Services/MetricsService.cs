@@ -112,8 +112,12 @@ namespace PlantsRPetsProjeto.Server.Services
                 .Where(m => m.UserId == userId && m.Timestamp >= startDate)
                 .ToListAsync();
 
-            var wateringCount = metrics.Count(m => m.EventType == "Watering");
-            var harvestCount = metrics.Count(m => m.EventType == "Harvest");
+            var wateringCount = metrics
+                .Where(m => m.EventType == "Watering")
+                .Sum(m => m.Quantity ?? 0);
+            var harvestCount = metrics
+                .Where(m => m.EventType == "Harvest")
+                .Sum(m => m.Quantity ?? 0);
             var plantingCount = metrics
                 .Where(m => m.EventType == "Planting")
                 .Sum(m => m.Quantity ?? 0);
