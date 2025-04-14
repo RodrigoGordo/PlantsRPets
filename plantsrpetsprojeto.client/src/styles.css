@@ -1,27 +1,13 @@
-/* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
-
-.mat-mdc-dialog-surface {
-  background-color: #ffffff !important;
-  box-shadow: none !important;
-  border-radius: 16px !important;
+.mat-typography {
+  background: linear-gradient(0.25turn, #3E8914, #3DA35D, #96E072, #E8FCCF);
 }
 
-.mdc-dialog__surface {
-  padding: 0 !important;
-  margin: 0 !important;
-  overflow: visible !important;
+html * {
+  font-family: 'Inter', sans-serif;
 }
 
-/* Global stylesheet */
-app-root {
-  padding: 0 !important;
-}
-
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
