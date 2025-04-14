@@ -1,10 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
-body {
-  background: linear-gradient( 135deg, #3E8914 0%, #3DA35D 35%, #96E072 70%, #E8FCCF 100% );
+.mat-typography {
+  background: linear-gradient(0.25turn, #3E8914, #3DA35D, #96E072, #E8FCCF);
 }
 
 html * {
   font-family: 'Inter', sans-serif;
 }
 
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
