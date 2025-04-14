@@ -1,11 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
-html {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
 body {
   background: linear-gradient( 135deg, #3E8914 0%, #3DA35D 35%, #96E072 70%, #E8FCCF 100% );
 }
