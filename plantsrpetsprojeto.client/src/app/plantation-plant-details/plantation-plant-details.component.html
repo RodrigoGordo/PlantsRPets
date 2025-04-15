@@ -7,7 +7,7 @@
     </div>
 
     <!-- Back Arrow -->
-    <button class="back-button" (click)="goBack()">
+    <button class="back-button" (click)="goBack()" matTooltip="Go back to plantation details">
       <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
         <path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z" />
       </svg>
@@ -19,13 +19,13 @@
         <img [src]="plantationPlant.referencePlant.image" [alt]="plantationPlant.referencePlant.plantName" class="plant-image">
 
         <div class="button-container">
-          <button class="remove-button" (click)="openRemoveDialog()">
+          <button class="remove-button" (click)="openRemoveDialog()" matTooltip="Remove this plant from your plantation">
             Remove Plant
           </button>
-          <button class="harvest-button" (click)="harvestPlant()" [disabled]="!canHarvest">
+          <button class="harvest-button" (click)="harvestPlant()" [disabled]="!canHarvest" matTooltip="{{ canHarvest ? 'Harvest this plant now' : 'This plant is not ready to harvest yet' }}">
             Harvest
           </button>
-          <button class="water-button" (click)="waterPlants()" [disabled]="!canWater">
+          <button class="water-button" (click)="waterPlants()" [disabled]="!canWater()" matTooltip="{{ canWater() ? 'Water this plant now' : 'You must wait before watering again' }}">
             Water Plant
           </button>
         </div>
