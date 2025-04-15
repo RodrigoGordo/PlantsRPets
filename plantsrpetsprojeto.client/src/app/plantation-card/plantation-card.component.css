@@ -2,24 +2,26 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: #fff;
+  background-color: #43A046;
   border: 2px solid #000;
   border-radius: 10px;
-  padding: 2%;
-  margin: 1% 0;
-  width: 90%;
-  max-width: 90%;
   transition: transform 0.2s ease-in-out;
   cursor: pointer;
+  width: 700px;
+  height: 90%;
+  padding: 20px;
+  padding-top: 10px;
+  color: #263238;
 }
 
   .plantation-card:hover {
-    transform: scale(1.02);
+    transform: scale(1.003);
+    background-color: #388E3C;
   }
 
   .plantation-card.editing {
     cursor: default;
-    background-color: #f3f3f3;
+    background-color: #237D31;
   }
 
 .plantation-info {
@@ -27,12 +29,9 @@
   flex-direction: column;
   width: 100%;
   text-align: left;
-  gap: 10px
+  gap: 10px;
+  font-weight: bold;
 }
-
-  .plantation-info:hover {
-    color: black;
-  }
 
   .plantation-info h3 {
     margin: 3px 0;
@@ -119,6 +118,10 @@ button {
 
 .delete-btn:hover {
   background: #cc0000;
+}
+
+.interpolation {
+    color: #E8F5E9;
 }
 
 @media (max-width: 768px) {

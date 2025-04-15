@@ -1,10 +1,5 @@
-<body>
-  <app-navbar></app-navbar>
-
-  <main class="plant-details-container">
-    <div *ngIf="errorMessage" class="error-state">
-      ❌ {{ errorMessage }}
-    </div>
+<app-navbar></app-navbar>
+<main class="plant-details-container">
 
     <!-- Back Arrow -->
     <button class="back-button" (click)="goBack()">
@@ -17,7 +12,6 @@
       <!-- Left Column -->
       <div class="left-column">
         <img [src]="plant.image" [alt]="plant.plantName" class="plant-image">
-        <button class="suggest-edit-button">Suggest Edit</button>
       </div>
 
       <!-- Right Column -->
@@ -100,6 +94,5 @@
                     [tips]="tips"></app-tips-card>
     </div>
 
-  </main>
-</body>
+</main>
 

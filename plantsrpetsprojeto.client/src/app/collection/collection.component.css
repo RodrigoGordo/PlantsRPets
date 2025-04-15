@@ -1,15 +1,26 @@
 .collection-container {
   max-width: 1200px;
-  margin: 0 auto;
+  margin: 20px auto;
   padding: 30px 20px;
+  background-color: #43A046;
+  padding: 25px;
+  border-radius: 10px;
+  border: 3px solid #103E13;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  width: 1200px;
 }
 
 h1 {
   text-align: center;
   margin-bottom: 30px;
-  color: #2c3e50;
+  color: #E8F5E9;
   font-size: 36px;
   position: relative;
+}
+
+h3 {
+  color:#E8F5E9;
 }
 
 h1:after {

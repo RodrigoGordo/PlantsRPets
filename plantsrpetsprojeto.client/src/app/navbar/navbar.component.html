@@ -38,6 +38,11 @@
     </ul>
     <ul *ngIf="isSignedIn">
       <li>
+        <a routerLink="/home" routerLinkActive="active" class="mock-button" matTooltip="Go to the homepage">
+          Home
+        </a>
+      </li>
+      <li>
         <a routerLink="/dashboard" routerLinkActive="active" class="mock-button" matTooltip="Check your dashboard for quick insights">
           Dashboard
         </a>

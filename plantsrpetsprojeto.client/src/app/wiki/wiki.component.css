@@ -1,3 +1,22 @@
+main {
+  display: flex;
+  flex-direction: column;
+  background-color: #43A046;
+  width: 1200px;
+  margin: 0 auto;
+  padding: 25px;
+  border-radius: 10px;
+  border: 3px solid #103E13;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.intro-text {
+  width: 1200px;
+  margin: 0 auto;
+  color: #E8F5E9;
+}
+
 .search-container {
   padding: 2rem;
   border-bottom: 1px solid #eee;
@@ -44,9 +63,10 @@
 }
 
 .filter-toggle {
-  background-color: #2c541d;
-  color: white;
-  border: none;
+  background-color: #263238;
+  color: #E8F5E9;
+  font-weight: bold;
+  border: 3px solid #263238;
   padding: 10px 20px;
   border-radius: 25px;
   cursor: pointer;

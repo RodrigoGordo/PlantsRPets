@@ -17,6 +17,6 @@ export interface Plantation {
   experiencePoints: number;
   level: number;
   bankedLevelUps: number;
-  location?: Location;
+  location: Location;
   plantationPlants: PlantationPlant[];
 }

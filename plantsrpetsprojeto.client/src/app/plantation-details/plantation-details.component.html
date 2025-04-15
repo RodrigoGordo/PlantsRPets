@@ -1,29 +1,35 @@
-<body>
+<main>
   <app-navbar></app-navbar>
 
   <div class="plantation-container">
-    <h1 class="plantation-title">{{ plantation.plantationName }}</h1>
+    <h1 class="plantation-title">{{ plantation?.plantationName }}</h1>
 
-    <div class="plantation-details">
-      <p><strong>Plant Type:</strong> {{ plantation.plantTypeName }}</p>
-      <p><strong>Created On:</strong> {{ plantation.plantingDate | date }}</p>
-      <p><strong>Level:</strong> {{ plantation.level }}</p>
-      <div class="xp-container">
-        <strong>Experience Points:</strong>
-        <span class="xp-value">{{ plantation.experiencePoints }}/500</span>
-        <div class="xp-bar">
-          <div class="xp-fill" [style.width.%]="(plantation.experiencePoints / 500) * 100"></div>
+    <div class="details-weather">
+      <div class="plantation-details">
+        <p><strong>Plant Type:</strong> {{ plantation?.plantTypeName }}</p>
+        <p><strong>Created On:</strong> {{ plantation.plantingDate | date }}</p>
+        <p class="plantation-type"><strong>Number of Different Species: </strong>  {{  plantationPlants.length || 0 }}</p>
+        <p class="plantation-type"><strong>Total Number of Plants:</strong> {{ totalPlants || 0}}</p>
+        <p><strong>Level:</strong> {{ plantation.level }}</p>
+        <div class="xp-container">
+          <strong>Experience Points:</strong>
+          <div class="xp-bar">
+            <div class="xp-fill" [style.width.%]="(plantation.experiencePoints / 500) * 100"></div>
+          </div>
+          <span class="xp-value">{{ plantation.experiencePoints }}/500</span>
         </div>
+        <div class="pet-choice-container" *ngIf="plantation.bankedLevelUps > 0 && !isCollectionFull">
+          <button class="pet-choice-button" (click)="openRewardPopup()">
+            🐾 Choose a Pet
+          </button>
+          <span class="choices-remaining">{{ plantation.bankedLevelUps }} choices remaining</span>
+        </div>
+        <p *ngIf="isCollectionFull" class="celebration-message">
+          🎉🍀 <strong>You have already unlocked all pets, check back soon!</strong> 🎉🍀
+        </p>
       </div>
-      <div class="pet-choice-container" *ngIf="plantation.bankedLevelUps > 0 && !isCollectionFull">
-        <button class="pet-choice-button" (click)="openRewardPopup()">
-          🐾 Choose a Pet
-        </button>
-        <span class="choices-remaining">{{ plantation.bankedLevelUps }} choices remaining</span>
-      </div>
-      <p *ngIf="isCollectionFull" class="celebration-message">
-        🎉🍀 <strong>You have already unlocked all pets, check back soon!</strong> 🎉🍀
-      </p>
+      <app-weather [location]="plantation.location">
+      </app-weather>
     </div>
 
     <h2 class="plantation-subtitle">Plants in this Plantation</h2>
@@ -38,4 +44,4 @@
       <p class="no-plants">No plants added yet.</p>
     </ng-template>
   </div>
-</body>
+</main>
