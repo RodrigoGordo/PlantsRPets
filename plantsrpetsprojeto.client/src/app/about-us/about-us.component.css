@@ -93,3 +93,28 @@ footer {
   color: #95a5a6;
   margin-top: 50px;
 }
+
+@media screen and (max-width: 768px) {
+  .about-us-container {
+    margin: 20px 10px;
+    padding: 20px;
+  }
+
+  header h1 {
+    font-size: 2rem;
+    letter-spacing: 1px;
+  }
+
+  .about-description h2,
+  .about-values h2,
+  .about-team h2 {
+    font-size: 1.5rem;
+  }
+
+  .about-description p,
+  .about-values p,
+  .about-team p,
+  .about-values li {
+    font-size: 1rem;
+  }
+}

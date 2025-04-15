@@ -3,7 +3,7 @@ body {
   font-family: 'Arial', sans-serif;
   margin: 0;
   padding: 0;
-  background-color: #e9f7db; /* Light greenish background */
+  background-color: #e9f7db;
   color: #2c3e50;
   line-height: 1.6;
 }
@@ -11,7 +11,7 @@ body {
 /* Main Container para a Home */
 .home-container {
   max-width: 1100px;
-  margin: 50px auto; /* Consistente com as outras páginas */
+  margin: 50px auto;
   padding: 40px;
   background-color: #ffffff;
   border-radius: 12px;
@@ -59,4 +59,71 @@ footer {
 header {
   text-align: center;
   margin-bottom: 40px;
+}
+
+/* ========== Responsividade ========== */
+@media (max-width: 1024px) {
+  .home-container {
+    margin: 40px 20px;
+    padding: 30px;
+  }
+
+  .intro {
+    padding: 30px;
+  }
+
+    .intro h2 {
+      font-size: 2rem;
+    }
+
+    .intro p {
+      font-size: 1rem;
+    }
+}
+
+@media (max-width: 768px) {
+  .home-container {
+    margin: 30px 16px;
+    padding: 24px;
+  }
+
+  .intro {
+    padding: 24px;
+  }
+
+    .intro h2 {
+      font-size: 1.8rem;
+    }
+
+    .intro p {
+      font-size: 0.95rem;
+    }
+}
+
+@media (max-width: 480px) {
+  .home-container {
+    margin: 20px 12px;
+    padding: 20px;
+  }
+
+  .intro {
+    padding: 20px;
+  }
+
+    .intro h2 {
+      font-size: 1.6rem;
+    }
+
+    .intro p {
+      font-size: 0.9rem;
+    }
+
+  footer {
+    font-size: 0.8rem;
+    margin-top: 30px;
+  }
+
+  header {
+    margin-bottom: 30px;
+  }
 }

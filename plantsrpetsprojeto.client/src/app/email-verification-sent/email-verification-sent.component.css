@@ -47,3 +47,42 @@
   color: #555;
   margin-top: 12px;
 }
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .verification-card {
+    max-width: 90%;
+    padding: 1.5rem;
+  }
+
+  .logo {
+    height: 80px;
+  }
+
+  .subtext, .auth-subtext {
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .wrapper {
+    padding: 30px 16px;
+  }
+
+  .verification-wrapper {
+    height: auto;
+    padding-bottom: 40px;
+  }
+
+  .logo {
+    height: 70px;
+  }
+
+  .verification-card {
+    padding: 1rem;
+  }
+
+  .subtext {
+    font-size: 0.8rem;
+  }
+}

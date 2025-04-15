@@ -1,3 +1,4 @@
+/* Confirmation Dialog */
 .confirmation-dialog {
   padding: 25px 30px;
   background: #fff;
@@ -14,12 +15,14 @@
     color: #333;
   }
 
+/* Buttons Container */
 .buttons {
   display: flex;
   justify-content: space-around;
   gap: 15px;
 }
 
+/* Confirm Button */
 .confirm-button {
   background-color: #d9534f;
   color: white;
@@ -35,6 +38,7 @@
     background-color: #c9302c;
   }
 
+/* Cancel Button */
 .cancel-button {
   background-color: #6c757d;
   color: white;
@@ -49,3 +53,48 @@
   .cancel-button:hover {
     background-color: #5a6268;
   }
+
+/* Media Queries */
+@media (max-width: 768px) {
+  .confirmation-dialog {
+    padding: 20px 25px;
+    max-width: 350px;
+  }
+
+    .confirmation-dialog h3 {
+      font-size: 1.1rem;
+    }
+
+  .buttons {
+    gap: 10px;
+  }
+
+  .confirm-button,
+  .cancel-button {
+    padding: 8px 16px;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .confirmation-dialog {
+    padding: 15px 20px;
+    max-width: 300px;
+  }
+
+    .confirmation-dialog h3 {
+      font-size: 1rem;
+    }
+
+  .buttons {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .confirm-button,
+  .cancel-button {
+    width: 100%;
+    padding: 10px;
+    font-size: 15px;
+  }
+}

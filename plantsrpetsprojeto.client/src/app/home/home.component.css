@@ -47,3 +47,35 @@
     background-color: #cde08d;
   }
 
+@media (max-width: 768px) {
+  .section {
+    width: 100%;
+    padding: 0 16px;
+  }
+
+  .card {
+    width: 100%;
+    max-width: 350px;
+  }
+
+  .header {
+    font-size: 22px;
+  }
+}
+
+@media (max-width: 480px) {
+  .card {
+    padding: 12px;
+    width: 100%;
+    max-width: 300px;
+  }
+
+  .list {
+    font-size: 14px;
+    padding: 8px;
+  }
+
+  .header {
+    font-size: 20px;
+  }
+}

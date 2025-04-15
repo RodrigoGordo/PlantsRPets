@@ -1,4 +1,4 @@
-/* register.component.css */
+/* Main Wrapper */
 .auth-wrapper {
   min-height: 100vh;
   background-color: #f5faf6;
@@ -8,6 +8,7 @@
   box-sizing: border-box;
 }
 
+/* Logo Container */
 .logo-container {
   text-align: center;
   margin-bottom: 40px;
@@ -20,6 +21,7 @@
   margin: 0 auto;
 }
 
+/* Auth Content */
 .auth-content {
   flex: 1;
   display: flex;
@@ -30,6 +32,7 @@
   margin: 0 auto;
 }
 
+/* Auth Card */
 .auth-card {
   background: white;
   padding: 40px;
@@ -46,6 +49,7 @@
   font-weight: 600;
 }
 
+/* Form Group */
 .form-group {
   margin-bottom: 20px;
 }
@@ -67,6 +71,7 @@
   box-sizing: border-box;
 }
 
+/* Auth Button */
 .auth-button {
   width: 100%;
   padding: 14px;
@@ -98,11 +103,13 @@
     text-decoration: underline;
   }
 
+/* Body Styling */
 body {
   margin: 0;
   overflow: hidden;
 }
 
+/* Error Message */
 .error-message {
   color: #e53e3e;
   font-size: 0.875rem;
@@ -117,12 +124,14 @@ body {
   box-shadow: 0 0 0 1px #e53e3e;
 }
 
+/* Disabled Button */
 .auth-button:disabled {
   opacity: 0.7;
   cursor: not-allowed;
   background-color: #cbd5e0;
 }
 
+/* Register Error Message */
 .register-error-message {
   color: #ff4444;
   font-size: 14px;
@@ -133,6 +142,7 @@ body {
   margin-top: 12px;
 }
 
+/* Success Message */
 .success-message {
   color: green;
   font-size: 14px;
@@ -141,4 +151,80 @@ body {
   background-color: lightgreen;
   border-radius: 8px;
   margin-top: 12px;
+}
+
+/* Media Queries */
+@media (max-width: 768px) {
+  .auth-wrapper {
+    padding: 30px 20px;
+  }
+
+  .logo {
+    height: 80px;
+  }
+
+  .auth-title {
+    font-size: 22px;
+    margin: -10px 0 20px 0;
+  }
+
+  .auth-card {
+    padding: 30px;
+  }
+
+  .form-input {
+    font-size: 14px;
+  }
+
+  .auth-button {
+    font-size: 14px;
+    padding: 12px;
+  }
+
+  .auth-footer {
+    margin-top: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .auth-wrapper {
+    padding: 20px 15px;
+  }
+
+  .logo {
+    height: 60px;
+  }
+
+  .auth-title {
+    font-size: 20px;
+    margin: -10px 0 15px 0;
+  }
+
+  .auth-card {
+    padding: 20px;
+  }
+
+  .form-input {
+    font-size: 13px;
+    padding: 10px 12px;
+  }
+
+  .auth-button {
+    font-size: 13px;
+    padding: 12px;
+  }
+
+  .auth-footer {
+    font-size: 13px;
+  }
+
+  .register-error-message,
+  .success-message {
+    font-size: 13px;
+    padding: 10px;
+  }
+
+  .error-message {
+    font-size: 0.75rem;
+  }
 }

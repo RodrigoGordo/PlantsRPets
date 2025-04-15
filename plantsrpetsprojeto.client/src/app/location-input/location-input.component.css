@@ -1,3 +1,4 @@
+/* Search Results */
 .search-results {
   position: absolute;
   background: #ffffff;
@@ -30,10 +31,43 @@
     background-color: #e9ecef;
   }
 
+/* Edit Input */
 .edit-input {
   font-size: 1.2rem;
   padding: 2%;
   border: 1px solid #ccc;
   border-radius: 5px;
   width: 95%;
+}
+
+/* Add Responsiveness */
+@media (max-width: 768px) {
+  .search-results {
+    width: 100%;
+    max-width: 100%;
+    margin-left: 0;
+  }
+
+  .search-result-item {
+    font-size: 13px;
+  }
+
+  .edit-input {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .search-results {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .search-result-item {
+    font-size: 12px;
+  }
+
+  .edit-input {
+    font-size: 0.95rem;
+  }
 }
