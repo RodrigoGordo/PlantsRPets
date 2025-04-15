@@ -42,19 +42,20 @@ namespace PlantsRPetsProjeto.Server.Services
         /// <returns>URL da imagem gerada, ou string vazia se for inválida ou ocorrer erro.</returns>
         public async Task<string> GeneratePetImageAsync(string emoji1, string emoji2, int size = 256)
         {
-            string url = $"https://emojik.vercel.app/s/{emoji1}_{emoji2}?size={size}";
+            var (e1, e2) = emoji1.CompareTo(emoji2) < 0 ? (emoji1, emoji2) : (emoji2, emoji1);
+            string url = $"https://emojik.vercel.app/s/{e1}_{e2}?size={size}";
 
-            using Image<Rgba32> onlineImage = await DownloadImage(url);
-            using Image<Rgba32> localImage = Image.Load<Rgba32>(localImagePath);
-
-            if (CompareImages(onlineImage, localImage))
-            {
-                Console.WriteLine("⚠️ Image not found, defaulting to empty.");
-                url = "";
-            }
-           
             try
             {
+                using Image<Rgba32> onlineImage = await DownloadImage(url);
+                using Image<Rgba32> localImage = Image.Load<Rgba32>(localImagePath);
+
+                if (CompareImages(onlineImage, localImage))
+                {
+                    Console.WriteLine("⚠️ Image not found, defaulting to empty.");
+                    return "";
+                }
+
                 var response = await _httpClient.GetAsync(url);
                 response.EnsureSuccessStatusCode();
                 return url;
@@ -65,6 +66,7 @@ namespace PlantsRPetsProjeto.Server.Services
                 return "";
             }
         }
+
 
         /// <summary>
         /// Descarrega uma imagem a partir de um URL e carrega-a na memória.

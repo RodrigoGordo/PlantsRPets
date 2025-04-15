@@ -23,7 +23,8 @@ namespace PlantsRPetsProjeto.Server.Data
                     UserName = "plantsrpets@outlook.com",
                     Email = "plantsrpets@outlook.com",
                     Nickname = "prpadmin",
-                    RegistrationDate = DateTime.UtcNow
+                    RegistrationDate = DateTime.UtcNow,
+                    EmailConfirmed = true
                 };
 
                 await userManager.CreateAsync(user, "PrP#2025");

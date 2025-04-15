@@ -15,9 +15,8 @@ namespace PlantsRPetsProjeto.Server.Services
         private readonly EmojiKitchenService _emojiKitchenService;
         private readonly Random _random = new Random();
 
-        /// <summary>
-        /// Lista de emojis relacionados com plantas, frutas e vegetais que serão usados na composição do mascote.
-        /// </summary>
+        private readonly HashSet<string> _usedCombinations = new();
+
         private readonly List<string> _vegetableFruitPlantEmojis = new List<string>
         {
             "🍄", "🌻", "🌺", "🌼", "🥦", "🥕",
@@ -25,9 +24,6 @@ namespace PlantsRPetsProjeto.Server.Services
             "🍍", "🍏", "🍒", "🍓", "🥝", "🥥"
         };
 
-        /// <summary>
-        /// Lista de emojis de expressões faciais e animais utilizados na composição do mascote.
-        /// </summary>
         private readonly List<string> _funnyFaceAnimalEmojis = new List<string>
         {
             "😀", "😃", "😄", "😁", "😆", "😅", "😂", "🤣", "😊", "😇",
@@ -37,53 +33,60 @@ namespace PlantsRPetsProjeto.Server.Services
             "🦁", "🐮", "🐷", "🐸", "🐔", "🐧", "🦄", "💎", "☢️"
         };
 
-        /// <summary>
-        /// Construtor do serviço de geração de mascotes.
-        /// </summary>
-        /// <param name="emojiKitchenService">Serviço utilizado para gerar a imagem visual do mascote com base em dois emojis.</param>
         public PetGeneratorService(EmojiKitchenService emojiKitchenService)
         {
             _emojiKitchenService = emojiKitchenService;
         }
 
         /// <summary>
-        /// Gera um novo mascote aleatório, combinando dois emojis e criando a imagem correspondente.
+        /// Gera um novo mascote aleatório, tentando evitar duplicados e combinações inválidas.
         /// </summary>
-        /// <returns>Objeto <see cref="Pet"/> contendo os dados do mascote ou null se a imagem não puder ser gerada.</returns>
+        /// <returns>Objeto <see cref="Pet"/> ou null se falhar após várias tentativas.</returns>
         public async Task<Pet?> GeneratePetAsync()
         {
-            var vegetableFruitPlant = _vegetableFruitPlantEmojis[_random.Next(_vegetableFruitPlantEmojis.Count)];
-            var funnyFaceAnimal = _funnyFaceAnimalEmojis[_random.Next(_funnyFaceAnimalEmojis.Count)];
+            const int maxAttempts = 20;
 
-            // Generate the pet image URL
-            string imageUrl;
-           
-            imageUrl = await _emojiKitchenService.GeneratePetImageAsync(vegetableFruitPlant, funnyFaceAnimal);
-
-            if (imageUrl == "")
+            for (int attempt = 0; attempt < maxAttempts; attempt++)
             {
-                return null;
+                var emoji1 = _vegetableFruitPlantEmojis[_random.Next(_vegetableFruitPlantEmojis.Count)];
+                var emoji2 = _funnyFaceAnimalEmojis[_random.Next(_funnyFaceAnimalEmojis.Count)];
+
+                var (e1, e2) = emoji1.CompareTo(emoji2) < 0 ? (emoji1, emoji2) : (emoji2, emoji1);
+                string key = $"{e1}_{e2}";
+
+                if (_usedCombinations.Contains(key))
+                    continue;
+
+                string imageUrl = await _emojiKitchenService.GeneratePetImageAsync(e1, e2);
+
+                if (string.IsNullOrEmpty(imageUrl))
+                    continue;
+
+                _usedCombinations.Add(key);
+
+                string name = $"{e1}{e2} Pet";
+                string type = "Plant/Fruit/Vegetable + Animal/Face";
+                string details = $"A unique pet made from {e1} and {e2}.";
+                string battleStats = GenerateBattleStats();
+
+                return new Pet
+                {
+                    Name = name,
+                    Type = type,
+                    Details = details,
+                    BattleStats = battleStats,
+                    ImageUrl = imageUrl
+                };
             }
 
-            string name = $"{vegetableFruitPlant}{funnyFaceAnimal} Pet";
-            string type = "Plant/Fruit/Vegetable + Animal/Face";
-            string details = $"A unique pet made from {vegetableFruitPlant} and {funnyFaceAnimal}.";
-            string battleStats = GenerateBattleStats();
-
-            return new Pet
-            {
-                Name = name,
-                Type = type,
-                Details = details,
-                BattleStats = battleStats,
-                ImageUrl = imageUrl
-            };
+            Console.WriteLine("⚠️ Could not generate a valid unique pet after multiple attempts.");
+            return null;
         }
 
         /// <summary>
-        /// Gera atributos aleatórios de combate para o mascote (vida, ataque, defesa e velocidade).
+        /// Gera atributos aleatórios de combate para o mascote.
         /// </summary>
-        /// <returns>String formatada com os valores gerados.</returns>
+        /// <returns>String formatada com os valores de combate.</returns>
         private string GenerateBattleStats()
         {
             int health = _random.Next(50, 100);
@@ -93,6 +96,5 @@ namespace PlantsRPetsProjeto.Server.Services
 
             return $"Health: {health}, Attack: {attack}, Defense: {defense}, Speed: {speed}";
         }
-
     }
 }
