@@ -8,7 +8,7 @@
       <div class="plantation-details">
         <p><strong>Plant Type:</strong> {{ plantation?.plantTypeName }}</p>
         <p><strong>Created On:</strong> {{ plantation.plantingDate | date }}</p>
-        <p class="plantation-type"><strong>Number of Different Species: </strong>  {{  plantationPlants?.length || 0 }}</p>
+        <p class="plantation-type"><strong>Number of Different Species: </strong>  {{  plantationPlants.length || 0 }}</p>
         <p class="plantation-type"><strong>Total Number of Plants:</strong> {{ totalPlants || 0}}</p>
         <p><strong>Level:</strong> {{ plantation.level }}</p>
         <div class="xp-container">
