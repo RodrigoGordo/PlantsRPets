@@ -97,6 +97,18 @@
   color: #555;
   line-height: 1.6;
   max-width: 37.5rem;
+  white-space: normal;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+  .bio p {
+    margin: 0 auto;
+    width: 100%;
+  }
+
+textarea.edit-input {
+  white-space: pre-wrap;
+  word-break: break-word;
 }
 
 .edit-input {
@@ -111,6 +123,13 @@
 textarea.edit-input {
   height: 6rem;
   resize: vertical;
+}
+
+.bio-length-info {
+  font-size: 0.875rem;
+  color: #777;
+  text-align: right;
+  margin-top: 0.5rem;
 }
 
 .section {

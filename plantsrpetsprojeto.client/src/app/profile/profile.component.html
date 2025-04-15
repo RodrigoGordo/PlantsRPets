@@ -29,7 +29,10 @@
           {{ userProfile.profile.bio || 'No bio available.' }}
         </p>
         <ng-template #editBio>
-          <textarea [(ngModel)]="userProfile.profile.bio" class="edit-input" placeholder="Enter your bio"></textarea>
+          <textarea [(ngModel)]="userProfile.profile.bio" class="edit-input" placeholder="Enter your bio" maxlength="100"></textarea>
+          <div class="bio-length-info">
+            <span>{{ (userProfile.profile.bio.length || 0) }}/100</span> characters
+          </div>
         </ng-template>
       </div>
     </div>
@@ -41,7 +44,6 @@
                       [pet]="pet">
         </app-pet-card>
       </div>
-      
     </div>
 
     <div class="section">
@@ -53,7 +55,6 @@
                              (deleted)="loadHighlightedPlantations()">
         </app-plantation-card>
       </div>
-      
     </div>
   </div>
 </main>

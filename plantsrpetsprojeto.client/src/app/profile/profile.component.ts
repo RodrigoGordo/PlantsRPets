@@ -8,10 +8,10 @@ import { Plantation } from '../models/plantation.model';
 import { PlantationsService } from '../plantations.service';
 
 @Component({
-    standalone: false,
-    selector: 'app-profile',
-    templateUrl: './profile.component.html',
-    styleUrls: ['./profile.component.css']
+  standalone: false,
+  selector: 'app-profile',
+  templateUrl: './profile.component.html',
+  styleUrls: ['./profile.component.css']
 })
 
 /**
@@ -24,12 +24,12 @@ export class ProfileComponent implements OnInit {
   userProfile: UserProfile = {
     nickname: '',
     profile: {
-        bio: '',
-        profilePicture: null,
-        favoritePets: [],
-        highlightedPlantations: [],
-        profileId: 0,
-        userId: ''
+      bio: '',
+      profilePicture: null,
+      favoritePets: [],
+      highlightedPlantations: [],
+      profileId: 0,
+      userId: ''
     }
   };
   favoritePets: Pet[] = [];
@@ -63,12 +63,12 @@ export class ProfileComponent implements OnInit {
   loadProfile(): void {
     this.authService.getUserProfile().subscribe(
       (data) => {
-          this.userProfile = data;
-          console.log("Profile data:", this.userProfile);
-          console.log("Profile picture URL:", this.userProfile.profile.profilePicture);
+        this.userProfile = data;
+        console.log("Profile data:", this.userProfile);
+        console.log("Profile picture URL:", this.userProfile.profile.profilePicture);
       },
       (error) => {
-          console.error('Error loading profile', error);
+        console.error('Error loading profile', error);
       }
     );
   }
@@ -92,7 +92,8 @@ export class ProfileComponent implements OnInit {
     const fileInput = document.getElementById('file-upload') as HTMLInputElement;
     const file = fileInput.files?.[0] || null;
 
-    this.userProfile.profile.bio = this.userProfile.profile.bio || '';
+    // Ensure bio is limited to 100 characters
+    this.userProfile.profile.bio = this.userProfile.profile.bio?.slice(0, 100) || '';
 
     this.authService.updateProfile(this.userProfile, file).subscribe(
       (response) => {
@@ -109,7 +110,7 @@ export class ProfileComponent implements OnInit {
    * Aciona o clique no input de upload de imagem de perfil.
    */
   triggerFileUpload(): void {
-     document.getElementById('file-upload')?.click();
+    document.getElementById('file-upload')?.click();
   }
 
   /**
@@ -130,7 +131,7 @@ export class ProfileComponent implements OnInit {
 
       const maxSize = 10 * 1024 * 1024;
       if (file.size > maxSize) {
-        alert('O ficheiro é muito grande. O tamanho máximo permitido é 10 MB.');
+        alert('O ficheiro deve ter no máximo 10MB.');
         input.value = '';
         return;
       }
@@ -144,46 +145,30 @@ export class ProfileComponent implements OnInit {
   }
 
   /**
-   * Carrega os pets favoritos do utilizador da coleção, ordenados por nome e se são owned.
-   * Limita a 5 entradas.
+   * Carrega os pets favoritos do utilizador a partir do serviço de coleção.
    */
   loadFavoritePets(): void {
-    this.loading = true;
-    this.http.get<Pet[]>('/api/collections').subscribe({
-      next: (data) => {
-        this.favoritePets = data
-        .filter(pet => pet.isFavorite)
-        .sort((a, b) => {
-          if (b.isOwned !== a.isOwned) {
-            return Number(b.isOwned) - Number(a.isOwned);
-          }
-          return a.name.localeCompare(b.name);
-        })
-        .slice(0, 5);
-
-        this.loading = false;
+    this.collectionService.getFavoritePetsInCollection().subscribe(
+      (pets) => {
+        this.favoritePets = pets;
       },
-      error: (err) => {
-        this.error = 'Failed to load your collection. Please try again later.';
-        this.loading = false;
-        console.error('Error loading collection:', err);
+      (error) => {
+        console.error('Error loading favorite pets', error);
       }
-    });
+    );
   }
 
   /**
-   * Carrega as plantações em destaque do utilizador, ordenadas por nível descendente.
-   * Mostra no máximo 3 plantações.
+   * Carrega as plantações em destaque do utilizador a partir do serviço de plantações.
    */
-  loadHighlightedPlantations() {
+  loadHighlightedPlantations(): void {
     this.plantationsService.getUserPlantations().subscribe(
-      (data: Plantation[]) => {
-        console.log(data);
-        this.highlightedPlantations = data
-          .sort((a, b) => b.level - a.level) 
-          .slice(0, 3);
+      (plantations) => {
+        this.highlightedPlantations = plantations;
       },
-      (error: any) => console.error('Error fetching plantations:', error)
+      (error) => {
+        console.error('Error loading highlighted plantations', error);
+      }
     );
   }
 }
