@@ -8,10 +8,10 @@ import { Plantation } from '../models/plantation.model';
 import { PlantationsService } from '../plantations.service';
 
 @Component({
-    standalone: false,
-    selector: 'app-profile',
-    templateUrl: './profile.component.html',
-    styleUrls: ['./profile.component.css']
+  standalone: false,
+  selector: 'app-profile',
+  templateUrl: './profile.component.html',
+  styleUrls: ['./profile.component.css']
 })
 
 /**
@@ -24,19 +24,20 @@ export class ProfileComponent implements OnInit {
   userProfile: UserProfile = {
     nickname: '',
     profile: {
-        bio: '',
-        profilePicture: null,
-        favoritePets: [],
-        highlightedPlantations: [],
-        profileId: 0,
-        userId: ''
+      bio: '',
+      profilePicture: null,
+      favoritePets: [],
+      highlightedPlantations: [],
+      profileId: 0,
+      userId: ''
     }
   };
+
   favoritePets: Pet[] = [];
   highlightedPlantations: Plantation[] = []
   loading: boolean = true;
   error: string | null = null;
-
+  savingProfile: boolean = false;
 
   /**
    * Construtor do componente, injeta os serviços necessários para carregar dados e gerir o perfil.
@@ -52,6 +53,18 @@ export class ProfileComponent implements OnInit {
    * Carrega o perfil, pets favoritos e plantações em destaque ao inicializar o componente.
    */
   ngOnInit(): void {
+    this.userProfile = {
+      nickname: '',
+      profile: {
+        bio: '',
+        profilePicture: null,
+        favoritePets: [],
+        highlightedPlantations: [],
+        profileId: 0,
+        userId: ''
+      }
+    };
+
     this.loadProfile();
     this.loadFavoritePets();
     this.loadHighlightedPlantations();
@@ -61,14 +74,19 @@ export class ProfileComponent implements OnInit {
    * Carrega os dados de perfil do utilizador autenticado a partir do serviço de autenticação.
    */
   loadProfile(): void {
+    this.loading = true;
     this.authService.getUserProfile().subscribe(
       (data) => {
+        if (data && data.profile) {
           this.userProfile = data;
           console.log("Profile data:", this.userProfile);
           console.log("Profile picture URL:", this.userProfile.profile.profilePicture);
+        }
+        this.loading = false;
       },
       (error) => {
-          console.error('Error loading profile', error);
+        console.error('Error loading profile', error);
+        this.loading = false;
       }
     );
   }
@@ -78,10 +96,10 @@ export class ProfileComponent implements OnInit {
    * Se for desligado o modo de edição, tenta guardar as alterações feitas.
    */
   toggleEdit(): void {
-    this.isEditing = !this.isEditing;
-    if (!this.isEditing) {
+    if (this.isEditing && !this.savingProfile) {
       this.saveProfile();
     }
+    this.isEditing = !this.isEditing;
   }
 
   /**
@@ -89,27 +107,38 @@ export class ProfileComponent implements OnInit {
    * Inclui a biografia e uma nova imagem de perfil (caso selecionada).
    */
   saveProfile(): void {
+    this.savingProfile = true;
     const fileInput = document.getElementById('file-upload') as HTMLInputElement;
-    const file = fileInput.files?.[0] || null;
+    const file = fileInput?.files?.[0] || null;
 
-    this.userProfile.profile.bio = this.userProfile.profile.bio || '';
-
-    this.authService.updateProfile(this.userProfile, file).subscribe(
-      (response) => {
-        console.log('Profile updated successfully', response);
-        this.userProfile = response;
-      },
-      (error) => {
-        console.error('Error updating profile', error);
+    const updatedProfile = {
+      ...this.userProfile,
+      profile: {
+        ...this.userProfile.profile,
+        bio: this.userProfile.profile?.bio || ''
       }
-    );
+    };
+
+    this.authService.updateProfile(updatedProfile, file).subscribe({
+      next: (response) => {
+        console.log('Profile updated successfully', response);
+        if (response && response.profile) {
+          this.userProfile = response;
+        }
+        this.savingProfile = false;
+      },
+      error: (error) => {
+        console.error('Error updating profile', error);
+        this.savingProfile = false;
+      }
+    });
   }
 
   /**
    * Aciona o clique no input de upload de imagem de perfil.
    */
   triggerFileUpload(): void {
-     document.getElementById('file-upload')?.click();
+    document.getElementById('file-upload')?.click();
   }
 
   /**
@@ -137,7 +166,9 @@ export class ProfileComponent implements OnInit {
 
       const reader = new FileReader();
       reader.onload = (e: any) => {
-        this.userProfile.profile.profilePicture = e.target.result;
+        if (this.userProfile && this.userProfile.profile) {
+          this.userProfile.profile.profilePicture = e.target.result;
+        }
       };
       reader.readAsDataURL(file);
     }
@@ -152,14 +183,14 @@ export class ProfileComponent implements OnInit {
     this.http.get<Pet[]>('/api/collections').subscribe({
       next: (data) => {
         this.favoritePets = data
-        .filter(pet => pet.isFavorite)
-        .sort((a, b) => {
-          if (b.isOwned !== a.isOwned) {
-            return Number(b.isOwned) - Number(a.isOwned);
-          }
-          return a.name.localeCompare(b.name);
-        })
-        .slice(0, 5);
+          .filter(pet => pet.isFavorite)
+          .sort((a, b) => {
+            if (b.isOwned !== a.isOwned) {
+              return Number(b.isOwned) - Number(a.isOwned);
+            }
+            return a.name.localeCompare(b.name);
+          })
+          .slice(0, 5);
 
         this.loading = false;
       },
@@ -176,14 +207,14 @@ export class ProfileComponent implements OnInit {
    * Mostra no máximo 3 plantações.
    */
   loadHighlightedPlantations() {
-    this.plantationsService.getUserPlantations().subscribe(
-      (data: Plantation[]) => {
+    this.plantationsService.getUserPlantations().subscribe({
+      next: (data: Plantation[]) => {
         console.log(data);
         this.highlightedPlantations = data
-          .sort((a, b) => b.level - a.level) 
+          .sort((a, b) => b.level - a.level)
           .slice(0, 3);
       },
-      (error: any) => console.error('Error fetching plantations:', error)
-    );
+      error: (error: any) => console.error('Error fetching plantations:', error)
+    });
   }
 }
