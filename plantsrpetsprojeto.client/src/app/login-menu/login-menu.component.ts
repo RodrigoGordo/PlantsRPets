@@ -47,7 +47,7 @@ export class LoginMenuComponent implements OnInit {
       if (this.isSignedIn) {
         this.loadProfilePicture();
       } else {
-        this.profilePicture = "assets /default -profile.png";
+        this.profilePicture = "assets/logo.png";
       }
     });
 

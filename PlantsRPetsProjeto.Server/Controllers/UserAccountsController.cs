@@ -351,6 +351,10 @@ namespace PlantsRPetsProjeto.Server.Controllers
                 {
                     profile.ProfilePicture = $"{baseUrl}/{profile.ProfilePicture.Replace("\\", "/")}";
                 }
+                else
+                {
+                    profile.ProfilePicture = $"{baseUrl}/images/logo.png";
+                }
 
                 return Ok(new
                 {
