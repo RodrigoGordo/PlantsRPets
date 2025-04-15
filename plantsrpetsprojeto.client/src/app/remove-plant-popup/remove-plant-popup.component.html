@@ -2,35 +2,55 @@
   <div class="popup-content">
     <h2>Remove Plant</h2>
 
-    <p>How many units of <strong>{{ data.plantName }}</strong> do you want to remove?</p>
+    <form [formGroup]="removeForm" (ngSubmit)="confirmRemoval()">
 
-    <input type="number"
-           [value]="inputValue"
-           (input)="onInputChange($event)"
-           (blur)="onInputBlur()"
-           [disabled]="confirming || isSecondConfirmStep" />
+      <p>
+        How many units of <strong>{{ data.plantName }}</strong> do you want to remove?
+      </p>
 
-    <p class="warning" *ngIf="quantityToRemove === data.maxQuantity && !isSecondConfirmStep">
-      ⚠️ This will completely remove this plant from the plantation.
-    </p>
+      <input type="number"
+             formControlName="quantity"
+             min="1"
+             [max]="data.maxQuantity"
+             (blur)="onInputBlur()"
+             (keypress)="preventInvalidInput($event)"
+             (paste)="preventPaste($event)"
+             [class.invalid]="removeForm.get('quantity')?.invalid && removeForm.get('quantity')?.touched" />
 
-    <p class="warning" *ngIf="isSecondConfirmStep">
-      ⚠️ This action will completely remove this plant from the plantation. Are you sure?
-    </p>
+      <div class="error" *ngIf="removeForm.get('quantity')?.errors?.['required'] && (removeForm.get('quantity')?.touched || removeForm.get('quantity')?.dirty)">
+        Quantity is required.
+      </div>
+      <div class="error" *ngIf="removeForm.get('quantity')?.errors?.['min'] && (removeForm.get('quantity')?.touched || removeForm.get('quantity')?.dirty)">
+        Quantity must be at least 1.
+      </div>
+      <div class="error" *ngIf="removeForm.get('quantity')?.errors?.['max'] && (removeForm.get('quantity')?.touched || removeForm.get('quantity')?.dirty)">
+        You can only remove up to {{ data.maxQuantity }} units.
+      </div>
 
-    <div class="popup-buttons" *ngIf="!isSecondConfirmStep">
-      <button class="cancel-button" (click)="cancel()" [disabled]="confirming">Cancel</button>
-      <button class="confirm-button" (click)="confirmRemoval()"
-              [disabled]="confirming || quantityToRemove <= 0 || quantityToRemove > data.maxQuantity">
-        {{ confirming ? 'Removing...' : 'Confirm' }}
-      </button>
-    </div>
+      <p class="warning" *ngIf="removeForm.get('quantity')?.value === data.maxQuantity && !isSecondConfirmStep">
+        ⚠️ This will completely remove this plant from the plantation.
+      </p>
 
-    <div class="popup-buttons" *ngIf="isSecondConfirmStep">
-      <button class="cancel-button" (click)="cancel()" [disabled]="confirming">Cancel</button>
-      <button class="final-confirm-button" (click)="confirmRemoval()" [disabled]="confirming" class="final-confirm-button">
-        Yes, remove all
-      </button>
-    </div>
+      <p class="warning" *ngIf="isSecondConfirmStep">
+        ⚠️ This action will completely remove this plant from the plantation. Are you sure?
+      </p>
+
+      <div class="popup-buttons" *ngIf="!isSecondConfirmStep">
+        <button type="button" class="cancel-button" (click)="cancel()" [disabled]="confirming">Cancel</button>
+        <button type="submit" class="confirm-button"
+                [disabled]="confirming || removeForm.invalid">
+          {{ confirming ? 'Removing...' : 'Confirm' }}
+        </button>
+      </div>
+
+      <div class="popup-buttons" *ngIf="isSecondConfirmStep">
+        <button type="button" class="cancel-button" (click)="cancel()" [disabled]="confirming">Cancel</button>
+        <button type="submit" class="final-confirm-button" [disabled]="confirming">
+          Yes, remove all
+        </button>
+      </div>
+
+    </form>
+
   </div>
 </div>

@@ -43,10 +43,20 @@ input[type="number"] {
   box-sizing: border-box;
 }
 
+input.invalid {
+  border: 1px solid red;
+}
+
 .warning {
   color: #d9534f;
   font-weight: bold;
   margin-top: 10px;
+}
+
+.error {
+  color: red;
+  font-size: 0.85rem;
+  margin-top: 4px;
 }
 
 .popup-buttons {
