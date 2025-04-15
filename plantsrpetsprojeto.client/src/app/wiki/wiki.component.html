@@ -3,7 +3,7 @@
   <main>
     <div class="search-container">
       <div class="search-controls">
-        <button class="filter-toggle" (click)="toggleFilters()" matTooltip="Toggle plant filter options">
+        <button class="filter-toggle" (click)="toggleFilters()">
           {{ showFilters ? 'Hide Filters' : 'Filter Plants' }}
         </button>
         <form class="search-form">
@@ -12,7 +12,6 @@
                  [(ngModel)]="searchQuery"
                  name="plantSearch"
                  class="search-input"
-                 matTooltip="Type a plant name to search">
         </form>
       </div>
 
