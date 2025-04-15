@@ -113,6 +113,6 @@ export class PetDetailsComponent implements OnInit {
    * Navega de volta para a página da coleção.
    */
   goBack(): void {
-    this.router.navigate(['/collection']);
+    this.router.navigate(['/collections']);
   }
 }
