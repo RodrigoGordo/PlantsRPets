@@ -1,5 +1,7 @@
-<section class="pet-card" (click)="viewPet()"
-         [ngClass]="{'not-owned': !pet.isOwned, 'favorite-border': pet.isOwned && pet.isFavorite}">
+<section class="pet-card"
+         (click)="viewPet()"
+         [ngClass]="{'not-owned': !pet.isOwned, 'favorite-border': pet.isOwned && pet.isFavorite}"
+         [matTooltip]="pet.isOwned ? 'View pet details' : 'You haven’t unlocked this pet yet'">
   <div class="pet-image-container">
     <img [src]="pet.imageUrl" alt="{{ pet.name }}">
     <div *ngIf="!pet.isOwned" class="silhouette-overlay"></div>

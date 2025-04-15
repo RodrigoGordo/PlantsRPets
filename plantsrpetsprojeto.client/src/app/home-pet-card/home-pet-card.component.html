@@ -1,4 +1,4 @@
-<div class="card pet-card">
+<div class="card pet-card" matTooltip="Check your recently unlocked pets">
   <div class="card-header">
     <h3>
       <i class="icon-pet"></i>
@@ -9,7 +9,7 @@
   <div *ngIf="pets.length; else noPets">
     <ul class="pet-list">
       <li class="pet-item" *ngFor="let petId of pets">
-        <a class="pet-link" [routerLink]="['/pet', petId]">
+        <a class="pet-link" [routerLink]="['/pet', petId]" matTooltip="View details for this pet">
           <span class="pet-icon">🐾</span>
           Pet {{ petId }}
         </a>

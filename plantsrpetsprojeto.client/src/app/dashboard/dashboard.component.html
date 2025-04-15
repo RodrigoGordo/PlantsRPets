@@ -3,10 +3,10 @@
 <div class="dashboard-container">
   <div class="time-frame-selector">
     <div class="btn-group">
-      <button [class.active]="timeFrame === 'day'" (click)="onTimeFrameChange('day')">Day</button>
-      <button [class.active]="timeFrame === 'week'" (click)="onTimeFrameChange('week')">Week</button>
-      <button [class.active]="timeFrame === 'month'" (click)="onTimeFrameChange('month')">Month</button>
-      <button [class.active]="timeFrame === 'year'" (click)="onTimeFrameChange('year')">Year</button>
+      <button [class.active]="timeFrame === 'day'" (click)="onTimeFrameChange('day')" matTooltip="View today's activity">Day</button>
+      <button [class.active]="timeFrame === 'week'" (click)="onTimeFrameChange('week')" matTooltip="View activity from this week">Week</button>
+      <button [class.active]="timeFrame === 'month'" (click)="onTimeFrameChange('month')" matTooltip="View monthly activity">Month</button>
+      <button [class.active]="timeFrame === 'year'" (click)="onTimeFrameChange('year')" matTooltip="View yearly activity">Year</button>
     </div>
   </div>
 
@@ -16,17 +16,17 @@
   </div>
 
   <div class="metrics-overview" *ngIf="!isLoading">
-    <div class="metric-card">
+    <div class="metric-card" matTooltip="Number of times you watered plants in the selected time frame">
       <div class="metric-icon">💧</div>
       <div class="metric-value">{{ activityCounts.Watering }}</div>
       <div class="metric-label">Plants Watered</div>
     </div>
-    <div class="metric-card">
+    <div class="metric-card" matTooltip="Number of plants you harvested in the selected time frame">
       <div class="metric-icon">🌾</div>
       <div class="metric-value">{{ activityCounts.Harvest }}</div>
       <div class="metric-label">Plants Harvested</div>
     </div>
-    <div class="metric-card">
+    <div class="metric-card" matTooltip="Number of plants you planted in the selected time frame">
       <div class="metric-icon">🌱</div>
       <div class="metric-value">{{ activityCounts.Planting }}</div>
       <div class="metric-label">Plants Planted</div>
@@ -34,7 +34,7 @@
   </div>
 
   <div class="charts-container" *ngIf="!isLoading">
-    <div class="chart-section">
+    <div class="chart-section" matTooltip="Watering activity over time">
       <h2>Watering Activity</h2>
       <ngx-charts-line-chart [view]="view"
                              [scheme]="colorScheme"
@@ -52,7 +52,7 @@
       </ngx-charts-line-chart>
     </div>
 
-    <div class="chart-section">
+    <div class="chart-section" matTooltip="Harvesting activity over time">
       <h2>Harvesting Activity</h2>
       <ngx-charts-line-chart [view]="view"
                              [scheme]="colorScheme"
@@ -70,7 +70,7 @@
       </ngx-charts-line-chart>
     </div>
 
-    <div class="chart-section">
+    <div class="chart-section" matTooltip="Planting activity over time">
       <h2>Planting Activity</h2>
       <ngx-charts-line-chart [view]="view"
                              [scheme]="colorScheme"
@@ -88,7 +88,7 @@
       </ngx-charts-line-chart>
     </div>
 
-    <div class="chart-section">
+    <div class="chart-section" matTooltip="Distribution of your plants by type">
       <h2>Plant Type Distribution</h2>
       <ngx-charts-pie-chart [view]="view"
                             [scheme]="colorScheme"
