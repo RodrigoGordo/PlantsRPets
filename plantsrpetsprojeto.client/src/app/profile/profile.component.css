@@ -97,6 +97,18 @@
   color: #555;
   line-height: 1.6;
   max-width: 37.5rem;
+  white-space: normal;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+  .bio p {
+    margin: 0 auto;
+    width: 100%;
+  }
+
+textarea.edit-input {
+  white-space: pre-wrap;
+  word-break: break-word;
 }
 
 .edit-input {
@@ -111,6 +123,13 @@
 textarea.edit-input {
   height: 6rem;
   resize: vertical;
+}
+
+.bio-length-info {
+  font-size: 0.875rem;
+  color: #777;
+  text-align: right;
+  margin-top: 0.5rem;
 }
 
 .section {
@@ -171,5 +190,38 @@ p {
 
   .list-item {
     padding: 0.5rem 1rem;
+  }
+
+  @media (max-width: 480px) {
+    html, body {
+      overflow-x: hidden;
+      width: 100%;
+    }
+
+    .profile-container {
+      max-width: 100vw;
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+
+    .nickname,
+    .section h2 {
+      word-break: break-word;
+      padding-left: 0.5rem;
+      padding-right: 0.5rem;
+    }
+
+    .scrollable-list {
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .edit-input,
+    textarea.edit-input {
+      width: calc(100% - 1rem);
+    }
+
+    button {
+      min-height: 44px;
+    }
   }
 }

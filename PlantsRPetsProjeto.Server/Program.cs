@@ -135,12 +135,10 @@ builder.Services.AddQuartz(q =>
     q.AddTrigger(opts => opts
         .ForJob(jobKey)
         .WithIdentity("SendNotificationEmailTrigger")
-        .WithSimpleSchedule(x => x
-            .WithIntervalInMinutes(1)
-            .RepeatForever()));
+        .WithSchedule(CronScheduleBuilder
+            .DailyAtHourAndMinute(8, 0)));
 });
 
-// Quartz Service for Plant Notification
 builder.Services.AddQuartz(q =>
 {
     var jobKey = new JobKey("PlantNotificationJob");
@@ -148,10 +146,10 @@ builder.Services.AddQuartz(q =>
     q.AddTrigger(opts => opts
         .ForJob(jobKey)
         .WithIdentity("PlantNotificationJobTrigger")
-        .WithSimpleSchedule(x => x
-            .WithIntervalInMinutes(1)
-            .RepeatForever()));
+        .WithSchedule(CronScheduleBuilder
+            .DailyAtHourAndMinute(8, 0)));
 });
+
 
 
 

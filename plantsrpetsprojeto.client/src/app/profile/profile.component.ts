@@ -75,8 +75,8 @@ export class ProfileComponent implements OnInit {
    */
   loadProfile(): void {
     this.loading = true;
-    this.authService.getUserProfile().subscribe(
-      (data) => {
+    this.authService.getUserProfile().subscribe({
+      next: (data) => {
         if (data && data.profile) {
           this.userProfile = data;
           console.log("Profile data:", this.userProfile);
@@ -84,11 +84,11 @@ export class ProfileComponent implements OnInit {
         }
         this.loading = false;
       },
-      (error) => {
+      error: (error) => {
         console.error('Error loading profile', error);
         this.loading = false;
       }
-    );
+    });
   }
 
   /**
@@ -110,7 +110,11 @@ export class ProfileComponent implements OnInit {
     this.savingProfile = true;
     const fileInput = document.getElementById('file-upload') as HTMLInputElement;
     const file = fileInput?.files?.[0] || null;
-
+  
+    if (this.userProfile && this.userProfile.profile) {
+      this.userProfile.profile.bio = this.userProfile.profile.bio?.slice(0, 100) || '';
+    }
+  
     const updatedProfile = {
       ...this.userProfile,
       profile: {
@@ -159,7 +163,7 @@ export class ProfileComponent implements OnInit {
 
       const maxSize = 10 * 1024 * 1024;
       if (file.size > maxSize) {
-        alert('O ficheiro é muito grande. O tamanho máximo permitido é 10 MB.');
+        alert('O ficheiro deve ter no máximo 10MB.');
         input.value = '';
         return;
       }
@@ -175,15 +179,13 @@ export class ProfileComponent implements OnInit {
   }
 
   /**
-   * Carrega os pets favoritos do utilizador da coleção, ordenados por nome e se são owned.
-   * Limita a 5 entradas.
+   * Carrega os pets favoritos do utilizador a partir do serviço de coleção.
    */
   loadFavoritePets(): void {
     this.loading = true;
-    this.http.get<Pet[]>('/api/collections').subscribe({
-      next: (data) => {
-        this.favoritePets = data
-          .filter(pet => pet.isFavorite)
+    this.collectionService.getFavoritePetsInCollection().subscribe({
+      next: (pets) => {
+        this.favoritePets = pets
           .sort((a, b) => {
             if (b.isOwned !== a.isOwned) {
               return Number(b.isOwned) - Number(a.isOwned);
@@ -191,30 +193,28 @@ export class ProfileComponent implements OnInit {
             return a.name.localeCompare(b.name);
           })
           .slice(0, 5);
-
         this.loading = false;
       },
-      error: (err) => {
-        this.error = 'Failed to load your collection. Please try again later.';
+      error: (error) => {
+        console.error('Error loading favorite pets', error);
         this.loading = false;
-        console.error('Error loading collection:', err);
       }
     });
   }
 
   /**
-   * Carrega as plantações em destaque do utilizador, ordenadas por nível descendente.
-   * Mostra no máximo 3 plantações.
+   * Carrega as plantações em destaque do utilizador a partir do serviço de plantações.
    */
-  loadHighlightedPlantations() {
+  loadHighlightedPlantations(): void {
     this.plantationsService.getUserPlantations().subscribe({
-      next: (data: Plantation[]) => {
-        console.log(data);
-        this.highlightedPlantations = data
+      next: (plantations: Plantation[]) => {
+        this.highlightedPlantations = plantations
           .sort((a, b) => b.level - a.level)
           .slice(0, 3);
       },
-      error: (error: any) => console.error('Error fetching plantations:', error)
+      error: (error) => {
+        console.error('Error loading highlighted plantations', error);
+      }
     });
   }
 }
