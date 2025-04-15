@@ -31,7 +31,7 @@
         <ng-template #editBio>
           <textarea [(ngModel)]="userProfile.profile.bio" class="edit-input" placeholder="Enter your bio" maxlength="100"></textarea>
           <div class="bio-length-info">
-            <span>{{ (userProfile.profile.bio.length || 0) }}/100</span> characters
+            <span>{{ userProfile.profile.bio ? userProfile.profile.bio.length : 0 }}/100</span> characters
           </div>
         </ng-template>
       </div>
