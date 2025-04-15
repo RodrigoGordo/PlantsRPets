@@ -7,6 +7,7 @@ import { Plantation } from '../models/plantation.model';
 import { PlantInfo } from '../models/plant-info';
 import { CollectionService } from '../collections.service';
 import { PetRewardPopupComponent } from '../pet-reward-popup/pet-reward-popup.component';
+import { PlantationPlant } from '../models/plantation-plant';
 
 @Component({
   selector: 'app-plantation-details',
@@ -21,25 +22,13 @@ import { PetRewardPopupComponent } from '../pet-reward-popup/pet-reward-popup.co
  * incluindo as plantas nela contidas e ações como adicionar plantas ou usar level-ups acumulados.
  */
 export class PlantationDetailsComponent implements OnInit {
-  plantation: Plantation = {
-    plantationId: 0,
-    plantationName: '',
-    plantTypeId: 0,
-    plantTypeName: '',
-    lastWatered: new Date(),
-    plantingDate: new Date(),
-    harvestDate: new Date(),
-    growthStatus: '',
-    experiencePoints: 0,
-    level: 0,
-    bankedLevelUps: 0,
-    location: undefined,
-    plantationPlants: []
-  };
+  plantation!: any;
 
   plantationPlants: PlantInfo[] = [];
   loading: boolean = true;
   errorMessage: string = '';
+
+  totalPlants!: number;
 
   isCollectionFull: boolean = false;
 
@@ -102,6 +91,7 @@ export class PlantationDetailsComponent implements OnInit {
       next: (data) => {
         console.log("Plants received:", data);
         this.plantationPlants = data.map(pp => pp.referencePlant);
+        this.getTotalPlants();
       },
       error: () => {
         this.errorMessage = "Failed to load plants.";
@@ -178,6 +168,17 @@ export class PlantationDetailsComponent implements OnInit {
         console.error('Failed to load reward pets:', err);
       }
     });
+  }
+
+  /**
+   * Calcula o número total de plantas presentes na plantação.
+   * Soma a quantidade de todas as instâncias de `PlantationPlant` associadas.
+   * 
+   * @returns O número total de plantas da plantação.
+   */
+  getTotalPlants(): void {
+    this.totalPlants = this.plantation?.plantationPlants.reduce((sum: number, plant: PlantationPlant) =>
+      sum + (plant.quantity || 0), 0) || 0;
   }
 
 }

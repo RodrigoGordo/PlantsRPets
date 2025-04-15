@@ -1,6 +1,10 @@
-<body>
-  <app-navbar></app-navbar>
-  <main>
+<app-navbar></app-navbar>
+<main>
+  <div class="intro-text">
+    <h1>Wiki</h1>
+    <h3>Here you can learn more about many plants. Try using the filter or typing to search for a specific plant and try clicking on one to show more information 🌳!</h3>
+  </div>
+
     <div class="search-container">
       <div class="search-controls">
         <button class="filter-toggle" (click)="toggleFilters()">
@@ -26,5 +30,5 @@
                       [plant]="plant">
       </app-plant-card>
     </article>
-  </main>
-</body>
+</main>
+

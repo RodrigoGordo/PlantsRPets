@@ -11,7 +11,6 @@
          matTooltip="View your user options"/>
     <div class="dropdown-menu" *ngIf="dropdownOpen">
       <a routerLink="/profile" class="dropdown-item" matTooltip="View and edit your profile">👤 Profile</a>
-      <a routerLink="/settings" class="dropdown-item" matTooltip="Adjust your account settings">⚙️ Settings</a>
       <hr />
       <button class="logout-button" (click)="confirmLogout()" matTooltip="Log out from your account">🚪Logout</button>
     </div>

@@ -1,7 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
-body {
-  background: linear-gradient( 135deg, #3E8914 0%, #3DA35D 35%, #96E072 70%, #E8FCCF 100% );
+.mat-typography {
+  background: linear-gradient(180deg, #E8F5E9);
+  background-attachment: fixed;
 }
 
 html * {

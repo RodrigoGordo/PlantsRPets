@@ -1,7 +1,8 @@
 <div class="plantation-card" [class.editing]="isEditing" [routerLink]="!isEditing ? ['/plantation', plantation.plantationId] : null" (click) ="onPlantationSelected()">
   <div class="plantation-info">
     <div class="plantation-name">
-      <h3 *ngIf="!isEditing" class="plantation-name">{{ plantation.plantationName }}</h3>
+      <h3 *ngIf="!isEditing" class="plantation-name">
+        <span class="interpolation">{{ plantation.plantationName }}</span></h3>
       <h3 *ngIf="isEditing" class="plantation-name">Plantation Name: </h3>
       <input *ngIf="isEditing"
              [(ngModel)]="newPlantationName"
@@ -10,20 +11,26 @@
              (click)="$event.stopPropagation()" />
     </div>
     <div class="location">
-      <p *ngIf="!isEditing && this.plantation?.location">Location: {{ plantation.location.city}}, {{ plantation.location.region}}, {{ plantation.location.country}} </p>
+      <p *ngIf="!isEditing && this.plantation?.location">
+        Location:
+        <span class="interpolation">{{ plantation.location.city }},</span>
+        <span class="interpolation">{{ plantation.location.region }},</span>
+        <span class="interpolation">{{ plantation.location.country }}</span>
+      </p>
       <p *ngIf="!isEditing && !this.plantation?.location">Location: Unknown</p>
       <p *ngIf="isEditing">Location: </p>
       <div *ngIf="isEditing" class="location-search">
-        <app-location-input
-                            (locationSelected)="onLocationSelected($event)">
+        <app-location-input (locationSelected)="onLocationSelected($event)">
         </app-location-input>
       </div>
     </div>
-    <p class="plantation-type">Plantation of Type: {{ plantation.plantTypeName }}</p>
-    <p class="last-watered">Creation Date: {{ plantation.plantingDate | date }}</p>
-    <p class="plantation-type">Number of Species: {{ plantation.plantationPlants.length || 0 }}</p>
-    <p class="plantation-type">Number of Plants: {{ getTotalPlants() }}</p>
-    <p class="plantation-type">Level: {{ plantation.level }}</p>
+    <div class="info-grid">
+      <p class="plantation-type">Plantation of Type: <span class="interpolation">{{ plantation.plantTypeName }}</span></p>
+      <p class="last-watered">Creation Date: <span class="interpolation">{{ plantation.plantingDate | date }}</span></p>
+      <p class="plantation-type">Number of Different Species: <span class="interpolation">{{ plantation.plantationPlants.length || 0 }}</span></p>
+      <p class="plantation-type">Total Number of Plants: <span class="interpolation">{{ getTotalPlants() }}</span></p>
+      <p class="plantation-type">Level: <span class="interpolation">{{ plantation.level }}</span></p>
+    </div>
   </div>
 
   <div class="plantation-actions">

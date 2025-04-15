@@ -1,16 +1,17 @@
 .plantation-container {
-  background: white;
+  background: #43A046;
   padding: 25px;
   margin: 20px auto;
   width: 90%;
-  max-width: 60%;
+  max-width: 70%;
   border-radius: 10px;
+  border: 3px solid #103E13;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
   text-align: center;
 }
 
 .plantation-title {
-  color: #2e7d32;
+  color: #E8F5E9;
   font-size: 24px;
   margin-bottom: 15px;
 }
@@ -21,6 +22,12 @@
   border-radius: 8px;
   text-align: left;
   margin-bottom: 15px;
+  width: 40%;
+  height: 315px;
+  border: 3px solid #103E13;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 }
 
   .plantation-details p {
@@ -31,7 +38,7 @@
 
 .plantation-subtitle {
   font-size: 20px;
-  color: #1b5e20;
+  color: #E8F5E9;
   margin-bottom: 10px;
 }
 
@@ -153,7 +160,8 @@ app-plant-card {
 
   .xp-container {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    align-items: center;
     gap: 8px;
     margin: 12px 0;
     margin-top: 0px;
@@ -214,4 +222,34 @@ app-plant-card {
   color: #28a745 !important;
   font-weight: bold;
 }
+
+.details-weather {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+.add-plant-btn {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+  width: 100px;
+  height: 30px;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  font-weight: bold;
+}
+
+  .add-plant-btn:hover {
+    background-color: #d4e7d6;
+    transform: translateY(-1px);
+  }
+
+  .add-plant-btn:active {
+    background-color: #c0d9c2;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
 

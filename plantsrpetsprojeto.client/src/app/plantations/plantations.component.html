@@ -1,24 +1,28 @@
 <app-navbar></app-navbar>
-<body>
-  <div class="header">Here you can manage your plantations!</div>
-  <div class="plantations-container">
-    <h1 class="plantations-title">Plantations</h1>
+<main>
+  <section class="plantation-creation">
+    <h1>
+      Plantations
+    </h1>
+    <h3>
+      Here you can add, edit, remove and see various informations about your plantations 🌱!
+      Below you can create a plantation and on the panel on the right you can click them to see more details!
+      Try it out yourself 🍀!
+    </h3>
 
     <button class="create-btn" (click)="openCreateDialog()">Create New Plantation</button>
+  </section>
 
-    <p class="no-plantations" *ngIf="plantations.length === 0">
-      You don't have any plantations yet. Create one now!
-    </p>
+  <h2 class="no-plantations" *ngIf="plantations.length === 0">
+    You don't have any plantations yet. Try creating one!
+  </h2>
 
-    <div class="plantations-list" *ngIf="plantations.length > 0">
-      <section class="plantation-and-weather" *ngFor="let plantation of plantations">
-        <app-plantation-card [plantation]="plantation"
+  <div class="plantations-list" *ngIf="plantations.length > 0">
+    <section class="plantation-and-weather" *ngFor="let plantation of plantations">
+      <app-plantation-card [plantation]="plantation"
                              (updated)="loadPlantations()"
                              (deleted)="loadPlantations()">
-        </app-plantation-card>
-        <app-weather [location]="plantation.location">
-        </app-weather>
-      </section>
-    </div>
+      </app-plantation-card>
+    </section>
   </div>
-</body>
+</main>
