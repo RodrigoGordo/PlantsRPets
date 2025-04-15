@@ -88,9 +88,12 @@ export class PlantationDetailsComponent implements OnInit {
     if (!plantationId) return;
 
     this.plantationsService.getPlantsInPlantation(plantationId).subscribe({
-      next: (data) => {
+      next: (data: PlantationPlant[]) => {
         console.log("Plants received:", data);
         this.plantationPlants = data.map(pp => pp.referencePlant);
+        if (this.plantation) {
+          this.plantation.plantationPlants = data;
+        }
         this.getTotalPlants();
       },
       error: () => {
@@ -98,6 +101,7 @@ export class PlantationDetailsComponent implements OnInit {
       }
     });
   }
+
 
   /**
    * Abre um diálogo para adicionar uma nova planta à plantação.
@@ -171,14 +175,20 @@ export class PlantationDetailsComponent implements OnInit {
   }
 
   /**
-   * Calcula o número total de plantas presentes na plantação.
+   * Calcula o número total de plantas presentes na plantação  .
    * Soma a quantidade de todas as instâncias de `PlantationPlant` associadas.
    * 
    * @returns O número total de plantas da plantação.
    */
   getTotalPlants(): void {
-    this.totalPlants = this.plantation?.plantationPlants.reduce((sum: number, plant: PlantationPlant) =>
-      sum + (plant.quantity || 0), 0) || 0;
+    if (!this.plantation || !this.plantation.plantationPlants) {
+      this.totalPlants = 0;
+      return;
+    }
+
+    this.totalPlants = this.plantation.plantationPlants
+      .reduce((sum: number, plant: PlantationPlant) => sum + (plant.quantity || 0), 0);
   }
+
 
 }
