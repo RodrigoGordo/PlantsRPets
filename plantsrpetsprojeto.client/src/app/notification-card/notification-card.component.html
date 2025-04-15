@@ -1,26 +1,45 @@
 <div class="notification-container">
   <i class="fa fa-bell notification-icon" (click)="toggleNotifications()"></i>
 
+  <!-- 🔴 Red badge for unread count -->
+  <span class="notification-badge" *ngIf="unreadNotifications.length > 0">
+    {{ unreadNotifications.length }}
+  </span>
+
+  <!-- Notification Card -->
   <div class="notification-card" *ngIf="showNotifications">
     <div class="notification-title">
       <h3>Notifications</h3>
       <i class="fa fa-cog settings-icon" (click)="toggleNotificationsSettings()"></i>
     </div>
 
-    <div *ngIf="notifications.length === 0">
-      <p class="no-notifications">No new notifications</p>
-    </div>
-
-    <div *ngFor="let notification of notifications" class="notification-item">
-      <div class="notification-content">
-        <strong>{{ notification.notification.type }}</strong>
-        <p>{{ notification.notification.message }}</p>
+    <div class="notification-list">
+      <div *ngIf="notifications.length === 0">
+        <p class="no-notifications">No new notifications</p>
       </div>
-      <button (click)="markAsRead(notification)">✔</button>
-      <button (click)="deleteNotification(notification)">❌</button>
+
+      <div *ngFor="let notification of notifications"
+           class="notification-item"
+           [ngClass]="notification.isRead ? 'read' : 'unread'">
+
+        <div class="notification-content">
+          <strong>{{ notification.notification.type }}</strong>
+          <p>{{ notification.notification.message }}</p>
+        </div>
+
+        <div class="notification-actions">
+          <button *ngIf="!notification.isRead" (click)="markAsRead(notification)" title="Mark as read">
+            <i class="fa fa-check"></i>
+          </button>
+          <button (click)="deleteNotification(notification)" title="Delete">
+            <i class="fa fa-trash"></i>
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 
+  <!-- Settings -->
   <div class="notification-settings-card" *ngIf="showNotificationsSettings">
     <h3>Notification Settings</h3>
     <div class="settings-group">

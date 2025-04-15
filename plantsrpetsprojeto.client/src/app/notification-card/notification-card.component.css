@@ -12,7 +12,6 @@
   transition: color 0.3s;
 }
 
-
   .notification-icon:hover {
     color: #d4af37;
   }
@@ -20,8 +19,6 @@
 .notification-card {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
   position: absolute;
   top: 40px;
   left: 10px;
@@ -32,43 +29,23 @@
   border: 1px solid #4CAF50;
   border-radius: 8px;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-  overflow-y: auto;
   padding: 10px;
   z-index: 150;
 }
 
-.notification-item {
-  padding: 8px;
-  margin: 6px 0;
-  background-color: rgba(0, 0, 0, 0.1);
-  border-radius: 6px;
-  font-size: 0.95rem;
-  color: #ffffff;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.no-notifications {
-  text-align: center;
-  color: #ffffff;
-  font-size: 14px;
-  margin-top: 10px;
-}
-
 .notification-title {
-  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100%;
+  position: relative;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .settings-icon {
   position: absolute;
-  right: 0%;
+  right: 0;
   top: 50%;
-  left: 50%;
   transform: translateY(-50%);
   font-size: 22px;
   color: white;
@@ -79,6 +56,58 @@
   .settings-icon:hover {
     color: #ffeb3b;
   }
+
+.notification-list {
+  overflow-y: auto;
+  max-height: 230px;
+  margin-top: 10px;
+}
+
+.notification-item {
+  padding: 8px;
+  margin: 6px 0;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  color: #ffffff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+  .notification-item.read {
+    background-color: rgba(255, 255, 255, 0.1);
+    opacity: 0.6;
+  }
+
+.notification-content {
+  flex-grow: 1;
+}
+
+.notification-actions {
+  display: flex;
+  gap: 6px;
+  margin-left: 10px;
+}
+
+  .notification-actions button {
+    background: transparent;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+  }
+
+    .notification-actions button:hover {
+      color: #ffeb3b;
+    }
+
+.no-notifications {
+  text-align: center;
+  color: #ffffff;
+  font-size: 14px;
+  margin-top: 10px;
+}
 
 .notification-settings-card {
   position: absolute;
@@ -97,25 +126,29 @@
   transform: translateY(-50%) rotate(45deg);
 }
 
-.selected-indicator {
-  margin-left: 8px;
-  font-weight: bold;
-  color: #ffeb3b;
+.settings-group {
+  margin-top: 10px;
 }
 
-.notification-actions {
+.setting-label {
+  color: white;
+  margin-bottom: 8px;
+}
+
+.frequency-buttons {
   display: flex;
+  flex-wrap: wrap;
   gap: 8px;
-  margin-left: 10px;
 }
 
 .frequency-btn {
-  position: relative;
   padding: 8px 12px;
   border: 2px solid transparent;
   background: rgba(255, 255, 255, 0.1);
   color: white;
   cursor: pointer;
+  border-radius: 4px;
+  transition: background 0.2s;
 }
 
   .frequency-btn.active {
@@ -127,3 +160,25 @@
   .frequency-btn:hover {
     background: rgba(0, 0, 0, 0.15);
   }
+
+.selected-indicator {
+  margin-left: 8px;
+  font-weight: bold;
+  color: #ffeb3b;
+}
+
+.notification-badge {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  background-color: red;
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 2px 6px;
+  border-radius: 50%;
+  z-index: 200;
+  pointer-events: none;
+  box-shadow: 0 0 2px #000;
+}
+
