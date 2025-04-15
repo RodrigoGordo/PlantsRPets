@@ -9,7 +9,7 @@
         <input [(ngModel)]="userProfile.nickname" class="edit-input" placeholder="Enter your nickname">
       </ng-template>
       <div class="profile-actions">
-        <button class="edit-profile-btn" (click)="toggleEdit()" matTooltip="{{ isEditing ? 'Save changes to your profile' : 'Edit your nickname, bio, or photo' }}">
+        <button class="edit-profile-btn" (click)="toggleEdit()">
           <i class="fas fa-edit"></i> {{ isEditing ? 'Save' : 'Edit Profile' }}
         </button>
       </div>
@@ -18,7 +18,7 @@
     <div class="profile-info">
       <div class="profile-picture">
         <img [src]="userProfile.profile.profilePicture || 'assets/logo.png'" alt="Profile Picture">
-        <button *ngIf="isEditing" class="upload-button" (click)="triggerFileUpload()" matTooltip="Upload a new profile picture">
+        <button *ngIf="isEditing" class="upload-button" (click)="triggerFileUpload()">
           <i class="fas fa-camera"></i>
         </button>
         <input type="file" id="file-upload" style="display: none;" (change)="onFileSelected($event)">

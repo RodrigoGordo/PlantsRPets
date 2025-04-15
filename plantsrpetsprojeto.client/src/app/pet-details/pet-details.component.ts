@@ -63,7 +63,7 @@ export class PetDetailsComponent implements OnInit {
         const petInCollection = collection.find(p => p.petId === +id);
 
         if (!petInCollection || !petInCollection.isOwned) {
-          this.router.navigate(['/collections']);
+          this.router.navigate(['/collection']);
           return;
         }
 
@@ -113,6 +113,6 @@ export class PetDetailsComponent implements OnInit {
    * Navega de volta para a página da coleção.
    */
   goBack(): void {
-    this.router.navigate(['/collections']);
+    this.router.navigate(['/collection']);
   }
 }

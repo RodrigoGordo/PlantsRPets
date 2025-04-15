@@ -19,7 +19,7 @@
           <span class="xp-value">{{ plantation.experiencePoints }}/500</span>
         </div>
         <div class="pet-choice-container" *ngIf="plantation.bankedLevelUps > 0 && !isCollectionFull">
-          <button class="pet-choice-button" (click)="openRewardPopup()" matTooltip="Choose a pet as a reward for leveling up">
+          <button class="pet-choice-button" (click)="openRewardPopup()">
             🐾 Choose a Pet
           </button>
           <span class="choices-remaining">{{ plantation.bankedLevelUps }} choices remaining</span>
@@ -34,7 +34,7 @@
 
     <h2 class="plantation-subtitle">Plants in this Plantation</h2>
 
-    <button class="add-plant-btn" (click)="openAddPlantDialog()" matTooltip="Add a new plant to this plantation">➕ Add Plant</button>
+    <button class="add-plant-btn" (click)="openAddPlantDialog()">➕ Add Plant</button>
 
     <article class="plantation-plants-grid">
       <app-plantation-plant-card *ngFor="let plant of plantationPlants" [plant]="plant"></app-plantation-plant-card>

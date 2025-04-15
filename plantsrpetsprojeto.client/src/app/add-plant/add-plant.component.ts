@@ -24,7 +24,7 @@ export class AddPlantComponent implements OnInit {
   addPlantForm: FormGroup;
   plants: PlantInfo[] = [];
   filteredPlants: PlantInfo[] = [];
-  formError: string | null = null;
+  plantFilter = new FormControl('');
 
   /**
    * Construtor do componente que injeta os serviços e inicializa o formulário.
@@ -43,7 +43,7 @@ export class AddPlantComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public plantationId: number
   ) {
     this.addPlantForm = this.fb.group({
-      plantInfo: [null, Validators.required],
+      plantInfoId: ['', Validators.required],
       quantity: [1, [Validators.required, Validators.min(1)]]
     });
   }
@@ -55,18 +55,10 @@ export class AddPlantComponent implements OnInit {
   ngOnInit(): void {
     this.loadPlants();
 
-    this.addPlantForm.get('plantInfo')?.valueChanges.pipe(
+    this.plantFilter.valueChanges.pipe(
       startWith(''),
-      map(value => typeof value === 'string' ? this.filterPlants(value) : this.plants)
+      map(value => (typeof value === 'string' ? this.filterPlants(value) : this.plants))
     ).subscribe(filtered => this.filteredPlants = filtered);
-
-    this.addPlantForm.get('plantInfo')?.valueChanges.subscribe(() => {
-      this.validateQuantityAgainstLimit();
-    });
-
-    this.addPlantForm.get('quantity')?.valueChanges.subscribe(() => {
-      this.validateQuantityAgainstLimit();
-    });
   }
 
   /**
@@ -104,112 +96,35 @@ export class AddPlantComponent implements OnInit {
   }
 
   /**
-   * Getter que verifica se o valor atual do campo de quantidade excede o limite máximo permitido (1000).
-   * Usado para desativar o botão de submissão e mostrar aviso ao utilizador.
-   * @returns true se a quantidade for superior a 1000, false caso contrário.
+   * Atualiza o campo de ID da planta ao selecionar um item do autocompletar.
+   * @param event - Evento de seleção do MatAutocomplete
    */
-  get quantityExceedsLimit(): boolean {
-    const quantity = this.addPlantForm.get('quantity')?.value;
-    return quantity > 1000;
-  }
-
-  /**
-   * Impede a introdução de caracteres inválidos no campo de quantidade.
-   * Só permite números (0-9).
-   */
-  preventInvalidInput(event: KeyboardEvent): void {
-    const allowedKeys = ['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab'];
-    if (!/^\d$/.test(event.key) && !allowedKeys.includes(event.key)) {
-      event.preventDefault();
-    }
-  }
-
-  /**
-   * Impede colar conteúdo inválido no campo de quantidade.
-   * Se o valor colado não for só números, cancela o evento.
-   */
-  preventPaste(event: ClipboardEvent): void {
-    const pastedInput: string = event.clipboardData?.getData('text') ?? '';
-    if (!/^\d+$/.test(pastedInput)) {
-      event.preventDefault();
-    }
-  }
-
-  /**
- * Valida dinamicamente a quantidade inserida em relação à quantidade já existente.
- * Atualiza o formError com uma mensagem clara e desativa o botão se necessário.
- */
-  validateQuantityAgainstLimit(): void {
-    this.formError = null;
-
-    const plant: PlantInfo = this.addPlantForm.get('plantInfo')?.value;
-    const quantity: number = this.addPlantForm.get('quantity')?.value;
-
-    if (!plant || !quantity || isNaN(quantity) || quantity < 1) {
-      return;
-    }
-
-    const plantInfoId = plant.plantInfoId;
-
-    this.plantationsService.getPlantationPlantById(this.plantationId, plantInfoId).subscribe({
-      next: (plantData) => {
-        const currentQuantity = plantData.quantity ?? 0;
-        const total = currentQuantity + quantity;
-
-        if (currentQuantity >= 1000) {
-          this.formError = `You already have 1000 units of this plant. You cannot add more.`;
-        } else if (total > 1000) {
-          const remaining = 1000 - currentQuantity;
-          this.formError = `Limit exceeded: You already have ${currentQuantity} units of this plant. You can only add up to ${remaining} more.`;
-        }
-      },
-      error: (error) => {
-        if (error.status !== 404) {
-          console.error('Error validating quantity:', error);
-          this.formError = 'There was a problem verifying the current quantity. Please try again later.';
-        }
-      }
+  selectPlant(event: MatAutocompleteSelectedEvent) {
+    const selectedPlant = event.option.value as PlantInfo;
+    this.addPlantForm.patchValue({
+      plantInfoId: selectedPlant.plantInfoId,
     });
-  }
 
-  /**
-  * Método executado quando o campo de quantidade perde o foco (blur).
-  * Garante que o valor inserido seja um número entre 1 e 1000.
-  * Se o valor for inválido (vazio, menor que 1 ou maior que 1000), será automaticamente corrigido para o limite mais próximo.
-  */
-  onQuantityBlur(): void {
-    const control = this.addPlantForm.get('quantity');
-    let value = parseInt(control?.value, 10);
-
-    if (isNaN(value) || value < 1) {
-      control?.setValue(1);
-    } else if (value > 1000) {
-      control?.setValue(1000);
-    }
+    this.plantFilter.setValue(selectedPlant.plantName, { emitEvent: false });
   }
 
   /**
    * Submete o formulário para adicionar a planta à plantação.
-   * Faz a verificação da quantidade adicionada.
    * Fecha o diálogo em caso de sucesso.
    */
   addPlant(): void {
-    this.formError = null;
-
-    if (this.addPlantForm.valid && !this.formError) {
-      const selectedPlant: PlantInfo = this.addPlantForm.value.plantInfo;
-      const quantity: number = this.addPlantForm.value.quantity;
-
+    if (this.addPlantForm.valid) {
       const requestData = {
-        plantInfoId: selectedPlant.plantInfoId,
-        quantity
+        plantInfoId: this.addPlantForm.value.plantInfoId,
+        quantity: this.addPlantForm.value.quantity
       };
 
       this.plantationsService.addPlantToPlantation(this.plantationId, requestData).subscribe({
-        next: () => this.dialogRef.close(true),
+        next: () => {
+          this.dialogRef.close(true);
+        },
         error: (error) => {
           console.error('Error adding plant:', error);
-          this.formError = 'There was an error adding the plant. Please try again.';
         }
       });
     }

@@ -2,7 +2,6 @@ import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { PlantationsService } from '../plantations.service';
 import { Router } from '@angular/router';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-remove-plant-popup',
@@ -17,9 +16,10 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
  * Permite ao utilizador definir a quantidade a remover, valida o input e confirma a remoção com um segundo passo caso a quantidade seja total.
  */
 export class RemovePlantPopupComponent {
+  _quantityToRemove: number = 1;
+  inputValue: string = '1';
   confirming: boolean = false;
   isSecondConfirmStep = false;
-  removeForm: FormGroup;
 
   /**
    * Construtor do componente.
@@ -30,7 +30,6 @@ export class RemovePlantPopupComponent {
    * @param data Dados recebidos do componente pai, incluindo nome da planta, quantidade máxima e IDs.
    */
   constructor(
-    private fb: FormBuilder,
     private plantationsService: PlantationsService,
     private dialogRef: MatDialogRef<RemovePlantPopupComponent>,
     private router: Router,
@@ -40,49 +39,47 @@ export class RemovePlantPopupComponent {
       plantationId: number;
       plantInfoId: number;
     }
-  ) {
-    this.removeForm = this.fb.group({
-      quantity: [{ value: 1, disabled: this.confirming || this.isSecondConfirmStep }, [
-        Validators.required,
-        Validators.min(1),
-        Validators.max(data.maxQuantity)
-      ]]
-    });
+  ) { }
+
+  /**
+   * Getter da quantidade a remover com base no input do utilizador, assegurando que é válido e dentro dos limites permitidos.
+   */
+  get quantityToRemove(): number {
+    const value = parseInt(this.inputValue, 10);
+    return isNaN(value) ? 0 : Math.min(value, this.data.maxQuantity);
   }
 
   /**
-   * Impede a introdução de caracteres inválidos no campo de quantidade.
-   * Só permite números (0-9).
+   * Setter da quantidade a remover, garantindo que o valor está dentro dos limites válidos.
    */
-  preventInvalidInput(event: KeyboardEvent): void {
-    const allowedKeys = ['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab'];
-    if (!/^\d$/.test(event.key) && !allowedKeys.includes(event.key)) {
-      event.preventDefault();
+  set quantityToRemove(value: number) {
+    if (!value || value < 1) {
+      this._quantityToRemove = 1;
+    } else if (value > this.data.maxQuantity) {
+      this._quantityToRemove = this.data.maxQuantity;
+    } else {
+      this._quantityToRemove = value;
     }
   }
 
   /**
-   * Impede colar conteúdo inválido no campo de quantidade.
-   * Se o valor colado não for só números, cancela o evento.
+   * Atualiza o valor do input com o valor introduzido pelo utilizador.
    */
-  preventPaste(event: ClipboardEvent): void {
-    const pastedInput: string = event.clipboardData?.getData('text') ?? '';
-    if (!/^\d+$/.test(pastedInput)) {
-      event.preventDefault();
-    }
+  onInputChange(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    this.inputValue = input.value;
   }
 
   /**
    * Valida o valor introduzido ao perder o foco do input. Corrige automaticamente se necessário.
    */
   onInputBlur(): void {
-    const control = this.removeForm.get('quantity');
-    let value = parseInt(control?.value, 10);
+    const value = parseInt(this.inputValue, 10);
 
     if (isNaN(value) || value < 1) {
-      control?.setValue(1);
+      this.inputValue = '1';
     } else if (value > this.data.maxQuantity) {
-      control?.setValue(this.data.maxQuantity);
+      this.inputValue = this.data.maxQuantity.toString();
     }
   }
 
@@ -91,24 +88,19 @@ export class RemovePlantPopupComponent {
    * Após remoção com sucesso, fecha o diálogo e redireciona, se necessário.
    */
   confirmRemoval(): void {
-    if (this.removeForm.invalid) return;
-
-    const quantityToRemove = this.removeForm.value.quantity;
-
-    if (quantityToRemove === this.data.maxQuantity && !this.isSecondConfirmStep) {
+    if (this.quantityToRemove === this.data.maxQuantity && !this.isSecondConfirmStep) {
       this.isSecondConfirmStep = true;
-      this.toggleQuantityControl();
       return;
     }
 
     this.confirming = true;
     this.plantationsService
-      .removePlantFromPlantation(this.data.plantationId, this.data.plantInfoId, quantityToRemove)
+      .removePlantFromPlantation(this.data.plantationId, this.data.plantInfoId, this.quantityToRemove)
       .subscribe({
         next: () => {
           this.confirming = false;
 
-          if (quantityToRemove === this.data.maxQuantity) {
+          if (this.quantityToRemove === this.data.maxQuantity) {
             this.dialogRef.close(true);
             this.router.navigate(['/plantation', this.data.plantationId]);
           } else {
@@ -122,20 +114,11 @@ export class RemovePlantPopupComponent {
       });
   }
 
-  toggleQuantityControl(): void {
-    if (this.isSecondConfirmStep || this.confirming) {
-      this.removeForm.get('quantity')?.disable();
-    } else {
-      this.removeForm.get('quantity')?.enable();
-    }
-  }
-
   /**
    * Cancela o segundo passo de confirmação (caso o utilizador mude de ideias).
    */
   cancelConfirmation(): void {
     this.isSecondConfirmStep = true;
-    this.toggleQuantityControl();
   }
 
   /**
