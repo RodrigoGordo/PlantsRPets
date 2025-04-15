@@ -80,9 +80,9 @@ button {
   width: 25%;
 }
 
-.edit-btn:hover {
-  background: #e0a800;
-}
+  .edit-btn:hover {
+    background: #e0a800;
+  }
 
 .save-btn {
   background: #28a745;
@@ -90,9 +90,9 @@ button {
   width: 25%;
 }
 
-.save-btn:hover {
-  background: #218838;
-}
+  .save-btn:hover {
+    background: #218838;
+  }
 
 .cancel-btn {
   background: #dc3545;
@@ -100,9 +100,9 @@ button {
   width: 25%;
 }
 
-.cancel-btn:hover {
-  background: #c82333;
-}
+  .cancel-btn:hover {
+    background: #c82333;
+  }
 
 .delete-btn {
   background: #ff4d4d;
@@ -116,18 +116,20 @@ button {
   width: 25%;
 }
 
-.delete-btn:hover {
-  background: #cc0000;
-}
+  .delete-btn:hover {
+    background: #cc0000;
+  }
 
 .interpolation {
-    color: #E8F5E9;
+  color: #E8F5E9;
 }
 
+/* Responsive Adjustments */
 @media (max-width: 768px) {
   .plantation-card {
     width: 95%;
     max-width: 500px;
+    padding: 15px;
   }
 
   .plantation-info {
@@ -141,6 +143,27 @@ button {
 
   button {
     width: 90%;
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .plantation-card {
+    width: 100%;
+    max-width: 400px;
+    padding: 10px;
+  }
+
+  .plantation-info h3 {
+    font-size: 1.3rem;
+  }
+
+  .plantation-info p {
+    font-size: 0.9rem;
+  }
+
+  button {
+    width: 95%;
     font-size: 1rem;
   }
 }
@@ -177,14 +200,16 @@ button {
     background-color: #e9ecef;
   }
 
-@media (max-width: 480px) {
-  .plantation-card {
-    width: 100%;
-    max-width: 400px;
+@media (max-width: 768px) {
+  .search-results {
+    width: 90%;
+    max-width: 350px;
   }
+}
 
-  button {
+@media (max-width: 480px) {
+  .search-results {
     width: 95%;
-    font-size: 1rem;
+    max-width: 300px;
   }
 }

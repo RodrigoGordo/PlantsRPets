@@ -3,7 +3,7 @@
   background-color: #f5faf6;
   display: flex;
   flex-direction: column;
-  padding: 40px 24px;
+  padding: 5vw 4vw;
   box-sizing: border-box;
 }
 
@@ -28,10 +28,11 @@
 
 .confirmation-card {
   max-width: 500px;
+  width: 100%;
   background-color: #fff;
   padding: 2rem;
   border-radius: 12px;
-  box-shadow: 0 0 16px rgba(0,0,0,0.1);
+  box-shadow: 0 0 16px rgba(0, 0, 0, 0.1);
   text-align: center;
 }
 
@@ -40,6 +41,7 @@
   display: flex;
   justify-content: center;
   gap: 1rem;
+  flex-wrap: wrap;
 }
 
 .action-btn {
@@ -50,10 +52,50 @@
   border-radius: 6px;
   cursor: pointer;
   font-size: 1rem;
+  transition: background-color 0.3s ease;
 }
+
+  .action-btn:hover {
+    background-color: #45a049;
+  }
 
   .action-btn.outline {
     background-color: transparent;
     border: 1px solid #4CAF50;
     color: #4CAF50;
   }
+
+    .action-btn.outline:hover {
+      background-color: #e8f5e9;
+    }
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .wrapper {
+    padding: 20px 16px;
+  }
+
+  .logo {
+    height: 70px;
+  }
+
+  .confirmation-card {
+    padding: 1.5rem;
+  }
+
+  .action-btn {
+    font-size: 0.9rem;
+    padding: 0.4rem 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .action-btn {
+    width: 100%;
+  }
+}

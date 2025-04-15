@@ -1,6 +1,9 @@
 .confirmation-dialog {
   text-align: center;
   padding: 20px;
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
 }
 
 h3 {
@@ -13,6 +16,7 @@ h3 {
   display: flex;
   justify-content: space-around;
   gap: 10px;
+  flex-wrap: wrap;
 }
 
 .confirm-button {
@@ -58,4 +62,62 @@ h3 {
   font-weight: bold;
   color: #2e7d32;
   border: 1px solid #ccc;
+}
+
+@media (max-width: 768px) {
+  .confirmation-dialog {
+    padding: 15px;
+    width: 90%;
+  }
+
+  h3 {
+    font-size: 1rem;
+  }
+
+  .buttons {
+    flex-direction: column;
+    gap: 15px;
+    align-items: center;
+  }
+
+  .confirm-button,
+  .cancel-button {
+    width: 100%;
+    padding: 12px;
+    font-size: 1rem;
+  }
+
+  .months-list {
+    justify-content: flex-start;
+  }
+
+  .month {
+    font-size: 0.9rem;
+    padding: 5px 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .confirmation-dialog {
+    padding: 10px;
+  }
+
+  h3 {
+    font-size: 0.9rem;
+  }
+
+  .buttons {
+    gap: 12px;
+  }
+
+  .confirm-button,
+  .cancel-button {
+    width: 100%;
+    padding: 12px;
+  }
+
+  .month {
+    font-size: 0.8rem;
+    padding: 5px 10px;
+  }
 }

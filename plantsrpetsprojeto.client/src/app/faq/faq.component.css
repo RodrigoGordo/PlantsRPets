@@ -41,6 +41,7 @@ header h1 {
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  text-align: left;
 }
 
   .faq-item h2 {
@@ -56,3 +57,43 @@ header h1 {
     line-height: 1.7;
     letter-spacing: 0.5px;
   }
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .faq-container {
+    padding: 30px 20px;
+  }
+
+  header h1 {
+    font-size: 2.2rem;
+  }
+
+  .faq-item h2 {
+    font-size: 1.5rem;
+  }
+
+  .faq-item p {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .faq-container {
+    margin: 30px 10px;
+    padding: 25px 16px;
+  }
+
+  header h1 {
+    font-size: 1.8rem;
+    letter-spacing: 1px;
+  }
+
+  .faq-item h2 {
+    font-size: 1.3rem;
+  }
+
+  .faq-item p {
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+}

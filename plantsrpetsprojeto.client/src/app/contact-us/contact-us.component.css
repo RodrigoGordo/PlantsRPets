@@ -1,9 +1,8 @@
-
 body {
   font-family: 'Arial', sans-serif;
   margin: 0;
   padding: 0;
-  background-color: #e9f7db; 
+  background-color: #e9f7db;
   color: #2c3e50;
   line-height: 1.6;
 }
@@ -16,6 +15,7 @@ body {
   border-radius: 12px;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
   text-align: center;
+  box-sizing: border-box;
 }
 
 header h1 {
@@ -66,4 +66,64 @@ footer {
   font-size: 0.9rem;
   color: #95a5a6;
   margin-top: 50px;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .contact-us-container {
+    padding: 30px 25px;
+  }
+
+  header h1 {
+    font-size: 2.5rem;
+  }
+
+  .contact-info h2 {
+    font-size: 1.75rem;
+  }
+
+  .contact-info p {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .contact-us-container {
+    padding: 25px 20px;
+  }
+
+  header h1 {
+    font-size: 2.2rem;
+  }
+
+  .contact-info {
+    padding: 20px;
+  }
+
+    .contact-info h2 {
+      font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+  .contact-us-container {
+    margin: 30px 10px;
+    padding: 20px 15px;
+  }
+
+  header h1 {
+    font-size: 1.8rem;
+  }
+
+  .contact-info h2 {
+    font-size: 1.3rem;
+  }
+
+  .contact-info p {
+    font-size: 0.95rem;
+  }
+
+  footer {
+    font-size: 0.8rem;
+  }
 }

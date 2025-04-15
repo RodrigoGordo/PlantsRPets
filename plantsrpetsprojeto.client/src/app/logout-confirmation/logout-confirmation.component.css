@@ -40,3 +40,25 @@ h3 {
   .cancel-button:hover {
     background-color: #5a6268;
   }
+
+@media (max-width: 768px) {
+  .confirmation-dialog {
+    padding: 15px;
+  }
+
+  h3 {
+    font-size: 1.2rem;
+  }
+
+  .buttons {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .confirm-button,
+  .cancel-button {
+    width: 100%;
+    padding: 12px;
+    font-size: 1rem;
+  }
+}

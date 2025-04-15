@@ -2,13 +2,15 @@ main {
   display: flex;
   flex-direction: row;
   justify-content: space-around;
+  flex-wrap: wrap;
+  gap: 20px;
 }
 
 .plantation-creation {
-    width: 400px;
-    padding: 20px;
-    margin-right: 150px;
-    color: #263238
+  width: 400px;
+  padding: 20px;
+  margin-right: 150px;
+  color: #263238;
 }
 
 .plantations-container {
@@ -39,9 +41,9 @@ main {
   margin-bottom: 20px;
 }
 
-.create-btn:hover {
-  background-color: #388E3C;
-}
+  .create-btn:hover {
+    background-color: #388E3C;
+  }
 
 .no-plantations {
   text-align: center;
@@ -71,9 +73,9 @@ main {
   transition: transform 0.2s ease-in-out;
 }
 
-.plantation-card:hover {
-  transform: scale(1.02);
-}
+  .plantation-card:hover {
+    transform: scale(1.02);
+  }
 
 .plantation-info {
   text-align: left;
@@ -109,9 +111,9 @@ main {
   margin-right: 8px;
 }
 
-.edit-btn:hover {
-  background: #e0a800;
-}
+  .edit-btn:hover {
+    background: #e0a800;
+  }
 
 .delete-btn {
   background: #ff5c5c;
@@ -125,12 +127,151 @@ main {
   transition: background 0.3s;
 }
 
-.delete-btn:hover {
-  background: #e04848;
-}
+  .delete-btn:hover {
+    background: #e04848;
+  }
 
 .plantation-and-weather {
   display: flex;
   flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
 }
 
+/* Responsive Adjustments */
+@media (max-width: 1024px) {
+  .plantation-creation {
+    width: 100%;
+    margin-right: 0;
+  }
+
+  .plantations-container {
+    width: 100%;
+    padding: 15px;
+  }
+
+  .plantations-title {
+    font-size: 1.8rem;
+  }
+
+  .plantations-list {
+    width: 100%;
+    height: 350px;
+    padding: 0;
+  }
+
+  .plantation-card {
+    padding: 12px;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .create-btn {
+    padding: 10px 15px;
+  }
+
+  .edit-btn, .delete-btn {
+    padding: 6px 10px;
+  }
+}
+
+@media (max-width: 768px) {
+  .plantation-creation {
+    width: 100%;
+    margin-right: 0;
+    padding: 15px;
+  }
+
+  .plantations-container {
+    width: 100%;
+    padding: 15px;
+  }
+
+  .plantations-title {
+    font-size: 1.6rem;
+  }
+
+  .plantations-list {
+    width: 100%;
+    height: 300px;
+    padding: 0;
+  }
+
+  .plantation-card {
+    flex-direction: column;
+    gap: 10px;
+    padding: 12px;
+  }
+
+  .plantation-name {
+    font-size: 1.1rem;
+  }
+
+  .plantation-type, .last-watered {
+    font-size: 0.85rem;
+  }
+
+  .create-btn {
+    padding: 8px 12px;
+    font-size: 0.9rem;
+  }
+
+  .edit-btn, .delete-btn {
+    padding: 6px 10px;
+    font-size: 0.9rem;
+  }
+
+  .plantation-and-weather {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 480px) {
+  .plantation-creation {
+    width: 100%;
+    margin-right: 0;
+    padding: 10px;
+  }
+
+  .plantations-container {
+    width: 100%;
+    padding: 10px;
+  }
+
+  .plantations-title {
+    font-size: 1.4rem;
+  }
+
+  .plantations-list {
+    width: 100%;
+    height: 250px;
+    padding: 0;
+  }
+
+  .plantation-card {
+    padding: 10px;
+    width: 100%;
+  }
+
+  .create-btn {
+    padding: 8px 12px;
+    font-size: 0.8rem;
+  }
+
+  .edit-btn, .delete-btn {
+    padding: 6px 8px;
+    font-size: 0.8rem;
+  }
+
+  .plantation-name {
+    font-size: 1rem;
+  }
+
+  .plantation-type, .last-watered {
+    font-size: 0.75rem;
+  }
+
+  .plantation-and-weather {
+    flex-direction: column;
+  }
+}

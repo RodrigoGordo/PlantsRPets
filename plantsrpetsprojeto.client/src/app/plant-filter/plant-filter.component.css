@@ -165,6 +165,31 @@ select {
       background: #3a6b2a;
     }
 
+/* Responsive Adjustments */
+@media (max-width: 1024px) {
+  .modal-content {
+    width: 90%;
+    padding: 1.5rem;
+  }
+
+  .modal-header h3 {
+    font-size: 1.3rem;
+  }
+
+  .filter-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+
+  .modal-footer {
+    flex-direction: column;
+  }
+
+  .btn {
+    width: 100%;
+  }
+}
+
 @media (max-width: 768px) {
   .filter-grid {
     grid-template-columns: 1fr;
@@ -185,5 +210,26 @@ select {
 
   .btn {
     width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .modal-content {
+    width: 95%;
+    padding: 1rem;
+  }
+
+  .modal-header h3 {
+    font-size: 1.1rem;
+  }
+
+  .filter-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .btn {
+    width: 100%;
+    padding: 0.75rem;
   }
 }

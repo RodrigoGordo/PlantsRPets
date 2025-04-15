@@ -182,3 +182,24 @@
   box-shadow: 0 0 2px #000;
 }
 
+@media (max-width: 768px) {
+  .notification-card {
+    width: 250px;
+  }
+
+  .notification-item {
+    font-size: 0.85rem;
+  }
+
+  .notification-actions button {
+    font-size: 14px;
+  }
+
+  .notification-settings-card {
+    width: 250px;
+  }
+
+  .frequency-btn {
+    padding: 6px 10px;
+  }
+}

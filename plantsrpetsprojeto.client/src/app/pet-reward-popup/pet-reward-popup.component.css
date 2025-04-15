@@ -32,6 +32,7 @@
   justify-content: space-around;
   gap: 16px;
   margin: 20px 0;
+  flex-wrap: wrap;
 }
 
 .reward-pet-card {
@@ -46,6 +47,7 @@
   cursor: pointer;
   width: 140px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+  margin: 0 auto; /* Center the cards */
 }
 
   .reward-pet-card:hover {
@@ -111,3 +113,48 @@ button {
   .cancel-button:hover {
     background-color: #c0392b;
   }
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  /* Popup Content */
+  .popup-content {
+    padding: 20px;
+  }
+
+  /* Reward Pet Cards */
+  .reward-pets {
+    justify-content: center;
+    gap: 16px;
+  }
+
+  .reward-pet-card {
+    width: 100%;
+    max-width: 200px; /* Adjust width for small screens */
+  }
+
+  button,
+  .cancel-button {
+    width: 100%;
+    max-width: 300px;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Popup Content */
+  .popup-content {
+    width: 95%;
+  }
+
+  /* Reward Pet Cards */
+  .reward-pet-card {
+    width: 100%;
+    max-width: 140px; /* Further adjust for smaller screens */
+  }
+
+  /* Buttons */
+  button,
+  .cancel-button {
+    padding: 12px;
+    font-size: 14px;
+  }
+}

@@ -7,13 +7,15 @@
   max-width: 250px;
   height: 350px;
   aspect-ratio: 7 / 8;
-  transition: transform 0.2s;
+  transition: transform 0.2s, box-shadow 0.2s;
   background: white;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
 }
 
   .plant-card:hover {
-    transform: translateY(-3px);
+    transform: translateY(-5px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   }
 
 .image-container {
@@ -46,12 +48,60 @@
   font-style: italic;
 }
 
-.plant-card {
-  cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
+/* Responsive Adjustments */
+@media (max-width: 1024px) {
+  .plant-card {
+    max-width: 200px;
+    height: 300px;
+  }
+
+  .common-name {
+    font-size: 1rem;
+  }
+
+  .scientific-name {
+    font-size: 0.8rem;
+  }
+
+  .plant-info {
+    padding: 10px;
+  }
 }
 
-  .plant-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+@media (max-width: 768px) {
+  .plant-card {
+    max-width: 180px;
+    height: 270px;
   }
+
+  .common-name {
+    font-size: 0.9rem;
+  }
+
+  .scientific-name {
+    font-size: 0.75rem;
+  }
+
+  .plant-info {
+    padding: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .plant-card {
+    max-width: 160px;
+    height: 250px;
+  }
+
+  .common-name {
+    font-size: 0.85rem;
+  }
+
+  .scientific-name {
+    font-size: 0.7rem;
+  }
+
+  .plant-info {
+    padding: 6px;
+  }
+}

@@ -134,6 +134,7 @@ h2 {
   }
 }
 
+/* Responsive Design */
 @media (max-width: 768px) {
   .chart-section {
     flex: 1 1 100%;

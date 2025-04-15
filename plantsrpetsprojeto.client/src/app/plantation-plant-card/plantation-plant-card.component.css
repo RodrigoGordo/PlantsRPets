@@ -8,7 +8,7 @@
   aspect-ratio: 7 / 8;
   transition: transform 0.2s;
   background: white;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
   .plant-card:hover {
@@ -52,5 +52,54 @@
 
   .plant-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   }
+
+/* Responsive Adjustments */
+@media (max-width: 1024px) {
+  .plant-card {
+    max-width: 220px;
+  }
+
+  .common-name {
+    font-size: 1rem;
+  }
+
+  .scientific-name {
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .plant-card {
+    max-width: 200px;
+  }
+
+  .common-name {
+    font-size: 0.95rem;
+  }
+
+  .scientific-name {
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .plant-card {
+    max-width: 150px;
+    aspect-ratio: 1 / 1;
+    margin: 5px;
+  }
+
+  .common-name {
+    font-size: 0.9rem;
+  }
+
+  .scientific-name {
+    font-size: 0.75rem;
+  }
+
+  .plant-info {
+    padding: 10px;
+  }
+}

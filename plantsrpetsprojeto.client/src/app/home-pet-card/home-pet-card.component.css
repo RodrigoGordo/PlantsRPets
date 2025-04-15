@@ -162,9 +162,12 @@
   }
 }
 
+/* ========== RESPONSIVE ENHANCEMENTS ========== */
+
 @media (max-width: 768px) {
   .pet-card {
     border-radius: 10px;
+    min-height: auto;
   }
 
   .card-header {
@@ -173,9 +176,69 @@
 
   .pet-item {
     padding: 12px 16px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
   }
 
   .card-footer {
     padding: 12px 16px;
+  }
+
+  .card-header h3 {
+    font-size: 1rem;
+  }
+
+  .icon-pet {
+    font-size: 1.2rem;
+  }
+
+  .pet-status {
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .pet-card {
+    border-radius: 8px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06);
+  }
+
+  .card-header {
+    padding: 12px;
+  }
+
+  .pet-item {
+    padding: 10px 12px;
+  }
+
+  .card-footer {
+    padding: 10px 12px;
+    font-size: 0.9rem;
+  }
+
+  .view-all {
+    font-size: 0.9rem;
+  }
+
+  .icon-no-pets {
+    font-size: 2rem;
+  }
+
+  .no-pets p {
+    font-size: 0.9rem;
+  }
+
+  .pet-link {
+    gap: 8px;
+  }
+
+  .pet-icon {
+    font-size: 1.1rem;
+  }
+
+  .pet-status {
+    gap: 6px;
+    font-size: 0.75rem;
   }
 }

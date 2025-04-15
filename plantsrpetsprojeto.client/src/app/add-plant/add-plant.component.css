@@ -138,19 +138,22 @@ button {
     background: #cc0000;
   }
 
-/* Responsive styles */
-@media (max-width: 480px) {
+@media (max-width: 768px) {
   .dialog-container {
-    padding: 15px;
-    width: 95%;
+    margin: 20px auto;
+    padding: 20px;
   }
 
   h2 {
-    font-size: 1.4em;
+    font-size: 1.45em;
+  }
+
+  .buttons {
+    flex-direction: column;
   }
 
   button {
-    font-size: 14px;
-    padding: 10px;
+    width: 100%;
+    font-size: 15px;
   }
 }
