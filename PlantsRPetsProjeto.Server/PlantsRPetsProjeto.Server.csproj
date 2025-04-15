@@ -50,4 +50,8 @@
     <None Include="wwwroot\images\reference.png" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\uploads\" />
+  </ItemGroup>
+
 </Project>
