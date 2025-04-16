@@ -184,8 +184,9 @@ export class ProfileComponent implements OnInit {
   loadFavoritePets(): void {
     this.loading = true;
     this.collectionService.getFavoritePetsInCollection().subscribe({
-      next: (pets) => {
-        this.favoritePets = pets
+      next: (data) => {
+        this.favoritePets = data
+          .filter(pet => pet.isFavorite)
           .sort((a, b) => {
             if (b.isOwned !== a.isOwned) {
               return Number(b.isOwned) - Number(a.isOwned);
@@ -195,9 +196,10 @@ export class ProfileComponent implements OnInit {
           .slice(0, 5);
         this.loading = false;
       },
-      error: (error) => {
-        console.error('Error loading favorite pets', error);
+      error: (err) => {
+        this.error = 'Failed to load your collection. Please try again later.';
         this.loading = false;
+        console.error('Error loading collection:', err);
       }
     });
   }

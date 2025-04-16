@@ -4,6 +4,10 @@
   <h1>My Pet Collection</h1>
   <h3>Here you can favorite and admire the pets you have collected 🍓😎! Clicking on a pet will show you more information about it 🍀!</h3>
 
+  <div *ngIf="favoriteLimitReached" class="favorite-limit-warning">
+    <p>⚠️ You have reached the maximum of 5 favorite pets. Remove one to add another.</p>
+  </div>
+
   <div *ngIf="loading" class="loading">
     <p>Loading your collection...</p>
   </div>
@@ -14,7 +18,7 @@
 
   <article *ngIf="!loading && !error" class="pet-container">
     <app-pet-card *ngFor="let pet of pets"
-                    [pet]="pet">
+                  [pet]="pet" (favoriteToggled)="onFavoriteToggled($event)">
     </app-pet-card>
   </article>
 

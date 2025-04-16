@@ -18,6 +18,7 @@ export class CollectionComponent implements OnInit {
   pets: Pet[] = [];
   loading: boolean = true;
   error: string | null = null;
+  favoriteLimitReached: boolean = false;
 
   /**
   * Construtor que injeta serviços essenciais:
@@ -50,6 +51,7 @@ export class CollectionComponent implements OnInit {
           }
           return Number(b.isFavorite) - Number(a.isFavorite); // Dentro de owned, favoritos primeiro
         });
+        this.favoriteLimitReached = this.getFavoriteCount() >= 5;
         this.loading = false;
       },
       error: (err) => {
@@ -58,6 +60,19 @@ export class CollectionComponent implements OnInit {
         console.error('Error loading collection:', err);
       }
     });
+  }
+
+  getFavoriteCount(): number {
+    return this.pets.filter(pet => pet.isFavorite).length;
+  }
+
+  onFavoriteToggled(updatedPet: Pet): void {
+    const index = this.pets.findIndex(p => p.petId === updatedPet.petId);
+    if (index !== -1) {
+      this.pets[index].isFavorite = updatedPet.isFavorite;
+    }
+
+    this.favoriteLimitReached = this.getFavoriteCount() >= 5;
   }
 
 }

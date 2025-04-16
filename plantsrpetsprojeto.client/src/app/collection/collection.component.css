@@ -310,4 +310,8 @@ h1:after {
   }
 }
 
-
+.favorite-limit-warning {
+  color: #d9534f;
+  font-weight: bold;
+  margin-top: 10px;
+}

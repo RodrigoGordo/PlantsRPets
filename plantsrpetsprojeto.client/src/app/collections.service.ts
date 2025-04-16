@@ -41,6 +41,6 @@ export class CollectionService {
    * @returns Observable com a lista de pets favoritos
    */
   getFavoritePetsInCollection(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/favoritePets`);
+    return this.http.get<any[]>(`${this.apiUrl}`);
   }
 }
