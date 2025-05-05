@@ -11,7 +11,7 @@ import { map, startWith } from 'rxjs/operators';
 @Component({
   selector: 'app-add-plant',
   standalone: false,
-  
+
   templateUrl: './add-plant.component.html',
   styleUrl: './add-plant.component.css'
 })
@@ -104,15 +104,31 @@ export class AddPlantComponent implements OnInit {
     if (value === "") {
       return this.plants.filter(
         plant =>
-          plant.plantType === this.plantationType
+          plant.plantType === this.plantationType || plant.plantType === this.plantationType.toLowerCase()
+          || plant.plantType === this.capitalize(this.plantationType)
       );
     }
 
     return this.plants.filter(
       plant =>
         plant.plantName.toLowerCase().includes(filterValue) &&
-        plant.plantType === this.plantationType
+        (plant.plantType === this.plantationType || plant.plantType === this.plantationType.toLowerCase()
+          || plant.plantType === this.capitalize(this.plantationType))
     );
+  }
+
+  /**
+   * Transforma uma string numa string capitalizada
+   * @param text - String a ser transformada
+   * @returns String capitalizada
+   */
+  capitalize(text: string): string {
+    if (!text) return '';
+    return text
+      .toLowerCase()
+      .split(' ')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ');
   }
 
   /**

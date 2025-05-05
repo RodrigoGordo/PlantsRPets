@@ -3,7 +3,7 @@
 "ServerUrl": "https://localhost:4200",
 "RedirectUrl": "",
 "LaunchCommand": "npm start",
-"WorkingDirectory": "C:\\Users\\35196\\Desktop\\Projeto de ESA\\PlantsRPets\\PlantsRPetsProjeto.Server\\..\\plantsrpetsprojeto.client",
+"WorkingDirectory": "C:\\Users\\Rodrigo\\source\\repos\\PlantsRPets\\PlantsRPetsProjeto.Server\\..\\plantsrpetsprojeto.client",
 "MaxTimeoutInSeconds": "120",
 "KeepRunning": "false"
 }
