@@ -1,3 +1,8 @@
+/**
+ * Responsável: Gonçalo Espada
+ * Contribuidores: Gonçalo Espada
+ */
+
 import { Injectable } from "@angular/core";
 import { CanActivate, Router } from "@angular/router";
 import { Observable, map } from "rxjs";

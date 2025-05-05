@@ -1,3 +1,8 @@
+/**
+ * Responsável: Guilherme Camarada
+ * Contribuidores: Guilherme Camarada
+ */
+
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({

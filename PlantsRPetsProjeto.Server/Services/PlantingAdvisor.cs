@@ -1,4 +1,9 @@
-﻿using PlantsRPetsProjeto.Server.Models;
+﻿/**
+ * Responsável: Gonçalo Espada
+ * Contribuidores: Gonçalo Espada, Guilherme Camarada, Ruben Pereira
+ */
+
+using PlantsRPetsProjeto.Server.Models;
 using System.Globalization;
 
 namespace PlantsRPetsProjeto.Server.Services

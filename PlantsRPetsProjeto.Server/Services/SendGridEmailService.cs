@@ -1,4 +1,9 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿/**
+ * Responsável: Gonçalo Espada
+ * Contribuidores: Gonçalo Espada
+ */
+
+using Microsoft.Extensions.Configuration;
 using SendGrid;
 using SendGrid.Helpers.Mail;
 using System;

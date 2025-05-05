@@ -1,4 +1,10 @@
-﻿using PlantsRPetsProjeto.Server.Models;
+﻿/**
+ * Responsável: Rodrigo Gordo
+ * Contribuidores: Rodrigo Gordo, Gonçalo Espada
+ */
+
+
+using PlantsRPetsProjeto.Server.Models;
 using System.Net.Http;
 using System.Collections.Generic;
 using System.Text.Json;

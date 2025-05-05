@@ -1,4 +1,9 @@
-﻿using PlantsRPetsProjeto.Server.Data;
+﻿/**
+ * Responsável: Guilherme Camarada
+ * Contribuidores: Guilherme Camarada, Ruben Pereira
+ */
+
+using PlantsRPetsProjeto.Server.Data;
 using System;
 using System.ComponentModel;
 using System.Globalization;

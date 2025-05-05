@@ -1,4 +1,9 @@
-﻿using System.Net.Http;
+﻿/**
+ * Responsável: Ruben Pereira
+ * Contribuidores: Ruben Pereira, Rodrigo Gordo
+ */
+
+using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;

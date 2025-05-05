@@ -1,4 +1,9 @@
-﻿using PlantsRPetsProjeto.Server.Models;
+﻿/**
+ * Responsável: Ruben Pereira
+ * Contribuidores: Ruben Pereira
+ */
+
+using PlantsRPetsProjeto.Server.Models;
 using Microsoft.EntityFrameworkCore;
 using Quartz;
 using PlantsRPetsProjeto.Server.Data;

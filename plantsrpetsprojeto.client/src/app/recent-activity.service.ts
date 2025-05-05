@@ -1,3 +1,8 @@
+/**
+ * Responsável: Ruben Pereira
+ * Contribuidores: Ruben Pereira
+ */
+
 import { Injectable } from '@angular/core';
 import { AuthorizeService } from './authorize.service';
 import { filter } from 'rxjs/operators';
