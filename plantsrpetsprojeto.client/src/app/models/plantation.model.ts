@@ -1,3 +1,8 @@
+/**
+ * Responsável: Gonçalo Espada
+ * Contribuidores: Gonçalo Espada
+ */
+
 import { PlantType } from './plant-type.model';
 import { PlantationPlant } from "./plantation-plant";
 import { Location } from './location.model';

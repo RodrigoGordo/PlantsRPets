@@ -1,3 +1,8 @@
+/**
+ * Responsável: Gonçalo Espada
+ * Contribuidores: Gonçalo Espada
+ */
+
 import { Component, Input, Output, EventEmitter, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';

@@ -1,3 +1,8 @@
+/**
+ * Responsável: Rodrigo Gordo
+ * Contribuidores: Rodrigo Gordo
+ */
+
 import { Component, Input, OnInit } from '@angular/core';
 import { WeatherService } from "../weather.service";
 import { Location } from '../models/location.model';

@@ -1,3 +1,8 @@
+/**
+ * Responsável: Ruben Pereira
+ * Contribuidores: Ruben Pereira
+ */
+
 import { Component, Input } from '@angular/core';
 
 @Component({

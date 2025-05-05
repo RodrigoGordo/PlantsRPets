@@ -29,7 +29,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { PlantationsComponent } from './plantations/plantations.component';
 import { CollectionComponent } from './collection/collection.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { SettingsComponent } from './settings/settings.component';
 import { HomeComponent } from './home/home.component';
 import { ProfileComponent } from './profile/profile.component';
 import { LoadingIndicatorComponent } from './loading-indicator/loading-indicator.component';
@@ -81,7 +80,6 @@ import { LocationInputComponent } from './location-input/location-input.componen
     PlantationsComponent,
     CollectionComponent,
     DashboardComponent,
-    SettingsComponent,
     HomeComponent,
     ProfileComponent,
     LoadingIndicatorComponent,

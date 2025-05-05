@@ -1,3 +1,8 @@
+/**
+ * Responsável: Gonçalo Espada
+ * Contribuidores: Gonçalo Espada
+ */
+
 import { Component, Input } from '@angular/core';
 
 

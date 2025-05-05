@@ -1,3 +1,8 @@
+/**
+ * Responsável: Guilherme Camarada
+ * Contribuidores: Guilherme Camarada
+ */
+
 import { Component, HostListener, OnInit } from '@angular/core';
 import { PlantsService } from '../plants.service';
 import { PlantInfo } from '../models/plant-info';

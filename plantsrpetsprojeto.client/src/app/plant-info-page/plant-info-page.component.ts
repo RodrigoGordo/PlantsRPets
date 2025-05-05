@@ -1,3 +1,8 @@
+/**
+ * Responsável: Guilherme Camarada
+ * Contribuidores: Guilherme Camarada
+ */
+
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { TipService } from '../tips.service';

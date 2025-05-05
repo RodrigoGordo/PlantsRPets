@@ -1,3 +1,8 @@
+/**
+ * Responsável: Rodrigo Gordo
+ * Contribuidores: Rodrigo Gordo, Guilherme Camarada
+ */
+
 import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { AuthorizeService } from '../authorize.service';

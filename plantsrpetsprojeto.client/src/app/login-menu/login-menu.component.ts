@@ -1,3 +1,8 @@
+/**
+ * Responsável: Ruben Pereira
+ * Contribuidores: Ruben Pereira, Guilherme Camarada, Gonçalo Espada
+ */
+
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { SigninComponent } from '../signin/signin.component';

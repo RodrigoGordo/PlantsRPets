@@ -1,3 +1,8 @@
+/**
+ * Responsável: Ruben Pereira
+ * Contribuidores: Ruben Pereira
+ */
+
 import { Component, OnInit } from '@angular/core';
 import { AuthorizeService } from '../authorize.service';
 import { UserProfile } from '../models/user-profile';

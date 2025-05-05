@@ -1,4 +1,9 @@
 /**
+ * Responsável: Rodrigo Gordo
+ * Contribuidores: Rodrigo Gordo
+ */
+
+/**
  * Representa um pet colecionável, gerado e atribuído ao utilizador.
  */
 export interface Pet {

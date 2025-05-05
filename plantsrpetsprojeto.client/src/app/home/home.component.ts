@@ -1,3 +1,8 @@
+/**
+ * Responsável: Rodrigo Gordo
+ * Contribuidores: Rodrigo Gordo, Guilherme Camarada, Ruben Pereira
+ */
+
 import { Component, OnInit } from '@angular/core';
 import { RecentActivityService } from '../recent-activity.service';
 import { AuthorizeService } from '../authorize.service';

@@ -1,4 +1,9 @@
 /**
+ * Responsável: Guilherme Camarada
+ * Contribuidores: Guilherme Camarada
+ */
+
+/**
  * Representa uma localização de uma plantação.
  */
 export interface Location {

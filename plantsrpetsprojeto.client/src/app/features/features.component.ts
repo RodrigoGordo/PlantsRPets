@@ -1,3 +1,8 @@
+/**
+ * Responsável: Rodrigo Gordo
+ * Contribuidores: Rodrigo Gordo, Ruben Pereira
+ */
+
 import { Component } from '@angular/core';
 
 /**

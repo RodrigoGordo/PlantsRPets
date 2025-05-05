@@ -1,4 +1,9 @@
 /**
+ * Responsável: Gonçalo Espada
+ * Contribuidores: Gonçalo Espada
+ */
+
+/**
  * Informação sobre a frequência de podas de uma planta.
  */
 export interface PruningCountInfo {

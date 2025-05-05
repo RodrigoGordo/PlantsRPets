@@ -12,7 +12,6 @@ import { RegisterComponent } from './register/register.component';
 import { PlantationsComponent } from './plantations/plantations.component';
 import { CollectionComponent } from './collection/collection.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { SettingsComponent } from './settings/settings.component';
 import { ProfileComponent } from './profile/profile.component';
 import { HomeComponent } from './home/home.component';
 import { WikiComponent } from './wiki/wiki.component';
@@ -40,7 +39,6 @@ const routes: Routes = [
   { path: 'collections', component: CollectionComponent },
   { path: 'plantation/:id', component: PlantationDetailsComponent },
   { path: 'dashboard', component: DashboardComponent },
-  { path: 'settings', component: SettingsComponent },
   { path: 'profile', component: ProfileComponent },
   { path: 'home', component: HomeComponent },
   { path: 'wiki', component: WikiComponent },

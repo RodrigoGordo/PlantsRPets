@@ -1,3 +1,8 @@
+/**
+ * Responsável: Gonçalo Espada
+ * Contribuidores: Gonçalo Espada, Guilherme Camarada
+ */
+
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';

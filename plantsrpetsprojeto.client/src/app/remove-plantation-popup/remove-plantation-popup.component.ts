@@ -1,3 +1,8 @@
+/**
+ * Responsável: Gonçalo Espada
+ * Contribuidores: Gonçalo Espada
+ */
+
 import { Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 

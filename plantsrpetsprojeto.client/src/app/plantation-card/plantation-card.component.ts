@@ -1,3 +1,8 @@
+/**
+ * Responsável: Gonçalo Espada
+ * Contribuidores: Gonçalo Espada, Guilherme Camarada
+ */
+
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { PlantationsService } from '../plantations.service';
 import { RecentActivityService } from '../recent-activity.service';

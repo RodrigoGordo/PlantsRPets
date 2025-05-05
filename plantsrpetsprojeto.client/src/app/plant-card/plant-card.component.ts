@@ -1,3 +1,8 @@
+/**
+ * Responsável: Guilherme Camarada
+ * Contribuidores: Guilherme Camarada
+ */
+
 import { Component, Input } from '@angular/core';
 import { PlantInfo } from '../models/plant-info';
 import { Router } from '@angular/router';

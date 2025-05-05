@@ -1,3 +1,8 @@
+/**
+ * Responsável: Rodrigo Gordo
+ * Contribuidores: Rodrigo Gordo
+ */
+
 import { PruningCountInfo } from "./pruning-count-info";
 
 /**

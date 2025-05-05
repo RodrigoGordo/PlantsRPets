@@ -1,3 +1,8 @@
+/**
+ * Responsável: Guilherme Camarada
+ * Contribuidores: Guilherme Camarada
+ */
+
 import { Component, OnInit } from "@angular/core";
 import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from "@angular/forms";
 import { AuthorizeService } from "../authorize.service";

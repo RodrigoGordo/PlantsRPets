@@ -1,3 +1,8 @@
+/**
+ * Responsável: Gonçalo Espada
+ * Contribuidores: Gonçalo Espada, Guilherme Camarada
+ */
+
 import { Component, Input } from '@angular/core';
 import { PlantInfo } from '../models/plant-info';
 import { ActivatedRoute, Router } from '@angular/router';

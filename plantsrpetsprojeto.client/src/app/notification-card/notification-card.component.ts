@@ -1,3 +1,8 @@
+/**
+ * Responsável: Ruben Pereira
+ * Contribuidores: Ruben Pereira
+ */
+
 import { Component, OnInit } from '@angular/core';
 import { NotificationService } from '../../app/notification.service';
 import { Notification } from '../models/notification.model';

@@ -1,3 +1,8 @@
+/**
+ * Responsável: Guilherme Camarada
+ * Contribuidores: Guilherme Camarada
+ */
+
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { CityService } from '../city.service';
 import { Location } from '../models/location.model';

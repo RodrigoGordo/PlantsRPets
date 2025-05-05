@@ -1,4 +1,9 @@
 /**
+ * Responsável: Ruben Pereira
+ * Contribuidores: Ruben Pereira
+ */
+
+/**
  * Representa o perfil de um utilizador na aplicação, contendo dados pessoais e preferências.
  */
 export interface UserProfile {

@@ -1,4 +1,9 @@
 /**
+ * Responsável: Ruben Pereira
+ * Contribuidores: Ruben Pereira
+ */
+
+/**
  * Representa uma notificação recebida por um utilizador.
  */
 export interface Notification {

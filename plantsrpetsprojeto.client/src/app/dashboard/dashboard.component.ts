@@ -1,3 +1,8 @@
+/**
+ * Responsável: Rodrigo Gordo
+ * Contribuidores: Rodrigo Gordo
+ */
+
 import { Component, OnInit } from '@angular/core';
 import { MetricsService } from '../metrics.service';
 import { Color, ScaleType } from '@swimlane/ngx-charts';
