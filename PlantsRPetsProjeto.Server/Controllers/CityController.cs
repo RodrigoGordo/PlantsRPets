@@ -1,4 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿/**
+ * Responsável: Guilherme Camarada
+ * Contribuidores: Guilherme Camarada
+ */
+
+using Microsoft.AspNetCore.Mvc;
 using PlantsRPetsProjeto.Server.Services;
 
 namespace PlantsRPetsProjeto.Server.Controllers

@@ -1,4 +1,9 @@
-﻿namespace PlantsRPetsProjeto.Server.Models
+﻿/**
+ * Responsável: Rodrigo Gordo
+ * Contribuidores: Rodrigo Gordo
+ */
+
+namespace PlantsRPetsProjeto.Server.Models
 {
     /// <summary>
     /// Representa a coleção de animais virtuais (pets) pertencente a um utilizador.

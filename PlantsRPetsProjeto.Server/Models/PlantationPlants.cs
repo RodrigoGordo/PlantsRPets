@@ -1,4 +1,9 @@
-﻿namespace PlantsRPetsProjeto.Server.Models
+﻿/**
+ * Responsável: Rodrigo Gordo
+ * Contribuidores: Rodrigo Gordo
+ */
+
+namespace PlantsRPetsProjeto.Server.Models
 {
     /// <summary>
     /// Representa a associação entre uma plantação e as plantas que nela foram cultivadas.

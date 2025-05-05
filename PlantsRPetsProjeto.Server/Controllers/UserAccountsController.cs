@@ -1,4 +1,9 @@
-﻿using Microsoft.AspNetCore.Authentication;
+﻿/**
+ * Responsável: Guilherme Camarada
+ * Contribuidores: Guilherme Camarada, Gonçalo Espada, Rúben Pereira, Rodrigo Gordo
+ */
+
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
@@ -256,7 +261,6 @@ namespace PlantsRPetsProjeto.Server.Controllers
                 var encodedToken = WebUtility.UrlEncode(token);
 
                 var resetLink = $"{_configuration["Frontend:BaseUrl"]}/reset-password?email={user.Email}&token={encodedToken}";
-                Console.WriteLine($"[DEBUG] Password Reset Token: {token}");// Pode ser removido depois (DEBUG)
 
                 await _emailService.SendEmailAsync(
                     user.Email!,

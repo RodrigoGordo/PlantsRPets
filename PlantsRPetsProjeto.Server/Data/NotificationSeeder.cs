@@ -1,4 +1,9 @@
-﻿using System;
+﻿/**
+ * Responsável: Rodrigo Gordo
+ * Contribuidores: Rodrigo Gordo
+ */
+
+using System;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;

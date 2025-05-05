@@ -1,4 +1,9 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿/**
+ * Responsável: Rúben Pereira
+ * Contribuidores: Rúben Pereira, Rodrigo Gordo
+ */
+
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PlantsRPetsProjeto.Server.Data;

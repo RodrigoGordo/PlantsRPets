@@ -1,4 +1,9 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿/**
+ * Responsável: Rodrigo Gordo
+ * Contribuidores: Rodrigo Gordo
+ */
+
+using Microsoft.AspNetCore.Identity;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using PlantsRPetsProjeto.Server.Models;
 using System.Data.Common;

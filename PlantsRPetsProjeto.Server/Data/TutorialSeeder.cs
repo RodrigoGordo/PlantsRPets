@@ -1,4 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿/**
+ * Responsável: Rodrigo Gordo
+ * Contribuidores: Rodrigo Gordo
+ */
+
+using Microsoft.EntityFrameworkCore;
 using PlantsRPetsProjeto.Server.Models;
 
 namespace PlantsRPetsProjeto.Server.Data

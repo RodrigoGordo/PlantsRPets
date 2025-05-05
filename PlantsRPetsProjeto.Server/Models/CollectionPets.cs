@@ -1,4 +1,9 @@
-﻿using System.Threading.Tasks.Dataflow;
+﻿/**
+ * Responsável: Rodrigo Gordo
+ * Contribuidores: Rodrigo Gordo
+ */
+
+using System.Threading.Tasks.Dataflow;
 
 namespace PlantsRPetsProjeto.Server.Models
 {

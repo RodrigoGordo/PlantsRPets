@@ -1,4 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿/**
+ * Responsável: Rodrigo Gordo
+ * Contribuidores: Rodrigo Gordo
+ */
+
+using Microsoft.AspNetCore.Mvc;
 using PlantsRPetsProjeto.Server.Services;
 using System.Threading.Tasks;
 

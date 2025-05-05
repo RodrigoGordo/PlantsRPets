@@ -1,4 +1,9 @@
-﻿using System;
+﻿/**
+ * Responsável: Gonçalo Espada
+ * Contribuidores: Gonçalo Espada, Guilherme Camarada, Rodrigo Gordo, Rúben Pereira
+ */
+
+using System;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
