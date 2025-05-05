@@ -11,7 +11,7 @@
     <div *ngIf="plant && !isLoading" class="plant-content-wrapper">
       <!-- Left Column -->
       <div class="left-column">
-        <img [src]="plant.image" [alt]="plant.plantName" class="plant-image">
+        <img [src]="plant.image || 'assets/logo.png'" [alt]="plant.plantName" class="plant-image">
       </div>
 
       <!-- Right Column -->
