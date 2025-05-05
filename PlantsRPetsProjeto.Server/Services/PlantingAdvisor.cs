@@ -20,18 +20,37 @@ namespace PlantsRPetsProjeto.Server.Services
             { "succulent", new() { { "High", 4 }, { "Moderate", 8 }, { "Low", 12 } } },
             { "shrub", new() { { "High", 6 }, { "Moderate", 12 }, { "Low", 18 } } },
             { "vegetable", new() { { "High", 2 }, { "Moderate", 4 }, { "Low", 6 } } },
-            { "vine", new() { { "High", 3 }, { "Moderate", 6 }, { "Low", 9 } } }
+            { "vine", new() { { "High", 3 }, { "Moderate", 6 }, { "Low", 9 } } },
+            { "aster", new() { { "High", 3 }, { "Moderate", 6 }, { "Low", 9 } } },
+            { "broadleaf evergreen", new() { { "High", 12 }, { "Moderate", 24 }, { "Low", 36 } } },
+            { "deciduous shrub", new() { { "High", 6 }, { "Moderate", 12 }, { "Low", 18 } } },
+            { "begonia", new() { { "High", 3 }, { "Moderate", 6 }, { "Low", 9 } } },
+            { "fern", new() { { "High", 2 }, { "Moderate", 4 }, { "Low", 6 } } },
+            { "ornamental grass", new() { { "High", 4 }, { "Moderate", 8 }, { "Low", 12 } } },
+            { "rush or sedge", new() { { "High", 3 }, { "Moderate", 6 }, { "Low", 9 } } },
+            { "default", new() { { "High", 6 }, { "Moderate", 12 }, { "Low", 18 } } }
         };
 
         /// <summary>
-        /// Tabela com dados da frequência de rega por tipo de planta 
+        /// Tabela com dados da frequência de rega por tipo de planta em horas.
         /// </summary>
         private static readonly Dictionary<string, Dictionary<string, int>> WateringTable = new()
         {
             { "Tree", new() { { "Minimal", 156 }, { "Average", 84 }, { "Frequent", 60 } } },
-            { "Shrub", new() { { "Minimal", 144 }, {"Average", 84 }, { "Frequent", 36 } } },
-            { "Vegetable", new(){ { "Minimal", 48 }, { "Average", 36 },{ "Frequent", 24 } } }
-
+            { "Shrub", new() { { "Minimal", 144 }, { "Average", 84 }, { "Frequent", 36 } } },
+            { "Vegetable", new() { { "Minimal", 48 }, { "Average", 36 }, { "Frequent", 24 } } },
+            { "Aster", new() { { "Minimal", 96 }, { "Average", 60 }, { "Frequent", 36 } } },
+            { "Broadleaf evergreen", new() { { "Minimal", 150 }, { "Average", 84 }, { "Frequent", 48 } } },
+            { "Deciduous shrub", new() { { "Minimal", 144 }, { "Average", 84 }, { "Frequent", 36 } } },
+            { "Begonia", new() { { "Minimal", 96 }, { "Average", 60 }, { "Frequent", 36 } } },
+            { "Fern", new() { { "Minimal", 120 }, { "Average", 72 }, { "Frequent", 48 } } },
+            { "Ornamental grass", new() { { "Minimal", 144 }, { "Average", 84 }, { "Frequent", 36 } } },
+            { "Rush or sedge", new() { { "Minimal", 120 }, { "Average", 72 }, { "Frequent", 48 } } },
+            { "Herb", new() { { "Minimal", 96 }, { "Average", 60 }, { "Frequent", 36 } } },
+            { "Vine", new() { { "Minimal", 72 }, { "Average", 48 }, { "Frequent", 36 } } },
+            { "Flower", new() { { "Minimal", 96 }, { "Average", 60 }, { "Frequent", 36 } } },
+            { "Succulent", new() { { "Minimal", 168 }, { "Average", 120 }, { "Frequent", 72 } } },
+            { "Default", new() { { "Minimal", 120 }, { "Average", 72 }, { "Frequent", 48 } } }
         };
 
         /// <summary>
@@ -80,6 +99,69 @@ namespace PlantsRPetsProjeto.Server.Services
                     { "moderate", new GrowthData { MaturityMonths = 2, HarvestOffsetMonths = 0 } },
                     { "low", new GrowthData { MaturityMonths = 3, HarvestOffsetMonths = 0 } },
                 }
+            },
+            { "aster", new()
+                {
+                    { "high", new GrowthData { MaturityMonths = 1, HarvestOffsetMonths = 0 } },
+                    { "moderate", new GrowthData { MaturityMonths = 2, HarvestOffsetMonths = 0 } },
+                    { "low", new GrowthData { MaturityMonths = 3, HarvestOffsetMonths = 0 } },
+                }
+            },
+            { "broadleaf evergreen", new()
+                {
+                    { "high", new GrowthData { MaturityMonths = 15, HarvestOffsetMonths = 6 } },
+                    { "moderate", new GrowthData { MaturityMonths = 24, HarvestOffsetMonths = 9 } },
+                    { "low", new GrowthData { MaturityMonths = 30, HarvestOffsetMonths = 12 } },
+                }
+            },
+            { "deciduous shrub", new()
+                {
+                    { "high", new GrowthData { MaturityMonths = 12, HarvestOffsetMonths = 6 } },
+                    { "moderate", new GrowthData { MaturityMonths = 18, HarvestOffsetMonths = 6 } },
+                    { "low", new GrowthData { MaturityMonths = 24, HarvestOffsetMonths = 6 } },
+                }
+            },
+            { "begonia", new()
+                {
+                    { "high", new GrowthData { MaturityMonths = 1, HarvestOffsetMonths = 0 } },
+                    { "moderate", new GrowthData { MaturityMonths = 2, HarvestOffsetMonths = 0 } },
+                    { "low", new GrowthData { MaturityMonths = 3, HarvestOffsetMonths = 0 } },
+                }
+            },
+            { "fern", new()
+                {
+                    { "high", new GrowthData { MaturityMonths = 1, HarvestOffsetMonths = 0 } },
+                    { "moderate", new GrowthData { MaturityMonths = 2, HarvestOffsetMonths = 0 } },
+                    { "low", new GrowthData { MaturityMonths = 3, HarvestOffsetMonths = 0 } },
+                }
+            },
+            { "ornamental grass", new()
+                {
+                    { "high", new GrowthData { MaturityMonths = 12, HarvestOffsetMonths = 6 } },
+                    { "moderate", new GrowthData { MaturityMonths = 18, HarvestOffsetMonths = 6 } },
+                    { "low", new GrowthData { MaturityMonths = 24, HarvestOffsetMonths = 6 } },
+                }
+            },
+            { "rush or sedge", new()
+                {
+                    { "high", new GrowthData { MaturityMonths = 3, HarvestOffsetMonths = 0 } },
+                    { "moderate", new GrowthData { MaturityMonths = 6, HarvestOffsetMonths = 3 } },
+                    { "low", new GrowthData { MaturityMonths = 12, HarvestOffsetMonths = 6 } },
+                }
+            },
+            { "succulent", new()
+                {
+                    { "high", new GrowthData { MaturityMonths = 3, HarvestOffsetMonths = 0 } },
+                    { "moderate", new GrowthData { MaturityMonths = 6, HarvestOffsetMonths = 0 } },
+                    { "low", new GrowthData { MaturityMonths = 9, HarvestOffsetMonths = 0 } },
+                }
+            },
+            { "default", new()
+                {
+                    { "high", new GrowthData { MaturityMonths = 6, HarvestOffsetMonths = 3 } },
+                    { "moderate", new GrowthData { MaturityMonths = 12, HarvestOffsetMonths = 6 } },
+                    { "low", new GrowthData { MaturityMonths = 18, HarvestOffsetMonths = 6 } },
+                }
             }
         };
 
@@ -92,8 +174,16 @@ namespace PlantsRPetsProjeto.Server.Services
             growthRate = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(growthRate.Trim().ToLower());
 
             if (GrowthTable.TryGetValue(plantType, out var rateMap) && rateMap.TryGetValue(growthRate, out int months))
+            {
                 return months;
-
+            } else
+            {
+                if (GrowthTable.TryGetValue("default", out var defaultRateMap) && defaultRateMap.TryGetValue(growthRate, out int defaultMonths))
+                {
+                    return defaultMonths;
+                }
+            }
+                
             return 6;
         }
 
@@ -216,6 +306,13 @@ namespace PlantsRPetsProjeto.Server.Services
                 && rateMap.TryGetValue(growthRate, out var data))
             {
                 return data.HarvestOffsetMonths;
+            } else
+            {
+                if (HarvestTable.TryGetValue("default", out var defaultRateMap)
+                    && defaultRateMap.TryGetValue(growthRate, out var defaultData))
+                {
+                    return defaultData.HarvestOffsetMonths;
+                }
             }
 
             return 0;
@@ -233,6 +330,13 @@ namespace PlantsRPetsProjeto.Server.Services
                 && rateMap.TryGetValue(growthRate, out var data))
             {
                 return data.TotalHarvestMonths;
+            } else
+            {
+                if (HarvestTable.TryGetValue("default", out var defaultRateMap)
+                    && defaultRateMap.TryGetValue(growthRate, out var defaultData))
+                {
+                    return defaultData.TotalHarvestMonths;
+                }
             }
 
             return 3;
@@ -267,7 +371,7 @@ namespace PlantsRPetsProjeto.Server.Services
                     return sample.HarvestOffsetMonths > 0;
             }
 
-            return false;
+            return true;
         }
 
         /// <summary>
@@ -284,13 +388,25 @@ namespace PlantsRPetsProjeto.Server.Services
             string plantType = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(plantInfo.PlantType.Trim().ToLower());
             string wateringNeeds = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(plantInfo.Watering.Trim().ToLower());
 
-            if (!WateringTable.TryGetValue(plantType, out var needsMap) || !needsMap.TryGetValue(wateringNeeds, out int intervalHours))
-                return (true, TimeSpan.Zero);
+            int finalIntervalHours = 0;
+            int intervalHours = 0;
+
+            if (WateringTable.TryGetValue(plantType, out var needsMap) && needsMap.TryGetValue(wateringNeeds, out intervalHours))
+            {
+                finalIntervalHours = intervalHours;
+            }
+            else
+            {
+                if (WateringTable.TryGetValue("Default", out var defaultNeedsMap) && defaultNeedsMap.TryGetValue(wateringNeeds, out int defaultIntervalHours))
+                {
+                    finalIntervalHours = defaultIntervalHours;
+                }
+            }
 
             if (!lastWatered.HasValue)
                 return (true, TimeSpan.Zero);
 
-            DateTime nextWaterTime = lastWatered.Value.AddHours(intervalHours);
+            DateTime nextWaterTime = lastWatered.Value.AddHours(finalIntervalHours);
             DateTime now = DateTime.UtcNow;
 
             if (now >= nextWaterTime)
