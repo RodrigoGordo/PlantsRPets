@@ -253,3 +253,20 @@ app-plant-card {
     background-color: #c0d9c2;
     box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
   }
+
+.mat-mdc-dialog-surface mdc-dialog__surface {
+    background-color: none;
+}
+
+.dialog-container[_ngcontent-ng-c1192819080] {
+  background: #fff;
+  padding: 25px;
+  border-radius: 25px;
+  text-align: center;
+  width: 91%;
+  width: 500px;
+  max-width: 100%;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+/*
+  .dialog-container[_ngcontent-ng-c1192819080]*/

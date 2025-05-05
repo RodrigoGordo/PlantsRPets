@@ -72,11 +72,13 @@ export class SigninComponent {
           this.authService.signIn(email, password).subscribe();
           this.loginSuccess = true;
           this.errorMessage = "";
-          setTimeout(() => {
-            this.dialogRef.close(true);
-            this.router.navigateByUrl("/home");
-          }, 1300);
+          //setTimeout(() => {
+          //  this.dialogRef.close(true);
+          //  this.router.navigateByUrl("/home");
+          //}, 1300);
           this.isLoading = false;
+          this.dialogRef.close(true);
+          this.router.navigateByUrl("/home");
         }
       },
       error: err => {

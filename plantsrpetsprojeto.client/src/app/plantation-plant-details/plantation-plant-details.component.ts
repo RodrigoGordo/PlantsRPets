@@ -97,7 +97,7 @@ export class PlantationPlantDetailsComponent implements OnInit, OnDestroy {
       },
       error: () => {
         this.isLoading = false;
-        this.errorMessage = 'Erro ao carregar detalhes da planta';
+        this.errorMessage = 'Error in loading plantation details, try again later.';
       }
     });
     this.plantationsService.getPlantationById(this.plantationId).subscribe({
@@ -149,7 +149,7 @@ export class PlantationPlantDetailsComponent implements OnInit, OnDestroy {
           const diffMs = new Date(res.nextHarvestDate).getTime() - new Date().getTime();
           this.updateCooldownMessage(diffMs, 'harvest');
         } else {
-          this.harvestCooldownMsg = '✅ Pronta para colher!';
+          this.harvestCooldownMsg = '✅ Ready to Harvest!';
         }
       },
       error: (err) => {
@@ -169,9 +169,9 @@ export class PlantationPlantDetailsComponent implements OnInit, OnDestroy {
     // Se o tempo restante for menor ou igual a zero, mostra mensagem de disponível
     if (diffMs <= 0) {
       if (type === 'water') {
-        this.waterCooldownMsg = '✅ Pronta para regar!';
+        this.waterCooldownMsg = '✅ Ready to Water!';
       } else {
-        this.harvestCooldownMsg = '✅ Pronta para colher!';
+        this.harvestCooldownMsg = '✅ Ready to Harvest!';
       }
       return;
     }
@@ -187,8 +187,8 @@ export class PlantationPlantDetailsComponent implements OnInit, OnDestroy {
     if (hours > 0) msgParts.push(`${hours}h`);
     if (minutes > 0) msgParts.push(`${minutes}m`);
 
-    const action = type === 'water' ? 'rega' : 'colheita';
-    const message = `⏳ Próxima ${action} disponível em ${msgParts.join(' ')}`;
+    const action = type === 'water' ? 'Watering' : 'Harvest';
+    const message = `⏳ Next ${action} available in ${msgParts.join(' ')}`;
 
     if (type === 'water') {
       this.waterCooldownMsg = message;
@@ -225,7 +225,7 @@ export class PlantationPlantDetailsComponent implements OnInit, OnDestroy {
    */
   waterPlants() {
     if (!this.canWater) {
-      alert('A planta ainda está em cooldown!');
+      alert('Wait until your next watering moment.');
       return;
     }
 
@@ -248,7 +248,7 @@ export class PlantationPlantDetailsComponent implements OnInit, OnDestroy {
    */
   harvestPlant() {
     if (!this.canHarvest) {
-      alert('A planta ainda não está pronta para colheita!');
+      alert('The plant is not yet ready to harvest!');
       return;
     }
 

@@ -108,7 +108,7 @@ export class PlantationDetailsComponent implements OnInit {
    */
   openAddPlantDialog(): void {
     const dialogRef = this.dialog.open(AddPlantComponent, {
-      width: '400px',
+      width: '600px',
       data: this.plantation.plantationId
     });
 
