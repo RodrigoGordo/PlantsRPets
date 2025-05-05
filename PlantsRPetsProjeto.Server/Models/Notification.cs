@@ -1,4 +1,9 @@
-﻿namespace PlantsRPetsProjeto.Server.Models
+﻿/**
+ * Responsável: Rodrigo Gordo
+ * Contribuidores: Rodrigo Gordo
+ */
+
+namespace PlantsRPetsProjeto.Server.Models
 {
     /// <summary>
     /// Representa uma notificação genérica enviada ao utilizador.

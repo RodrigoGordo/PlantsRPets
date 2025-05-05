@@ -1,4 +1,9 @@
-﻿using System.Threading.Tasks;
+﻿/**
+ * Responsável: Rodrigo Gordo
+ * Contribuidores: Rodrigo Gordo
+ */
+
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using PlantsRPetsProjeto.Server.Data;

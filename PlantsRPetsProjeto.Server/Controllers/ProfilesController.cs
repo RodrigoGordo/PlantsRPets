@@ -1,4 +1,9 @@
-﻿using System.Security.Claims;
+﻿/**
+ * Responsável: Ruben Pereira
+ * Contribuidores: Ruben Pereira
+ */
+
+using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;

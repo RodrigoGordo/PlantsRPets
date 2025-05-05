@@ -1,4 +1,9 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿/**
+ * Responsável: Rodrigo Gordo
+ * Contribuidores: Rodrigo Gordo
+ */
+
+using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 
 namespace PlantsRPetsProjeto.Server.Models

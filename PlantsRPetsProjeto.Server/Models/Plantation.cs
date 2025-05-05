@@ -1,4 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿/**
+ * Responsável: Rodrigo Gordo
+ * Contribuidores: Rodrigo Gordo
+ */
+
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PlantsRPetsProjeto.Server.Models
 {

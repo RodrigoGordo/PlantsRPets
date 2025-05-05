@@ -1,4 +1,9 @@
-﻿namespace PlantsRPetsProjeto.Server.Models
+﻿/**
+ * Responsável: Rodrigo Gordo
+ * Contribuidores: Rodrigo Gordo
+ */
+
+namespace PlantsRPetsProjeto.Server.Models
 {
     /// <summary>
     /// Regista eventos relevantes realizados por um utilizador,

@@ -1,4 +1,9 @@
-﻿using Microsoft.Identity.Client;
+﻿/**
+ * Responsável: Rodrigo Gordo
+ * Contribuidores: Rodrigo Gordo
+ */
+
+using Microsoft.Identity.Client;
 
 namespace PlantsRPetsProjeto.Server.Models
 {

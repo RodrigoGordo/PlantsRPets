@@ -1,4 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿/**
+ * Responsável: Ruben Pereira
+ * Contribuidores: Ruben Pereira
+ */
+
+using Microsoft.AspNetCore.Mvc;
 using Quartz;
 using PlantsRPetsProjeto.Server.Services;
 
