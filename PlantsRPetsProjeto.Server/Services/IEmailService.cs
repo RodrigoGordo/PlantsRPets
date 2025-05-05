@@ -1,4 +1,9 @@
-﻿namespace PlantsRPetsProjeto.Server.Services
+﻿/**
+ * Responsável: Gonçalo Espada
+ * Contribuidores: Gonçalo Espada
+ */
+
+namespace PlantsRPetsProjeto.Server.Services
 {
     /// <summary>
     /// Interface para o serviço de envio de e-mails.

@@ -1,4 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿/**
+ * Responsável: Ruben Pereira
+ * Contribuidores: Ruben Pereira
+ */
+
+using Microsoft.EntityFrameworkCore;
 using PlantsRPetsProjeto.Server.Controllers;
 using PlantsRPetsProjeto.Server.Data;
 using PlantsRPetsProjeto.Server.Models;

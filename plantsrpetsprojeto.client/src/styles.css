@@ -9,16 +9,6 @@ html * {
   font-family: 'Inter', sans-serif;
 }
 
-.dialog-container[_ngcontent-ng-c1192819080] {
-  background: #fff !important;
-  padding: 25px !important;
-  border-radius: 25px !important;
-  text-align: center !important;
-  width: 500px !important;
-  width: 91% !important;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15) !important;
-}
-
 .mat-mdc-dialog-surface {
     width: none;
-} 
+}

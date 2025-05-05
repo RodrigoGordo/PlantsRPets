@@ -1,4 +1,9 @@
-﻿using Newtonsoft.Json;
+﻿/**
+ * Responsável: Rodrigo Gordo
+ * Contribuidores: Rodrigo Gordo
+ */
+
+using Newtonsoft.Json;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;

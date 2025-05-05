@@ -1,4 +1,10 @@
-﻿namespace PlantsRPetsProjeto.Server.Services
+﻿/**
+ * Responsável: Guilherme Camarada
+ * Contribuidores: Guilherme Camarada
+ */
+
+
+namespace PlantsRPetsProjeto.Server.Services
 {
     public class CityService
     {

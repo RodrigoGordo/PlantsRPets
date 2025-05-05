@@ -1,4 +1,9 @@
-﻿using System;
+﻿/**
+ * Responsável: Rodrigo Gordo
+ * Contribuidores: Rodrigo Gordo, Guilherme Camarada
+ */
+
+using System;
 using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
