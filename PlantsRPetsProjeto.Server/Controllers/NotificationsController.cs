@@ -1,6 +1,6 @@
 ﻿/**
- * Responsável: Rúben Pereira
- * Contribuidores: Rúben Pereira
+ * Responsável: Ruben Pereira
+ * Contribuidores: Ruben Pereira
  */
 
 using System;

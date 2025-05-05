@@ -1,6 +1,6 @@
 ﻿/**
  * Responsável: Gonçalo Espada
- * Contribuidores: Gonçalo Espada, Guilherme Camarada, Rodrigo Gordo, Rúben Pereira
+ * Contribuidores: Gonçalo Espada, Guilherme Camarada, Rodrigo Gordo, Ruben Pereira
  */
 
 using System;

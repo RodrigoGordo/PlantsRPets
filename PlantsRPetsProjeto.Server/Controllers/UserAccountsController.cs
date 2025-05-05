@@ -1,6 +1,6 @@
 ﻿/**
  * Responsável: Guilherme Camarada
- * Contribuidores: Guilherme Camarada, Gonçalo Espada, Rúben Pereira, Rodrigo Gordo
+ * Contribuidores: Guilherme Camarada, Gonçalo Espada, Ruben Pereira, Rodrigo Gordo
  */
 
 using Microsoft.AspNetCore.Authentication;

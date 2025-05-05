@@ -1,11 +1,11 @@
-﻿using System.Security.Claims;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
-/**
- * Responsável: Rúben Pereira
- * Contribuidores: Rúben Pereira
+﻿/**
+ * Responsável: Ruben Pereira
+ * Contribuidores: Ruben Pereira
  */
 
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;

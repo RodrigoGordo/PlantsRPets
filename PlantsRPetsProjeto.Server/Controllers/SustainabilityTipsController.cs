@@ -1,6 +1,6 @@
 ﻿/**
- * Responsável: Rúben Pereira
- * Contribuidores: Rúben Pereira, Rodrigo Gordo
+ * Responsável: Ruben Pereira
+ * Contribuidores: Ruben Pereira, Rodrigo Gordo
  */
 
 using Microsoft.AspNetCore.Authorization;
