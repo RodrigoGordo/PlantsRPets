@@ -25,6 +25,7 @@ export class AddPlantComponent implements OnInit {
   plants: PlantInfo[] = [];
   filteredPlants: PlantInfo[] = [];
   formError: string | null = null;
+  plantationType: string = "";
 
   /**
    * Construtor do componente que injeta os serviços e inicializa o formulário.
@@ -67,6 +68,15 @@ export class AddPlantComponent implements OnInit {
     this.addPlantForm.get('quantity')?.valueChanges.subscribe(() => {
       this.validateQuantityAgainstLimit();
     });
+
+    this.plantationsService.getPlantationById(this.plantationId).subscribe({
+      next: (data) => {
+        this.plantationType = data.plantTypeName;
+      },
+      error: (error) => {
+        console.error('Error adding plantation type:', error);
+      }
+    });
   }
 
   /**
@@ -76,7 +86,7 @@ export class AddPlantComponent implements OnInit {
     this.plantsService.getPlants().subscribe({
       next: (data) => {
         this.plants = data.sort((a, b) => a.plantName.localeCompare(b.plantName));
-        this.filteredPlants = this.plants;
+        this.filteredPlants = this.filterPlants("");
       },
       error: (error) => {
         console.error('Error loading plants:', error);
@@ -91,7 +101,18 @@ export class AddPlantComponent implements OnInit {
    */
   filterPlants(value: string): PlantInfo[] {
     const filterValue = value.toLowerCase();
-    return this.plants.filter(plant => plant.plantName.toLowerCase().includes(filterValue));
+    if (value === "") {
+      return this.plants.filter(
+        plant =>
+          plant.plantType === this.plantationType
+      );
+    }
+
+    return this.plants.filter(
+      plant =>
+        plant.plantName.toLowerCase().includes(filterValue) &&
+        plant.plantType === this.plantationType
+    );
   }
 
   /**
