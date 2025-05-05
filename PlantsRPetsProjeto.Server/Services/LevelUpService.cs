@@ -57,8 +57,65 @@ namespace PlantsRPetsProjeto.Server.Services
                     { "moderate", new ExperienceData { MaturityExperience = 20, HarvestExperience = 0 } },
                     { "low", new ExperienceData { MaturityExperience = 30, HarvestExperience = 0 } },
                 }
+            },
+            { "aster", new()
+                {
+                    { "high", new ExperienceData { MaturityExperience = 10, HarvestExperience = 0 } },
+                    { "moderate", new ExperienceData { MaturityExperience = 20, HarvestExperience = 0 } },
+                    { "low", new ExperienceData { MaturityExperience = 30, HarvestExperience = 0 } },
+                }
+            },
+            { "broadleaf evergreen", new()
+                {
+                    { "high", new ExperienceData { MaturityExperience = 120, HarvestExperience = 60 } },
+                    { "moderate", new ExperienceData { MaturityExperience = 180, HarvestExperience = 60 } },
+                    { "low", new ExperienceData { MaturityExperience = 240, HarvestExperience = 60 } },
+                }
+            },
+            { "deciduous shrub", new()
+                {
+                    { "high", new ExperienceData { MaturityExperience = 120, HarvestExperience = 60 } },
+                    { "moderate", new ExperienceData { MaturityExperience = 180, HarvestExperience = 60 } },
+                    { "low", new ExperienceData { MaturityExperience = 240, HarvestExperience = 60 } },
+                }
+            },
+            { "begonia", new()
+                {
+                    { "high", new ExperienceData { MaturityExperience = 10, HarvestExperience = 0 } },
+                    { "moderate", new ExperienceData { MaturityExperience = 20, HarvestExperience = 0 } },
+                    { "low", new ExperienceData { MaturityExperience = 30, HarvestExperience = 0 } },
+                }
+            },
+            { "fern", new()
+                {
+                    { "high", new ExperienceData { MaturityExperience = 10, HarvestExperience = 0 } },
+                    { "moderate", new ExperienceData { MaturityExperience = 20, HarvestExperience = 0 } },
+                    { "low", new ExperienceData { MaturityExperience = 30, HarvestExperience = 0 } },
+                }
+            },
+            { "ornamental grass", new()
+                {
+                    { "high", new ExperienceData { MaturityExperience = 120, HarvestExperience = 60 } },
+                    { "moderate", new ExperienceData { MaturityExperience = 180, HarvestExperience = 60 } },
+                    { "low", new ExperienceData { MaturityExperience = 240, HarvestExperience = 60 } },
+                }
+            },
+            { "rush or sedge", new()
+                {
+                    { "high", new ExperienceData { MaturityExperience = 10, HarvestExperience = 0 } },
+                    { "moderate", new ExperienceData { MaturityExperience = 20, HarvestExperience = 0 } },
+                    { "low", new ExperienceData { MaturityExperience = 30, HarvestExperience = 0 } },
+                }
+            },
+            { "default", new()
+                {
+                    { "high", new ExperienceData { MaturityExperience = 60, HarvestExperience = 30 } },
+                    { "moderate", new ExperienceData { MaturityExperience = 90, HarvestExperience = 30 } },
+                    { "low", new ExperienceData { MaturityExperience = 120, HarvestExperience = 30 } },
+                }
             }
         };
+
 
         /// <summary>
         /// Tabela de experiência atribuída com base na frequência de rega, por tipo de planta.
@@ -67,49 +124,112 @@ namespace PlantsRPetsProjeto.Server.Services
         {
             { "tree", new()
                 {
-                    { "frequent", 3},
-                    { "average",  4},
-                    { "minimal",  7},
+                    { "frequent", 3 },
+                    { "average",  4 },
+                    { "minimal",  7 },
                 }
             },
             { "shrub", new()
                 {
-                    { "frequent",  2},
-                    { "average",  4},
-                    { "minimal",  6},
+                    { "frequent", 2 },
+                    { "average",  4 },
+                    { "minimal",  6 },
                 }
             },
             { "vine", new()
                 {
-                    { "frequent", 2},
-                    { "average",  3},
-                    { "minimal",  4},
+                    { "frequent", 2 },
+                    { "average",  3 },
+                    { "minimal",  4 },
                 }
             },
             { "flower", new()
                 {
-                    { "frequent", 2},
-                    { "average",  3},
-                    { "minimal",  4},
+                    { "frequent", 2 },
+                    { "average",  3 },
+                    { "minimal",  4 },
                 }
             },
             { "herb", new()
                 {
-                    { "frequent", 2},
-                    { "average",  2},
-                    { "minimal", 1},
+                    { "frequent", 2 },
+                    { "average",  2 },
+                    { "minimal",  1 },
                 }
             },
             { "vegetable", new()
                 {
-                    { "frequent",  2},
-                    { "average",  2},
-                    { "minimal",  1},
+                    { "frequent", 2 },
+                    { "average",  2 },
+                    { "minimal",  1 },
+                }
+            },
+            { "fruit", new()
+                {
+                    { "frequent", 2 },
+                    { "average",  2 },
+                    { "minimal",  1 },
+                }
+            },
+            { "aster", new()
+                {
+                    { "frequent", 2 },
+                    { "average",  3 },
+                    { "minimal",  4 },
+                }
+            },
+            { "broadleaf evergreen", new()
+                {
+                    { "frequent", 2 },
+                    { "average",  4 },
+                    { "minimal",  6 },
+                }
+            },
+            { "deciduous shrub", new()
+                {
+                    { "frequent", 2 },
+                    { "average",  4 },
+                    { "minimal",  6 },
+                }
+            },
+            { "begonia", new()
+                {
+                    { "frequent", 2 },
+                    { "average",  3 },
+                    { "minimal",  4 },
+                }
+            },
+            { "fern", new()
+                {
+                    { "frequent", 2 },
+                    { "average",  2 },
+                    { "minimal",  1 },
+                }
+            },
+            { "ornamental grass", new()
+                {
+                    { "frequent", 2 },
+                    { "average",  3 },
+                    { "minimal",  4 },
+                }
+            },
+            { "rush or sedge", new()
+                {
+                    { "frequent", 2 },
+                    { "average",  2 },
+                    { "minimal",  1 },
+                }
+            },
+            { "default", new()
+                {
+                    { "frequent", 2 },
+                    { "average",  3 },
+                    { "minimal",  5 },
                 }
             }
         };
-           
-        
+
+
 
 
         private readonly PlantsRPetsProjetoServerContext _context;
@@ -167,8 +287,15 @@ namespace PlantsRPetsProjeto.Server.Services
             growthRate = growthRate.ToLower();
 
             if (HarvestExperience.TryGetValue(plantType, out var rateMap) && rateMap.TryGetValue(growthRate, out var data))
+            {
                 return data.HarvestExperience;
-
+            } else
+            {
+               if (HarvestExperience.TryGetValue("default", out var rateMapDefault) && rateMapDefault.TryGetValue(growthRate, out var dataDefault))
+               {
+                   return dataDefault.HarvestExperience;
+               }
+            }
             return -1;
         }
 
@@ -181,8 +308,14 @@ namespace PlantsRPetsProjeto.Server.Services
             wateringFrequency = wateringFrequency.ToLower();
 
             if (WateringExperience.TryGetValue(plantType, out var rateMap) && rateMap.TryGetValue(wateringFrequency, out int experienceAmount))
+            {
                 return experienceAmount;
-
+            } else
+            {
+                if (WateringExperience.TryGetValue("default", out var rateMapDefault) && rateMapDefault.TryGetValue(wateringFrequency, out int experienceAmountDefault)) {
+                    return experienceAmountDefault;
+                }
+            }
             return -1;
         }
     }

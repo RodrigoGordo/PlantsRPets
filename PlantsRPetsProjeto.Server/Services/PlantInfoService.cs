@@ -5,6 +5,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using PlantsRPetsProjeto.Server.Data;
 using Microsoft.EntityFrameworkCore;
+using System.Globalization;
 
 namespace PlantsRPetsProjeto.Server.Services
 {
@@ -93,6 +94,8 @@ namespace PlantsRPetsProjeto.Server.Services
                     var jsonResponse = await response.Content.ReadAsStringAsync();
                     var jsonData = JsonSerializer.Deserialize<JsonElement>(jsonResponse);
                     var plant = MapToPlantInfo(jsonData);
+                    TextInfo textInfo = CultureInfo.CurrentCulture.TextInfo;
+                    plant.PlantName  = textInfo.ToTitleCase(plant.PlantName.ToLower());
                     plants.Add(plant);
                 }
 
